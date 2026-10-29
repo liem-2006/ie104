@@ -4,7 +4,7 @@
 
 ## Đầu vào / đầu ra
 
-Đầu vào: `data/research-data.json` (16 email giảng viên duy nhất), schema bên dưới, mẫu header/footer và theme được duyệt. Đầu ra: danh mục JSON giảng viên và hai trang HTML/CSS responsive; hồ sơ mẫu dùng `camnt@uit.edu.vn`.
+Đầu vào: `data/research-data.json` (16 email giảng viên duy nhất), schema tại data/JOB-1.md, mẫu header/footer và theme được duyệt. Đầu ra: danh mục JSON giảng viên và hai trang HTML/CSS responsive; hồ sơ mẫu dùng `camnt@uit.edu.vn`.
 
 ## File được tạo
 
@@ -17,55 +17,12 @@
 | `assets/css/lecturer-detail.css` | Scope `#page-lecturer-detail`; thông tin cá nhân, liên kết nghiên cứu, chỉ số và danh sách chủ đề, co giãn trên mobile. |
 | `assets/images/lecturers/<ten-file>.jpg` hoặc `.png`, `.webp` | Tùy chọn, chỉ khi được phép sử dụng; ghi nguồn ảnh trong JSON. Không lấy ảnh người trùng tên hoặc dùng ảnh AI thay chân dung thật. |
 
-## Schema bắt buộc thống nhất
+## Hướng dẫn tại thư mục đích
 
-Ví dụ cấu trúc dưới đây dùng placeholder, không phải thông tin thật để copy vào bản bàn giao:
-
-```json
-{
-  "lecturers": [
-    {
-      "name": "Tên từ dữ liệu nghiên cứu",
-      "email": "email từ dữ liệu nghiên cứu",
-      "profile": {
-        "affiliation": "Đơn vị công tác đã xác minh",
-        "bio": "Giới thiệu ngắn có nguồn",
-        "researchAreas": ["Lĩnh vực nghiên cứu"],
-        "sourceUrl": "https://example.org/profile",
-        "checkedAt": "YYYY-MM-DD"
-      },
-      "photo": {
-        "path": "assets/images/lecturers/ten-file.jpg",
-        "alt": "Chân dung giảng viên ...",
-        "sourceUrl": "https://example.org/photo",
-        "usageNote": "Căn cứ cho phép sử dụng ảnh"
-      },
-      "researchProfiles": [
-        { "label": "Google Scholar", "url": "https://example.org/scholar" }
-      ],
-      "metrics": [
-        {
-          "sourceName": "Google Scholar",
-          "sourceUrl": "https://example.org/scholar",
-          "asOf": "YYYY-MM-DD",
-          "scope": "all-time",
-          "citations": 123,
-          "hIndex": 10,
-          "i10Index": 5
-        }
-      ]
-    }
-  ]
-}
-```
-
-- Chỉ `name`, `email` bắt buộc. `profile`, `photo`, `researchProfiles`, `metrics` đều tùy chọn; chưa biết thì bỏ trường, không điền 0/null/chuỗi giả hoặc URL example.org vào dữ liệu thật.
-- `profile`: có ít nhất một trong affiliation/bio/researchAreas; sourceUrl và checkedAt bắt buộc nếu có profile. Nội dung cùng object phải được nguồn đó hỗ trợ; nếu không đủ thì bỏ phần chưa xác minh.
-- `photo`: đủ path/alt/sourceUrl/usageNote khi có ảnh. path tính từ gốc repo; HTML ở các cấp khác nhau thêm tiền tố tương đối tương ứng. Không có ảnh dùng khung chữ cái/tên, không ảnh lỗi.
-- `researchProfiles`: mảng liên kết không rỗng, từng phần tử đủ label/url (Scholar, ORCID, trang trường...). Kiểm tra đúng người theo tên và đơn vị/chủ đề.
-- `metrics`: từng phần tử có sourceName/sourceUrl/asOf/scope; scope Job 1 chỉ nhận `all-time`. Ít nhất một chỉ số citations/hIndex/i10Index là số nguyên không âm. Chỉ lấy chỉ số thực sự có trên nguồn và đúng phạm vi; không trộn số từ các nguồn vào một bản ghi, không tự tính hay suy đoán.
-- Hiển thị chỉ số kèm nguồn và ngày chụp số liệu; không tuyên bố số hiện tại, không xếp hạng giảng viên. Mục đích giúp tham khảo thành tựu nghiên cứu.
-- Không thêm ID. Không chép danh sách đề tài/roadmap vào lecturers.json; đối chiếu bằng email. Các nhóm chủ đề là “nhóm đề tài trên website”, không tự biến thành researchAreas chính thức.
+- [Schema và nhiệm vụ JSON](../data/JOB-1.md): bản định nghĩa schema duy nhất, đặt cạnh lecturers.json.
+- [HTML hồ sơ chi tiết](detail/JOB-1.md).
+- [Phân công từng file CSS](../assets/css/JOB-1.md).
+- [Ảnh giảng viên](../assets/images/lecturers/JOB-1.md).
 
 ## Phạm vi thu thập
 

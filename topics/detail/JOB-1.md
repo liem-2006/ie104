@@ -8,6 +8,8 @@
 
 ## File được tạo
 
+Hướng dẫn stylesheet đặt ngay tại [assets/css/JOB-1.md](../../assets/css/JOB-1.md).
+
 | File tính từ gốc repo | Nội dung phải có |
 |---|---|
 | `topics/detail/index.html` | Body `page-topic-detail`; breadcrumb về danh sách; h1 tên chủ đề; nhóm, tên GV và link hồ sơ; hướng dẫn cách đọc cây; keyword gốc, outcome, subjects nếu có; link quay lại. Dùng ul/li lồng nhau và details/summary khi cần. |

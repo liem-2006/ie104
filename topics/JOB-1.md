@@ -8,6 +8,8 @@
 
 ## File được tạo và nội dung
 
+Hướng dẫn riêng cho các file stylesheet đặt ngay tại [assets/css/JOB-1.md](../assets/css/JOB-1.md).
+
 | File tính từ gốc repo | Công việc và giới hạn |
 |---|---|
 | `assets/css/reset.css` | Reset nhỏ tự viết: box-sizing, margin mặc định cần thiết, font form, ảnh co giãn. Giữ dấu hiệu focus; không chép thư viện reset. |
