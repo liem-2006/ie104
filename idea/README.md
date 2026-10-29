@@ -2,6 +2,9 @@
 
 ## Quyết định đang áp dụng
 
+- **Job 1 hiện hành:** HTML + CSS responsive, sáng/tối bằng CSS; đọc [quy tắc chung](job-1-rules.md). TV1: [khám phá và theme](../topics/JOB-1.md); TV2: [chi tiết và roadmap tự thiết kế](../topics/detail/JOB-1.md); TV3: [danh bạ, hồ sơ và schema giảng viên](../lecturers/JOB-1.md). Chưa làm JS. Bản tổng quan job chỉ lưu ngoài repo và nhóm trưởng gửi riêng.
+- TV3 được tạo `data/lecturers.json` theo schema trong task, dùng email nối với dữ liệu chủ đề; ảnh/hồ sơ/chỉ số nghiên cứu là tùy chọn có nguồn. Không sửa schema nghiên cứu để thêm thông tin này.
+
 - Tập trung frontend vanilla theo skill IE104; JSON tĩnh, không cần backend.
 - Dùng `../data/research-data.json` với 3 nhóm và 37 bản ghi đã hợp nhất. Tạm dừng đánh giá chất lượng nội dung để triển khai web.
 - Mỗi bản ghi chỉ có một `lecturer` gồm `name`, `email`; keyword có `name`, `outcome`, `subjects` tùy chọn, `children` đệ quy không giới hạn cấp.

@@ -4,6 +4,8 @@ Website giúp sinh viên khám phá chủ đề, xem cây kiến thức nền v�
 
 ## Bắt đầu
 
+**Job 1:** dựng HTML/CSS responsive và theme sáng/tối. Bắt đầu tại [hợp đồng chung](idea/job-1-rules.md), sau đó đọc task [TV1](topics/JOB-1.md), [TV2](topics/detail/JOB-1.md) hoặc [TV3](lecturers/JOB-1.md). Các file giao việc mô tả từng file cần tạo; chưa phải mã giao diện đã triển khai.
+
 1. Đọc [quyết định hiện hành](idea/README.md), [quy tắc code](AGENTS.md) và [hướng dẫn đóng góp](CONTRIBUTING.md).
 2. Nhận một Issue có phạm vi file, đầu vào, đầu ra và tiêu chí nghiệm thu do nhóm trưởng chốt.
 3. Fork repo, tạo nhánh riêng, làm task rồi gửi Pull Request về `liem-2006/ie104:main`.
