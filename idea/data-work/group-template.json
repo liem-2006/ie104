@@ -1,0 +1,90 @@
+{
+  "group": {
+    "id": "sec",
+    "name": "An toàn thông tin"
+  },
+  "topics": [
+    {
+      "name": "Phát hiện tấn công mạng bằng học sâu",
+      "lecturer": {
+        "name": "PGS.TS. Nguyễn Tấn Cầm",
+        "email": "camnt@uit.edu.vn"
+      },
+      "keywords": [
+        {
+          "name": "IDS",
+          "outcome": "Giải thích mục đích của hệ thống phát hiện xâm nhập và loại thông tin mà hệ thống quan sát.",
+          "children": [
+            {
+              "name": "Mạng máy tính",
+              "outcome": "Mô tả khái quát cách thiết bị trao đổi dữ liệu qua mạng.",
+              "subjects": ["Nhập môn mạng máy tính"]
+            }
+          ]
+        },
+        {
+          "name": "DL",
+          "outcome": "Giải thích vai trò của học sâu trong việc nhận biết dấu hiệu tấn công từ dữ liệu.",
+          "children": [
+            {
+              "name": "ML",
+              "outcome": "Giải thích mô hình học từ dữ liệu và cách đánh giá kết quả ở mức cơ bản.",
+              "children": [
+                {
+                  "name": "Xác suất và thống kê",
+                  "outcome": "Giải thích xác suất, phân bố và các đại lượng thống kê cơ bản khi đọc dữ liệu.",
+                  "children": [
+                    {
+                      "name": "Biến ngẫu nhiên",
+                      "outcome": "Giải thích biến ngẫu nhiên biểu diễn giá trị có thể nhận được của một hiện tượng."
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Phân loại mã độc bằng học sâu",
+      "lecturer": {
+        "name": "PGS.TS. Nguyễn Tấn Cầm",
+        "email": "camnt@uit.edu.vn"
+      },
+      "keywords": [
+        {
+          "name": "Mã độc",
+          "outcome": "Giải thích mã độc là gì và mục tiêu của bài toán phân loại mã độc."
+        },
+        {
+          "name": "DL",
+          "outcome": "Giải thích cách học sâu có thể hỗ trợ phân loại từ dữ liệu về mã độc.",
+          "children": [
+            {
+              "name": "ML",
+              "outcome": "Giải thích mô hình học từ dữ liệu và cách đánh giá kết quả phân loại ở mức cơ bản."
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Phát hiện gian lận và dữ liệu đa phương thức giả",
+      "lecturer": {
+        "name": "PGS. TS. Phạm Văn Hậu",
+        "email": "haupv@uit.edu.vn"
+      },
+      "keywords": [
+        {
+          "name": "Phát hiện gian lận",
+          "outcome": "Giải thích mục tiêu của việc nhận biết dấu hiệu gian lận trong dữ liệu."
+        },
+        {
+          "name": "Dữ liệu đa phương thức",
+          "outcome": "Giải thích dữ liệu đa phương thức là gì và vì sao cần xem xét nhiều loại dữ liệu cùng lúc."
+        }
+      ]
+    }
+  ]
+}
