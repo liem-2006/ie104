@@ -4,7 +4,7 @@ description: Quy chuẩn và hướng dẫn bắt buộc khi thực hiện đồ
 ---
 
 # Hướng Dẫn & Quy Chuẩn Code Đồ Án Môn Học IE104 (UIT)
-> **Môn học:** Internet và Công nghệ Web (IE104)  
+> **Môn học:** Internet và Công nghệ Web (IE104)
 > **Giảng viên phụ trách:** ThS. Võ Tấn Khoa - Khoa KH&KTTT, Trường ĐH Công nghệ Thông tin (ĐHQG-HCM)
 
 Tài liệu này đóng vai trò là kim chỉ nam và quy chuẩn kỹ thuật bắt buộc cho Agent khi hỗ trợ sinh viên xây dựng đồ án IE104.
@@ -15,7 +15,7 @@ Tài liệu này đóng vai trò là kim chỉ nam và quy chuẩn kỹ thuật 
 
 1. **100% Vanilla Code (Code thuần):**
    * **CHỈ SỬ DỤNG:** HTML5, CSS3 và JavaScript thuần (Vanilla JS).
-   * **TUYỆT ĐỐI CẤM:** 
+   * **TUYỆT ĐỐI CẤM:**
      * Framework/Thư viện CSS: Bootstrap, Tailwind CSS, Bulma, Foundation,...
      * Thư viện/Framework JS: jQuery, React, Vue, Angular, Lodash,...
      * Plugin giao diện có sẵn: Swiper.js, Owl Carousel, Slick, jQuery UI, Bootstrap Modal,... (Mọi slider, modal, dropdown đều phải tự code bằng Vanilla JS).

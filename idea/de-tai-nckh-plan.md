@@ -1,8 +1,8 @@
-﻿# Kế hoạch đồ án IE104: bốn người phát triển bốn cụm chủ đề xuyên suốt
+# Kế hoạch đồ án IE104: bốn người phát triển bốn cụm chủ đề xuyên suốt
 
-> **Áp dụng cho:** [Đặc tả website định hướng chủ đề NCKH](./de-tai-nckh-chi-tiet.md)  
-> **Nhóm:** 4 người, gồm nhóm trưởng. Mỗi người theo một cụm nghiên cứu từ dữ liệu đến kiểm thử.  
-> **Lịch học:** LT1 → LT2 → TH1 → LT3 → LT4 → TH2 → LT5 → LT6 → TH3 → LT7 → TH4 → LT8 → LT9 → TH5 → LT10 → LT11 → TH6 → khoảng đệm hoàn thiện.  
+> **Áp dụng cho:** [Đặc tả website định hướng chủ đề NCKH](./de-tai-nckh-chi-tiet.md)
+> **Nhóm:** 4 người, gồm nhóm trưởng. Mỗi người theo một cụm nghiên cứu từ dữ liệu đến kiểm thử.
+> **Lịch học:** LT1 → LT2 → TH1 → LT3 → LT4 → TH2 → LT5 → LT6 → TH3 → LT7 → TH4 → LT8 → LT9 → TH5 → LT10 → LT11 → TH6 → khoảng đệm hoàn thiện.
 > **Nguyên tắc:** Nhóm trưởng định hình cấu trúc và làm một mẫu chạy được trước mỗi chặng; các thành viên dùng cùng hợp đồng để tự làm cụm của mình.
 
 ## 1. Căn cứ và mục tiêu
@@ -95,4 +95,3 @@ Ma trận kiểm thử tối thiểu gồm: ô Excel nhiều hướng và dòng 
 - Báo cáo PDF 15–40 trang, slide và phần thuyết trình 10–15 phút; mỗi người trình bày được cụm mình và giải thích được cấu trúc chung.
 
 Khi muốn thay cấu trúc dữ liệu, component hoặc cách lưu trạng thái, N1 cập nhật **hợp đồng và mẫu trước**, cả nhóm đánh giá ảnh hưởng, rồi mỗi người cập nhật cụm mình. Khi muốn thêm chức năng, chỉ nhận nếu hành trình khám phá → hiểu kiến thức → tìm GV đã ổn định và còn thời gian sau Gate TH5. Nếu lịch hoặc yêu cầu của giảng viên thay đổi, cập nhật mốc tương ứng tại đây để cả nhóm dùng một kế hoạch.
-

@@ -17,4 +17,3 @@ Closes #
 Ảnh desktop/mobile nếu có giao diện; cách chạy và tái hiện chức năng nếu có JS.
 
 ## Hỗ trợ AI và phần cần người duyệt chú ý
-

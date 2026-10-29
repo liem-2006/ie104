@@ -1,8 +1,8 @@
 # Đặc tả đồ án IE104: Website định hướng chủ đề nghiên cứu khoa học
 
-> **Trạng thái:** Bản đặc tả làm việc cho nhóm; tên sản phẩm chính thức chưa chốt.  
-> **Đối tượng chính:** Sinh viên UIT tự tìm hiểu một hướng nghiên cứu trước khi trao đổi với giảng viên.  
-> **Nguồn dữ liệu đề tài và giảng viên:** File Excel do nhóm cung cấp, sheet `2025`.  
+> **Trạng thái:** Bản đặc tả làm việc cho nhóm; tên sản phẩm chính thức chưa chốt.
+> **Đối tượng chính:** Sinh viên UIT tự tìm hiểu một hướng nghiên cứu trước khi trao đổi với giảng viên.
+> **Nguồn dữ liệu đề tài và giảng viên:** File Excel do nhóm cung cấp, sheet `2025`.
 > **Phạm vi kỹ thuật:** Website tĩnh, HTML5 + CSS3 + JavaScript thuần, không dùng thư viện/framework/template có sẵn.
 
 ## 1. Mục đích của tài liệu

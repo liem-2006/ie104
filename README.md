@@ -33,3 +33,5 @@ Dữ liệu có cấu trúc `{ "groups": [{ "group": { "id", "name" }, "topics":
 ## Quyền quản lý
 
 Chủ repo: **@liem-2006**. Thành viên đóng góp qua fork và PR; không cấp quyền ghi vào repo chính. Chỉ chủ repo quyết định merge. CODEOWNERS chỉ yêu cầu người rà soát; bảo vệ nhánh trên GitHub mới thực thi yêu cầu duyệt.
+
+Đã bật bảo vệ `main`: cần một approval của CODEOWNER, hủy approval khi PR có commit mới, giải quyết hết trao đổi trước khi merge; chặn force-push và xóa nhánh. Chỉ dùng squash merge và tắt auto-merge. Chủ repo giữ ngoại lệ admin để tự cập nhật khung; không cần một thành viên duyệt PR của chính chủ repo. Không thêm thành viên vào Collaborators nếu muốn giữ mô hình chỉ chủ repo có quyền ghi.
