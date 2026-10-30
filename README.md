@@ -7,7 +7,7 @@ Website giúp sinh viên khám phá chủ đề, xem cây kiến thức nền v�
 **Job 1:** dựng HTML/CSS responsive và theme sáng/tối. Bắt đầu tại [hợp đồng chung](idea/job-1-rules.md), sau đó đọc task [TV1](topics/JOB-1.md), [TV2](topics/detail/JOB-1.md) hoặc [TV3](lecturers/JOB-1.md). Các file giao việc mô tả từng file cần tạo; chưa phải mã giao diện đã triển khai.
 
 1. Đọc [quyết định hiện hành](idea/README.md), [quy tắc code](AGENTS.md) và [hướng dẫn đóng góp](CONTRIBUTING.md).
-2. Nhận một Issue có phạm vi file, đầu vào, đầu ra và tiêu chí nghiệm thu do nhóm trưởng chốt.
+2. Nhận bản JOB-N.md hoặc Issue có phạm vi file, đầu vào, đầu ra và tiêu chí nghiệm thu do nhóm trưởng chốt. Job 1 đã có các bản giao việc, không cần chờ Issue.
 3. Fork repo, tạo nhánh riêng, làm task rồi gửi Pull Request về `liem-2006/ie104:main`.
 
 Repo đang ở giai đoạn dựng khung; chưa có giao diện hoàn chỉnh. Khi bắt đầu tạo trang, chạy bằng HTTP server cục bộ (ví dụ Live Server của VS Code), không mở bằng `file://` vì website đọc JSON qua `fetch`.
@@ -15,7 +15,8 @@ Repo đang ở giai đoạn dựng khung; chưa có giao diện hoàn chỉnh. K
 ## Cấu trúc
 
 ```text
-data/research-data.json        # Nguồn dữ liệu chạy web duy nhất
+data/research-data.json        # Nguồn chủ đề và roadmap dùng chung
+data/lecturers.json            # TV3 tạo hồ sơ giảng viên theo data/JOB-1.md
 assets/css/                   # reset.css, style.css và CSS từng trang khi đến task CSS
 assets/js/                    # data.js, main.js và JS chức năng khi đến task JS
 assets/images/                # Ảnh dùng trên website
@@ -28,7 +29,7 @@ idea/                         # Ngữ cảnh, kế hoạch và hợp đồng d�
 .github/                      # CODEOWNERS, mẫu task và mẫu PR
 ```
 
-Task HTML sẽ tạo `index.html`, `404.html` ở gốc và `index.html` trong từng thư mục trang. `.gitkeep` chỉ giữ thư mục trống. Nhóm trưởng làm mẫu dùng chung trước từng chặng; thành viên áp dụng mẫu vào phần đã giao, không tạo nhiều phiên bản của cùng một trang/hàm dùng chung.
+Job 1 tạo bốn trang `topics/index.html`, `topics/detail/index.html`, `lecturers/index.html`, `lecturers/detail/index.html` và CSS tương ứng. Trang chủ/404 là task riêng của nhóm trưởng; saved/about dành cho job sau. `.gitkeep` chỉ giữ thư mục trống. TV1 đề xuất nền chung để nhóm trưởng duyệt, TV2 tự thiết kế roadmap và TV3 làm dữ liệu/hồ sơ; dùng chung một bộ CSS nền.
 
 Dữ liệu có cấu trúc `{ "groups": [{ "group": { "id", "name" }, "topics": [...] }] }`: 3 nhóm `sec`, `data`, `nlp`, 37 bản ghi. Mỗi chủ đề có một giảng viên và cây keyword đệ quy. Từ trang gốc tải `./data/research-data.json`; trang sâu phải tính đường dẫn tương ứng. Tên file dữ liệu và hợp đồng không đổi trong task giao diện nếu nhóm trưởng chưa duyệt.
 

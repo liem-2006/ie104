@@ -10,7 +10,7 @@
 - Mỗi bản ghi chỉ có một `lecturer` gồm `name`, `email`; keyword có `name`, `outcome`, `subjects` tùy chọn, `children` đệ quy không giới hạn cấp.
 - `children` là kiến thức học trước cha, không nối xuyên chủ đề. Chưa thêm ID chủ đề/keyword. Quy ước khóa lưu tiến độ được nhóm trưởng chốt ở chặng JavaScript.
 - Repo dùng `data/` ở gốc theo yêu cầu nhóm trưởng, thay cho `assets/data/` trong mẫu skill.
-- Nhóm trưởng định hình mẫu trước từng chặng. Thành viên làm task theo thứ tự HTML → CSS → JS, gửi PR từ fork; chủ repo duyệt và merge.
+- Job 1 gộp HTML/CSS: TV1 đề xuất nền chung để nhóm trưởng duyệt; TV2 tự thiết kế roadmap; TV3 chuẩn bị danh mục và hồ sơ. JavaScript làm ở job sau. Thành viên gửi PR từ fork; chủ repo duyệt và merge.
 
 ## Tài liệu
 

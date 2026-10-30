@@ -19,9 +19,11 @@ Hướng dẫn riêng cho các file stylesheet đặt ngay tại [assets/css/JOB
 
 ## Thứ tự thực hiện
 
-1. PR nền chung: đề xuất giá trị token và HTML mẫu header/footer/thẻ; ảnh hai theme ở mobile/desktop. Nhóm trưởng duyệt trước khi TV2/TV3 phụ thuộc vào CSS này.
+1. PR nền chung: đề xuất giá trị token và HTML mẫu header/footer/thẻ; ảnh hai theme ở mobile/desktop. Chỉ cần khung và ít nhất một thẻ, chưa cần đủ 6 thẻ hoặc link xuyên trang hoạt động trước khi TV2/TV3 merge. Nhóm trưởng duyệt trước khi TV2/TV3 phụ thuộc vào CSS này.
 2. Hoàn thiện trang khám phá bằng các thành phần đã duyệt; không đổi hợp đồng CSS âm thầm.
 3. Kiểm tra tiêu đề dài, tên giảng viên dài, nút/link focus và các đường dẫn. Ghi chú bộ màu/font trong mô tả PR để nhóm áp dụng.
+
+Trạng thái rỗng đặt trong section có thuộc tính hidden, là anh em với danh sách kết quả. Khi kiểm tra, tạm ẩn danh sách và bỏ hidden của trạng thái rỗng bằng DevTools; trả trạng thái mặc định trước bàn giao. Không tạo nút chuyển giả hoặc hiển thị đồng thời “không có kết quả” với danh sách đang có.
 
 ## Không thuộc task
 

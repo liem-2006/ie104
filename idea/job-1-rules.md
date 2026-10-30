@@ -7,7 +7,11 @@
 1. TV1 đề xuất bộ màu sáng/tối, font, khoảng cách và header/footer mẫu trong PR đầu tiên. Nhóm trưởng duyệt rồi merge trước khi các thành viên hoàn thiện CSS riêng.
 2. TV2 có thể dựng HTML và tự đề xuất bố cục cây trong lúc chờ; TV3 có thể chuẩn bị dữ liệu giảng viên và HTML. Chỉ dùng bộ màu/font chung sau khi đã duyệt.
 3. TV1 hoàn thiện khám phá; TV2 hoàn thiện chi tiết/roadmap; TV3 hoàn thiện danh bạ/hồ sơ. Mỗi phần có PR riêng, nhóm trưởng tích hợp.
-4. Nhóm trưởng làm trang chủ/404 ở task riêng, duyệt thành phần chung và kiểm tra liên kết giữa các trang. Job 1 không tạo link tới các trang chưa tồn tại.
+4. Nhóm trưởng làm trang chủ/404 ở task riêng, duyệt thành phần chung và kiểm tra liên kết giữa các trang. Job 1 không tạo link tới homepage/404/saved/about chưa triển khai. Các link giữa bốn trang thuộc Job 1 được khai báo trước theo đường dẫn đã chốt; có thể chưa mở được khi PR của thành viên khác chưa merge. Ghi rõ phụ thuộc trong PR; mọi link này phải hoạt động khi nghiệm thu tích hợp cuối job.
+
+Mốc đầu tiên là PR nền của TV1, chỉ cần HTML khung header/footer/thẻ và CSS chung hoạt động; chưa yêu cầu đủ 6 thẻ hay trang của thành viên khác. Sau khi merge nền, TV1 tạo nhánh mới từ main để hoàn thiện danh sách; TV2/TV3 cập nhật upstream/main. PR nghiệm thu từng người kiểm tra phần họ sở hữu; kiểm tra liên kết xuyên trang là bước nghiệm thu tích hợp của nhóm trưởng. Rà soát chéo bằng nhận xét, không yêu cầu thành viên có quyền approve thay CODEOWNER.
+
+Trước khi hoàn thiện giao diện, mỗi người gửi phác thảo mobile/desktop trong mô tả hoặc ảnh đính kèm Draft PR để nhóm trưởng duyệt; không bắt buộc tạo file thiết kế mới trong repo. TV1 đề xuất khung chung; TV2 tự quyết định bố cục roadmap trong giới hạn đã thống nhất.
 
 ## Kiến thức và ràng buộc
 
@@ -23,9 +27,11 @@ TV1 sở hữu `assets/css/reset.css` và `assets/css/style.css`. TV2/TV3 không
 
 Các token bắt buộc trong style.css: `--color-bg`, `--color-surface`, `--color-text`, `--color-muted`, `--color-border`, `--color-primary`, `--color-on-primary`, `--color-focus`; `--font-body`, `--font-heading`; `--space-1` đến `--space-6`; `--radius-card`, `--container-max`. TV1 chốt giá trị, không đổi tên tùy ý sau merge. Mặc định nền sáng; dark khai báo qua `prefers-color-scheme: dark`. Font và spacing dùng chung, màu có hai bộ. CSS riêng dùng var() thay cho hardcode màu giao diện.
 
-Job 1 đổi theme theo hệ điều hành/trình duyệt, kiểm tra bằng DevTools hoặc cài đặt hệ thống. Chưa có nút chuyển theme hay localStorage vì chưa làm JS. Mục tiêu tương phản chữ thường tối thiểu 4.5:1 ở cả hai theme. Ưu tiên font hệ thống có tiếng Việt; font tải về phải có quyền sử dụng, đường dẫn nội bộ và fallback.
+Job 1 đổi theme theo hệ điều hành/trình duyệt, kiểm tra bằng DevTools hoặc cài đặt hệ thống. Chưa có nút chuyển theme hay localStorage vì chưa làm JS. Mục tiêu tương phản chữ thường tối thiểu 4.5:1 ở cả hai theme. Job 1 dùng font hệ thống có tiếng Việt và fallback; bổ sung font tải về cần task riêng để chốt quyền sử dụng và file được tạo.
 
 Header dùng `.site-header`, nav `.site-nav`, footer `.site-footer`, khung `.container`, thẻ chủ đề `.topic-card`. TV1 viết HTML mẫu tại `topics/index.html`; TV2/TV3 sao chép header/footer và điều chỉnh đường dẫn, aria-current cho trang của mình. Header hiển thị Khám phá/Giảng viên, xuống dòng trên mobile; không tạo menu hamburger cần JS.
+
+CSS reset và thành phần dùng chung được phép dùng selector toàn cục/class chung; chỉ CSS riêng mới bắt buộc scope theo ID trang. Trang danh sách đặt aria-current="page" cho link đúng trang; trang chi tiết có thể đánh dấu nhóm điều hướng bằng class nhưng không gán aria-current="page" cho link dẫn sang trang danh sách khác. Khi TV1 cập nhật mẫu, TV2/TV3 tự cập nhật bản HTML của mình theo commit được nhóm trưởng duyệt.
 
 Thứ tự link CSS: reset.css → style.css → CSS trang. ID body: `page-topics`, `page-topic-detail`, `page-lecturers`, `page-lecturer-detail`.
 
@@ -43,3 +49,5 @@ Nguồn dùng chung: `data/research-data.json`. Chọn chủ đề “Phát hi�
 ## Bàn giao và kiểm thử
 
 Mỗi PR nêu file đã sửa, cách chạy bằng HTTP, ảnh mobile/desktop ở hai theme, thử bàn phím và kết quả kiểm tra HTML/CSS. HTML/CSS hợp lệ; không lỗi đường dẫn, ảnh, font; nội dung dài không đè nhau. TV1 rà TV2, TV2 rà TV3, TV3 rà TV1; chủ repo duyệt/merge. Không tự sửa file ngoài danh sách task. File JOB-1.md là hướng dẫn, chỉ sửa khi nhóm trưởng giao.
+
+Kiểm thử dữ liệu dài/cây sâu/trạng thái thiếu dữ liệu có thể chỉnh tạm bằng DevTools hoặc bản làm việc, chụp minh chứng rồi trả về nội dung mẫu trước commit. Không tạo dữ liệu giảng viên giả trong file bàn giao. Nếu chưa có ảnh hoặc chỉ số đã xác minh, ghi “chưa kiểm thử trạng thái có dữ liệu” và nghiệm thu fallback; không bắt thu thập cho đủ ảnh kiểm thử. Bài lab nằm ngoài repo: thiếu bản lab không chặn task; dùng hợp đồng này và skill, xin nhóm trưởng gửi bài khi cần đối chiếu.

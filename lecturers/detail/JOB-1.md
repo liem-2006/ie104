@@ -17,4 +17,4 @@
 
 ## Đầu ra và nghiệm thu
 
-Một trang HTML mẫu đầy đủ, liên kết đúng, dùng CSS do TV3 viết theo [task CSS](../../assets/css/JOB-1.md). Thử dữ liệu có/không ảnh và chỉ số, email dài, bàn phím, mobile/desktop và hai theme. PR ghi minh chứng cùng kết quả kiểm tra HTML. Không sửa file của TV1/TV2.
+Một trang HTML mẫu đầy đủ, liên kết đúng khi tích hợp, dùng CSS do TV3 viết theo [task CSS](../../assets/css/JOB-1.md). Thử trạng thái có/không ảnh và chỉ số khi có dữ liệu đã xác minh; nếu chưa có thì thử fallback và ghi giới hạn, không bịa dữ liệu để đạt checklist. Thử email dài, bàn phím, mobile/desktop và hai theme. PR ghi minh chứng cùng kết quả kiểm tra HTML. Không sửa file của TV1/TV2.
