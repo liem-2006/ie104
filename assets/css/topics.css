@@ -1,0 +1,232 @@
+/* ==========================================================================
+   IE104 - Topics List CSS (TV1 Mock)
+   Scope: #page-topics
+   ========================================================================== */
+
+#page-topics .topics-hero {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-6) 0 var(--space-5) 0;
+}
+
+#page-topics .topics-hero__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  #page-topics .topics-hero__title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+#page-topics .topics-hero__desc {
+  font-size: var(--font-size-base);
+  color: var(--color-muted);
+  max-width: 800px;
+  line-height: var(--line-height-relaxed);
+  margin-bottom: var(--space-5);
+}
+
+/* Bộ lọc & tìm kiếm */
+#page-topics .topics-filter {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+}
+
+@media (min-width: 768px) {
+  #page-topics .topics-filter {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+}
+
+#page-topics .topics-filter__search {
+  flex: 2 1 300px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+#page-topics .topics-filter__group {
+  flex: 1 1 200px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+#page-topics .topics-filter__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-muted);
+}
+
+#page-topics .topics-filter__input,
+#page-topics .topics-filter__select {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast);
+}
+
+#page-topics .topics-filter__input:focus,
+#page-topics .topics-filter__select:focus {
+  border-color: var(--color-primary);
+}
+
+#page-topics .topics-stats {
+  margin-top: var(--space-3);
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+  font-weight: var(--font-weight-medium);
+}
+
+/* Lưới chủ đề */
+#page-topics .topics-content {
+  padding: var(--space-6) 0 var(--space-8) 0;
+}
+
+#page-topics .topics-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 640px) {
+  #page-topics .topics-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  #page-topics .topics-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* Thẻ chủ đề */
+#page-topics .topic-card {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition-fast), box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+#page-topics .topic-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: var(--shadow-md);
+}
+
+#page-topics .topic-card__header {
+  margin-bottom: var(--space-2);
+}
+
+#page-topics .topic-card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-bottom: var(--space-3);
+  flex-grow: 1;
+}
+
+#page-topics .topic-card__title a {
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+#page-topics .topic-card__title a:hover {
+  color: var(--color-primary);
+}
+
+#page-topics .topic-card__lecturer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--font-size-xs);
+  color: var(--color-text);
+  margin-bottom: var(--space-3);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+#page-topics .topic-card__lecturer-icon {
+  font-size: 1.25rem;
+}
+
+#page-topics .topic-card__email {
+  color: var(--color-muted);
+}
+
+#page-topics .topic-card__keywords {
+  margin-bottom: var(--space-4);
+}
+
+#page-topics .topic-card__keywords-title {
+  font-size: var(--font-size-xs);
+  color: var(--color-muted);
+  margin-bottom: var(--space-1);
+}
+
+#page-topics .topic-card__pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+#page-topics .topic-card__keyword-pill {
+  font-size: 11px;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+}
+
+#page-topics .topic-card__footer {
+  margin-top: auto;
+}
+
+#page-topics .topic-card__btn {
+  width: 100%;
+}
+
+/* Trạng thái rỗng */
+#page-topics .topics-empty {
+  text-align: center;
+  padding: var(--space-8) var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+#page-topics .topics-empty__icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--space-2);
+}
+
+#page-topics .topics-empty__title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+#page-topics .topics-empty__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+}
+
