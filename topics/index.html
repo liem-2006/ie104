@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Khám phá chủ đề nghiên cứu khoa học | IE104</title>
+  <meta name="description" content="Danh mục các chủ đề nghiên cứu khoa học từ Khoa KH&amp;KTTT - UIT, kèm bản đồ lộ trình kiến thức và giảng viên hướng dẫn.">
+
+  <!-- Thứ tự link CSS -->
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/topics.css">
+
+  <script src="../assets/js/topics.js" defer></script>
+</head>
+<body id="page-topics">
+
+  <!-- Site Header -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="../index.html" class="site-brand" title="Trang chủ Đồ án IE104">
+        <span class="site-brand__badge">IE104</span>
+        <span>Nghiên cứu Khoa học</span>
+      </a>
+
+      <nav class="site-nav" aria-label="Điều hướng chính">
+        <ul class="site-nav__list">
+          <li class="site-nav__item">
+            <a href="index.html" class="site-nav__link site-nav__link--active" aria-current="page">Khám phá chủ đề</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="../lecturers/index.html" class="site-nav__link">Giảng viên</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main id="main-content" class="topics-page">
+
+    <!-- Hero / Intro -->
+    <section class="topics-hero">
+      <div class="container">
+        <h1 class="topics-hero__title">Khám phá chủ đề nghiên cứu khoa học</h1>
+        <p class="topics-hero__desc">
+          Tìm kiếm và định hướng các đề tài NCKH từ Khoa Khoa học và Kỹ thuật Thông tin (UIT). 
+          Nhấn vào bất kỳ chủ đề nào để xem <strong>Bản đồ lộ trình kiến thức (Roadmap)</strong> và thông tin giảng viên hướng dẫn.
+        </p>
+
+        <!-- Thanh tìm kiếm & lọc -->
+        <div class="topics-filter">
+          <div class="topics-filter__search">
+            <label for="topics-search-input" class="topics-filter__label">Tìm kiếm đề tài, từ khóa hoặc giảng viên:</label>
+            <input type="search" id="topics-search-input" class="topics-filter__input" placeholder="Nhập từ khóa (ví dụ: học sâu, blockchain, Phan Thế Duy...)" autocomplete="off">
+          </div>
+
+          <div class="topics-filter__group">
+            <label for="topics-group-select" class="topics-filter__label">Lọc theo nhóm lĩnh vực:</label>
+            <select id="topics-group-select" class="topics-filter__select">
+              <option value="">Tất cả các nhóm lĩnh vực</option>
+              <option value="sec">An toàn thông tin</option>
+              <option value="data">Dữ liệu &amp; Dự báo</option>
+              <option value="nlp">AI ngôn ngữ</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Thống kê kết quả -->
+        <div class="topics-stats">
+          <span id="topics-count" class="topics-stats__count">Đang tải chủ đề...</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- Danh sách Grid chủ đề -->
+    <section class="topics-content">
+      <div class="container">
+        <div id="topics-grid" class="topics-grid">
+          <!-- Các thẻ chủ đề được render tự động từ research-data.json -->
+        </div>
+
+        <!-- Trạng thái không có kết quả -->
+        <div id="topics-empty-state" class="topics-empty" hidden>
+          <div class="topics-empty__icon">🔍</div>
+          <h2 class="topics-empty__title">Không tìm thấy chủ đề phù hợp</h2>
+          <p class="topics-empty__desc">Hãy thử thay đổi từ khóa tìm kiếm hoặc chọn nhóm lĩnh vực khác.</p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__meta">
+        <strong>Đồ án môn học IE104 — Internet và Công nghệ Web</strong>
+        <p class="site-footer__note">
+          Trường Đại học Công nghệ Thông tin (UIT) &bull; Khoa Khoa học và Kỹ thuật Thông tin.
+        </p>
+      </div>
+      <div class="site-footer__links">
+        <a href="index.html">Khám phá chủ đề</a> &bull;
+        <a href="../lecturers/index.html">Danh bạ giảng viên</a>
+      </div>
+    </div>
+  </footer>
+
+</body>
+</html>
+

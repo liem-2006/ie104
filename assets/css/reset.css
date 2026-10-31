@@ -1,0 +1,74 @@
+/* ==========================================================================
+   IE104 - Reset CSS (Tự viết chuẩn môn học, không dùng thư viện ngoài)
+   Dành cho Job 1 - Nền tảng dùng chung
+   ========================================================================== */
+
+/* 1. Thiết lập box-sizing chuẩn cho toàn bộ thành phần */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Loại bỏ margin và padding mặc định không nhất quán giữa các trình duyệt */
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+figure,
+blockquote,
+dl,
+dd,
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+}
+
+/* 3. Đặt danh sách không có chấm đầu dòng mặc định */
+ul,
+ol {
+  list-style: none;
+}
+
+/* 4. Hình ảnh và video co giãn linh hoạt, không tràn khung chứa */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 5. Đồng bộ font và kích thước cho form controls */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* 6. Textarea tự động co giãn theo chiều dọc */
+textarea {
+  resize: vertical;
+}
+
+/* 7. Bỏ gạch chân mặc định của link */
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* 8. Giữ dấu hiệu focus rõ ràng phục vụ khả năng tiếp cận (Accessibility) */
+:focus-visible {
+  outline: 2px solid var(--color-focus, #0284c7);
+  outline-offset: 2px;
+}
+
