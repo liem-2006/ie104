@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Danh bạ Giảng viên — IE104 Định Hướng NCKH</title>
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/lecturers.css">
+</head>
+<body id="page-lecturers">
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <a href="../topics/index.html" class="site-header__logo">IE104 — Định Hướng NCKH</a>
+      <nav class="site-nav" aria-label="Điều hướng chính">
+        <ul class="site-nav__list">
+          <li class="site-nav__item">
+            <a href="../topics/index.html" class="site-nav__link">Khám phá</a>
+          </li>
+          <li class="site-nav__item">
+            <a href="./index.html" class="site-nav__link" aria-current="page">Giảng viên</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-main container">
+    <header class="page-header">
+      <h1 class="page-header__title">Danh bạ Giảng viên</h1>
+      <p class="page-header__desc">Danh mục 16 giảng viên hướng dẫn nghiên cứu khoa học thuộc các lĩnh vực An toàn thông tin, Khoa học Dữ liệu và Xử lý ngôn ngữ tự nhiên.</p>
+    </header>
+
+    <section class="lecturers-filter" aria-labelledby="filter-heading">
+      <h2 id="filter-heading" class="sr-only">Tìm kiếm và bộ lọc</h2>
+      <form class="lecturers-filter__form" onsubmit="return false;">
+        <div class="form-group">
+          <label for="lecturer-search" class="form-label">Tìm kiếm theo tên hoặc email giảng viên</label>
+          <input type="search" id="lecturer-search" class="form-input" placeholder="Nhập tên giảng viên hoặc email (ví dụ: camnt@uit.edu.vn)..." disabled>
+        </div>
+        <p class="form-helper" role="note">Chức năng tìm kiếm và bộ lọc sẽ bổ sung ở chặng JavaScript.</p>
+      </form>
+    </section>
+
+    <section class="lecturers-section" aria-labelledby="lecturers-list-heading">
+      <h2 id="lecturers-list-heading" class="sr-only">Danh sách giảng viên</h2>
+      <div class="lecturers-grid">
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">PD</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Phan Thế Duy</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:duypt@uit.edu.vn" class="lecturer-card__email-link">duypt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--sec">An toàn thông tin</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>10</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card lecturer-card--sample">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NC</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS.TS. Nguyễn Tấn Cầm</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:camnt@uit.edu.vn" class="lecturer-card__email-link">camnt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--sec">An toàn thông tin</span>
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>3</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <a href="./detail/index.html" class="lecturer-card__action-link">Xem hồ sơ mẫu &rarr;</a>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">PH</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS. TS. Phạm Văn Hậu</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:haupv@uit.edu.vn" class="lecturer-card__email-link">haupv@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--sec">An toàn thông tin</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">LH</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS. TS. Lê Kim Hùng</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:hunglkt@uit.edu.vn" class="lecturer-card__email-link">hunglkt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--sec">An toàn thông tin</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">HT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Hà Minh Tân</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:tanhm@uit.edu.vn" class="lecturer-card__email-link">tanhm@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NA</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Nguyễn Gia Tuấn Anh</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:anhngt@uit.edu.vn" class="lecturer-card__email-link">anhngt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>2</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">ĐH</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Đỗ Trọng Hợp</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:hopdt@uit.edu.vn" class="lecturer-card__email-link">hopdt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>2</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS. TS. Nguyễn Đình Thuân</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:thuannd@uit.edu.vn" class="lecturer-card__email-link">thuannd@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>4</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">TV</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Trịnh Quang Việt (ĐH KTL)</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:tqviet@uel.edu.vn" class="lecturer-card__email-link">tqviet@uel.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--data">Khoa học Dữ liệu</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NK</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Nguyễn Văn Kiệt</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:kietnv@uit.edu.vn" class="lecturer-card__email-link">kietnv@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>3</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NP</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Nguyễn Tấn Hoàng Phước</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:phuocnth@uit.edu.vn" class="lecturer-card__email-link">phuocnth@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">NN</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS. TS. Nguyễn Lưu Thùy Ngân</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:ngannlt@uit.edu.vn" class="lecturer-card__email-link">ngannlt@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">ĐT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Đặng Văn Thìn</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:thindv@uit.edu.vn" class="lecturer-card__email-link">thindv@uit.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>2</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">LT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Lê Duy Tân (ĐHQT)</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:ldtan@hcmiu.edu.vn" class="lecturer-card__email-link">ldtan@hcmiu.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>1</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">HT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">PGS. TS. Huỳnh Khả Tú (ĐHQG-HCM)</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:hktu@vnuhcm.edu.vn" class="lecturer-card__email-link">hktu@vnuhcm.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>2</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+        <article class="lecturer-card">
+          <div class="lecturer-card__header">
+            <div class="lecturer-card__avatar" aria-hidden="true">LT</div>
+            <div class="lecturer-card__meta">
+              <h3 class="lecturer-card__name">TS. Lê Thanh Tùng (ĐHKHTN)</h3>
+              <p class="lecturer-card__email">
+                <a href="mailto:lttung@fit.hcmus.edu.vn" class="lecturer-card__email-link">lttung@fit.hcmus.edu.vn</a>
+              </p>
+            </div>
+          </div>
+          <div class="lecturer-card__body">
+            <div class="lecturer-card__tags" aria-label="Nhóm lĩnh vực">
+              <span class="lecturer-tag lecturer-tag--nlp">Xử lý ngôn ngữ tự nhiên</span>
+            </div>
+            <p class="lecturer-card__topic-count">
+              <strong>2</strong> hướng đề tài nghiên cứu
+            </p>
+          </div>
+          <div class="lecturer-card__footer">
+            <span class="lecturer-card__action-disabled" title="Trang mẫu chưa triển khai cho giảng viên này">Trang mẫu chưa triển khai</span>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <p class="site-footer__text">Đồ án môn học IE104 — Internet và Công nghệ Web. Khoa Khoa học và Kỹ thuật Thông tin, Trường ĐH Công nghệ Thông tin (ĐHQG-HCM).</p>
+    </div>
+  </footer>
+</body>
+</html>

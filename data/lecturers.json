@@ -1,0 +1,101 @@
+{
+  "lecturers": [
+    {
+      "name": "TS. Phan Thế Duy",
+      "email": "duypt@uit.edu.vn"
+    },
+    {
+      "name": "PGS.TS. Nguyễn Tấn Cầm",
+      "email": "camnt@uit.edu.vn",
+      "profile": {
+        "affiliation": "Khoa Khoa học và Kỹ thuật Thông tin, Trường Đại học Công nghệ Thông tin, ĐHQG-HCM",
+        "bio": "Phó Giáo sư, Tiến sĩ ngành Công nghệ Thông tin, hiện là Phó Trưởng khoa Khoa Khoa học và Kỹ thuật Thông tin tại Trường Đại học Công nghệ Thông tin, ĐHQG-HCM. Hướng nghiên cứu chuyên sâu bao gồm an toàn thông tin thiết bị di động, phân tích phát hiện mã độc và ứng dụng học máy trong an ninh mạng.",
+        "researchAreas": [
+          "An toàn thông tin di động",
+          "Phát hiện mã độc",
+          "Học máy trong an ninh mạng",
+          "An toàn và bảo mật thông tin"
+        ],
+        "sourceUrl": "https://orcid.org/0000-0002-3909-7650",
+        "checkedAt": "2026-10-31"
+      },
+      "researchProfiles": [
+        {
+          "label": "Google Scholar",
+          "url": "https://scholar.google.com/citations?user=MVLSi5oAAAAJ"
+        },
+        {
+          "label": "ORCID",
+          "url": "https://orcid.org/0000-0002-3909-7650"
+        }
+      ],
+      "metrics": [
+        {
+          "sourceName": "Google Scholar",
+          "sourceUrl": "https://scholar.google.com/citations?user=MVLSi5oAAAAJ",
+          "asOf": "2026-10-31",
+          "scope": "all-time",
+          "citations": 325,
+          "hIndex": 10,
+          "i10Index": 11
+        }
+      ]
+    },
+    {
+      "name": "PGS. TS. Phạm Văn Hậu",
+      "email": "haupv@uit.edu.vn"
+    },
+    {
+      "name": "PGS. TS. Lê Kim Hùng",
+      "email": "hunglkt@uit.edu.vn"
+    },
+    {
+      "name": "TS. Hà Minh Tân",
+      "email": "tanhm@uit.edu.vn"
+    },
+    {
+      "name": "TS. Nguyễn Gia Tuấn Anh",
+      "email": "anhngt@uit.edu.vn"
+    },
+    {
+      "name": "TS. Đỗ Trọng Hợp",
+      "email": "hopdt@uit.edu.vn"
+    },
+    {
+      "name": "PGS. TS. Nguyễn Đình Thuân",
+      "email": "thuannd@uit.edu.vn"
+    },
+    {
+      "name": "TS. Trịnh Quang Việt (ĐH KTL)",
+      "email": "tqviet@uel.edu.vn"
+    },
+    {
+      "name": "TS. Nguyễn Văn Kiệt",
+      "email": "kietnv@uit.edu.vn"
+    },
+    {
+      "name": "TS. Nguyễn Tấn Hoàng Phước",
+      "email": "phuocnth@uit.edu.vn"
+    },
+    {
+      "name": "PGS. TS. Nguyễn Lưu Thùy Ngân",
+      "email": "ngannlt@uit.edu.vn"
+    },
+    {
+      "name": "TS. Đặng Văn Thìn",
+      "email": "thindv@uit.edu.vn"
+    },
+    {
+      "name": "TS. Lê Duy Tân (ĐHQT)",
+      "email": "ldtan@hcmiu.edu.vn"
+    },
+    {
+      "name": "PGS. TS. Huỳnh Khả Tú (ĐHQG-HCM)",
+      "email": "hktu@vnuhcm.edu.vn"
+    },
+    {
+      "name": "TS. Lê Thanh Tùng (ĐHKHTN)",
+      "email": "lttung@fit.hcmus.edu.vn"
+    }
+  ]
+}
