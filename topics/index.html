@@ -1,0 +1,1087 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description"
+    content="Khám phá danh sách đề tài nghiên cứu khoa học liên tục, cập nhật theo ngày mới nhất tại Trường Đại học Công nghệ Thông tin ĐHQG-HCM (UIT).">
+  <title>Khám phá đề tài nghiên cứu | UIT Discovery — IE104</title>
+  <link rel="stylesheet" href="../assets/css/reset.css">
+  <link rel="stylesheet" href="../assets/css/style.css">
+  <link rel="stylesheet" href="../assets/css/topics.css">
+  <script defer src="../assets/js/topics.js"></script>
+</head>
+
+<body id="page-topics">
+  <!-- Header dùng chung cho các trang thuộc phạm vi Job 1 -->
+  <header class="site-header">
+    <div class="container site-header__inner">
+      <!-- Cụm trái: Logo UIT + Nút 3 gạch (Mobile) + Thanh điều hướng chính (Desktop) -->
+      <div class="site-header__left">
+        <a class="site-header__brand" href="./index.html" aria-label="Trang khám phá đề tài nghiên cứu UIT">
+          <img class="site-header__logo-img" src="../assets/images/uit-logo.png"
+            alt="Logo Trường Đại học Công nghệ Thông tin ĐHQG-HCM (UIT)" width="54" height="42">
+        </a>
+
+        <!-- Menu 3 gạch hoạt động bằng HTML native trên Mobile (< 768px), nằm ngay bên phải kế bên Logo, chỉ có icon 3 gạch -->
+        <details class="site-header__mobile-menu" name="site-header-menu">
+          <summary class="site-header__menu-toggle" aria-label="Mở menu điều hướng trên điện thoại">
+            <svg class="site-header__menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </summary>
+          <nav class="site-header__mobile-nav" aria-label="Menu điều hướng di động">
+            <ul class="site-header__mobile-list">
+              <li>
+                <a class="site-header__mobile-link site-header__mobile-link--active" href="./index.html"
+                  aria-current="page">
+                  <span class="site-header__mobile-link-text">Đề tài</span>
+                  <span class="site-header__badge-count">12</span>
+                </a>
+              </li>
+              <li>
+                <a class="site-header__mobile-link" href="./detail/index.html">
+                  <span class="site-header__mobile-link-text">Chi tiết đề tài mẫu (IDS)</span>
+                  <span class="site-header__tag-sub">TV2</span>
+                </a>
+              </li>
+              <li>
+                <a class="site-header__mobile-link" href="../lecturers/index.html">
+                  <span class="site-header__mobile-link-text">Giảng viên</span>
+                  <span class="site-header__tag-sub">16 GV</span>
+                </a>
+              </li>
+              <li>
+                <a class="site-header__mobile-link" href="../lecturers/detail/index.html">
+                  <span class="site-header__mobile-link-text">Hồ sơ giảng viên mẫu</span>
+                  <span class="site-header__tag-sub">TV3</span>
+                </a>
+              </li>
+              <li>
+                <a class="site-header__mobile-link" href="#topics-faq">
+                  <span class="site-header__mobile-link-text">Các câu hỏi thường gặp</span>
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </details>
+
+        <!-- Menu Desktop (>= 768px): Đề tài, Giảng viên và Các câu hỏi thường gặp -->
+        <nav class="site-header__nav" aria-label="Điều hướng chính">
+          <ul class="site-header__menu">
+            <li class="site-header__item">
+              <a class="site-header__link site-header__link--active" href="./index.html" aria-current="page">
+                <span>Đề tài</span>
+                <span class="site-header__badge-count">12</span>
+              </a>
+            </li>
+            <li class="site-header__item">
+              <a class="site-header__link" href="../lecturers/index.html">
+                <span>Giảng viên</span>
+              </a>
+            </li>
+            <li class="site-header__item">
+              <a class="site-header__link" href="#topics-faq">
+                <span>Các câu hỏi thường gặp</span>
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Cụm phải: Ô tìm kiếm nhanh (disabled) + Avatar người dùng với dropdown native -->
+      <div class="site-header__actions">
+        <form class="site-header__search" role="search" aria-label="Tìm kiếm nhanh đề tài">
+          <label for="header-search-input" class="sr-only">Tìm kiếm đề tài hoặc từ khóa</label>
+          <div class="site-header__search-wrap">
+            <svg class="site-header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input id="header-search-input" class="site-header__search-input" type="search"
+              placeholder="Tìm đề tài, giảng viên..." disabled
+              title="Tìm kiếm toàn trang sẽ bổ sung ở chặng JavaScript">
+          </div>
+        </form>
+
+        <!-- Dropdown tài khoản người dùng sử dụng <details> native -->
+        <details class="site-header__user-menu" name="site-header-menu">
+          <summary class="site-header__avatar-btn" aria-label="Mở menu tài khoản sinh viên">
+            <span class="site-header__avatar" aria-hidden="true">SV</span>
+          </summary>
+          <div class="site-header__dropdown">
+            <div class="site-header__dropdown-user">
+              <p class="site-header__dropdown-name">Sinh viên UIT</p>
+              <p class="site-header__dropdown-email">sinhvien@uit.edu.vn</p>
+            </div>
+            <ul class="site-header__dropdown-list">
+              <li>
+                <button type="button" class="site-header__dropdown-btn" disabled>
+                  <span class="site-header__dropdown-btn-main">
+                    <svg class="site-header__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path
+                        d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z">
+                      </path>
+                    </svg>
+                    <span>Settings</span>
+                  </span>
+                  <span class="site-header__dropdown-tag">Chờ JS</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="site-header__dropdown-btn" disabled>
+                  <span class="site-header__dropdown-btn-main">
+                    <svg class="site-header__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <span>Mode</span>
+                  </span>
+                  <span class="site-header__dropdown-tag">Tự động CSS</span>
+                </button>
+              </li>
+              <li>
+                <button type="button" class="site-header__dropdown-btn" disabled>
+                  <span class="site-header__dropdown-btn-main">
+                    <svg class="site-header__dropdown-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                      <polyline points="16 17 21 12 16 7"></polyline>
+                      <line x1="21" y1="12" x2="9" y2="12"></line>
+                    </svg>
+                    <span>Logout</span>
+                  </span>
+                  <span class="site-header__dropdown-tag">Chờ JS</span>
+                </button>
+              </li>
+            </ul>
+            <p class="site-header__dropdown-note">
+              Giao diện Sáng/Tối hiện tự động theo <code>prefers-color-scheme</code>. Các thao tác tài khoản chưa triển
+              khai ở Job 1.
+            </p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </header>
+
+  <!-- Bố cục 3 cột Discovery: Hero ở hàng trên, Cột giữa bắt đầu bằng thanh lựa chọn ngang mép hai sidebar -->
+  <main class="container discovery-layout topics-main" id="main-content">
+
+    <!-- 1. PHẦN ĐẦU (HERO) — CĂN GIỮA TRÊN HÀNG ĐẦU TIÊN CỦA GRID (HAI BÊN THOÁNG) -->
+    <section class="topics-hero" id="topics-hero" aria-labelledby="topics-hero-title">
+      <div class="topics-hero__badge">
+        <span class="topics-hero__badge-dot" aria-hidden="true"></span>
+        <span>Nghiên cứu khoa học sinh viên UIT</span>
+      </div>
+
+      <h1 id="topics-hero-title" class="topics-hero__title">
+        <span class="topics-hero__line topics-hero__line--1">Tìm một hướng nghiên cứu</span>
+        <span class="topics-hero__line topics-hero__line--2" id="hero-line-2">thuộc về bạn.</span>
+      </h1>
+
+      <p class="topics-hero__desc">
+        Bắt đầu từ điều bạn quan tâm, tìm hướng nghiên cứu phù hợp và kết nối với giảng viên hướng dẫn tại UIT.
+      </p>
+    </section>
+
+    <!-- 2. CỘT GIỮA: NỘI DUNG CHÍNH (BẮT ĐẦU BẰNG THANH LỰA CHỌN LĨNH VỰC) -->
+    <div class="discovery-center">
+      <!-- CỤM LỰA CHỌN LĨNH VỰC — MỐC CĂN TRÊN CỦA HAI SIDEBAR -->
+      <div class="topics-controls" role="region" aria-label="Lọc nhanh và mở bảng sắp xếp đề tài">
+        <div class="topics-domain-nav" aria-label="Bộ lọc nhanh lĩnh vực và nút chọn">
+          <button type="button" class="topics-domain-nav__pill topics-domain-nav__pill--selected"
+            data-domain-filter="all" aria-pressed="true">
+            <span>Tất cả</span>
+          </button>
+          <button type="button" class="topics-domain-nav__pill" data-domain-filter="sec" aria-pressed="false">
+            <span class="topics-domain-nav__dot topics-domain-nav__dot--sec" aria-hidden="true"></span>
+            <span>An toàn thông tin</span>
+          </button>
+          <button type="button" class="topics-domain-nav__pill" data-domain-filter="data" aria-pressed="false">
+            <span class="topics-domain-nav__dot topics-domain-nav__dot--data" aria-hidden="true"></span>
+            <span>Dữ liệu &amp; dự báo</span>
+          </button>
+          <button type="button" class="topics-domain-nav__pill" data-domain-filter="nlp" aria-pressed="false">
+            <span class="topics-domain-nav__dot topics-domain-nav__dot--nlp" aria-hidden="true"></span>
+            <span>AI ngôn ngữ</span>
+          </button>
+          <button type="button" class="topics-domain-nav__pill topics-domain-nav__pill--multi" id="pill-multi-domains"
+            hidden aria-pressed="false" title="Bấm để xem và chỉnh sửa các lĩnh vực đã chọn">
+            <span>Nhiều lĩnh vực</span>
+          </button>
+          <button type="button" class="topics-domain-nav__pill topics-domain-nav__pill--filter" aria-haspopup="dialog"
+            id="btn-open-filter-dialog" aria-label="Mở bảng chọn lĩnh vực và tùy chỉnh sắp xếp">
+            <svg class="topics-domain-nav__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+              stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            <span>Chọn</span>
+          </button>
+        </div>
+        <p class="topics-controls__note">
+          Lọc nhanh theo từng lĩnh vực hoặc bấm <strong>+ Chọn</strong> để kết hợp nhiều lĩnh vực và tùy chỉnh sắp xếp.
+        </p>
+      </div>
+
+      <!-- 3. VÙNG KẾT QUẢ CHUNG — DANH SÁCH ĐỀ TÀI NGHIÊN CỨU LIÊN TỤC -->
+      <section id="topics-results" class="topics-results" aria-labelledby="topics-results-heading">
+        <header class="topics-results__header">
+          <div class="topics-results__title-wrap">
+            <h2 id="topics-results-heading" class="topics-results__title">Đề tài nghiên cứu</h2>
+            <span class="topics-results__count" id="topics-results-count" aria-live="polite">12 đề tài hiển thị</span>
+          </div>
+          <p class="topics-results__note" id="topics-results-sort-note">
+            Sắp xếp mặc định: Mới nhất trước. Ngày thêm trong bản xem trước là dữ liệu minh họa.
+          </p>
+        </header>
+
+        <div class="topics-rows">
+          <!-- HÀNG 01 (Mới nhất: 02/11/2026 — AI ngôn ngữ) -->
+          <article id="topic-row-01" class="topic-row topic-card" data-domain="nlp" data-created-at="2026-11-02"
+            data-title="Agentic AI, Multi-Agent AI Systems">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 01">01</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Agentic AI, Multi-Agent AI Systems</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--nlp">AI ngôn ngữ</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-11-02">02/11/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Tấn Hoàng Phước</span>
+                <a class="topic-row__email" href="mailto:phuocnth@uit.edu.vn">phuocnth@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 02 (28/10/2026 — An toàn thông tin — ĐỀ TÀI MẪU IDS) -->
+          <article id="topic-row-02" class="topic-row topic-card topic-row--featured" data-domain="sec"
+            data-created-at="2026-10-28" data-title="Phát hiện tấn công mạng bằng học sâu">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 02">02</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">
+                  <a class="topic-row__title-link" href="./detail/index.html">Phát hiện tấn công mạng bằng học sâu</a>
+                </h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--sec">An toàn thông tin</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-28">28/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">PGS.TS. Nguyễn Tấn Cầm</span>
+                <a class="topic-row__email" href="mailto:camnt@uit.edu.vn">camnt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <a class="topic-row__link btn btn--primary" href="./detail/index.html">
+                  <span>Xem đề tài mẫu</span>
+                  <span aria-hidden="true">→</span>
+                </a>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 03 (24/10/2026 — Dữ liệu & dự báo) -->
+          <article id="topic-row-03" class="topic-row topic-card" data-domain="data" data-created-at="2026-10-24"
+            data-title="Phát triển và ứng dụng các mô hình trí tuệ nhân tạo trên dữ liệu lớn (Developing and applying artificial intelligence models on big data)">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 03">03</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">
+                  Phát triển và ứng dụng các mô hình trí tuệ nhân tạo trên dữ liệu lớn (Developing and applying
+                  artificial intelligence models on big data)
+                </h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--data">Dữ liệu &amp; dự báo</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-24">24/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Hà Minh Tân</span>
+                <a class="topic-row__email" href="mailto:tanhm@uit.edu.vn">tanhm@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 04 (19/10/2026 — AI ngôn ngữ) -->
+          <article id="topic-row-04" class="topic-row topic-card" data-domain="nlp" data-created-at="2026-10-19"
+            data-title="Mô hình ngôn ngữ lớn (LLM)">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 04">04</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Mô hình ngôn ngữ lớn (LLM)</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--nlp">AI ngôn ngữ</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-19">19/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Văn Kiệt</span>
+                <a class="topic-row__email" href="mailto:kietnv@uit.edu.vn">kietnv@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 05 (15/10/2026 — An toàn thông tin) -->
+          <article id="topic-row-05" class="topic-row topic-card" data-domain="sec" data-created-at="2026-10-15"
+            data-title="An toàn và bảo mật cho hệ thống Agentic AI và GenAI">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 05">05</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">An toàn và bảo mật cho hệ thống Agentic AI và GenAI</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--sec">An toàn thông tin</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-15">15/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Phan Thế Duy</span>
+                <a class="topic-row__email" href="mailto:duypt@uit.edu.vn">duypt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 06 (10/10/2026 — Dữ liệu & dự báo) -->
+          <article id="topic-row-06" class="topic-row topic-card" data-domain="data" data-created-at="2026-10-10"
+            data-title="Phân tích và dự báo chuỗi thời gian">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 06">06</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Phân tích và dự báo chuỗi thời gian</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--data">Dữ liệu &amp; dự báo</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-10">10/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Gia Tuấn Anh</span>
+                <a class="topic-row__email" href="mailto:anhngt@uit.edu.vn">anhngt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 07 (05/10/2026 — AI ngôn ngữ) -->
+          <article id="topic-row-07" class="topic-row topic-card" data-domain="nlp" data-created-at="2026-10-05"
+            data-title="Trí tuệ nhân tạo tạo sinh (AI Generative)">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 07">07</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Trí tuệ nhân tạo tạo sinh (AI Generative)</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--nlp">AI ngôn ngữ</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-10-05">05/10/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Văn Kiệt</span>
+                <a class="topic-row__email" href="mailto:kietnv@uit.edu.vn">kietnv@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 08 (28/09/2026 — An toàn thông tin) -->
+          <article id="topic-row-08" class="topic-row topic-card" data-domain="sec" data-created-at="2026-09-28"
+            data-title="Kiểm thử xâm nhập tự động và phát hiện lỗ hổng phần mềm">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 08">08</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Kiểm thử xâm nhập tự động và phát hiện lỗ hổng phần mềm</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--sec">An toàn thông tin</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-09-28">28/09/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Phan Thế Duy</span>
+                <a class="topic-row__email" href="mailto:duypt@uit.edu.vn">duypt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 09 (20/09/2026 — Dữ liệu & dự báo) -->
+          <article id="topic-row-09" class="topic-row topic-card" data-domain="data" data-created-at="2026-09-20"
+            data-title="Tăng cường mô hình học cho đa miền công nghệ thông tin (Enhancing learning model for multi-domain in IT)">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 09">09</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">
+                  Tăng cường mô hình học cho đa miền công nghệ thông tin (Enhancing learning model for multi-domain in
+                  IT)
+                </h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--data">Dữ liệu &amp; dự báo</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-09-20">20/09/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">PGS.TS. Nguyễn Tấn Cầm</span>
+                <a class="topic-row__email" href="mailto:camnt@uit.edu.vn">camnt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 10 (15/09/2026 — AI ngôn ngữ) -->
+          <article id="topic-row-10" class="topic-row topic-card" data-domain="nlp" data-created-at="2026-09-15"
+            data-title="Xử lý văn bản truyền thông xã hội (Social Media Text Processing)">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 10">10</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Xử lý văn bản truyền thông xã hội (Social Media Text Processing)</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--nlp">AI ngôn ngữ</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-09-15">15/09/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Văn Kiệt</span>
+                <a class="topic-row__email" href="mailto:kietnv@uit.edu.vn">kietnv@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 11 (08/09/2026 — An toàn thông tin) -->
+          <article id="topic-row-11" class="topic-row topic-card" data-domain="sec" data-created-at="2026-09-08"
+            data-title="Phân loại mã độc bằng học sâu">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 11">11</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Phân loại mã độc bằng học sâu</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--sec">An toàn thông tin</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-09-08">08/09/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">PGS.TS. Nguyễn Tấn Cầm</span>
+                <a class="topic-row__email" href="mailto:camnt@uit.edu.vn">camnt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+
+          <!-- HÀNG 12 (01/09/2026 — Dữ liệu & dự báo) -->
+          <article id="topic-row-12" class="topic-row topic-card" data-domain="data" data-created-at="2026-09-01"
+            data-title="Quản trị, thiết kế và tối ưu hóa hệ thống cơ sở dữ liệu nâng cao">
+            <div class="topic-row__start">
+              <span class="topic-row__num" aria-label="Thứ tự 12">12</span>
+              <div class="topic-row__main">
+                <h3 class="topic-row__title">Quản trị, thiết kế và tối ưu hóa hệ thống cơ sở dữ liệu nâng cao</h3>
+                <div class="topic-row__meta">
+                  <span class="topic-row__domain topic-row__domain--data">Dữ liệu &amp; dự báo</span>
+                  <span aria-hidden="true">·</span>
+                  <span class="topic-row__date-wrap">
+                    Ngày thêm: <time class="topic-row__date" datetime="2026-09-01">01/09/2026</time>
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div class="topic-row__end">
+              <div class="topic-row__lecturer">
+                <span class="topic-row__lecturer-name">TS. Nguyễn Gia Tuấn Anh</span>
+                <a class="topic-row__email" href="mailto:anhngt@uit.edu.vn">anhngt@uit.edu.vn</a>
+              </div>
+              <div class="topic-row__action">
+                <span class="topic-row__status">Trang mẫu chưa triển khai</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- Trạng thái rỗng mẫu đặt cùng cấp (sibling) với danh mục kết quả, mặc định ẩn bằng [hidden] -->
+      <section id="topics-empty" class="topics-empty" aria-labelledby="topics-empty-heading" hidden>
+        <div class="topics-empty__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+            stroke-linejoin="round" width="40" height="40">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            <line x1="8" y1="11" x2="14" y2="11"></line>
+          </svg>
+        </div>
+        <h2 id="topics-empty-heading" class="topics-empty__title">Không tìm thấy chủ đề phù hợp</h2>
+        <p class="topics-empty__desc">
+          Hiện không có đề tài nào khớp với lĩnh vực nghiên cứu đã chọn. Vui lòng thử lại với lĩnh vực khác hoặc bấm nút
+          bên dưới để xem lại tất cả đề tài.
+        </p>
+        <div class="topics-empty__action">
+          <button type="button" class="btn btn--primary btn-reset-filter" id="btn-reset-filter">
+            Xóa bộ lọc
+          </button>
+        </div>
+      </section>
+
+      <!-- Khu vực Các câu hỏi thường gặp (#topics-faq) ngay trong trang -->
+      <section id="topics-faq" class="topics-faq" aria-labelledby="topics-faq-heading">
+        <header class="topics-faq__header">
+          <h2 id="topics-faq-heading" class="topics-faq__title">Các câu hỏi thường gặp</h2>
+          <p class="topics-faq__desc">
+            Giải đáp nhanh cách tra cứu đề tài, sắp xếp theo thời gian và liên hệ giảng viên trong phạm vi Job 1.
+          </p>
+        </header>
+
+        <div class="topics-faq__list">
+          <details class="topics-faq__item" open>
+            <summary class="topics-faq__question">
+              <span>1. Làm thế nào để xem cây lộ trình kiến thức (roadmap) của một đề tài?</span>
+              <span class="topics-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="topics-faq__answer">
+              Trong phạm vi Job 1 (HTML/CSS tĩnh), đề tài mẫu <strong>“Phát hiện tấn công mạng bằng học sâu”</strong>
+              của <strong>PGS.TS. Nguyễn Tấn Cầm</strong> đã được liên kết trực tiếp tới trang chi tiết
+              <a href="./detail/index.html">Chi tiết chủ đề &amp; cây kiến thức</a>. Các đề tài còn lại sẽ được nạp
+              động từ <code>data/research-data.json</code> ở chặng JavaScript.
+            </p>
+          </details>
+
+          <details class="topics-faq__item">
+            <summary class="topics-faq__question">
+              <span>2. Làm sao để liên hệ với giảng viên hướng dẫn đề tài?</span>
+              <span class="topics-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="topics-faq__answer">
+              Mỗi hàng đề tài đều hiển thị tên giảng viên và địa chỉ email chính thức (đuôi <code>@uit.edu.vn</code>).
+              Bạn có thể nhấp trực tiếp vào địa chỉ email để mở ứng dụng thư điện tử, hoặc chuyển sang trang
+              <a href="../lecturers/index.html">Danh bạ giảng viên</a> để xem hồ sơ và hướng nghiên cứu chuyên sâu.
+            </p>
+          </details>
+
+          <details class="topics-faq__item">
+            <summary class="topics-faq__question">
+              <span>3. Các đề tài được sắp xếp theo tiêu chí nào và có thể lọc kết hợp không?</span>
+              <span class="topics-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="topics-faq__answer">
+              Mặc định, danh sách được sắp xếp theo <strong>Mới nhất trước</strong> dựa trên ngày thêm minh họa.
+              Bạn có thể bấm các chip lọc nhanh trên thanh điều khiển hoặc bấm nút <strong>+ Chọn</strong> để lọc kết
+              hợp nhiều lĩnh vực
+              và chuyển đổi giữa 3 chế độ sắp xếp: <em>Mới nhất trước</em>, <em>Cũ nhất trước</em>, hoặc <em>Tên đề tài
+                A–Z</em>.
+            </p>
+          </details>
+
+          <details class="topics-faq__item">
+            <summary class="topics-faq__question">
+              <span>4. Làm sao để đổi giữa giao diện Sáng (Light) và Tối (Dark)?</span>
+              <span class="topics-faq__icon" aria-hidden="true"></span>
+            </summary>
+            <p class="topics-faq__answer">
+              Ở Job 1, toàn bộ bảng màu tuân thủ 100% chế độ màu của hệ điều hành thông qua
+              <code>@media (prefers-color-scheme)</code>. Khi thiết bị của bạn chuyển giữa Dark mode và Light mode, giao
+              diện UIT Discovery sẽ tự động chuyển màu mượt mà. Nút gạt thủ công sẽ được thêm tại chặng JavaScript.
+            </p>
+          </details>
+        </div>
+      </section>
+    </div>
+
+    <!-- CỘT TRÁI (SIDEBAR TRÁI): THÔNG KÊ NHANH & BƯỚC THỰC HIỆN (TRÌNH BÀY PHẲNG TRÊN NỀN TRANG) -->
+    <aside class="discovery-sidebar discovery-sidebar--left" aria-label="Thống kê tổng quan và kiến thức">
+      <div class="discovery-sidebar__sticky">
+        <!-- Khung 1: Thống kê nhanh -->
+        <section class="sidebar-section" aria-labelledby="sidebar-stats-title">
+          <div class="sidebar-section__header">
+            <h2 id="sidebar-stats-title" class="sidebar-section__title">Tổng quan nghiên cứu</h2>
+          </div>
+
+          <dl class="overview-stats">
+            <div class="overview-stats__row">
+              <dt class="overview-stats__term">Lĩnh vực có dữ liệu</dt>
+              <dd class="overview-stats__value">03</dd>
+            </div>
+            <div class="overview-stats__row">
+              <dt class="overview-stats__term">Đề tài trong danh mục</dt>
+              <dd class="overview-stats__value">37</dd>
+            </div>
+            <div class="overview-stats__row">
+              <dt class="overview-stats__term">Giảng viên hướng dẫn</dt>
+              <dd class="overview-stats__value">16</dd>
+            </div>
+          </dl>
+        </section>
+
+        <!-- Khung 2: Kiến thức thường gặp trong roadmap (Đối chiếu chính xác research-data.json) -->
+        <section class="sidebar-section" aria-labelledby="sidebar-knowledge-title">
+          <div class="sidebar-section__header">
+            <h2 id="sidebar-knowledge-title" class="sidebar-section__title">Kiến thức thường gặp</h2>
+            <span class="sidebar-section__tag">Tần suất</span>
+          </div>
+
+          <ul class="knowledge-list">
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Học máy · <span class="knowledge-item__type">Chủ đề</span></span>
+                <span class="knowledge-item__count">16</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w100"></span>
+              </div>
+            </li>
+
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Xác suất thống kê · <span class="knowledge-item__type">Chủ
+                    đề</span></span>
+                <span class="knowledge-item__count">11</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w69"></span>
+              </div>
+            </li>
+
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Học sâu · <span class="knowledge-item__type">Chủ đề</span></span>
+                <span class="knowledge-item__count">10</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w63"></span>
+              </div>
+            </li>
+
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Lập trình Python · <span class="knowledge-item__type">Chủ
+                    đề</span></span>
+                <span class="knowledge-item__count">9</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w56"></span>
+              </div>
+            </li>
+
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Deep Learning trong KH dữ liệu · <span
+                    class="knowledge-item__type">Môn học</span></span>
+                <span class="knowledge-item__count">8</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w50"></span>
+              </div>
+            </li>
+
+            <li class="knowledge-item">
+              <div class="knowledge-item__top">
+                <span class="knowledge-item__name">Máy học · <span class="knowledge-item__type">Môn học</span></span>
+                <span class="knowledge-item__count">6</span>
+              </div>
+              <div class="knowledge-item__bar" aria-hidden="true">
+                <span class="knowledge-item__fill knowledge-item__fill--w38"></span>
+              </div>
+            </li>
+          </ul>
+
+          <p class="sidebar-section__footnote">
+            Đếm từng lần xuất hiện của cùng tên chủ đề hoặc môn học trong 37 đề tài.
+          </p>
+        </section>
+
+        <!-- Khung 3: Bắt đầu như thế nào? -->
+        <section class="sidebar-section" aria-labelledby="sidebar-guide-title">
+          <div class="sidebar-section__header">
+            <h2 id="sidebar-guide-title" class="sidebar-section__title">Bắt đầu như thế nào?</h2>
+          </div>
+
+          <ol class="guide-steps">
+            <li class="guide-steps__item">
+              <span class="guide-steps__num" aria-hidden="true">1</span>
+              <span>Chọn lĩnh vực bạn quan tâm</span>
+            </li>
+            <li class="guide-steps__item">
+              <span class="guide-steps__num" aria-hidden="true">2</span>
+              <span>Duyệt danh sách đề tài</span>
+            </li>
+            <li class="guide-steps__item">
+              <span class="guide-steps__num" aria-hidden="true">3</span>
+              <span>Xem roadmap và môn tiên quyết</span>
+            </li>
+            <li class="guide-steps__item">
+              <span class="guide-steps__num" aria-hidden="true">4</span>
+              <span>Liên hệ giảng viên hướng dẫn</span>
+            </li>
+          </ol>
+
+          <a class="sidebar-section__action btn btn--outline" href="./detail/index.html">
+            <span>Xem đề tài mẫu (IDS)</span>
+            <span aria-hidden="true">→</span>
+          </a>
+        </section>
+      </div>
+    </aside>
+
+    <!-- CỘT PHẢI (SIDEBAR PHẢI): GIẢNG VIÊN & ĐỀ TÀI ĐƯỢC QUAN TÂM (TRÌNH BÀY PHẲNG TRÊN NỀN TRANG) -->
+    <aside class="discovery-sidebar discovery-sidebar--right" aria-label="Giảng viên và đề tài được quan tâm">
+      <div class="discovery-sidebar__sticky">
+        <!-- Khung 1: Giảng viên được quan tâm -->
+        <section class="sidebar-section" aria-labelledby="sidebar-lecturers-title">
+          <div class="sidebar-section__header">
+            <h2 id="sidebar-lecturers-title" class="sidebar-section__title">Giảng viên được quan tâm</h2>
+            <a class="sidebar-section__link" href="../lecturers/index.html">Tất cả</a>
+          </div>
+
+          <ul class="featured-lecturers">
+            <li class="featured-lecturer">
+              <span class="featured-lecturer__avatar" aria-hidden="true">NC</span>
+              <div class="featured-lecturer__info">
+                <p class="featured-lecturer__name">
+                  <a href="../lecturers/detail/index.html">PGS.TS. Nguyễn Tấn Cầm</a>
+                </p>
+                <p class="featured-lecturer__role">An toàn thông tin · 680 lượt xem</p>
+              </div>
+            </li>
+
+            <li class="featured-lecturer">
+              <span class="featured-lecturer__avatar" aria-hidden="true">PD</span>
+              <div class="featured-lecturer__info">
+                <p class="featured-lecturer__name">TS. Phan Thế Duy</p>
+                <p class="featured-lecturer__role">An toàn thông tin · 590 lượt xem</p>
+              </div>
+            </li>
+
+            <li class="featured-lecturer">
+              <span class="featured-lecturer__avatar" aria-hidden="true">NK</span>
+              <div class="featured-lecturer__info">
+                <p class="featured-lecturer__name">TS. Nguyễn Văn Kiệt</p>
+                <p class="featured-lecturer__role">Khoa học Máy tính · 520 lượt xem</p>
+              </div>
+            </li>
+          </ul>
+
+          <p class="sidebar-section__footnote">
+            Số liệu minh họa · 30 ngày
+          </p>
+        </section>
+
+        <!-- Khung 2: Đề tài được quan tâm -->
+        <section class="sidebar-section" aria-labelledby="sidebar-trending-topics-title">
+          <div class="sidebar-section__header">
+            <h2 id="sidebar-trending-topics-title" class="sidebar-section__title">Đề tài được quan tâm</h2>
+          </div>
+
+          <ul class="featured-topics">
+            <li class="featured-topic">
+              <span class="featured-topic__rank" aria-label="Hạng 1">01</span>
+              <div class="featured-topic__info">
+                <p class="featured-topic__title">
+                  <a class="featured-topic__link" href="./detail/index.html">Phát hiện tấn công mạng bằng học sâu</a>
+                </p>
+                <p class="featured-topic__meta">An toàn thông tin · 560 lượt xem</p>
+              </div>
+            </li>
+
+            <li class="featured-topic">
+              <span class="featured-topic__rank" aria-label="Hạng 2">02</span>
+              <div class="featured-topic__info">
+                <p class="featured-topic__title">Agentic AI, Multi-Agent AI Systems</p>
+                <p class="featured-topic__meta">AI ngôn ngữ · 490 lượt xem</p>
+              </div>
+            </li>
+
+            <li class="featured-topic">
+              <span class="featured-topic__rank" aria-label="Hạng 3">03</span>
+              <div class="featured-topic__info">
+                <p class="featured-topic__title">Kiểm thử xâm nhập tự động và phát hiện lỗ hổng phần mềm</p>
+                <p class="featured-topic__meta">An toàn thông tin · 430 lượt xem</p>
+              </div>
+            </li>
+          </ul>
+
+          <p class="sidebar-section__footnote">
+            Số liệu minh họa · 30 ngày
+          </p>
+        </section>
+      </div>
+    </aside>
+  </main>
+
+  <!-- HỘP THOẠI MODAL NATIVE: LĨNH VỰC VÀ SẮP XẾP -->
+  <dialog id="topics-filter-dialog" class="topics-dialog" aria-labelledby="dialog-title" aria-describedby="dialog-desc">
+    <div class="topics-dialog__container">
+      <header class="topics-dialog__header">
+        <div class="topics-dialog__heading-group">
+          <h2 id="dialog-title" class="topics-dialog__title">Lĩnh vực và sắp xếp</h2>
+          <p id="dialog-desc" class="topics-dialog__subtitle">Chọn lĩnh vực bạn quan tâm và cách hiển thị đề tài.</p>
+        </div>
+        <button type="button" class="topics-dialog__close" aria-label="Đóng hộp thoại">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"
+            stroke-linejoin="round" aria-hidden="true">
+            <line x1="18" y1="6" x2="6" y2="18"></line>
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+          </svg>
+        </button>
+      </header>
+      </button>
+      </header>
+
+      <div class="topics-dialog__body">
+        <!-- PHẦN A: LĨNH VỰC QUAN TÂM -->
+        <fieldset class="topics-dialog__fieldset">
+          <legend class="topics-dialog__legend">
+            <span>Lĩnh vực quan tâm</span>
+            <span class="topics-dialog__legend-sub">(Có thể chọn nhiều)</span>
+          </legend>
+
+          <!-- Checkbox chọn nhanh Tất cả lĩnh vực -->
+          <div class="topics-dialog__all-wrap">
+            <label class="topics-dialog__checkbox-item topics-dialog__checkbox-item--all">
+              <input type="checkbox" id="dialog-select-all" value="all" checked>
+              <span class="topics-dialog__checkbox-label">
+                <strong>Tất cả lĩnh vực</strong>
+              </span>
+            </label>
+          </div>
+
+          <p class="topics-dialog__group-label">3 lĩnh vực có dữ liệu nghiên cứu:</p>
+          <div class="topics-dialog__options-grid">
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="sec" checked>
+              <span class="topics-dialog__checkbox-label">An toàn thông tin</span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="data" checked>
+              <span class="topics-dialog__checkbox-label">Dữ liệu &amp; dự báo</span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="nlp" checked>
+              <span class="topics-dialog__checkbox-label">AI ngôn ngữ</span>
+            </label>
+          </div>
+
+          <p class="topics-dialog__group-label">10 lĩnh vực giả lập bổ sung:</p>
+          <div class="topics-dialog__options-grid">
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="se">
+              <span class="topics-dialog__checkbox-label">Công nghệ phần mềm <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="is">
+              <span class="topics-dialog__checkbox-label">Hệ thống thông tin <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="net">
+              <span class="topics-dialog__checkbox-label">Mạng máy tính <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="cloud">
+              <span class="topics-dialog__checkbox-label">Điện toán đám mây <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="iot">
+              <span class="topics-dialog__checkbox-label">Internet vạn vật (IoT) <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="cv">
+              <span class="topics-dialog__checkbox-label">Thị giác máy tính <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="robot">
+              <span class="topics-dialog__checkbox-label">Robot &amp; tự hành <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="hci">
+              <span class="topics-dialog__checkbox-label">Tương tác người–máy <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="xr">
+              <span class="topics-dialog__checkbox-label">Đồ họa &amp; XR <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+            <label class="topics-dialog__checkbox-item">
+              <input type="checkbox" name="domain" value="bio">
+              <span class="topics-dialog__checkbox-label">Tin học y sinh <em class="topics-dialog__tag">Minh
+                  họa</em></span>
+            </label>
+          </div>
+          <p class="topics-dialog__hint">
+            * 10 lựa chọn có nhãn "Minh họa" dùng để kiểm tra bộ lọc nhiều lựa chọn; hiện chưa có đề tài nghiên cứu
+            tương ứng trong Job 1.
+          </p>
+        </fieldset>
+
+        <!-- PHẦN B: SẮP XẾP (4 RADIO) -->
+        <fieldset class="topics-dialog__fieldset">
+          <legend class="topics-dialog__legend">
+            <span>Sắp xếp hiển thị</span>
+            <span class="topics-dialog__legend-sub">(Chọn một cách)</span>
+          </legend>
+
+          <div class="topics-dialog__radios">
+            <label class="topics-dialog__radio-item">
+              <input type="radio" name="topic-sort" value="latest" checked>
+              <span class="topics-dialog__radio-label">
+                <strong>Mới nhất trước</strong> — Mặc định theo ngày thêm minh họa
+              </span>
+            </label>
+            <label class="topics-dialog__radio-item">
+              <input type="radio" name="topic-sort" value="oldest">
+              <span class="topics-dialog__radio-label">
+                <strong>Cũ nhất trước</strong>
+              </span>
+            </label>
+            <label class="topics-dialog__radio-item">
+              <input type="radio" name="topic-sort" value="title-az">
+              <span class="topics-dialog__radio-label">
+                <strong>Tên đề tài A–Z</strong> (sắp xếp bảng chữ cái tiếng Việt)
+              </span>
+            </label>
+            <label class="topics-dialog__radio-item">
+              <input type="radio" name="topic-sort" value="popular" disabled>
+              <span class="topics-dialog__radio-label topics-dialog__radio-label--disabled">
+                <strong>Được quan tâm nhiều nhất</strong> (Chưa khả dụng — thiếu dữ liệu lượt xem trong
+                <code>research-data.json</code>)
+              </span>
+            </label>
+          </div>
+        </fieldset>
+      </div>
+
+      <footer class="topics-dialog__footer">
+        <p class="topics-dialog__preview-note">Thay đổi trong bảng chỉ có hiệu lực sau khi bấm Áp dụng.</p>
+        <div id="dialog-validation-msg" class="topics-dialog__validation-msg" role="alert" hidden>
+          Vui lòng chọn ít nhất một lĩnh vực nghiên cứu.
+        </div>
+        <div class="topics-dialog__actions">
+          <button type="button" class="btn btn--outline" id="dialog-cancel-btn">Hủy</button>
+          <button type="button" class="btn btn--primary" id="dialog-apply-btn">Áp dụng</button>
+        </div>
+      </footer>
+    </div>
+  </dialog>
+
+  <!-- Footer dùng chung gọn gàng, thống nhất với thiết kế Discovery -->
+  <footer class="site-footer">
+    <div class="container site-footer__inner">
+      <div class="site-footer__info">
+        <p class="site-footer__title">UIT Discovery · Định hướng Nghiên cứu Khoa học — Đồ án IE104</p>
+        <p class="site-footer__desc">
+          Dữ liệu chuẩn: 3 lĩnh vực có dữ liệu nghiên cứu, 37 đề tài và 16 giảng viên hướng dẫn
+          (<code>data/research-data.json</code>).
+        </p>
+      </div>
+
+      <nav aria-label="Liên kết nhanh trong phạm vi Job 1">
+        <ul class="site-footer__nav">
+          <li class="site-footer__item">
+            <a class="site-footer__link" href="./index.html" aria-current="page">Đề tài</a>
+          </li>
+          <li class="site-footer__item">
+            <a class="site-footer__link" href="./detail/index.html">Chi tiết đề tài mẫu (IDS)</a>
+          </li>
+          <li class="site-footer__item">
+            <a class="site-footer__link" href="../lecturers/index.html">Giảng viên</a>
+          </li>
+          <li class="site-footer__item">
+            <a class="site-footer__link" href="../lecturers/detail/index.html">Hồ sơ giảng viên mẫu</a>
+          </li>
+          <li class="site-footer__item">
+            <a class="site-footer__link" href="#topics-faq">Cần hỗ trợ? (FAQ)</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </footer>
+</body>
+
+</html>

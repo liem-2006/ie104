@@ -1,0 +1,68 @@
+/* ==========================================================================
+   Reset CSS cơ bản — Đồ án IE104 (UIT)
+   Phụ trách: TV1
+   Mục đích: Chuẩn hóa box-sizing, margin mặc định, form control và hình ảnh
+   mà vẫn bảo toàn khả năng điều hướng bàn phím (focus) và thuộc tính [hidden].
+   ========================================================================== */
+
+/* 1. Tính cả padding và border vào kích thước phần tử để tránh vỡ bố cục */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* 2. Ngăn trình duyệt di động tự ý phóng to cỡ chữ khi xoay màn hình */
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+/* 3. Xóa margin mặc định của các phần tử khối phổ biến để kiểm soát bằng token */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+ol,
+dl,
+dd,
+figure,
+blockquote,
+fieldset,
+legend {
+  margin: 0;
+}
+
+/* 4. Đảm bảo trang luôn cao tối thiểu bằng chiều cao khung nhìn */
+body {
+  min-height: 100vh;
+}
+
+/* 5. Hình ảnh và phương tiện truyền thông co giãn theo khung chứa, tránh tràn ngang */
+img,
+picture,
+svg,
+video,
+canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+/* 6. Các điều khiển biểu mẫu kế thừa font chữ và màu chữ từ phần tử cha */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+/* 7. Bảo toàn tác dụng ẩn phần tử của thuộc tính HTML [hidden] */
+[hidden] {
+  display: none !important;
+}
+
