@@ -363,3 +363,17 @@ Lighthouse 13.6.0, mobile mặc định; ba lượt/trang, ghi trung vị. Trang
 - [ ] Hosting thật: chưa deploy/push/merge; /ie104/ hiện được mô phỏng bằng HTTP cục bộ.
 
 Tự chạy: mở repo bằng VS Code Live Server, vào index.html. Đối chiếu ảnh ở kích thước tương ứng, thử phân trang/tìm/lọc, mở cây và giảng viên, thay theme và thu cửa sổ. Tiếp tục theo Yêu cầu giao diện hiện hành trong Job MD cạnh code, không áp dụng ràng buộc HTML/CSS tĩnh của bản lịch sử.
+
+## Bàn giao GitHub và Job 2 — 12/11/2026
+
+Phần này cập nhật trạng thái bàn giao sau thiết kế lại; kết quả kiểm thử giao diện bên trên là lịch sử bản nền, không phải kết quả Job 2.
+
+- Đã kiểm tra GitHub: main vẫn adea9fe01c25d220c08ae34b90f7ea3cd84dd369; PR #1/#2/#3 còn mở, commit nguồn không đổi so với bảng tích hợp. Không có cập nhật nguồn mới cần hòa giải.
+- Bản code nền: 54d0de6. Đợt giao Job 2 chỉ sửa tài liệu; không thay code, asset hoặc hai JSON.
+- Đã tạo JOB-2.md cạnh khám phá, chi tiết/roadmap, danh bạ và hồ sơ; cập nhật README, CONTRIBUTING, AGENTS, ngữ cảnh idea và mẫu PR.
+- TV1 nhận roadmap (gốc TV2); TV2 nhận danh bạ/hồ sơ (gốc TV3); TV3 nhận khám phá (gốc TV1). Nhóm trưởng quản lý trang vào/token/component/module chung.
+- IE104 giữ vai trò quy chuẩn code/cấu trúc. IE106 dùng kiến thức đã học về khả năng sử dụng, phân cấp và nhất quán giao diện; không tự thêm rubric.
+- Job 2 chưa bắt đầu. Thành viên chờ nhóm trưởng merge PR bản nền vào main, tạo nhánh mới từ upstream/main, rồi thực hiện một PR/người. Không dùng nhánh Job 1 cũ.
+- Bản tổng quan job-history/job-2.md ở workspace bên ngoài repo, chỉ lưu local. Không đưa vào GitHub.
+- Đã rà link nội bộ của tài liệu mới và hướng dẫn cập nhật: không phát hiện link hỏng; ID scope khớp HTML. git diff --check không lỗi khoảng trắng; code/dữ liệu không đổi, không chạy lại kiểm thử giao diện cho thay đổi thuần tài liệu.
+- Công bố bằng push integration/job-1-fixes và mở PR vào main; không merge, đóng PR gốc hoặc deploy. Trạng thái/đường dẫn PR được bàn giao sau khi GitHub xác nhận.

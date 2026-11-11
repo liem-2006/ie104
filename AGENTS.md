@@ -1,5 +1,9 @@
 # IE104 - Internet và Công nghệ Web (UIT) - Workspace Rules
 
+## Ưu tiên nhiệm vụ Job 2
+
+Đọc JOB-2.md cạnh code và CONTRIBUTING.md. Job 2 thay phân công Job 1: TV1 roadmap, TV2 giảng viên, TV3 khám phá. Nhóm trưởng quản lý nền chung; không tự sửa style.css/reset.css/data.js/theme.js/JSON/root index.html. Style học thuật và logic hiện hành vẫn là chuẩn. Áp dụng IE104 cho code và kiến thức IE106 đã học cho giao diện; không tự suy diễn rubric IE106. Không ghi kiểm thử dự kiến thành đã hoàn thành.
+
 ## Ngữ cảnh repo này
 
 - Đọc `idea/README.md` trước khi làm task; trang này ghi quyết định mới thay thế các phần cũ trong tài liệu ý tưởng.

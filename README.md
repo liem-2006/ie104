@@ -1,5 +1,15 @@
 # IE104 — UIT Discovery
 
+## Job 2 — kiểm tra chéo và nâng cấp giao diện
+
+Chỉ bắt đầu code sau khi nhóm trưởng merge PR tích hợp vào main. Đọc bản ghi sửa chữa phần mình nhận trước khi sửa.
+
+- **TV1:** [Chi tiết/roadmap](topics/detail/JOB-2.md), phần gốc TV2.
+- **TV2:** [Danh bạ/hồ sơ](lecturers/JOB-2.md), phần gốc TV3.
+- **TV3:** [Khám phá](topics/JOB-2.md), phần gốc TV1.
+- Nhóm trưởng quản lý nền chung và tích hợp; một PR/người từ fork theo [CONTRIBUTING](CONTRIBUTING.md).
+- IE104 quy định code/cấu trúc; IE106 định hướng thiết kế dễ dùng. Giữ style học thuật hiện tại, dữ liệu và logic.
+
 Website giúp sinh viên khám phá chủ đề nghiên cứu, xem cây kiến thức nền và tìm giảng viên hướng dẫn. Phiên bản tích hợp dùng HTML5, CSS3, JavaScript thuần và JSON cục bộ; không có backend hoặc bước build.
 
 ## Chạy website

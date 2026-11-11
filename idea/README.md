@@ -1,5 +1,11 @@
 # Ngữ cảnh hiện hành — đọc trước tài liệu chi tiết
 
+## Ưu tiên hiện hành: Job 2 (12/11/2026)
+
+Job 2 thay phân công Job 1: TV1 sửa roadmap của TV2, TV2 sửa giảng viên của TV3, TV3 sửa khám phá của TV1. Đọc [quy trình](../CONTRIBUTING.md). Chờ PR tích hợp được nhóm trưởng merge vào main trước khi tạo nhánh mới.
+
+Nhóm trưởng quản lý token, component, trang vào và module chung; các dòng “TV1 quản lý nền chung” dưới đây là ngữ cảnh Job 1. Không sửa dữ liệu hoặc lịch sử ghi nhận. Các quy tắc chức năng/style vẫn được giữ. IE104 áp dụng code/cấu trúc, IE106 áp dụng kiến thức đã học về khả năng sử dụng giao diện.
+
 ## Quyết định đang áp dụng
 
 - **Giao diện ngày 12/11/2026:** tra cứu học thuật; container 1.200px, nền trung tính và xanh UIT, ít trang trí. Khám phá một danh sách rộng, phân trang 12 chủ đề sau tìm/lọc/sắp xếp; bỏ sidebar và modal chọn nhóm. Roadmap fit theo node thực. Quyết định này thay yêu cầu giữ bố cục/gradient TV1 ban đầu.
