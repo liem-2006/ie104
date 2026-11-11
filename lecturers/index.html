@@ -2,6 +2,7 @@
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
+    <script src="../assets/js/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -41,6 +42,17 @@
             </li>
           </ul>
         </nav>
+        <button
+          type="button"
+          class="theme-toggle"
+          aria-label="Chế độ tối"
+          aria-pressed="false"
+          title="Chuyển sang giao diện tối"
+          hidden
+        >
+          <span class="theme-toggle__icon" aria-hidden="true">☀</span
+          ><span class="theme-toggle__text">Sáng</span>
+        </button>
       </div>
     </header>
     <main id="main-content" class="container site-main">
@@ -64,7 +76,8 @@
             <option value="">Tất cả nhóm</option>
           </select>
         </div>
-        <button class="btn" type="submit">Tìm kiếm</button><button class="btn btn--outline" type="reset">Xóa bộ lọc</button>
+        <button class="btn" type="submit">Tìm kiếm</button
+        ><button class="btn btn--outline" type="reset">Xóa bộ lọc</button>
       </form>
       <p id="lecturers-status" role="status" aria-live="polite">Đang tải dữ liệu…</p>
       <div id="lecturers-list" class="lecturers-grid"></div>

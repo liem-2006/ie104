@@ -30,10 +30,16 @@ assets/js/topics.js đã được viết lại quanh nguồn JSON; không chỉ 
 - Dialog giữ bản nháp đến khi Áp dụng; Hủy/Escape giữ bộ lọc cũ và trả focus về nút mở.
 - Danh mục/số lượng đến từ JSON; không thêm ngày, độ hot, lượt xem hoặc lĩnh vực minh họa vào dữ liệu runtime.
 - Dùng topicUrl/lecturerUrl của module chung; dữ liệu văn bản vào textContent.
-- CSS riêng scope #page-topics; theme theo hệ điều hành. Tránh dùng màu link làm nền đi với color-on-primary.
+- CSS riêng scope #page-topics; theme mặc định theo hệ điều hành, nút sáng/tối ghi đè theo lựa chọn được lưu. Tránh dùng màu link làm nền đi với color-on-primary.
 
 ## Tự chạy và kiểm tra
 
 Chạy Live Server từ root repo, mở topics/index.html. Thử tên không dấu, sec/nlp cùng lúc, thêm từ khóa, chọn A–Z, xóa lọc và không có kết quả. Mở modal bằng bàn phím, Hủy/Escape và Áp dụng; Tab phải quay lại nút mở sau khi đóng. Mở chủ đề và giảng viên bất kỳ, kiểm tra query đúng.
 
 Đã kiểm tra 37 thẻ, bộ lọc/sort/reset, native dialog, các mốc 320/375/768/1024/1440 ở hai theme; HTML-Validate 0 lỗi; axe không phát hiện lỗi WCAG trong các trạng thái đã thử. Lighthouse mobile: 99/100/100/100. Giới hạn dịch vụ W3C và trình duyệt khác xem tài liệu chung; không ghi pass cho kiểm tra chưa chạy.
+
+## Bổ sung — chuyển theme thủ công
+
+Đã thêm nút sáng/tối ở header tất cả các trang, dùng script chung assets/js/theme.js và token trong style.css. Lựa chọn lưu ở ie104.theme (light/dark), ưu tiên hơn hệ thống, giữ qua reload/chuyển trang và đồng bộ tab. Khi chưa chọn thì theo hệ thống; nếu localStorage bị chặn, nút vẫn đổi theme trong trang. Không tạo script theme riêng cho từng TV.
+
+Đã kiểm tra lựa chọn thủ công ngược theme hệ thống, lưu trạng thái, bàn phím, mobile 320px và storage bị chặn. HTML-Validate năm trang và axe mobile hai theme đều không có lỗi phát hiện.

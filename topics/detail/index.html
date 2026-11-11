@@ -2,6 +2,7 @@
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
+    <script src="../../assets/js/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -38,6 +39,17 @@
             </li>
           </ul>
         </nav>
+        <button
+          type="button"
+          class="theme-toggle"
+          aria-label="Chế độ tối"
+          aria-pressed="false"
+          title="Chuyển sang giao diện tối"
+          hidden
+        >
+          <span class="theme-toggle__icon" aria-hidden="true">☀</span
+          ><span class="theme-toggle__text">Sáng</span>
+        </button>
       </div>
     </header>
     <main id="main-content" class="topic-detail">
@@ -69,7 +81,8 @@
         <div class="container">
           <!-- Thanh chuyển đổi nhanh chủ đề -->
           <div
-            id="topic-switcher-container" role="group"
+            id="topic-switcher-container"
+            role="group"
             class="topic-switcher"
             aria-label="Chọn chủ đề khác"
           ></div>
@@ -162,7 +175,8 @@
                 <button
                   type="button"
                   class="mindmap-tool-btn"
-                  id="btn-zoom-in" aria-label="Phóng to"
+                  id="btn-zoom-in"
+                  aria-label="Phóng to"
                   title="Phóng to (+)"
                 >
                   <span aria-hidden="true">+</span>
@@ -170,7 +184,8 @@
                 <button
                   type="button"
                   class="mindmap-tool-btn"
-                  id="btn-zoom-out" aria-label="Thu nhỏ"
+                  id="btn-zoom-out"
+                  aria-label="Thu nhỏ"
                   title="Thu nhỏ (-)"
                 >
                   <span aria-hidden="true">&minus;</span>
@@ -178,7 +193,8 @@
                 <button
                   type="button"
                   class="mindmap-tool-btn"
-                  id="btn-zoom-reset" aria-label="Căn vừa khung"
+                  id="btn-zoom-reset"
+                  aria-label="Căn vừa khung"
                   title="Vừa vặn khung nhìn (Fit to Screen)"
                 >
                   <span aria-hidden="true">&lt;&gt;</span>
@@ -186,7 +202,8 @@
                 <button
                   type="button"
                   class="mindmap-tool-btn"
-                  id="btn-fullscreen" aria-label="Toàn màn hình"
+                  id="btn-fullscreen"
+                  aria-label="Toàn màn hình"
                   title="Toàn màn hình"
                 >
                   <span aria-hidden="true">&#x26F6;</span>

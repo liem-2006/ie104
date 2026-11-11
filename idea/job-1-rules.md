@@ -6,7 +6,7 @@
 
 TV1 phụ trách reset/style chung và khám phá; TV2 chi tiết/roadmap; TV3 danh bạ/hồ sơ/dữ liệu giảng viên. Nhóm trưởng đã giao tích hợp liên phần trên nhánh riêng. Các task tiếp theo phải chỉ rõ phạm vi, không tự ghi đè phần người khác. Header/footer là một mẫu chung được lặp trong HTML, chỉnh đường dẫn đúng độ sâu. Thứ tự CSS reset → style → CSS trang.
 
-Chỉ HTML5/CSS3/JavaScript thuần, không framework/template. BEM, CSS scoped theo ID trang, font hệ thống. Style chung là nơi duy nhất định nghĩa token. Theme theo prefers-color-scheme; mobile dưới 768px, tablet 768–1023px, desktop từ 1024px. Thử 320/375/768/1024/1440px; không che tràn bằng overflow-x:hidden. Một h1/trang, focus rõ, label/alt đầy đủ. JS đơn nhiệm, JSDoc, khởi tạo DOMContentLoaded.
+Chỉ HTML5/CSS3/JavaScript thuần, không framework/template. BEM, CSS scoped theo ID trang, font hệ thống. Style chung là nơi duy nhất định nghĩa token. Theme mặc định theo prefers-color-scheme, có nút sáng/tối trên header; lựa chọn thủ công lưu tại localStorage với khóa ie104.theme và được ưu tiên hơn hệ điều hành; mobile dưới 768px, tablet 768–1023px, desktop từ 1024px. Thử 320/375/768/1024/1440px; không che tràn bằng overflow-x:hidden. Một h1/trang, focus rõ, label/alt đầy đủ. JS đơn nhiệm, JSDoc, khởi tạo DOMContentLoaded.
 
 ## Dữ liệu và liên kết
 

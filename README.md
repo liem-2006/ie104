@@ -8,7 +8,7 @@ Website giúp sinh viên khám phá chủ đề nghiên cứu, xem cây kiến t
 2. Mở index.html để vào Khám phá hoặc Giảng viên.
 3. Không mở bằng file:// vì ES module và fetch cần HTTP. Không cần npm install để chạy website.
 
-Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Tìm/lọc/sắp xếp hoạt động trên JSON. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Theme sáng/tối theo hệ điều hành/trình duyệt.
+Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Tìm/lọc/sắp xếp hoạt động trên JSON. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Nút sáng/tối nằm trên header của mọi trang; lựa chọn được lưu bằng localStorage và đồng bộ giữa các tab. Khi chưa chọn, website theo hệ điều hành/trình duyệt.
 
 ## Đọc trước khi nhận việc
 

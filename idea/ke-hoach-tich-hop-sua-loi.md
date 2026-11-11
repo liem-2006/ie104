@@ -37,7 +37,7 @@ Website gồm trang vào tối giản và bốn màn hình: khám phá → chi t
 - JSON được fetch qua HTTP. Nội dung nguồn vào DOM bằng `textContent`/DOM API. Không render chuỗi JSON bằng `innerHTML`.
 - `children` là kiến thức chuẩn bị trước cha, không phải nhóm nội dung; không có quan hệ cross-topic. Danh sách và sơ đồ giữ cùng nội dung; các ID node chỉ là trạng thái runtime của engine.
 - CSS: reset → style chung → CSS trang. Chỉ style chung khai báo token, CSS riêng scope theo ID trang; dùng màu chữ link và màu nền primary đúng cặp tương phản.
-- Theme theo `prefers-color-scheme`; không thêm theme toggle/localStorage trong đợt này. JS được nhóm trưởng cho phép cho phiên bản tích hợp.
+- Theo yêu cầu bổ sung của nhóm trưởng, đã có nút sáng/tối chung ở header. Khi chưa chọn thì theo `prefers-color-scheme`; khi đã chọn thì ưu tiên `localStorage["ie104.theme"]` (light/dark), giữ qua chuyển trang/reload và đồng bộ tab. Script theme áp dụng trước CSS để tránh nháy màu; bị chặn storage vẫn đổi được trong trang.
 - Mobile mặc định danh sách; desktop mặc định sơ đồ. Ctrl + wheel zoom, cuộn thường vẫn cuộn trang. Zoom/pan/nút căn vừa không làm thay đổi dữ liệu.
 - Không khai báo bốn cách fetch/link/theme khác nhau. Thay đổi hợp đồng chung cần đồng bộ mọi trang.
 
@@ -102,3 +102,9 @@ HTML-Validate dùng preset recommended; tắt quy tắc phong cách void-style, 
 - [TV1 — khám phá và nền chung](../topics/SUA-CHUA-TV1.md)
 - [TV2 — chi tiết và roadmap](../topics/detail/SUA-CHUA-TV2.md)
 - [TV3 — danh bạ, hồ sơ và dữ liệu](../lecturers/SUA-CHUA-TV3.md)
+
+## Bổ sung sau tích hợp — nút sáng/tối
+
+Đã thêm assets/js/theme.js và nút trên header của năm trang. Nút có nhãn Chế độ tối, aria-pressed phản ánh trạng thái, dùng được bằng Enter/Space và hiển thị ở mobile. CSS dùng cùng token TV1; selector thủ công áp dụng được cả khi hệ điều hành đang ở theme ngược lại. Chưa chọn thì vẫn theo hệ thống; giá trị lưu không hợp lệ được bỏ qua.
+
+Đã kiểm tra chuyển hai chiều, giữ qua reload/cả năm trang, đồng bộ tab, bàn phím và màn hình 320px; storage bị chặn không phát sinh pageerror. Khi tắt JS, nút ẩn và CSS vẫn theo hệ thống. HTML-Validate: 0 lỗi trên năm trang; axe: 0 vi phạm phát hiện trên 10 trường hợp mobile với theme chọn thủ công ngược hệ thống. Các điểm Lighthouse ở bảng trên được ghi nhận trước lần bổ sung nút này.

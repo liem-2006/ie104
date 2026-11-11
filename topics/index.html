@@ -2,6 +2,7 @@
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
+    <script src="../assets/js/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
@@ -41,6 +42,17 @@
             </li>
           </ul>
         </nav>
+        <button
+          type="button"
+          class="theme-toggle"
+          aria-label="Chế độ tối"
+          aria-pressed="false"
+          title="Chuyển sang giao diện tối"
+          hidden
+        >
+          <span class="theme-toggle__icon" aria-hidden="true">☀</span
+          ><span class="theme-toggle__text">Sáng</span>
+        </button>
       </div>
     </header>
     <main id="main-content" class="container discovery-layout">
@@ -63,7 +75,12 @@
             id="topic-search"
             placeholder="Ví dụ: học sâu, IDS, Nguyễn Tấn Cầm"
           />
-          <div id="group-pills" role="group" class="topics-domain-nav" aria-label="Lọc nhóm chủ đề"></div>
+          <div
+            id="group-pills"
+            role="group"
+            class="topics-domain-nav"
+            aria-label="Lọc nhóm chủ đề"
+          ></div>
           <button type="button" id="open-groups" class="btn btn--outline">Chọn nhiều nhóm</button
           ><label for="topic-sort">Sắp xếp</label
           ><select id="topic-sort">

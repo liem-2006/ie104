@@ -13,6 +13,7 @@
 
 /* 1. Khai báo Design Tokens mặc định (Light Mode — UIT Discovery Light) */
 :root {
+  color-scheme: light;
   /* Token bắt buộc theo hợp đồng Job 1: Nền chuyển nhẹ sang xanh da trời nhạt */
   --color-bg: #f8fafc;
   --color-surface: #ffffff;
@@ -105,7 +106,8 @@
 
 /* 2. Khai báo Design Tokens cho Chế độ Tối (Dark Mode — Xám than & Xanh xám trầm) */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not([data-theme="light"]) {
+    color-scheme: dark;
     --color-bg: #15171a;
     --color-surface: #202329;
     --color-text: #f2f4f8;
@@ -180,9 +182,77 @@
   }
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: #15171a;
+  --color-surface: #202329;
+  --color-text: #f2f4f8;
+  --color-muted: #b6bec8;
+  --color-border: #383d47;
+  --color-primary: #245aa3;
+  --color-on-primary: #ffffff;
+  --color-focus: #8cc4ff;
+
+  --color-link: #99caff;
+  --color-link-hover: #c2e0ff;
+  --color-primary-hover: #2c69bc;
+  --color-primary-active: #1b4682;
+  --color-surface-elevated: #282c35;
+  --color-surface-muted: #1b1d22;
+  --color-disabled-bg: #1f2126;
+  --color-disabled-text: #9da6b2;
+  --color-badge-bg: #23344c;
+  --color-badge-text: #b8daff;
+  --color-danger-text: #ff8585;
+
+  /* Gradient Nền trang Dark: xám than, đen xám và xanh xám trầm */
+  --gradient-page: linear-gradient(180deg, #15171a 0%, #171b21 50%, #1a212a 100%);
+  --gradient-surface: linear-gradient(180deg, #24272f 0%, #1f2228 100%);
+  --gradient-primary: linear-gradient(135deg, #2b67b5 0%, #1e4b8a 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #3172c6 0%, #23569c 100%);
+  --gradient-primary-active: linear-gradient(135deg, #1e4e8c 0%, #163b6e 100%);
+  --gradient-card-hover: linear-gradient(180deg, #2a2e38 0%, #22262f 100%);
+  --gradient-hero-text: linear-gradient(180deg, #f4faff 0%, #b9ddff 38%, #69b1ff 72%, #3b82f6 100%);
+  --color-hero-fallback: #69b1ff;
+
+  /* Token hàng đề tài: Viền xanh đậm rõ ràng trên nền xám than */
+  --color-row-bg: #1b1d23;
+  --color-row-border: #2b456b;
+  --color-row-border-hover: #5b9bf4;
+  --color-row-hover-tint: rgba(91, 155, 244, 0.06);
+  --gradient-row-bg: linear-gradient(180deg, #1e2127 0%, #17191e 100%);
+  --shadow-row-hover: 0 2px 6px rgba(0, 0, 0, 0.35);
+
+  /* Sắc nền lĩnh vực trên nền Xám than */
+  --color-domain-sec-bg: #1d222b;
+  --gradient-domain-sec: linear-gradient(180deg, #1f2530 0%, #1b2028 100%);
+  --color-domain-sec-border: #313d4f;
+  --color-domain-sec-accent: #94c8ff;
+  --color-domain-sec-icon-bg: #243347;
+
+  --color-domain-data-bg: #1c2425;
+  --gradient-domain-data: linear-gradient(180deg, #1e2728 0%, #1a2122 100%);
+  --color-domain-data-border: #2e4343;
+  --color-domain-data-accent: #84dfd2;
+  --color-domain-data-icon-bg: #213837;
+
+  --color-domain-nlp-bg: #272138;
+  --gradient-domain-nlp: linear-gradient(180deg, #2c2540 0%, #221d32 100%);
+  --color-domain-nlp-border: #4a3e6b;
+  --color-domain-nlp-accent: #c4b5fd;
+  --color-domain-nlp-icon-bg: #352b52;
+
+  /* Token đường phân cách sidebar giữa các section lớn (Dark Mode) */
+  --color-sidebar-divider: #8b6bb1;
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
+  --shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.28);
+  --shadow-dropdown: 0 14px 32px rgba(0, 0, 0, 0.55), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --shadow-pressed: inset 0 2px 5px rgba(0, 0, 0, 0.45);
+}
+
 /* 3. Nền tảng Typography & Khung trang (Tối ưu hiển thị tiếng Việt) */
 html {
-  color-scheme: light dark;
   scroll-behavior: smooth;
   scroll-padding-top: 4.5rem; /* Tránh header che khuất đích cuộn nội trang */
   scrollbar-gutter: stable;
@@ -491,15 +561,25 @@ summary::-webkit-details-marker {
 
 /* Ở Dark mode: giữ nền trong suốt (bỏ hoàn toàn nền trắng), tăng sáng nhẹ để logo xanh UIT nổi bật */
 @media (prefers-color-scheme: dark) {
-  .site-header__brand,
-  .site-header__logo-img {
+  :root:not([data-theme="light"]) .site-header__brand,
+  :root:not([data-theme="light"]) .site-header__logo-img {
     background-color: transparent;
     background-image: none;
   }
 
-  .site-header__logo-img {
+  :root:not([data-theme="light"]) .site-header__logo-img {
     filter: brightness(1.85) saturate(1.15);
   }
+}
+
+:root[data-theme="dark"] .site-header__brand,
+:root[data-theme="dark"] .site-header__logo-img {
+  background-color: transparent;
+  background-image: none;
+}
+
+:root[data-theme="dark"] .site-header__logo-img {
+  filter: brightness(1.85) saturate(1.15);
 }
 
 /* Điều hướng chính trên Laptop/Tablet (.site-nav) */
@@ -630,23 +710,23 @@ summary::-webkit-details-marker {
 
 /* Dark mode cho menu điều hướng dạng liên kết chữ roadmap.sh */
 @media (prefers-color-scheme: dark) {
-  .site-header__link,
-  .site-nav__link {
+  :root:not([data-theme="light"]) .site-header__link,
+  :root:not([data-theme="light"]) .site-nav__link {
     color: #b6bec8; /* Chữ sáng vừa phải, dễ đọc */
   }
 
-  .site-header__link:hover,
-  .site-nav__link:hover {
+  :root:not([data-theme="light"]) .site-header__link:hover,
+  :root:not([data-theme="light"]) .site-nav__link:hover {
     color: #ffffff; /* Hover sáng hơn, gần trắng */
     background: none;
     background-color: transparent;
     border-color: transparent;
   }
 
-  .site-header__link[aria-current="page"],
-  .site-header__link--active,
-  .site-nav__link[aria-current="page"],
-  .site-nav__link--active {
+  :root:not([data-theme="light"]) .site-header__link[aria-current="page"],
+  :root:not([data-theme="light"]) .site-header__link--active,
+  :root:not([data-theme="light"]) .site-nav__link[aria-current="page"],
+  :root:not([data-theme="light"]) .site-nav__link--active {
     color: #ffffff; /* Trang hiện tại: chữ sáng và đậm hơn, không nền */
     font-weight: 600;
     background: none;
@@ -654,15 +734,49 @@ summary::-webkit-details-marker {
     border-color: transparent;
   }
 
-  .site-header__link[aria-current="page"]:hover,
-  .site-header__link--active:hover,
-  .site-nav__link[aria-current="page"]:hover,
-  .site-nav__link--active:hover {
+  :root:not([data-theme="light"]) .site-header__link[aria-current="page"]:hover,
+  :root:not([data-theme="light"]) .site-header__link--active:hover,
+  :root:not([data-theme="light"]) .site-nav__link[aria-current="page"]:hover,
+  :root:not([data-theme="light"]) .site-nav__link--active:hover {
     color: #ffffff;
     background: none;
     background-color: transparent;
     border-color: transparent;
   }
+}
+
+:root[data-theme="dark"] .site-header__link,
+:root[data-theme="dark"] .site-nav__link {
+  color: #b6bec8; /* Chữ sáng vừa phải, dễ đọc */
+}
+
+:root[data-theme="dark"] .site-header__link:hover,
+:root[data-theme="dark"] .site-nav__link:hover {
+  color: #ffffff; /* Hover sáng hơn, gần trắng */
+  background: none;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+:root[data-theme="dark"] .site-header__link[aria-current="page"],
+:root[data-theme="dark"] .site-header__link--active,
+:root[data-theme="dark"] .site-nav__link[aria-current="page"],
+:root[data-theme="dark"] .site-nav__link--active {
+  color: #ffffff; /* Trang hiện tại: chữ sáng và đậm hơn, không nền */
+  font-weight: 600;
+  background: none;
+  background-color: transparent;
+  border-color: transparent;
+}
+
+:root[data-theme="dark"] .site-header__link[aria-current="page"]:hover,
+:root[data-theme="dark"] .site-header__link--active:hover,
+:root[data-theme="dark"] .site-nav__link[aria-current="page"]:hover,
+:root[data-theme="dark"] .site-nav__link--active:hover {
+  color: #ffffff;
+  background: none;
+  background-color: transparent;
+  border-color: transparent;
 }
 
 .site-header__tag-sub {
@@ -1161,9 +1275,13 @@ dialog::backdrop {
 }
 
 @media (prefers-color-scheme: dark) {
-  dialog::backdrop {
+  :root:not([data-theme="light"]) dialog::backdrop {
     background-color: rgba(0, 0, 0, 0.78);
   }
+}
+
+:root[data-theme="dark"] dialog::backdrop {
+  background-color: rgba(0, 0, 0, 0.78);
 }
 
 /* 10. Footer dùng chung (.site-footer) */
@@ -1432,3 +1550,42 @@ select {
     display: block;
   }
 }
+
+/* Nút theme dùng chung, hiện sau khi script sẵn sàng. */
+.theme-toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  min-width: 6rem;
+  min-height: 2.75rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+.theme-toggle:hover {
+  background: var(--color-surface-muted);
+}
+.site-header__inner > .site-nav {
+  margin-left: auto;
+}
+@media (max-width: 767px) {
+  .site-header__inner > .site-nav {
+    order: 3;
+    flex-basis: 100%;
+    margin-left: 0;
+  }
+  .site-nav__list {
+    justify-content: center;
+  }
+  .theme-toggle {
+    margin-left: auto;
+  }
+}
+
+@media (max-width: 767px) { html { scroll-padding-top: 8rem; } }
