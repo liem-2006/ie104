@@ -5,8 +5,6 @@
    Tuân thủ: HTML5/CSS3 thuần, BEM, Flexbox/Grid, Responsive, Sáng/Tối
    ========================================================================== */
 
-/* Token dự phòng (fallback) nếu style.css dùng chung chưa nạp */
-
 /* Định dạng cơ bản body */
 #page-lecturer-detail {
   margin: 0;
@@ -20,19 +18,11 @@
   flex-direction: column;
 }
 
-/* Khung nội dung chung */
-
-/* Header & Nav */
-
 /* Main Layout & Breadcrumb */
 #page-lecturer-detail .site-main {
   flex: 1 0 auto;
   padding-top: var(--space-4);
   padding-bottom: var(--space-6);
-}
-
-#page-lecturer-detail .breadcrumb-nav {
-  margin-bottom: var(--space-4);
 }
 
 #page-lecturer-detail .breadcrumb-link {
@@ -70,7 +60,6 @@
   }
 }
 
-/* Header Hồ sơ: Avatar & Thông tin cơ bản */
 #page-lecturer-detail .profile-header {
   display: flex;
   align-items: flex-start;
@@ -107,46 +96,6 @@
   flex: 1 1 auto;
 }
 
-#page-lecturer-detail .profile-header__name {
-  margin: 0 0 var(--space-2) 0;
-  font-family: var(--font-heading);
-  font-size: 1.85rem;
-  line-height: 1.25;
-  color: var(--color-text);
-}
-
-@media (max-width: 767px) {
-  #page-lecturer-detail .profile-header__name {
-    font-size: 1.5rem;
-  }
-}
-
-#page-lecturer-detail .profile-header__affiliation {
-  margin: 0 0 var(--space-2) 0;
-  font-size: 1.05rem;
-  color: var(--color-muted);
-}
-
-#page-lecturer-detail .profile-header__email {
-  margin: 0;
-  font-size: 0.95rem;
-}
-
-#page-lecturer-detail .profile-header__email-link {
-  color: var(--color-link);
-  text-decoration: none;
-  word-break: break-all;
-}
-
-#page-lecturer-detail .profile-header__email-link:hover {
-  text-decoration: underline;
-}
-
-#page-lecturer-detail .profile-header__email-link:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
 /* Các section con trong hồ sơ */
 #page-lecturer-detail .profile-section {
   padding-top: var(--space-5);
@@ -167,80 +116,9 @@
   color: var(--color-text);
 }
 
-#page-lecturer-detail .profile-section__desc {
-  margin: 0 0 var(--space-3) 0;
-  font-size: 0.92rem;
-  color: var(--color-muted);
-}
-
 /* Phần Tiểu sử & Lĩnh vực */
-#page-lecturer-detail .profile-bio__text {
-  margin: 0 0 var(--space-4) 0;
-  font-size: 1rem;
-  line-height: 1.7;
-  color: var(--color-text);
-}
-
-#page-lecturer-detail .profile-subheading {
-  font-size: 0.95rem;
-  font-weight: 600;
-  margin: 0 0 var(--space-2) 0;
-  color: var(--color-text);
-}
-
-#page-lecturer-detail .area-list {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  list-style: none;
-  padding: 0;
-  margin: 0 0 var(--space-3) 0;
-}
-
-#page-lecturer-detail .area-badge {
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  padding: 0.35rem 0.85rem;
-  border-radius: var(--radius-full);
-  font-size: 0.88rem;
-  font-weight: 500;
-}
 
 /* Liên kết học thuật & công bố */
-#page-lecturer-detail .research-links-group {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-3);
-}
-
-#page-lecturer-detail .research-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-sm);
-  color: var(--color-text);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  transition:
-    border-color 0.15s ease,
-    background-color 0.15s ease;
-}
-
-#page-lecturer-detail .research-link:hover {
-  border-color: var(--color-link);
-  color: var(--color-link);
-  background-color: var(--color-surface);
-}
-
-#page-lecturer-detail .research-link:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
 
 /* Chỉ số trích dẫn khoa học */
 #page-lecturer-detail .metrics-grid {
@@ -308,20 +186,6 @@
   background-color: var(--color-bg);
 }
 
-#page-lecturer-detail .related-topic-item--sample {
-  border-color: var(--color-link);
-  background-color: var(--color-surface);
-  box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-#page-lecturer-detail .related-topic-item__header {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-bottom: var(--space-2);
-}
-
 #page-lecturer-detail .related-topic-item__link {
   color: var(--color-link);
   text-decoration: none;
@@ -335,25 +199,6 @@
 #page-lecturer-detail .related-topic-item__link:focus-visible {
   outline: 2px solid var(--color-focus);
   outline-offset: 2px;
-}
-
-#page-lecturer-detail .related-topic-item__title {
-  font-size: 1.05rem;
-  font-weight: 600;
-  color: var(--color-text);
-}
-
-#page-lecturer-detail .related-topic-item__note {
-  margin: 0;
-  font-size: 0.9rem;
-  color: var(--color-muted);
-}
-
-#page-lecturer-detail .related-topic-item__status {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  font-style: italic;
 }
 
 /* Tags lĩnh vực */

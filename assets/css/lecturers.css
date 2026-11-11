@@ -5,8 +5,6 @@
    Tuân thủ: HTML5/CSS3 thuần, BEM, Flexbox/Grid, Responsive, Sáng/Tối
    ========================================================================== */
 
-/* Token dự phòng (fallback) nếu style.css dùng chung chưa nạp */
-
 /* Định dạng cơ bản cho body của trang danh bạ */
 #page-lecturers {
   margin: 0;
@@ -19,10 +17,6 @@
   display: flex;
   flex-direction: column;
 }
-
-/* Khung nội dung chung */
-
-/* Header & Nav */
 
 /* Main Layout */
 #page-lecturers .site-main {
@@ -90,13 +84,6 @@
   background-color: var(--color-border);
 }
 
-#page-lecturers .form-helper {
-  margin: var(--space-2) 0 0 0;
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  font-style: italic;
-}
-
 /* Lưới hiển thị danh bạ giảng viên */
 #page-lecturers .lecturers-grid {
   display: grid;
@@ -135,12 +122,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-#page-lecturers .lecturer-card--sample {
-  border-color: var(--color-link);
-  box-shadow: 0 0 0 1px var(--color-primary);
-}
-
-/* Header thẻ: Avatar & Meta */
 #page-lecturers .lecturer-card__header {
   display: flex;
   align-items: center;
@@ -199,10 +180,6 @@
 }
 
 /* Body thẻ: Tags & Số lượng đề tài */
-#page-lecturers .lecturer-card__body {
-  margin-bottom: var(--space-4);
-  flex-grow: 1;
-}
 
 #page-lecturers .lecturer-card__tags {
   display: flex;
@@ -242,40 +219,6 @@
 }
 
 /* Footer thẻ: Nút hành động */
-#page-lecturers .lecturer-card__footer {
-  border-top: 1px solid var(--color-border);
-  padding-top: var(--space-3);
-  text-align: right;
-}
-
-#page-lecturers .lecturer-card__action-link {
-  display: inline-block;
-  color: var(--color-link);
-  font-weight: 600;
-  font-size: 0.92rem;
-  text-decoration: none;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  transition: background-color 0.15s ease;
-}
-
-#page-lecturers .lecturer-card__action-link:hover {
-  text-decoration: underline;
-  background-color: var(--color-bg);
-}
-
-#page-lecturers .lecturer-card__action-link:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-#page-lecturers .lecturer-card__action-disabled {
-  display: inline-block;
-  color: var(--color-muted);
-  font-size: 0.85rem;
-  font-style: italic;
-  user-select: none;
-}
 
 /* Footer chung */
 
