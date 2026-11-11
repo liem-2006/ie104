@@ -2,7 +2,7 @@
 
 ## Nhận task
 
-Nhóm trưởng giao việc bằng JOB-N.md hoặc tài liệu task có phạm vi cụ thể. Phiên bản tích hợp hiện hành theo [kế hoạch sửa lỗi](idea/ke-hoach-tich-hop-sua-loi.md), đã cho phép JavaScript và JSON động. Đọc bản ghi sửa chữa TV1–TV3 trước khi tiếp tục; không áp dụng giới hạn HTML/CSS tĩnh của JOB-1.md cũ. Không thêm framework hoặc tính năng ngoài task.
+Nhóm trưởng giao việc bằng JOB-N.md hoặc tài liệu task có phạm vi cụ thể. Phiên bản tích hợp hiện hành theo [kế hoạch sửa lỗi](idea/ke-hoach-tich-hop-sua-loi.md), đã cho phép JavaScript và JSON động. Đọc bản ghi sửa chữa TV1–TV3 trước khi tiếp tục; đọc Yêu cầu giao diện hiện hành ở đầu JOB-1.md và không áp dụng giới hạn HTML/CSS tĩnh trong phần Lịch sử. Không thêm framework hoặc tính năng ngoài task.
 
 ## Fork và tạo nhánh
 

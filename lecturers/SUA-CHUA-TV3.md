@@ -1,5 +1,45 @@
 # Ghi nhận sửa chữa TV3 — Danh bạ, hồ sơ và dữ liệu
 
+> Bản hiện hành ngày 12/11/2026: thiết kế học thuật được nhóm trưởng duyệt. Nội dung tích hợp trước đó được giữ trong phần Lịch sử bên dưới.
+
+## Thiết kế lại giao diện học thuật
+
+### Phần được giữ
+
+Giữ JSON giảng viên, tìm/lọc theo dữ liệu thật, email làm khóa nối, ảnh fallback, thông tin nghiên cứu có nguồn/ngày, chỉ số 0 thật và cách bỏ URL nguy hiểm. Không bổ sung hoặc xác minh học thuật lại dữ liệu.
+
+### Trước → sau
+
+| Trước | Sau | Lý do | File liên quan |
+|---|---|---|---|
+| Bộ lọc kéo thành biểu mẫu nhiều hàng desktop | Tìm kiếm, nhóm và thao tác trên một hàng desktop, mobile xếp dọc | Dùng không gian phù hợp màn hình | lecturers/index.html, lecturers.css |
+| Nút Xem hồ sơ rộng hết thẻ | Link gọn cạnh số chủ đề, vùng bấm 44px | Thẻ nhẹ và bớt nút lặp nổi bật | lecturers.js, lecturers.css |
+| Card và hồ sơ có khoảng cách/màu riêng | Dùng token chung, grid 3/2/1 cột và typography chung | Cùng một website với TV1/TV2 | Hai CSS riêng |
+| H1 nằm tách khỏi avatar/email | H1 chuyển vào header hồ sơ, đúng một h1 | Nhóm thông tin cá nhân tự nhiên | lecturer-detail.js |
+| Các mục thiếu dữ liệu tạo nhiều khối Chưa bổ sung | Một ghi chú ngắn; ẩn liên kết/chỉ số không có dữ liệu | Không tạo cảm giác hồ sơ rỗng lớn | lecturer-detail.js |
+| Logic renderProfile gom nhiều phần | Tách header, giới thiệu, liên kết và chủ đề thành hàm riêng | Dễ giải thích và bảo trì | lecturer-detail.js |
+| Chủ đề liên quan có HTML riêng | Gọi createTopicRow(entry,3), dùng chung hàng với khám phá | Cùng kiểu hiển thị và URL | lecturer-detail.js, data.js |
+| Hồ sơ thay placeholder khi JSON tới | aria-busy và giải phóng trong finally | Hạn chế dịch chuyển và trạng thái tải bị kẹt | lecturers/detail/index.html, CSS/JS hồ sơ |
+
+### Quy ước tiếp tục làm
+
+Dữ liệu/schema không đổi. Nhóm luôn suy từ chủ đề theo email chuẩn hóa; không tự gán lĩnh vực. Component hàng thuộc TV1, TV3 gọi lại với heading cấp 3. Không khai báo token/header riêng. Nút Tìm/Enter và tìm trực tiếp cùng dùng renderLecturers; reset native xong mới render. Các khối tùy chọn chỉ có khi đủ dữ liệu, nguồn/ngày giữ nguyên, URL ngoài chỉ HTTP(S).
+
+### Tự chạy và kết quả thực tế
+
+Live Server → Giảng viên → hồ sơ. Tìm theo tên không dấu/email, đổi nhóm, Tìm/Enter, reset; mở chủ đề liên quan rồi quay lại. Thử hồ sơ thiếu thông tin, ảnh hỏng, chỉ số thiếu/0 và URL sai.
+
+Đã mở đủ 16 hồ sơ: tên, một h1 và số chủ đề khớp email. Lưới 1/2/3 cột đúng ở mobile/tablet/desktop, tên/email không tràn. Tìm/lọc/Tìm/Enter/reset hoạt động. Fixture ảnh hỏng về chữ cái; chỉ hiện một giá trị 0 thật, không tạo 0 cho mục thiếu; javascript URL bị bỏ. Cả hai HTML nguồn hợp lệ theo công cụ cục bộ. Accessibility hai theme nằm trong 20 ca chung không vi phạm phát hiện.
+
+Ảnh: [danh bạ desktop](../idea/minh-chung-giao-dien/giang-vien-desktop.png), [hồ sơ mobile tối](../idea/minh-chung-giao-dien/ho-so-mobile-toi.png). Lighthouse và giới hạn: [kế hoạch chung](../idea/ke-hoach-tich-hop-sua-loi.md#giao-dien-hoc-thuat).
+
+Commit triển khai: 0c94920; bổ sung nút submit ngữ nghĩa: dcb925f.
+
+## Lịch sử tích hợp trước thiết kế lại
+
+<details>
+<summary>Mở bản ghi tích hợp cũ để đối chiếu.</summary>
+
 > Đọc nhanh: giữ JSON 16 giảng viên và bố cục card/hồ sơ của PR #1; render động theo email và dùng theme TV1. File này bao quát cả hai trang và dữ liệu. [Kế hoạch và nghiệm thu chung](../idea/ke-hoach-tich-hop-sua-loi.md).
 
 ## Đóng góp được giữ
@@ -35,3 +75,5 @@ Nguồn: PR #1, commit 292c4aa00bad124ca1d25f6ff10ffabb513581cb. Giữ nguyên l
 Chạy Live Server từ root, mở lecturers/index.html. Thử tên/email không dấu, nhóm sec/data/nlp, reset và không có kết quả. Mở nhiều giảng viên khác nhau; tên/email và danh sách chủ đề phải đổi đúng. Thử một hồ sơ chỉ có name/email và hồ sơ có chỉ số; xem nguồn/ngày. Thử email sai và email viết hoa trong URL.
 
 Đã kiểm tra 16 hồ sơ với tên và số chủ đề đúng nguồn; lọc sec cho 4 giảng viên; thử ảnh URL lỗi, URL javascript, chỉ số 0 và thiếu chỉ số bằng fixture tạm. Không sửa dữ liệu thật để tạo ca thử. HTML-Validate 0 lỗi, axe không phát hiện lỗi WCAG ở hai theme và mobile. Lighthouse mobile: danh bạ 97/100/100/100; hồ sơ 93/100/100/100. Giới hạn W3C và trình duyệt xem tài liệu chung.
+
+</details>

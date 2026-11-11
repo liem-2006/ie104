@@ -1,3 +1,42 @@
+# TV2 — Chi tiết và roadmap
+
+## Yêu cầu giao diện hiện hành
+
+> Cập nhật ngày 12/11/2026 theo quyết định thiết kế lại của nhóm trưởng. Phần này là yêu cầu áp dụng khi tiếp tục sửa code.
+
+### Mục tiêu và đầu vào
+
+Đưa kiến thức nền lên sớm, giữ ý nghĩa con học trước cha. Đầu vào: JSON nghiên cứu hiện có, URL group/topic/email, token/header của TV1 và engine sơ đồ đã tích hợp. Đọc [hợp đồng chung](../../idea/job-1-rules.md), AGENTS.md và skill IE104.
+
+### Phạm vi và đầu ra
+
+- `topics/detail/index.html`: thông tin chủ đề gọn; nhóm, tên, giảng viên/email; bộ chuyển chủ đề phụ; Kiến thức nền; Sơ đồ/Danh sách; hướng dẫn thu gọn và dialog node.
+- `assets/css/topic-detail.css`: scope #page-topic-detail, dùng token chung, canvas clamp(360px,60vh,640px), danh sách đệ quy và panel responsive.
+- `assets/js/topic-detail.js`: tải đúng chủ đề theo URL, dựng mọi children, giữ pan/zoom/mở nhánh, fit theo bounding box thực của node, chừa 40px mỗi cạnh và không tự zoom lớn hơn 1.
+
+Không sửa JSON, URL chung, bộ token của TV1 hoặc file danh bạ/hồ sơ.
+
+### Quy tắc bắt buộc
+
+- Một h1, không chèn mô tả sinh tự động lặp lại tên đề tài. Thông tin giảng viên/email cùng metadata, tự xuống dòng.
+- Hướng dẫn ngắn luôn có gần cây: nhánh con là kiến thức học trước cha; hướng dẫn thao tác dài dùng details.
+- Mobile mặc định danh sách, vẫn chọn được sơ đồ. Đệ quy không giới hạn cấp, giảm thụt lề lồng sâu thay vì thu nhỏ chữ hoặc cắt nội dung.
+- Giữ thuật toán bố trí node, gom requestAnimationFrame, tách pha đọc/ghi DOM. Pan/zoom chỉ thay transform; fit dùng nodeBounds cập nhật sau bố trí.
+- Node mở bằng bàn phím; dialog có nhãn, Escape đóng và trả focus. Không tạo quan hệ cross-topic hoặc biến keyword thành checkbox tiến độ.
+- outcome phải đọc được; subjects là tùy chọn. Không tự bổ sung kiến thức hoặc môn học.
+- Không fallback IDS khi URL sai. Giữ trạng thái đang tải/lỗi/không tìm thấy và giải phóng aria-busy trong cả nhánh lỗi.
+
+### Nghiệm thu và tự kiểm tra
+
+Chạy HTTP, mở từ danh sách và link trực tiếp. Thử đủ 37 đề tài, cây sâu, tên dài, subjects có/không có; không mất node hoặc node chồng nhau. Thử mở/thu liên tục, chuyển view/chủ đề, fit/zoom/pan, fullscreen, bàn phím và focus dialog. Kiểm tra hai theme tại 320/375/768/1024/1440px; canvas có thể chứa vùng rộng nhưng không làm toàn trang tràn.
+
+Chi tiết thay đổi: [SUA-CHUA-TV2.md](SUA-CHUA-TV2.md). Kết quả toàn website: [kế hoạch tổng](../../idea/ke-hoach-tich-hop-sua-loi.md).
+
+## Lịch sử giao việc ban đầu
+
+<details>
+<summary>Mở bản giao việc cũ để đối chiếu; yêu cầu hiện hành ở trên được ưu tiên.</summary>
+
 > **Bản giao việc ban đầu, lưu để đối chiếu.** Giới hạn chỉ HTML/CSS, chức năng disabled và một trang mẫu đã được thay thế bởi [kế hoạch tích hợp](../../idea/ke-hoach-tich-hop-sua-loi.md). Các quy định schema và code còn phù hợp vẫn được giữ.
 
 # TV2 — Chi tiết chủ đề và cây roadmap
@@ -31,3 +70,5 @@ TV2 tự đề xuất và dựng format cây cho mobile/tablet/desktop. Nhóm tr
 ## Nghiệm thu
 
 Link chủ đề–giảng viên và quay lại đúng; không mất nút/outcome; hai theme thống nhất với TV1. PR giải thích cách trình bày cây và cung cấp ảnh cây sâu trên mobile/desktop, kết quả thử bàn phím và kiểm tra HTML/CSS. Không sửa CSS chung, schema hoặc dữ liệu giảng viên.
+
+</details>

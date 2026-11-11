@@ -1,5 +1,8 @@
 # Tích hợp và sửa lỗi Job 1 — IE104
 
+> **Giao diện hiện hành ngày 12/11/2026:** [thiết kế lại theo hướng tra cứu học thuật](#giao-dien-hoc-thuat). Các phần tích hợp/tối ưu trước mục này là lịch sử; quyết định mới thay bố cục ba cột, gradient và modal chọn nhóm cũ. Hợp đồng dữ liệu/URL vẫn có hiệu lực.
+
+
 > **Bàn giao:** nhánh `integration/job-1-fixes`. Thiết kế TV1 là nền chung; bốn trang chức năng đã dùng JavaScript thuần và JSON. PR gốc được giữ để đối chiếu. Đọc tài liệu này thay cho các giới hạn HTML/CSS tĩnh trong bản giao Job 1 ban đầu.
 
 ## Nguồn và phạm vi
@@ -235,3 +238,128 @@ Lượt chẩn đoán trước khi sửa trạng thái tải cho roadmap đạt 
 - Kiểm tra lại hosting và W3C khi môi trường sẵn sàng. Không cần thêm chức năng để hoàn thành bước đó.
 
 Tự chạy: mở repo bằng VS Code Live Server qua HTTP; bắt đầu ở index.html. Thử luồng Khám phá → chủ đề → giảng viên → chủ đề liên quan, đổi theme và kích thước cửa sổ. Khi sửa roadmap, thử đóng/mở nhanh, đổi view, căn vừa và bàn phím trước khi tạo PR. Công cụ QA tạm trên máy không phải yêu cầu cài đặt để thành viên chạy website.
+
+
+<a id="giao-dien-hoc-thuat"></a>
+
+## Thiết kế lại giao diện học thuật — 12/11/2026
+
+> **Đã triển khai và kiểm thử cục bộ.** Năm trang dùng cùng thiết kế gọn, nền trung tính và xanh UIT, tập trung tìm đề tài và xem kiến thức nền. Khám phá phân trang 12 chủ đề. Quyết định đã được nhóm trưởng duyệt thay yêu cầu giữ nguyên bố cục TV1 ban đầu; các kết quả ở mục này là bằng chứng cho giao diện mới.
+
+### Đầu vào, giới hạn và commit
+
+Mốc trước thiết kế lại: `206c92f`. Dữ liệu/source PR và lịch sử sửa chữa được giữ ở các mục trước. Tiếp tục HTML5/CSS3/JavaScript thuần, BEM, CSS riêng theo ID, JSDoc và DOMContentLoaded. Không thêm thư viện/build/backend hoặc dữ liệu nghiên cứu mới. Hai JSON giữ nguyên SHA-256, 3 nhóm/37 chủ đề/234 keyword/16 hồ sơ. URL group/topic/email, URL hồ sơ email và khóa ie104.theme giữ nguyên.
+
+| Commit | Kết quả |
+|---|---|
+| 8a2984f | Nền học thuật, header/footer, trang vào, khám phá và phân trang |
+| b6916b2 | Chi tiết gọn, cây/danh sách theo token chung và fit theo node thật |
+| 0c94920 | Danh bạ, hồ sơ và component hàng chủ đề dùng chung |
+| dcb925f | Sửa HTML semantics của tìm kiếm và nền trắng cho logo gốc ở theme tối |
+| 5238351 | Chốt tiêu đề hàng chủ đề 18px trên mobile theo thang chữ đã duyệt |
+
+Commit bàn giao tài liệu/ảnh theo sau các commit trên; tra bằng git log. Chưa push, merge, deploy, đóng PR hoặc đăng nhận xét lên GitHub.
+
+### Bộ quy tắc giao diện
+
+- Container tối đa 1.200px; lề 16/24/32px, breakpoint 768/1024px. Font hệ thống, body 16px/1,6; phụ 14px; H1 mobile/desktop 26/32px; tên thẻ 18px.
+- Spacing 4/8/12/16/24/32/48px; input/nút bo 8px, khối 12px. Bỏ gradient/shadow cũ; đường phân cách và khoảng cách thay cho nhiều khung trang trí.
+- Sáng: nền #F6F8FB, surface #FFFFFF, chữ #162536, phụ #526274, nhấn #165F9B với chữ trắng. Tối: nền #141A23, surface #1C2531, chữ #ECF2F8, phụ #ACB8C8, nhấn #8CC7FF với chữ #10263A.
+- Header có logo + UIT Discovery, Khám phá/Giảng viên và theme. Mobile hai hàng. Logo gốc màu xanh có nền trắng riêng để nhìn rõ trong theme tối; không tạo logo mới.
+- Nút/điều khiển chính có kích thước CSS ít nhất 44px, focus rõ, nhãn truy cập khớp chữ hiển thị. Một H1 mỗi trang. Emoji trang trí đã bỏ khỏi phần trình bày roadmap; chữ/thuật ngữ trong JSON được giữ.
+- Chỉ style.css quản lý token, header/footer và topic-row dùng chung. CSS riêng có ID scope. TV1 sở hữu nền; TV2/TV3 không tạo bộ màu/header riêng.
+
+### Thay đổi theo phần việc
+
+| Phần | Trước | Sau | Mục đích |
+|---|---|---|---|
+| TV1 — Khám phá | Cột giữa hẹp, sidebar trống kéo dài, 37 card | Danh sách rộng, thống kê một dòng, hướng dẫn details, 12 hàng/trang | Dễ quét và ngắn hơn |
+| TV1 — Điều khiển | Pill + modal trùng chức năng, filter thành nhiều hàng | Chọn nhiều nhóm trực tiếp; kết quả/sắp xếp/reset gọn | Giảm thao tác trùng lặp |
+| TV1 — Thẻ | Tên đề tài và nút mở riêng cùng dẫn một nơi | Tên đề tài là link chính, giảng viên là link độc lập | Bỏ hành động lặp |
+| TV2 — Phần đầu | Nhiều metadata card và mô tả tự sinh lặp tên | Tiêu đề/nhóm và metadata gọn, bộ chuyển chủ đề phụ | Đưa kiến thức nền lên sớm |
+| TV2 — Sơ đồ | Fit theo cả vùng SVG trống | Fit theo bounding box node, chừa 40px/cạnh, không tự phóng quá 1 | Cây ít nhánh có chữ dễ đọc |
+| TV2 — Hướng dẫn | Nhiều emoji/nhãn dài, mô tả dài luôn hiện | Sơ đồ/Danh sách, hướng dẫn một câu và details, panel theo token chung | Dễ hiểu và đồng nhất |
+| TV3 — Danh bạ | Bộ tìm/lọc dọc trên desktop, nút hồ sơ rộng | Tìm/lọc cùng hàng, grid 3/2/1, link hồ sơ gọn | Dùng không gian hợp màn hình |
+| TV3 — Hồ sơ | Tiêu đề tách avatar/email và nhiều mục trống | Header thông tin gọn, một ghi chú khi thiếu, khối tùy chọn chỉ hiện khi có | Không tạo hồ sơ trống lớn |
+| TV3 — Chủ đề liên quan | HTML riêng | createTopicRow(entry,3) cùng component khám phá | Tránh lệch thiết kế và đường dẫn |
+
+### Hợp đồng phân trang và component
+
+- state.page ban đầu 1, pageSize=12. Lọc toàn bộ dữ liệu theo OR nhóm + AND truy vấn → sắp xếp → lấy lát cắt của trang hiện tại.
+- Đổi tìm kiếm/nhóm/sắp xếp về trang 1. Không chọn nhóm là tất cả; tìm tên đề tài hoặc giảng viên không phân biệt dấu/hoa thường.
+- Trạng thái “1–12 trong 37 chủ đề”, Trước/Sau và số trang có aria-current. Khi <=12 hoặc 0 kết quả thì ẩn thanh phân trang.
+- Đổi trang focus về results-heading và cuộn tới đầu kết quả. Không ghi page hoặc bộ lọc vào URL/storage. Nút reset chỉ hiện khi có lựa chọn khác mặc định; reset trả focus về input.
+- Đã bỏ modal nhóm cùng handler, không khôi phục modal khi sửa tiếp.
+- createTopicRow(entry, headingLevel=2) là export mới trong data.js: h2 ở khám phá, gọi với 3 ở hồ sơ dưới mục h2. Tạo nội dung bằng DOM/textContent, URL bằng helper cũ. Khi duyệt mảng phải gọi hàm với tham số rõ ràng; không truyền trực tiếp vào Array.map vì index sẽ bị hiểu là headingLevel.
+- Roadmap giữ engine và đệ quy children, gom frame, fit/focus sau bố trí. nodeBounds chỉ là dữ liệu runtime. Pan/zoom không dựng lại cây, mobile mặc định danh sách.
+
+### Tài liệu đã đồng bộ
+
+- [TV1 — Job hiện hành](../topics/JOB-1.md), [TV2 — Job hiện hành](../topics/detail/JOB-1.md), [TV3 — Job hiện hành](../lecturers/JOB-1.md), [hồ sơ TV3](../lecturers/detail/JOB-1.md), [CSS theo TV](../assets/css/JOB-1.md): mục tiêu, đầu vào, file đích, đầu ra, quy tắc và nghiệm thu ở đầu; bản giao việc cũ giữ trong phần Lịch sử.
+- Ba ghi nhận [TV1](../topics/SUA-CHUA-TV1.md), [TV2](../topics/detail/SUA-CHUA-TV2.md), [TV3](../lecturers/SUA-CHUA-TV3.md) có bảng trước/sau/lý do/file, cách tự thử, kết quả và giới hạn.
+- README, idea/README, job-1-rules, AGENTS và CONTRIBUTING đã chỉ tới yêu cầu hiện hành. Phần lịch sử không còn là lệnh giữ nguyên giao diện cũ.
+
+### Ảnh minh chứng của bản hiện hành
+
+Ảnh chụp viewport thực, không phải mockup; đã xem trực tiếp desktop/mobile trước khi chuyển sang phần việc kế tiếp. Folder ảnh này chỉ phục vụ bàn giao, không được tải ở runtime.
+
+| Ảnh | Kích thước/theme |
+|---|---|
+| [Trang vào](minh-chung-giao-dien/trang-vao-desktop.png) | 1440×900, sáng |
+| [Khám phá desktop](minh-chung-giao-dien/kham-pha-desktop.png) | 1440×900, sáng |
+| [Khám phá mobile](minh-chung-giao-dien/kham-pha-mobile.png) | 375×812, sáng |
+| [Roadmap desktop](minh-chung-giao-dien/roadmap-desktop-toi.png) | 1440×900, tối |
+| [Danh bạ desktop](minh-chung-giao-dien/giang-vien-desktop.png) | 1440×900, sáng |
+| [Hồ sơ mobile](minh-chung-giao-dien/ho-so-mobile-toi.png) | 375×812, tối |
+
+### Nghiệm thu đã thực hiện
+
+Chrome 157.0.8103.50 headless qua HTTP root và /ie104/, ngày 12/11/2026. Công cụ/fixture QA đặt trong thư mục tạm, không là dependency của web.
+
+| Kiểm tra | Kết quả |
+|---|---|
+| Dữ liệu và URL | Hai JSON không đổi SHA-256; đủ 3 nhóm, 37 chủ đề, 234 keyword và 16 hồ sơ |
+| Mở tất cả đề tài/hồ sơ | Đúng tên, giảng viên, số chủ đề theo email; 37 cây đủ node/đường nối, không phát hiện node chồng nhau |
+| Phân trang mặc định | 12/12/12/1; 37 URL duy nhất, đúng Trước/Sau và aria-current |
+| Lọc/tìm/sắp xếp | OR nhóm + AND truy vấn, không dấu, A–Z trên cả 37 đề tài trước phân trang; đổi lọc về 1 |
+| Kết quả ít/rỗng | 0, dưới 12, trên 12; ẩn phân trang đúng, reset và focus đúng |
+| Điều hướng trang bằng bàn phím | Enter đổi trang, focus về results-heading; reset trả focus input |
+| Màn hình đầu | 375×812: tên đề tài đầu y≈674–726; 1440×900 thấy bốn hàng đầy đủ |
+| Responsive | 5 trang × 5 độ rộng × 2 theme = 50 ca, không tràn ngang, một h1, nav/theme hiện đủ; danh bạ đúng 1/2/3 cột |
+| Tinh chỉnh tiêu đề mobile 18px | Kiểm tra lại 320/375px, hai theme: không tràn, axe không vi phạm phát hiện |
+| Roadmap | Fit theo node thật/đệm; mở/thu nhanh, pan/zoom giữ DOM, danh sách, fullscreen, quick switch/reload/Back/Forward đạt |
+| Dialog và bàn phím | Enter/Space mở, Escape đóng và trả focus; axe dialog không vi phạm phát hiện |
+| Fixture kiến thức | Cây 9 cấp, tên/outcome dài/chứa HTML, subjects có/không, tên trùng khác email: đủ dữ liệu, đúng người, không render HTML nguồn |
+| Fixture hồ sơ | Ảnh hỏng về chữ cái; chỉ số thiếu không thành 0; 0 thật giữ; URL javascript bị loại |
+| Tải dữ liệu | 12 ca HTTP 500/JSON sai/hai nguồn rỗng × 4 màn hình: có thông báo, không kẹt aria-busy, không runtime error |
+| Theme | Bàn phím, reload/chuyển trang, đồng bộ tab; storage bị chặn vẫn đổi được; tắt JS theo hệ thống và nút ẩn |
+| URL và tài nguyên | 5 URL thiếu/sai không fallback, email hoa/khoảng trắng đúng; 5 trang dưới /ie104/ giữ tiền tố; không tài nguyên cục bộ tải thất bại trong các luồng bình thường |
+| HTML/CSS/JS | HTML-Validate nguồn 5 trang: 0 lỗi; CSS parse được/không thiếu token; CSS trang có scope; AST không phát hiện hàm thiếu JSDoc/returns; không pageerror |
+| Accessibility | 20 ca axe mobile/desktop, hai theme, WCAG 2 A/AA và 2.1 A/AA không vi phạm phát hiện; thêm dialog và bốn ca mobile sau tinh chỉnh đạt |
+
+HTML-Validate giữ cấu hình đã mô tả ở mục lịch sử (tắt bốn quy tắc phong cách, không tắt cấu trúc/accessibility). Kết quả tự động không thay việc dùng screen reader hoặc thử trên thiết bị thật.
+
+### Lighthouse trên giao diện mới
+
+Lighthouse 13.6.0, mobile mặc định; ba lượt/trang, ghi trung vị. Trang khám phá chạy lại ba lượt sau khi chốt font mobile 18px; bốn trang còn lại lấy bộ ba sau khi hoàn thiện nền logo. Kết quả này thay bảng Lighthouse trước đó cho giao diện hiện hành; không suy ra điểm trên hosting thật.
+
+| Trang | Performance 1 / 2 / 3 | Performance trung vị | Accessibility / Best Practices / SEO trung vị |
+|---|---|---:|---|
+| Trang vào | 100 / 100 / 100 | 100 | 100 / 100 / 100 |
+| Khám phá | 94 / 94 / 94 | 94 | 100 / 100 / 100 |
+| Chi tiết/roadmap | 95 / 95 / 95 | 95 | 100 / 100 / 100 |
+| Danh bạ | 97 / 97 / 97 | 97 | 100 / 100 / 100 |
+| Hồ sơ | 95 / 95 / 95 | 95 | 100 / 100 / 100 |
+
+### Checklist bàn giao và giới hạn
+
+- [x] Năm trang thiết kế lại, giữ dữ liệu/URL và chức năng đã chốt.
+- [x] Phân trang 12 và bàn phím, trạng thái lỗi/rỗng, responsive hai theme.
+- [x] Kiểm tra trực quan và sáu ảnh minh chứng; không chỉ dựa số đo overflow.
+- [x] Cập nhật năm Job MD, ba ghi nhận TV và hướng dẫn hiện hành; giữ lịch sử.
+- [x] Nghiệm thu cục bộ/Lighthouse và commit theo phần việc.
+- [ ] W3C chính thức: thử lại ngày 12/11/2026 bằng HTML trang vào và endpoint CSS, đều HTTP 403. Chưa có báo cáo hợp lệ, không ghi pass W3C.
+- [ ] Firefox: chưa có tại đường dẫn Playwright hoặc hai vị trí cài Windows đã kiểm tra. Chưa xác nhận Firefox/Safari/iOS, screen reader hoặc thiết bị thật.
+- [ ] Hosting thật: chưa deploy/push/merge; /ie104/ hiện được mô phỏng bằng HTTP cục bộ.
+
+Tự chạy: mở repo bằng VS Code Live Server, vào index.html. Đối chiếu ảnh ở kích thước tương ứng, thử phân trang/tìm/lọc, mở cây và giảng viên, thay theme và thu cửa sổ. Tiếp tục theo Yêu cầu giao diện hiện hành trong Job MD cạnh code, không áp dụng ràng buộc HTML/CSS tĩnh của bản lịch sử.

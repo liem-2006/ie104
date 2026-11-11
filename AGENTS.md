@@ -6,6 +6,8 @@
 - Dữ liệu runtime nằm ở `data/research-data.json` theo yêu cầu nhóm trưởng. Không đổi schema, đường dẫn hoặc nội dung dữ liệu trong task frontend nếu chưa được giao.
 - Làm đúng phạm vi đã giao. Phiên bản tích hợp theo `idea/ke-hoach-tich-hop-sua-loi.md` và `idea/job-1-rules.md`: JavaScript và JSON động đã được nhóm trưởng cho phép; JOB-1.md cũ là lịch sử phạm vi ban đầu. Đóng góp qua fork/PR theo CONTRIBUTING.md; @liem-2006 duyệt và merge.
 
+- Giao diện hiện hành là tra cứu học thuật theo quyết định 12/11/2026: đọc phần đầu JOB-1.md cạnh code. Bố cục ba cột/gradient TV1 và modal chọn nhóm cũ đã được thay; phân trang 12 chủ đề dùng toàn bộ kết quả đã lọc.
+
 ## BẮT BUỘC TUÂN THỦ KHI VIẾT CODE ĐỒ ÁN:
 1. **100% Vanilla Code:** Chỉ dùng HTML5, CSS3, JavaScript thuần.
 2. **CẤM THƯ VIỆN & FRAMEWORK:** Không dùng Bootstrap, Tailwind, jQuery, React, Vue,... Mọi component (Slider, Modal, Filter, LiveSearch, Form validation) phải tự code bằng Vanilla JS.

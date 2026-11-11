@@ -1,5 +1,44 @@
 # Ghi nhận sửa chữa TV2 — Chi tiết và roadmap
 
+> Bản hiện hành ngày 12/11/2026: thiết kế học thuật được nhóm trưởng duyệt. Nội dung tích hợp trước đó được giữ trong phần Lịch sử bên dưới.
+
+## Thiết kế lại giao diện học thuật
+
+### Phần được giữ
+
+Giữ engine cây của TV2, đệ quy mọi cấp, bố trí tránh chồng node, SVG Bezier, mở nhánh, pan/zoom, fullscreen, danh sách, dialog nội dung và URL chính xác. Không sửa JSON hoặc thêm liên kết xuyên chủ đề.
+
+### Trước → sau
+
+| Trước | Sau | Lý do | File liên quan |
+|---|---|---|---|
+| Bộ chọn, nhiều thẻ thông tin và mô tả dài đứng trước cây | Tiêu đề/nhóm, metadata giảng viên–email gọn; bộ chọn phụ cạnh header desktop | Đưa kiến thức nền lên sớm | topics/detail/index.html, topic-detail.css |
+| Mô tả sinh tự động lặp tên đề tài | Bỏ đoạn lặp | Không tạo nội dung trông có ý nghĩa nhưng không bổ sung thông tin | topic-detail.js |
+| Nhiều emoji và nhãn song ngữ trang trí | Nhãn tiếng Việt ngắn; thuật ngữ từ JSON giữ nguyên | Hợp ngữ cảnh học thuật | HTML, topic-detail.js |
+| Fit theo kích thước SVG có phần trống tối thiểu | getMapBounds đo vùng node; chừa 40px/cạnh, tự fit không quá 1 | Cây ít nhánh không bị thu chữ vì vùng trống | topic-detail.js |
+| Toolbar/canvas/panel mang phong cách riêng | Dùng token chung, toolbar Sơ đồ/Danh sách, nút 44px, canvas clamp | Đồng nhất với TV1/TV3 | topic-detail.css |
+| Danh sách nhiều khối nền và thụt lề sâu | Một cây nền đơn giản; giảm padding trong nhánh lồng | Đọc được cây sâu ở 320px | topic-detail.css |
+| Hướng dẫn dài luôn hiện | Một câu ý nghĩa tiên quyết luôn hiện, chi tiết thao tác trong details | Giữ ý nghĩa mà gọn phần đầu | topics/detail/index.html |
+
+### Quy ước tiếp tục làm
+
+nodeBounds là dữ liệu runtime, cập nhật sau bố trí và không ghi JSON. Không đổi thuật toán cây để phục vụ màu/bố cục. Giữ gom requestAnimationFrame và pha đo/ghi DOM; pan/zoom chỉ đổi transform. Mobile mặc định danh sách. Bỏ class/ID phải kiểm tra các tham chiếu JS; dialog vẫn Enter/Space, Escape và trả focus.
+
+### Tự chạy và kết quả thực tế
+
+Live Server → Khám phá → bất kỳ đề tài. Mở/thu các nhánh, chuyển danh sách, xem outcome/subjects, fit và zoom; thử URL trực tiếp, chuyển đề tài, reload, Back/Forward.
+
+Đã mở đủ 37 đề tài/234 keyword, không phát hiện node chồng nhau khi mở toàn bộ cây. Thử cây 9 cấp ở 320px, chữ dài/chứa HTML, subjects có/không và trùng tên khác email: đạt. Căn vừa giữ node trong vùng đệm, không phóng tự động quá 1 ở cây mẫu; pan/zoom giữ DOM. Enter/Space, dialog/Escape/focus, fullscreen và chuyển chủ đề hoạt động. Kiểm tra axe riêng dialog không phát hiện vi phạm; HTML nguồn hợp lệ theo công cụ cục bộ.
+
+Ảnh: [roadmap desktop tối](../../idea/minh-chung-giao-dien/roadmap-desktop-toi.png). Kiểm thử và giới hạn chung: [kế hoạch](../../idea/ke-hoach-tich-hop-sua-loi.md#giao-dien-hoc-thuat).
+
+Commit triển khai: b6916b2.
+
+## Lịch sử tích hợp trước thiết kế lại
+
+<details>
+<summary>Mở bản ghi tích hợp cũ để đối chiếu.</summary>
+
 > Đọc nhanh: giữ engine sơ đồ và danh sách đệ quy của PR #2; đồng bộ theme TV1, sửa URL và dữ liệu, hoàn thiện bàn phím/mobile. [Kế hoạch và nghiệm thu chung](../../idea/ke-hoach-tich-hop-sua-loi.md).
 
 ## Đóng góp được giữ
@@ -40,3 +79,5 @@ Nguồn: PR #2, commit 78f4924b7aa5db0ef81b0aed0e92e5313b89beea. Giữ cấu tr�
 Từ trang khám phá bấm một đề tài để có query đúng; không mở chi tiết không query rồi kỳ vọng ra IDS. Thử tất cả nhóm, chọn nhanh chủ đề khác, reload và Back/Forward. Mở nhánh, Enter trên node, Escape đóng dialog, thử +/−/căn vừa/toàn màn hình khi trình duyệt cho phép. Trên mobile thử danh sách, sau đó chuyển sang sơ đồ.
 
 Đã so 37 trang với JSON và số keyword; thử fixture 9 cấp, tên dài, HTML trong dữ liệu, thiếu subjects, URL sai và dữ liệu lỗi. Không pageerror; axe desktop/mobile/dialog không phát hiện lỗi WCAG; HTML-Validate 0 lỗi. Lighthouse mobile: 92/100/100/100. Nu trực tuyến còn báo không tương thích dialog theo tài liệu chung; Firefox chưa được kiểm tra.
+
+</details>

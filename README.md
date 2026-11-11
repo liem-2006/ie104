@@ -8,7 +8,7 @@ Website giúp sinh viên khám phá chủ đề nghiên cứu, xem cây kiến t
 2. Mở index.html để vào Khám phá hoặc Giảng viên.
 3. Không mở bằng file:// vì ES module và fetch cần HTTP. Không cần npm install để chạy website.
 
-Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Tìm/lọc/sắp xếp hoạt động trên JSON. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Nút sáng/tối nằm trên header của mọi trang; lựa chọn được lưu bằng localStorage và đồng bộ giữa các tab. Khi chưa chọn, website theo hệ điều hành/trình duyệt.
+Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Giao diện tra cứu học thuật, sáng/tối. Tìm/lọc/sắp xếp hoạt động trên toàn bộ JSON rồi phân trang 12 chủ đề; đổi bộ lọc về trang 1. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Nút sáng/tối nằm trên header của mọi trang; lựa chọn được lưu bằng localStorage và đồng bộ giữa các tab. Khi chưa chọn, website theo hệ điều hành/trình duyệt.
 
 ## Đọc trước khi nhận việc
 
@@ -16,7 +16,7 @@ Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Tìm/l�
 - [Kế hoạch tích hợp và kết quả nghiệm thu](idea/ke-hoach-tich-hop-sua-loi.md): nguồn PR, hợp đồng URL, kiểm thử và giới hạn.
 - Ghi nhận sửa chữa [TV1](topics/SUA-CHUA-TV1.md), [TV2](topics/detail/SUA-CHUA-TV2.md), [TV3](lecturers/SUA-CHUA-TV3.md).
 
-Các JOB-1.md là bản giao việc ban đầu được giữ để đối chiếu; giới hạn chỉ HTML/CSS, disabled filter và một trang mẫu đã được thay thế bằng phạm vi tích hợp có JavaScript.
+Các JOB-1.md tại thư mục đích có phần Yêu cầu giao diện hiện hành ở đầu. Bản giao việc ban đầu được giữ trong phần Lịch sử để đối chiếu; giới hạn chỉ HTML/CSS, disabled filter và một trang mẫu đã được thay thế.
 
 ## Cấu trúc đang chạy
 
@@ -37,6 +37,6 @@ Giữ data/ ở root, không chuyển sang assets/data/. Không thêm ID vào JS
 
 ## Kiểm thử và quyền quản lý
 
-Chrome 157: đã kiểm tra đủ 37 chủ đề/16 hồ sơ, 40 tổ hợp responsive/theme, HTML-Validate và axe. Lighthouse mobile: performance 92–100, accessibility/best practices/SEO đều 100 trên các trang được audit. Kết quả và giới hạn W3C/Firefox/hosting thực được ghi trong kế hoạch; không xem kiểm thử tự động là xác nhận mọi trình duyệt.
+Giao diện ngày 12/11/2026 đã kiểm tra 37 chủ đề/16 hồ sơ, 50 tổ hợp responsive/theme và phân trang 12/12/12/1. HTML-Validate và axe không lỗi/vi phạm phát hiện trong phạm vi đã thử. Lighthouse mobile trung vị: Performance 94–100, ba nhóm còn lại 100. [Kết quả, ảnh và giới hạn W3C/Firefox/hosting](idea/ke-hoach-tich-hop-sua-loi.md#giao-dien-hoc-thuat). Kết quả tối ưu trước đó giữ làm lịch sử.
 
 Nhánh bàn giao: integration/job-1-fixes. PR #1–#3 được giữ để đối chiếu; không merge chồng các PR gốc lên bản tích hợp. Chủ repo @liem-2006 duyệt và merge. Thành viên đóng góp qua fork/PR, không push vào repo chính. Không tự thay đổi bảo vệ main hoặc CODEOWNERS.
