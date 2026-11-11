@@ -83,6 +83,7 @@ const state = {
   renderVersion: 0,
   fitAfterRender: false,
   toggleFocusId: "",
+  nodeBounds: null,
 };
 
 document.addEventListener("DOMContentLoaded", initTopicDetailPage);
@@ -132,14 +133,14 @@ function renderHeaderInfo(topic, group) {
   if (elBreadcrumb) elBreadcrumb.textContent = topic.name;
 
   const elGroupBadge = document.getElementById("topic-group-badge");
-  if (elGroupBadge) elGroupBadge.textContent = `Lĩnh vực: ${group.name || "An toàn thông tin"}`;
+  if (elGroupBadge) elGroupBadge.textContent = group.name;
 
   const elTitle = document.getElementById("topic-title");
   if (elTitle) elTitle.textContent = topic.name;
 
   const elLecturer = document.getElementById("topic-lecturer-link");
   if (elLecturer && topic.lecturer) {
-    elLecturer.textContent = `${topic.lecturer.name} →`;
+    elLecturer.textContent = topic.lecturer.name;
     elLecturer.href = lecturerUrl(topic.lecturer.email);
   }
 
@@ -147,11 +148,6 @@ function renderHeaderInfo(topic, group) {
   if (elEmail && topic.lecturer) {
     elEmail.textContent = topic.lecturer.email;
     elEmail.href = `mailto:${topic.lecturer.email}`;
-  }
-
-  const elIntro = document.getElementById("topic-intro-text");
-  if (elIntro) {
-    elIntro.textContent = `Nghiên cứu định hướng chuyên sâu về đề tài "${topic.name}", được hướng dẫn bởi ${topic.lecturer ? topic.lecturer.name : "Giảng viên"}. Bạn có thể nhấp trực tiếp vào từng node để mở dần lộ trình các kiến thức nền tảng tương ứng.`;
   }
 
   const elActionLecturer = document.getElementById("btn-action-lecturer");
@@ -175,7 +171,7 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   const label = document.createElement("label");
   label.setAttribute("for", "topic-select-dropdown");
   label.className = "topic-switcher__label";
-  label.textContent = "🚀 Chọn nhanh chủ đề nghiên cứu:";
+  label.textContent = "Chuyển chủ đề";
 
   const select = document.createElement("select");
   select.id = "topic-select-dropdown";
@@ -532,6 +528,7 @@ function applyNodePositions(nodes) {
  * @returns {void}
  */
 function resizeMapCanvas(svg, nodes, rightEdges) {
+  state.nodeBounds = getMapBounds(nodes);
   let bottom = 0;
   for (const node of nodes) bottom = Math.max(bottom, node.y + node.height / 2);
   const width = (rightEdges[rightEdges.length - 1] || 600) + 160;
@@ -611,7 +608,7 @@ function ensureSvgDefs(svgLayer) {
 
 /** Dựng node tương tác và nút mở kiến thức tiên quyết.
  * @param {object} node Node kiến thức.
- * @returns {HTMLDetailsElement} Nhánh danh sách đóng/mở bằng bàn phím.
+ * @returns {HTMLDivElement} Thẻ node có nút mở/thu tiên quyết.
  */
 
 function createNodeDomElement(node) {
@@ -768,12 +765,12 @@ function renderDrawerBadge(node) {
   const variant = node.isRoot || node.depth === 1 ? "primary" : isLeaf ? "success" : "purple";
   badge.className = "badge badge--" + variant;
   badge.textContent = node.isRoot
-    ? "🎯 MỤC TIÊU ĐỀ TÀI"
+    ? "Chủ đề nghiên cứu"
     : node.depth === 1
-      ? "🏛️ TRỤ CỘT ĐỀ TÀI"
+      ? "Kiến thức cốt lõi"
       : isLeaf
-        ? "🌱 NỀN TẢNG TIÊN QUYẾT (XUẤT PHÁT)"
-        : "🔷 KIẾN THỨC CƠ SỞ";
+        ? "Nền tảng tiên quyết"
+        : "Kiến thức cơ sở";
 }
 
 /** Mở dialog native và ghi nhận điểm trả focus khi người dùng đóng.
@@ -837,23 +834,36 @@ function createPrerequisite(node) {
 
 function fitToScreen() {
   const viewport = document.getElementById("mindmap-viewport");
-  const svg = document.getElementById("mindmap-svg");
-  if (!viewport || !svg) return;
-
-  const vpWidth = viewport.clientWidth;
-  const vpHeight = viewport.clientHeight;
-  const contentWidth = parseFloat(svg.getAttribute("width")) || 650;
-  const contentHeight = parseFloat(svg.getAttribute("height")) || 400;
-
-  const scaleX = (vpWidth - 80) / contentWidth;
-  const scaleY = (vpHeight - 80) / contentHeight;
-  const fitScale = Math.min(Math.min(scaleX, scaleY), 1.0);
-
-  state.scale = Math.max(0.02, fitScale);
-  state.panX = Math.max(0, (vpWidth - contentWidth * state.scale) / 2);
-  state.panY = Math.max(0, (vpHeight - contentHeight * state.scale) / 2);
-
+  const bounds = state.nodeBounds;
+  if (!viewport || !bounds || !viewport.clientWidth || !viewport.clientHeight) return;
+  const width = viewport.clientWidth;
+  const height = viewport.clientHeight;
+  // Chừa 40px ở mỗi cạnh, không tính vùng SVG trống vào tỷ lệ fit.
+  state.scale = Math.max(
+    CONFIG.MIN_ZOOM,
+    Math.min((width - 80) / bounds.width, (height - 80) / bounds.height, 1),
+  );
+  state.panX = (width - bounds.width * state.scale) / 2 - bounds.left * state.scale;
+  state.panY = (height - bounds.height * state.scale) / 2 - bounds.top * state.scale;
   applyTransform();
+}
+
+/** Tính bounding box thật của các node sau khi bố trí.
+ * @param {MapNode[]} nodes Node đang hiển thị và đã được đo.
+ * @returns {{left:number,top:number,width:number,height:number}} Vùng chứa tất cả node.
+ */
+function getMapBounds(nodes) {
+  let left = Infinity,
+    top = Infinity,
+    right = -Infinity,
+    bottom = -Infinity;
+  for (const node of nodes) {
+    left = Math.min(left, node.x);
+    top = Math.min(top, node.y - node.height / 2);
+    right = Math.max(right, node.x + node.width);
+    bottom = Math.max(bottom, node.y + node.height / 2);
+  }
+  return { left, top, width: Math.max(1, right - left), height: Math.max(1, bottom - top) };
 }
 
 /** Khởi tạo các nút công cụ Toolbar
@@ -1040,7 +1050,7 @@ function createPillarCard(keyword, index) {
   const label = element(
     "div",
     "roadmap-pillar__label",
-    "Trụ cột " + (index + 1) + ": " + keyword.name,
+    "Nhánh " + (index + 1) + ": " + keyword.name,
   );
   const tree = element("div", "roadmap-tree");
   tree.appendChild(createCardNodeRecursive(keyword, 0));
@@ -1072,13 +1082,13 @@ function createCardNodeRecursive(kw, depth) {
   badge.className = "roadmap-node__badge badge";
   if (isPillar) {
     badge.classList.add("badge--primary");
-    badge.textContent = "🏛️ TRỤ CỘT ĐỀ TÀI";
+    badge.textContent = "Kiến thức cốt lõi";
   } else if (isLeaf) {
     badge.classList.add("badge--success");
-    badge.textContent = "🌱 NỀN TẢNG TIÊN QUYẾT";
+    badge.textContent = "Nền tảng tiên quyết";
   } else {
     badge.classList.add("badge--purple");
-    badge.textContent = "🔷 KIẾN THỨC CƠ SỞ";
+    badge.textContent = "Kiến thức cơ sở";
   }
 
   const h = document.createElement("span");

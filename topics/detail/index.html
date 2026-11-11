@@ -6,9 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."
+      content="Tìm hiểu kiến thức nền, lộ trình tiên quyết và giảng viên hướng dẫn cho chủ đề nghiên cứu."
     />
-    <title>Chi tiết chủ đề và roadmap | UIT Discovery</title>
+    <title>Chi tiết chủ đề | UIT Discovery</title>
     <link rel="icon" href="../../assets/images/uit-logo.png" />
     <link rel="stylesheet" href="../../assets/css/reset.css" />
     <link rel="stylesheet" href="../../assets/css/style.css" />
@@ -19,24 +19,23 @@
     <a class="skip-link" href="#main-content">Đến nội dung chính</a>
     <header class="site-header">
       <div class="container site-header__inner">
-        <a class="site-header__brand" href="../../index.html" aria-label="UIT Discovery — trang đầu"
+        <a class="site-header__brand" href="../../index.html"
           ><img
             class="site-header__logo-img"
             src="../../assets/images/uit-logo.png"
-            width="54"
-            height="42"
+            width="34"
+            height="30"
             alt="UIT"
-        /></a>
+          /><span>UIT Discovery</span></a
+        >
         <nav class="site-nav" aria-label="Điều hướng chính">
           <ul class="site-nav__list">
-            <li class="site-nav__item">
-              <a class="site-nav__link site-nav__link--active" href="../../topics/index.html"
+            <li>
+              <a class="site-nav__link" href="../../topics/index.html" aria-current="page"
                 >Khám phá</a
               >
             </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link" href="../../lecturers/index.html">Giảng viên</a>
-            </li>
+            <li><a class="site-nav__link" href="../../lecturers/index.html">Giảng viên</a></li>
           </ul>
         </nav>
         <button
@@ -52,299 +51,178 @@
         </button>
       </div>
     </header>
-    <main id="main-content" class="topic-detail" aria-busy="true">
-      <p id="topic-load-status" class="topic-detail__loading" role="status">Đang tải chủ đề và lộ trình kiến thức…</p>
-      <!-- 1. Breadcrumb navigation -->
-      <nav class="breadcrumb" aria-label="Đường dẫn điều hướng">
-        <div class="container">
-          <ol class="breadcrumb__list">
-            <li class="breadcrumb__item">
-              <a href="../../index.html" class="breadcrumb__link">Trang chủ</a>
-            </li>
-            <li class="breadcrumb__separator" aria-hidden="true">&rsaquo;</li>
-            <li class="breadcrumb__item">
-              <a href="../index.html" class="breadcrumb__link">Khám phá chủ đề</a>
-            </li>
-            <li class="breadcrumb__separator" aria-hidden="true">&rsaquo;</li>
-            <li
-              id="breadcrumb-current"
-              class="breadcrumb__item breadcrumb__item--current"
-              aria-current="page"
-            >
-              Đang tải chủ đề...
-            </li>
-          </ol>
-        </div>
+    <main id="main-content" class="container page topic-detail" aria-busy="true">
+      <p id="topic-load-status" class="topic-detail__loading" role="status">
+        Đang tải chủ đề và lộ trình kiến thức…
+      </p>
+      <nav class="breadcrumb" aria-label="Đường dẫn">
+        <a href="../index.html">Khám phá chủ đề</a><span aria-hidden="true"> / </span
+        ><span>Chi tiết</span>
       </nav>
-
-      <!-- 2. Header & Thông tin tổng quan đề tài -->
-      <section class="topic-header" aria-labelledby="topic-title">
-        <div class="container">
-          <!-- Thanh chuyển đổi nhanh chủ đề -->
-          <div
-            id="topic-switcher-container"
-            role="group"
-            class="topic-switcher"
-            aria-label="Chọn chủ đề khác"
-          ></div>
-
-          <div class="topic-header__badge-wrap">
-            <span id="topic-group-badge" class="badge badge--primary">Lĩnh vực: Đang tải...</span>
-            <span class="badge badge--warning">Dữ liệu thực tế 2025</span>
-          </div>
-
-          <h1 id="topic-title" aria-live="polite" class="topic-header__title">
-            Đang tải tên chủ đề...
-          </h1>
-
+      <header class="topic-header">
+        <div class="topic-header__main">
+          <span id="topic-group-badge" class="badge">Đang tải nhóm…</span>
+          <h1 id="topic-title">Đang tải chủ đề…</h1>
           <div class="topic-header__meta">
-            <div class="topic-meta-card">
-              <div class="topic-meta-card__icon" aria-hidden="true">👨‍🏫</div>
-              <div class="topic-meta-card__content">
-                <span class="topic-meta-card__label">Giảng viên hướng dẫn:</span>
-                <a
-                  id="topic-lecturer-link"
-                  href="../../lecturers/detail/index.html"
-                  class="topic-meta-card__link"
-                  title="Xem hồ sơ chi tiết giảng viên"
-                >
-                  Đang tải thông tin giảng viên &rarr;
-                </a>
-              </div>
-            </div>
-
-            <div class="topic-meta-card">
-              <div class="topic-meta-card__icon" aria-hidden="true">✉️</div>
-              <div class="topic-meta-card__content">
-                <span class="topic-meta-card__label">Email liên hệ trao đổi:</span>
-                <a id="topic-email-link" href="#" class="topic-meta-card__link"> ... </a>
-              </div>
-            </div>
-          </div>
-
-          <div class="topic-header__intro">
-            <h2 class="topic-header__intro-heading">Mục tiêu bài toán &amp; Bối cảnh nghiên cứu</h2>
-            <p id="topic-intro-text" class="topic-header__intro-text">Đang tải dữ liệu mô tả...</p>
+            <span
+              >Hướng dẫn:
+              <a id="topic-lecturer-link" href="../../lecturers/index.html">Đang tải…</a></span
+            ><a id="topic-email-link" href="mailto:">Email giảng viên</a>
           </div>
         </div>
-      </section>
-
-      <!-- 3. Khu vực Bản đồ Lộ trình Kiến thức (Roadmap Interactive Mind Map) -->
+        <div id="topic-switcher-container" class="topic-switcher"></div>
+      </header>
       <section class="roadmap-section" aria-labelledby="roadmap-heading">
-        <div class="container">
-          <div class="roadmap-header">
-            <div class="roadmap-header__text">
-              <h2 id="roadmap-heading" class="roadmap-header__title">
-                Bản đồ lộ trình kiến thức tiên quyết (Interactive Mind Map)
-              </h2>
-              <p class="roadmap-header__desc">
-                Keyword con là kiến thức cần chuẩn bị cho keyword cha. Học từ các kiến thức tiên
-                quyết bên ngoài về kiến thức đích; mũi tên hướng từ con về cha. Kéo vùng trống để di
-                chuyển, dùng nút +/− hoặc Ctrl + cuộn để zoom.
-              </p>
+        <header class="roadmap-header">
+          <h2 id="roadmap-heading">Kiến thức nền</h2>
+          <p>Nhánh con là kiến thức cần học trước nhánh cha; mũi tên hướng từ con về cha.</p>
+          <details class="reading-guide">
+            <summary>Cách xem lộ trình</summary>
+            <p>
+              Mở dấu + để xem kiến thức tiên quyết. Chọn một node để đọc đầu ra và môn học gợi ý.
+              Kéo vùng trống để di chuyển, dùng nút phóng/thu hoặc Ctrl + cuộn để zoom. Bạn có thể
+              chuyển sang danh sách để đọc tuần tự.
+            </p>
+          </details>
+        </header>
+        <div class="mindmap-component">
+          <div class="mindmap-toolbar">
+            <div class="mindmap-toolbar__views" role="group" aria-label="Chế độ hiển thị">
+              <button
+                type="button"
+                class="mindmap-view-btn"
+                id="btn-view-mindmap"
+                aria-pressed="true"
+              >
+                Sơ đồ</button
+              ><button
+                type="button"
+                class="mindmap-view-btn"
+                id="btn-view-cards"
+                aria-pressed="false"
+              >
+                Danh sách
+              </button>
             </div>
-          </div>
-
-          <!-- Khung bao bọc Mind Map Component -->
-          <div class="mindmap-component">
-            <!-- Thanh công cụ (Toolbar) -->
-            <div class="mindmap-toolbar">
-              <!-- Bộ chuyển đổi chế độ xem -->
-              <div class="mindmap-toolbar__views" role="group" aria-label="Chế độ hiển thị">
-                <button
-                  type="button"
-                  class="mindmap-view-btn mindmap-view-btn--active"
-                  id="btn-view-mindmap"
-                  aria-pressed="true"
-                  title="Xem sơ đồ tư duy trực quan"
-                >
-                  🧠 Sơ đồ tư duy (Mind Map)
-                </button>
-                <button
-                  type="button"
-                  class="mindmap-view-btn"
-                  id="btn-view-cards"
-                  aria-pressed="false"
-                  title="Xem danh sách thẻ chi tiết"
-                >
-                  📋 Danh sách thẻ
-                </button>
-              </div>
-
-              <!-- Các nút điều khiển Canvas (Zoom, Fit, Fullscreen) -->
-              <div class="mindmap-toolbar__controls" id="mindmap-controls">
-                <button
-                  type="button"
-                  class="mindmap-tool-btn"
-                  id="btn-zoom-in"
-                  aria-label="Phóng to"
-                  title="Phóng to (+)"
-                >
-                  <span aria-hidden="true">+</span>
-                </button>
-                <button
-                  type="button"
-                  class="mindmap-tool-btn"
-                  id="btn-zoom-out"
-                  aria-label="Thu nhỏ"
-                  title="Thu nhỏ (-)"
-                >
-                  <span aria-hidden="true">&minus;</span>
-                </button>
-                <button
-                  type="button"
-                  class="mindmap-tool-btn"
-                  id="btn-zoom-reset"
-                  aria-label="Căn vừa khung"
-                  title="Vừa vặn khung nhìn (Fit to Screen)"
-                >
-                  <span aria-hidden="true">&lt;&gt;</span>
-                </button>
-                <button
-                  type="button"
-                  class="mindmap-tool-btn"
-                  id="btn-fullscreen"
-                  aria-label="Toàn màn hình"
-                  title="Toàn màn hình"
-                >
-                  <span aria-hidden="true">&#x26F6;</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- 1. Viewport Sơ đồ tư duy (Mind Map View) -->
-            <section
-              class="mindmap-viewport"
-              id="mindmap-viewport"
-              tabindex="0"
-              aria-label="Khu vực sơ đồ tư duy tương tác"
+            <div
+              class="mindmap-toolbar__controls"
+              id="mindmap-controls"
+              role="group"
+              aria-label="Điều khiển sơ đồ"
             >
-              <!-- Canvas Sân khấu (Stage) chứa SVG đường nối và các Node HTML -->
-              <div class="mindmap-stage" id="mindmap-stage">
-                <!-- SVG chứa các đường cong Bezier mượt mà và đầu mũi tên -->
-                <svg class="mindmap-svg" id="mindmap-svg" aria-hidden="true">
-                  <defs>
-                    <marker
-                      id="mindmap-arrow"
-                      viewBox="0 0 10 10"
-                      refX="8"
-                      refY="5"
-                      markerWidth="8"
-                      markerHeight="8"
-                      orient="auto-start-reverse"
-                    >
-                      <path d="M 0 1.5 L 8 5 L 0 8.5 z" fill="currentColor"></path>
-                    </marker>
-                  </defs>
-                  <g id="mindmap-links-group"></g>
-                </svg>
-
-                <!-- Các phần tử Node dạng viên thuốc (Pills) -->
-                <div class="mindmap-nodes" id="mindmap-nodes"></div>
-              </div>
-
-              <!-- Dòng nhắc hướng dẫn thao tác nhanh -->
-              <div class="mindmap-hint" id="mindmap-hint" aria-hidden="true">
-                <span
-                  >✋ <strong>Kéo chuột</strong> để di chuyển &bull; <strong>Ctrl + cuộn</strong> để
-                  zoom &bull; <strong>Bấm nút</strong> để xem chi tiết môn học</span
+              <button
+                type="button"
+                class="mindmap-tool-btn"
+                id="btn-zoom-in"
+                aria-label="Phóng to"
+                title="Phóng to"
+              >
+                +</button
+              ><button
+                type="button"
+                class="mindmap-tool-btn"
+                id="btn-zoom-out"
+                aria-label="Thu nhỏ"
+                title="Thu nhỏ"
+              >
+                −</button
+              ><button
+                type="button"
+                class="mindmap-tool-btn"
+                id="btn-zoom-reset"
+                aria-label="Căn vừa khung"
+                title="Căn vừa khung"
+              >
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
                 >
-              </div>
-
-              <!-- Panel thông tin chi tiết (Inspector Drawer trượt ra từ bên phải) -->
-              <dialog
-                class="mindmap-drawer"
-                id="mindmap-drawer"
-                aria-modal="true"
-                aria-labelledby="drawer-title"
-                hidden
+                  <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"></path>
+                </svg></button
+              ><button
+                type="button"
+                class="mindmap-tool-btn"
+                id="btn-fullscreen"
+                aria-label="Toàn màn hình"
+                title="Toàn màn hình"
               >
-                <div class="mindmap-drawer__header">
-                  <span class="badge" id="drawer-badge">Trụ cột</span>
-                  <button
-                    type="button"
-                    class="mindmap-drawer__close"
-                    id="drawer-close"
-                    aria-label="Đóng bảng chi tiết"
-                  >
-                    &times;
-                  </button>
-                </div>
-
-                <h3 class="mindmap-drawer__title" id="drawer-title">Tên kiến thức</h3>
-
-                <div class="mindmap-drawer__body">
-                  <div class="mindmap-drawer__section">
-                    <h4 class="mindmap-drawer__label">🎯 Mục tiêu đạt được (Learning Outcome):</h4>
-                    <p class="mindmap-drawer__text" id="drawer-outcome"></p>
-                  </div>
-
-                  <div class="mindmap-drawer__section" id="drawer-subjects-section">
-                    <h4 class="mindmap-drawer__label">📚 Môn học UIT hỗ trợ:</h4>
-                    <div class="mindmap-drawer__subjects" id="drawer-subjects"></div>
-                  </div>
-
-                  <div class="mindmap-drawer__section" id="drawer-prereqs-section">
-                    <h4 class="mindmap-drawer__label">🔗 Kiến thức tiên quyết cần học trước:</h4>
-                    <ul class="mindmap-drawer__prereqs" id="drawer-prereqs"></ul>
-                  </div>
-                </div>
-              </dialog>
-            </section>
-
-            <!-- 2. Viewport Thẻ phân cấp (Cards View - Tối ưu cho đọc tuần tự & thiết bị di động hẹp) -->
-            <div class="mindmap-cards-view" id="cards-viewport" hidden>
-              <div id="roadmap-pillars-grid" class="roadmap-pillars-grid"></div>
+                <svg
+                  viewBox="0 0 24 24"
+                  width="18"
+                  height="18"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="1.8"
+                  aria-hidden="true"
+                >
+                  <path d="M9 3H3v6M15 3h6v6M3 15v6h6M21 15v6h-6"></path>
+                </svg>
+              </button>
             </div>
           </div>
-        </div>
-      </section>
-
-      <!-- 4. Gợi ý trao đổi & Hành động điều hướng -->
-      <section class="topic-footer-action" aria-labelledby="action-heading">
-        <div class="container">
-          <div class="topic-footer-card">
-            <div class="topic-footer-card__content">
-              <h2 id="action-heading" class="topic-footer-card__title">
-                Gợi ý các bước tiếp theo dành cho sinh viên
-              </h2>
-              <ul class="topic-footer-card__list">
-                <li>
-                  Nắm vững các keyword có nhãn Nền tảng tiên quyết trước khi đi sâu vào chuyên đề.
-                </li>
-                <li>
-                  Chuẩn bị 2–3 câu hỏi định hướng nghiên cứu và liên hệ giảng viên qua email để trao
-                  đổi lịch gặp.
-                </li>
-                <li>
-                  Đọc kỹ đề cương các môn học UIT liên quan để lên kế hoạch đăng ký học phần phù
-                  hợp.
-                </li>
-              </ul>
+          <section
+            class="mindmap-viewport"
+            id="mindmap-viewport"
+            tabindex="0"
+            aria-label="Sơ đồ kiến thức tương tác"
+          >
+            <div class="mindmap-stage" id="mindmap-stage">
+              <svg class="mindmap-svg" id="mindmap-svg" aria-hidden="true"></svg>
+              <div class="mindmap-nodes" id="mindmap-nodes"></div>
             </div>
-            <div class="topic-footer-card__buttons">
-              <a href="../index.html" class="btn btn--outline" title="Quay lại danh sách chủ đề">
-                &larr; Quay lại danh sách chủ đề
-              </a>
-              <a
-                id="btn-action-lecturer"
-                href="../../lecturers/detail/index.html"
-                class="btn btn--primary"
-                title="Xem hồ sơ giảng viên hướng dẫn"
-              >
-                Xem hồ sơ GV hướng dẫn &rarr;
-              </a>
-            </div>
+          </section>
+          <div class="mindmap-cards-view" id="cards-viewport" hidden>
+            <div id="roadmap-pillars-grid" class="roadmap-pillars-grid"></div>
           </div>
+          <p id="mindmap-hint" class="mindmap-hint">
+            Chọn node để xem kiến thức. Dùng +/− để mở hoặc thu nhánh.
+          </p>
+          <dialog class="mindmap-drawer" id="mindmap-drawer" aria-labelledby="drawer-title" hidden>
+            <div class="mindmap-drawer__header">
+              <span class="badge" id="drawer-badge">Kiến thức</span
+              ><button
+                type="button"
+                class="mindmap-drawer__close"
+                id="drawer-close"
+                aria-label="Đóng bảng chi tiết"
+              >
+                ×
+              </button>
+            </div>
+            <h3 class="mindmap-drawer__title" id="drawer-title">Tên kiến thức</h3>
+            <div class="mindmap-drawer__body">
+              <section class="mindmap-drawer__section">
+                <h4 class="mindmap-drawer__label">Đầu ra kỳ vọng</h4>
+                <p id="drawer-outcome" class="mindmap-drawer__text"></p>
+              </section>
+              <section class="mindmap-drawer__section" id="drawer-subjects-section">
+                <h4 class="mindmap-drawer__label">Môn học gợi ý tại UIT</h4>
+                <div id="drawer-subjects" class="mindmap-drawer__subjects"></div>
+              </section>
+              <section class="mindmap-drawer__section" id="drawer-prereqs-section">
+                <h4 class="mindmap-drawer__label">Kiến thức cần học trước</h4>
+                <ul id="drawer-prereqs" class="mindmap-drawer__prereqs"></ul>
+              </section>
+            </div>
+          </dialog>
         </div>
       </section>
+      <div class="topic-footer">
+        <a href="../index.html">Quay lại danh sách chủ đề</a
+        ><a id="btn-action-lecturer" href="../../lecturers/index.html">Xem hồ sơ giảng viên</a>
+      </div>
     </main>
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p>
-        <a href="../../lecturers/index.html">Tìm giảng viên hướng dẫn</a>
+        <p>UIT Discovery · Đồ án IE104</p>
+        <a href="../../lecturers/index.html">Giảng viên hướng dẫn</a>
       </div>
     </footer>
-    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript>
+    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem lộ trình.</p></noscript>
   </body>
 </html>
