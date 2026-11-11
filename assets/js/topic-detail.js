@@ -112,6 +112,10 @@ async function initTopicDetailPage() {
     renderMindMap(true);
   } catch {
     renderErrorMessage("Không thể tải dữ liệu chủ đề. Hãy tải lại trang để thử lại.");
+  } finally {
+    // Công bố nội dung theo một lần cập nhật, tránh xê dịch các placeholder khi JSON tới.
+    document.getElementById("main-content").removeAttribute("aria-busy");
+    document.getElementById("topic-load-status")?.remove();
   }
 }
 

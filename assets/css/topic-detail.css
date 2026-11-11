@@ -862,3 +862,21 @@
     padding: 0.5rem;
   }
 }
+
+/* Giữ chỗ nhưng chưa hiển thị nội dung placeholder trong lúc tải JSON.
+   Nội dung chỉ xuất hiện sau khi tiêu đề, bộ chọn và roadmap đã sẵn sàng. */
+#page-topic-detail .topic-detail {
+  position: relative;
+}
+#page-topic-detail .topic-detail[aria-busy="true"] {
+  min-height: 100vh;
+}
+#page-topic-detail .topic-detail[aria-busy="true"] > :not(.topic-detail__loading) {
+  visibility: hidden;
+}
+#page-topic-detail .topic-detail__loading {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  padding: var(--space-6);
+}

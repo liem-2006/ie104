@@ -172,11 +172,12 @@ function renderTopics() {
   }
 }
 /** Tạo hàng chủ đề theo thiết kế TV1.
- * @param {*} value Phần tử đang xử lý.
- * @returns {void} Không trả về giá trị.
+ * @param {{group: object, topic: object}} entry Chủ đề và metadata nhóm.
+ * @returns {HTMLElement} Hàng chủ đề có link roadmap và hồ sơ giảng viên.
  */
 
-function createTopicRow({ group, topic }) {
+function createTopicRow(entry) {
+  const { group, topic } = entry;
   const row = element("article", "topic-row");
   const badge = element("span", "badge", group.name);
   const heading = element("h2", "topic-row__title");

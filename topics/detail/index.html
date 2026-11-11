@@ -42,7 +42,7 @@
         <button
           type="button"
           class="theme-toggle"
-          aria-label="Chế độ tối"
+          aria-label="Giao diện sáng/tối"
           aria-pressed="false"
           title="Chuyển sang giao diện tối"
           hidden
@@ -52,7 +52,8 @@
         </button>
       </div>
     </header>
-    <main id="main-content" class="topic-detail">
+    <main id="main-content" class="topic-detail" aria-busy="true">
+      <p id="topic-load-status" class="topic-detail__loading" role="status">Đang tải chủ đề và lộ trình kiến thức…</p>
       <!-- 1. Breadcrumb navigation -->
       <nav class="breadcrumb" aria-label="Đường dẫn điều hướng">
         <div class="container">
