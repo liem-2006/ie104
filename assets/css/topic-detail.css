@@ -1,0 +1,829 @@
+/* ==========================================================================
+   IE104 - Topic Detail & Interactive Mind Map CSS (TV2)
+   Scope: #page-topic-detail
+   Tham khảo phong cách tương tác và mỹ thuật từ NotebookLM Mind Map
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Breadcrumb Navigation
+   -------------------------------------------------------------------------- */
+#page-topic-detail .breadcrumb {
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  padding: var(--space-3) 0;
+  font-size: var(--font-size-sm);
+}
+
+#page-topic-detail .breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+#page-topic-detail .breadcrumb__item {
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-muted);
+}
+
+#page-topic-detail .breadcrumb__link {
+  color: var(--color-muted);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+#page-topic-detail .breadcrumb__link:hover {
+  color: var(--color-primary);
+  text-decoration: underline;
+}
+
+#page-topic-detail .breadcrumb__separator {
+  color: var(--color-border);
+  font-weight: var(--font-weight-bold);
+  user-select: none;
+}
+
+#page-topic-detail .breadcrumb__item--current {
+  color: var(--color-text);
+  font-weight: var(--font-weight-medium);
+}
+
+/* --------------------------------------------------------------------------
+   2. Topic Header Section & Quick Switcher
+   -------------------------------------------------------------------------- */
+#page-topic-detail .topic-header {
+  background-color: #ffffff;
+  border-bottom: 1px solid var(--color-border);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-6);
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .topic-header {
+    background-color: #0f172a;
+    border-bottom-color: #1e293b;
+  }
+}
+
+#page-topic-detail .topic-switcher {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-3) var(--space-4);
+  margin-bottom: var(--space-4);
+}
+
+#page-topic-detail .topic-switcher__label {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+}
+
+#page-topic-detail .topic-switcher__select {
+  flex: 1 1 260px;
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-sm);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+#page-topic-detail .topic-switcher__select:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
+
+#page-topic-detail .topic-header__badge-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-bottom: var(--space-2);
+}
+
+#page-topic-detail .topic-header__title {
+  font-size: var(--font-size-2xl);
+  color: var(--color-text);
+  margin-bottom: var(--space-4);
+  line-height: var(--line-height-tight);
+}
+
+@media (min-width: 768px) {
+  #page-topic-detail .topic-header__title {
+    font-size: var(--font-size-3xl);
+  }
+}
+
+#page-topic-detail .topic-header__meta {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+@media (min-width: 640px) {
+  #page-topic-detail .topic-header__meta {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+#page-topic-detail .topic-meta-card {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface-raised);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+
+#page-topic-detail .topic-meta-card__icon {
+  font-size: 1.5rem;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+#page-topic-detail .topic-meta-card__content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+#page-topic-detail .topic-meta-card__label {
+  font-size: var(--font-size-xs);
+  color: var(--color-muted);
+}
+
+#page-topic-detail .topic-meta-card__link {
+  font-size: var(--font-size-sm);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  word-break: break-all;
+}
+
+#page-topic-detail .topic-header__intro {
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4) var(--space-5);
+}
+
+#page-topic-detail .topic-header__intro-heading {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--space-2);
+  color: var(--color-text);
+}
+
+#page-topic-detail .topic-header__intro-text {
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+/* --------------------------------------------------------------------------
+   3. Roadmap Section & Mind Map Component
+   -------------------------------------------------------------------------- */
+#page-topic-detail .roadmap-section {
+  background-color: #f1f5f9;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+  padding-top: var(--space-6);
+  padding-bottom: var(--space-8);
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .roadmap-section {
+    background-color: #0b1120;
+    border-top-color: #1e293b;
+    border-bottom-color: #1e293b;
+  }
+}
+
+#page-topic-detail .roadmap-header {
+  margin-bottom: var(--space-4);
+}
+
+#page-topic-detail .roadmap-header__title {
+  font-size: var(--font-size-xl);
+  color: var(--color-text);
+  margin-bottom: var(--space-1);
+}
+
+@media (min-width: 768px) {
+  #page-topic-detail .roadmap-header__title {
+    font-size: var(--font-size-2xl);
+  }
+}
+
+#page-topic-detail .roadmap-header__desc {
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+}
+
+/* Khung chính của Mind Map (Container Thẻ nổi bật trên nền Slate) */
+#page-topic-detail .mindmap-component {
+  background-color: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-component {
+    background-color: #0f172a;
+    border-color: #334155;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   4. Mind Map Toolbar
+   -------------------------------------------------------------------------- */
+#page-topic-detail .mindmap-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+}
+
+#page-topic-detail .mindmap-toolbar__views {
+  display: flex;
+  gap: var(--space-2);
+}
+
+#page-topic-detail .mindmap-view-btn {
+  padding: var(--space-2) var(--space-3);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface-raised);
+  color: var(--color-muted);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+#page-topic-detail .mindmap-view-btn:hover {
+  color: var(--color-text);
+  border-color: var(--color-muted);
+}
+
+#page-topic-detail .mindmap-view-btn--active {
+  background-color: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+}
+
+#page-topic-detail .mindmap-toolbar__controls {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+#page-topic-detail .mindmap-tool-btn {
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background-color: var(--color-surface);
+  color: var(--color-text);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+#page-topic-detail .mindmap-tool-btn:hover {
+  background-color: var(--color-surface-raised);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+/* --------------------------------------------------------------------------
+   5. Mind Map Viewport (Canvas sân khấu)
+   -------------------------------------------------------------------------- */
+#page-topic-detail .mindmap-viewport {
+  position: relative;
+  width: 100%;
+  height: 600px;
+  min-height: 500px;
+  overflow: hidden;
+  cursor: grab;
+  user-select: none;
+  background-color: #f8fafc;
+  /* Lưới chấm bi NotebookLM Dot Grid tương phản sắc nét trên nền canvas */
+  background-image: radial-gradient(circle, #94a3b8 1.4px, transparent 1.4px);
+  background-size: 24px 24px;
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-viewport {
+    background-color: #020617;
+    background-image: radial-gradient(circle, #334155 1.4px, transparent 1.4px);
+  }
+}
+
+#page-topic-detail .mindmap-viewport:active {
+  cursor: grabbing;
+}
+
+#page-topic-detail .mindmap-stage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: 0 0;
+  will-change: transform;
+}
+
+#page-topic-detail .mindmap-svg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  overflow: visible;
+  pointer-events: none;
+  z-index: 1;
+  max-width: none !important;
+  max-height: none !important;
+  display: block;
+}
+
+/* Đường nối Bezier mượt mà */
+#page-topic-detail .mindmap-curve {
+  fill: none;
+  stroke: #3b82f6;
+  stroke-width: 2.2px;
+  stroke-linecap: round;
+  transition: stroke var(--transition-fast), stroke-width var(--transition-fast);
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-curve {
+    stroke: #60a5fa;
+  }
+}
+
+#page-topic-detail .mindmap-nodes {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   6. Mind Map Node Pills (Phong cách NotebookLM Mind Map)
+   -------------------------------------------------------------------------- */
+#page-topic-detail .mindmap-node {
+  position: absolute;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  max-width: 240px;
+  min-width: 130px;
+  padding: 8px 14px;
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  cursor: pointer;
+  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+  border: 1.5px solid transparent;
+  user-select: none;
+  background-color: var(--color-surface);
+  box-sizing: border-box;
+}
+
+#page-topic-detail .mindmap-node:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 6px 16px -2px rgba(37, 99, 235, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  z-index: 5;
+}
+
+#page-topic-detail .mindmap-node--selected {
+  outline: 2.5px solid #2563eb;
+  outline-offset: 2px;
+  box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.25);
+  transform: scale(1.03);
+  z-index: 10 !important;
+}
+
+/* Node Root (Gốc đề tài) - Tông Xanh Chàm Indigo */
+#page-topic-detail .mindmap-node--root {
+  min-width: 220px;
+  max-width: 290px;
+  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
+  border-color: #818cf8;
+  color: #1e1b4b;
+  font-size: 14.5px;
+  font-weight: 700;
+  border-radius: 14px;
+  padding: 11px 16px;
+  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.16);
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-node--root {
+    background: #1e1b4b;
+    border-color: #6366f1;
+    color: #e0e7ff;
+  }
+}
+
+/* Node Trụ cột (Level 1) - Tông Xanh Biển Nhạt Sky */
+#page-topic-detail .mindmap-node--pillar {
+  min-width: 140px;
+  max-width: 240px;
+  background: #f0f7ff;
+  border-color: #93c5fd;
+  color: #0c4a6e;
+  font-size: 13.5px;
+  font-weight: 600;
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-node--pillar {
+    background-color: #172554;
+    border-color: #3b82f6;
+    color: #dbeafe;
+  }
+}
+
+/* Node Cơ sở (Level 2) - Tông Tím Lavender */
+#page-topic-detail .mindmap-node--intermediate {
+  min-width: 140px;
+  max-width: 230px;
+  background: #faf5ff;
+  border-color: #d8b4fe;
+  color: #581c87;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-node--intermediate {
+    background-color: #2e1065;
+    border-color: #9333ea;
+    color: #f3e8ff;
+  }
+}
+
+/* Node Lá tiên quyết (Level 3+) - Tông Xanh Ngọc Mint */
+#page-topic-detail .mindmap-node--leaf {
+  min-width: 130px;
+  max-width: 220px;
+  background: #f0fdf4;
+  border-color: #86efac;
+  color: #064e3b;
+  font-size: 12.5px;
+  font-weight: 500;
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .mindmap-node--leaf {
+    background-color: #064e3b;
+    border-color: #10b981;
+    color: #d1fae5;
+  }
+}
+
+#page-topic-detail .mindmap-node__text {
+  line-height: 1.35;
+  text-wrap: balance;
+  word-break: break-word;
+  white-space: normal;
+  flex: 1;
+}
+
+/* Nút Toggle tròn (+ / -) */
+#page-topic-detail .mindmap-node__toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border-radius: 50%;
+  background-color: #ffffff;
+  border: 1.5px solid currentColor;
+  color: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0;
+  margin-left: 6px;
+  flex-shrink: 0;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+  transition: all 0.15s ease;
+}
+
+#page-topic-detail .mindmap-node__toggle:hover {
+  background-color: #2563eb;
+  color: #ffffff;
+  border-color: #2563eb;
+  transform: scale(1.1);
+}
+
+/* Gợi ý thao tác nhanh */
+#page-topic-detail .mindmap-hint {
+  position: absolute;
+  bottom: var(--space-3);
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(4px);
+  color: #ffffff;
+  font-size: var(--font-size-xs);
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-pill);
+  pointer-events: none;
+  z-index: 10;
+  box-shadow: var(--shadow-sm);
+  text-align: center;
+}
+
+/* --------------------------------------------------------------------------
+   7. Mind Map Inspector Drawer (Panel chi tiết trượt ra từ bên phải)
+   -------------------------------------------------------------------------- */
+#page-topic-detail .mindmap-drawer {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 360px;
+  max-width: 90%;
+  height: 100%;
+  background-color: var(--color-surface);
+  border-left: 1px solid var(--color-border);
+  box-shadow: -4px 0 20px rgba(0, 0, 0, 0.12);
+  padding: var(--space-5);
+  overflow-y: auto;
+  z-index: 20;
+  transform: translateX(100%);
+  transition: transform var(--transition-normal);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#page-topic-detail .mindmap-drawer--open {
+  transform: translateX(0);
+}
+
+#page-topic-detail .mindmap-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-2);
+}
+
+#page-topic-detail .mindmap-drawer__close {
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  color: var(--color-muted);
+  cursor: pointer;
+  line-height: 1;
+  padding: var(--space-1);
+  border-radius: var(--radius-sm);
+}
+
+#page-topic-detail .mindmap-drawer__close:hover {
+  color: var(--color-text);
+  background-color: var(--color-surface-raised);
+}
+
+#page-topic-detail .mindmap-drawer__title {
+  font-size: var(--font-size-lg);
+  color: var(--color-text);
+  line-height: var(--line-height-tight);
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--color-border);
+}
+
+#page-topic-detail .mindmap-drawer__section {
+  margin-bottom: var(--space-4);
+}
+
+#page-topic-detail .mindmap-drawer__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: var(--space-2);
+}
+
+#page-topic-detail .mindmap-drawer__text {
+  font-size: var(--font-size-sm);
+  color: var(--color-text);
+  line-height: var(--line-height-relaxed);
+}
+
+#page-topic-detail .mindmap-drawer__subjects {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+#page-topic-detail .mindmap-drawer__prereqs {
+  padding-left: var(--space-4);
+  list-style: disc;
+  font-size: var(--font-size-xs);
+  color: var(--color-muted);
+  line-height: var(--line-height-normal);
+}
+
+#page-topic-detail .mindmap-drawer__prereqs li {
+  margin-bottom: var(--space-2);
+}
+
+/* --------------------------------------------------------------------------
+   8. Cards View (Chế độ danh sách thẻ phân cấp)
+   -------------------------------------------------------------------------- */
+#page-topic-detail .mindmap-cards-view {
+  padding: var(--space-5);
+  background-color: var(--color-bg);
+}
+
+#page-topic-detail .roadmap-pillars-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-5);
+}
+
+@media (min-width: 1024px) {
+  #page-topic-detail .roadmap-pillars-grid {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
+}
+
+#page-topic-detail .roadmap-pillar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+#page-topic-detail .roadmap-pillar__label {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-primary);
+  padding-bottom: var(--space-2);
+  border-bottom: 2px solid var(--color-border);
+}
+
+#page-topic-detail .roadmap-tree {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+#page-topic-detail .roadmap-node {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  overflow: hidden;
+}
+
+#page-topic-detail .roadmap-node--pillar { border-left: 4px solid var(--color-primary); }
+#page-topic-detail .roadmap-node--intermediate { border-left: 4px solid var(--color-purple); }
+#page-topic-detail .roadmap-node--leaf { border-left: 4px solid var(--color-success); background-color: var(--color-surface-raised); }
+
+#page-topic-detail .roadmap-node__summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-4);
+  cursor: pointer;
+  user-select: none;
+  min-height: 48px;
+  list-style: none;
+}
+
+#page-topic-detail .roadmap-node__summary::-webkit-details-marker { display: none; }
+#page-topic-detail .roadmap-node__summary:focus-visible { outline: 2px solid var(--color-focus); }
+
+#page-topic-detail .roadmap-node__name {
+  flex: 1 1 auto;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin: 0;
+}
+
+#page-topic-detail .roadmap-node__content {
+  padding: var(--space-3) var(--space-4);
+  border-top: 1px solid var(--color-border);
+  background-color: var(--color-bg);
+  font-size: var(--font-size-sm);
+}
+
+#page-topic-detail .roadmap-branch {
+  margin-top: var(--space-3);
+  padding-left: var(--space-3);
+  border-left: 2px dashed var(--color-border);
+}
+
+#page-topic-detail .roadmap-branch__connector {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-muted);
+  margin-bottom: var(--space-2);
+}
+
+#page-topic-detail .roadmap-branch__arrow {
+  color: var(--color-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+/* --------------------------------------------------------------------------
+   9. Footer Action Card
+   -------------------------------------------------------------------------- */
+#page-topic-detail .topic-footer-action {
+  background-color: #ffffff;
+  border-top: 1px solid var(--color-border);
+  padding-top: var(--space-7);
+  padding-bottom: var(--space-8);
+}
+
+@media (prefers-color-scheme: dark) {
+  #page-topic-detail .topic-footer-action {
+    background-color: #0f172a;
+    border-top-color: #1e293b;
+  }
+}
+
+#page-topic-detail .topic-footer-card {
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (min-width: 768px) {
+  #page-topic-detail .topic-footer-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+#page-topic-detail .topic-footer-card__content {
+  max-width: 700px;
+}
+
+#page-topic-detail .topic-footer-card__title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+#page-topic-detail .topic-footer-card__list {
+  padding-left: var(--space-4);
+  list-style: disc;
+  font-size: var(--font-size-sm);
+  color: var(--color-muted);
+  line-height: var(--line-height-relaxed);
+}
+
+#page-topic-detail .topic-footer-card__buttons {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  flex-shrink: 0;
+}
+
+@media (min-width: 480px) {
+  #page-topic-detail .topic-footer-card__buttons {
+    flex-direction: row;
+  }
+}
