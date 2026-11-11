@@ -377,3 +377,6 @@ Phần này cập nhật trạng thái bàn giao sau thiết kế lại; kết q
 - Bản tổng quan job-history/job-2.md ở workspace bên ngoài repo, chỉ lưu local. Không đưa vào GitHub.
 - Đã rà link nội bộ của tài liệu mới và hướng dẫn cập nhật: không phát hiện link hỏng; ID scope khớp HTML. git diff --check không lỗi khoảng trắng; code/dữ liệu không đổi, không chạy lại kiểm thử giao diện cho thay đổi thuần tài liệu.
 - Công bố bằng push integration/job-1-fixes và mở PR vào main; không merge, đóng PR gốc hoặc deploy. Trạng thái/đường dẫn PR được bàn giao sau khi GitHub xác nhận.
+### Xác nhận công bố
+
+Đã push nhánh integration/job-1-fixes và mở [PR #4](https://github.com/liem-2006/ie104/pull/4) vào main ngày 12/11/2026. Commit giao việc: 3ad3c5c. PR có liên kết ba bản ghi sửa chữa, các task Job 2 và kết quả kiểm thử bản nền. Chờ nhóm trưởng duyệt/merge; chưa merge, chưa đóng PR #1–#3, chưa deploy.
