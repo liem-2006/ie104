@@ -1,627 +1,124 @@
-/* ==========================================================================
-   CSS Riêng Trang Khám Phá Chủ Đề (#page-topics) — Đồ án IE104 (UIT)
-   Phụ trách: TV1
-   Thiết kế: UIT Discovery — Danh Sách Đề Tài Nghiên Cứu Liên Tục
-   Quy tắc:
-   - Mọi selector bắt đầu bằng #page-topics để tránh xung đột với TV2/TV3
-   - Sử dụng Design Tokens var(--*) từ assets/css/style.css
-   - Bố cục 3 cột (2 : 6 : 2 trên Laptop) qua CSS Grid Area
-   - Khai báo background-color đặc làm fallback trước background-image gradient
-   ========================================================================== */
-
-/* 1. Khung chính trang Khám phá & khoảng đệm: 32px (2rem) trên Desktop từ header tới nội dung */
-#page-topics .discovery-layout {
-  padding-block: 2rem var(--space-6);
+/* TV1 — khám phá: tìm/lọc toàn bộ dữ liệu, danh sách 12 đề tài/trang. */
+#page-topics .page-header {
+  margin-bottom: 20px;
 }
-
-/* 2. Bố cục 3 cột Discovery qua Grid Template Areas
-   Trong HTML: discovery-center đứng đầu tiên (để điều hướng bàn phím đi vào nội dung chính trước).
-   Trên Laptop (>= 1024px): Bố cục CSS Grid chuẩn:
-   - topics-hero và h1 sử dụng display: contents để các phần tử tham gia trực tiếp vào grid:
-     + Hàng 1: Badge (cột 2) — canh giữa trong phạm vi cột giữa
-     + Hàng 2: Cột trái (cột 1) | Dòng 1 "Tìm một hướng nghiên cứu" (cột 2) | Cột phải (cột 3)
-     + Hàng 3: Cột trái (cột 1) | Dòng 2 "thuộc về bạn." (cột 2) | Cột phải (cột 3)
-     + Hàng 4: Cột trái (cột 1) | Đoạn mô tả hero (cột 2) | Cột phải (cột 3)
-     + Hàng 5: Cột trái (cột 1) | discovery-center (cột 2) gồm cụm lọc, kết quả, FAQ | Cột phải (cột 3)
-   => Mép trên của hai sidebar bắt đầu CHÍNH XÁC ngang mép trên của DÒNG ĐẦU TIÊN "Tìm một hướng nghiên cứu"! */
-#page-topics .discovery-layout {
-  display: grid;
-  grid-template-columns: minmax(0, 2fr) minmax(0, 6fr) minmax(0, 2fr);
-  column-gap: var(--space-5);
-  row-gap: var(--space-4);
-  align-items: start;
-}
-
-@media (min-width: 1024px) {
-  #page-topics .discovery-layout > .topics-hero,
-  #page-topics .topics-hero {
-    display: contents;
-  }
-
-  #page-topics .topics-hero__badge {
-    grid-column: 2;
-    grid-row: 1;
-    justify-self: center; /* Canh giữa Hero trong phạm vi cột giữa */
-    align-self: center;
-  }
-
-  #page-topics .topics-hero__title {
-    display: contents;
-  }
-
-  #page-topics .discovery-sidebar--left {
-    grid-column: 1;
-    grid-row: 2 / span 5; /* Bắt đầu ngang mép trên dòng 1 "Tìm một hướng nghiên cứu" */
-    min-width: 0;
-  }
-
-  #page-topics .topics-hero__line--1 {
-    grid-column: 2;
-    grid-row: 2;
-    justify-self: center;
-    text-align: center;
-  }
-
-  #page-topics .discovery-sidebar--right {
-    grid-column: 3;
-    grid-row: 2 / span 5; /* Bắt đầu ngang mép trên dòng 1 "Tìm một hướng nghiên cứu" */
-    min-width: 0;
-  }
-
-  #page-topics .topics-hero__line--2 {
-    grid-column: 2;
-    grid-row: 3;
-    justify-self: center;
-    text-align: center;
-  }
-
-  #page-topics .topics-hero__desc {
-    grid-column: 2;
-    grid-row: 4;
-    justify-self: center;
-    text-align: center;
-    margin-inline: auto;
-  }
-
-  #page-topics .discovery-center {
-    grid-column: 2;
-    grid-row: 5;
-    min-width: 0;
-    text-align: left; /* Cụm controls, kết quả và danh sách đề tài giữ canh trái */
-  }
-}
-
-#page-topics .discovery-sidebar--left,
-#page-topics .discovery-sidebar--right,
-#page-topics .discovery-center {
-  min-width: 0;
-}
-
-/* Cụm dính (sticky) ở 2 cột bên */
-
-/* 3. Khung nội dung hai bên: Trình bày PHẲNG trực tiếp trên nền trang (Bỏ kiểu hộp đóng kín) */
-#page-topics .sidebar-panel {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-  padding: 0 0 var(--space-5) 0;
-  border-bottom: 2px solid var(--color-sidebar-divider);
-  background: none;
-  background-color: transparent;
-  background-image: none;
-  border-left: none;
-  border-right: none;
-  border-top: none;
-  border-radius: 0;
-  box-shadow: none;
-}
-
-#page-topics .sidebar-panel:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-#page-topics .sidebar-panel__title {
-  color: var(--color-text);
-  font-size: 0.9375rem; /* 15px */
-  font-weight: 700;
-  line-height: 1.4;
-}
-
-/* 3.1. Cột trái — Thống kê tổng quan */
-#page-topics .overview-stats {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  margin: 0;
-}
-
-#page-topics .overview-stats__row {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: var(--space-2);
-  padding-bottom: var(--space-2);
-  border-bottom: 1px solid var(--color-border);
-}
-
-#page-topics .overview-stats__row:last-child {
-  padding-bottom: 0;
-  border-bottom: none;
-}
-
-#page-topics .overview-stats__term {
+#page-topics .topics-summary {
+  font-size: 14px;
   color: var(--color-muted);
-  font-size: 0.8125rem; /* 13px */
-  font-weight: 500;
+  margin-top: 10px;
+  min-height: 23px;
 }
-
-#page-topics .overview-stats__value {
-  color: var(--color-text);
-  font-size: 1.25rem; /* 20px */
-  font-weight: 700;
-  line-height: 1.2;
+#page-topics .topics-search {
+  margin-bottom: 20px;
 }
-
-/* 3.2. Cột trái — Kiến thức thường gặp trong roadmap */
-
-/* 3.3. Cột trái — Bắt đầu như thế nào? */
-#page-topics .guide-steps {
+#page-topics .topics-groups {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-2);
-  list-style: none;
-  padding: 0;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+  min-height: 44px;
 }
-
-/* 4. Cột giữa — Phần mở đầu Hero (Canh giữa trong phạm vi cột giữa) */
-#page-topics .topics-hero {
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Canh giữa Hero trong phạm vi cột giữa */
-  text-align: center;
-  gap: var(--space-3);
-  padding: 0 0 var(--space-3) 0;
-}
-
-@media (min-width: 1024px) {
-  #page-topics .discovery-layout > .topics-hero,
-  #page-topics .topics-hero {
-    display: contents;
-  }
-}
-
-#page-topics .topics-hero__badge {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: 0.3rem 0.85rem;
-  background-color: var(--color-badge-bg);
-  color: var(--color-badge-text);
+#page-topics .topics-groups__button {
+  min-height: 44px;
+  padding: 8px 14px;
   border: 1px solid var(--color-border);
   border-radius: var(--radius-pill);
-  font-size: 0.8125rem; /* 13px */
-  font-weight: 600;
-  line-height: 1.4;
-  align-self: center;
-}
-
-#page-topics .topics-hero__title {
-  color: var(--color-hero-fallback);
-  font-size: clamp(1.9375rem, 1.45rem + 1.8vw, 2.5625rem); /* +3px: Mobile 31px, Laptop 41px */
-  font-weight: 700;
-  line-height: 1.25;
-  letter-spacing: -0.015em;
-  text-align: center;
-}
-
-#page-topics .topics-hero__line {
-  display: block;
-  color: var(--color-hero-fallback);
-  background-image: var(--gradient-hero-text);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  padding-bottom: 0.05em; /* Bảo vệ chân chữ tiếng Việt không bị cắt */
-}
-
-@supports not (-webkit-background-clip: text) {
-  #page-topics .topics-hero__line {
-    color: var(--color-hero-fallback);
-    -webkit-text-fill-color: currentColor;
-  }
-}
-
-@media (forced-colors: active) {
-  #page-topics .topics-hero__line {
-    -webkit-text-fill-color: CanvasText;
-    color: CanvasText;
-  }
-}
-
-#page-topics .topics-hero__desc {
-  max-width: 58ch;
   color: var(--color-muted);
-  font-size: 1rem; /* 16px */
-  line-height: 1.6;
-  text-align: center;
-  margin-inline: auto;
-}
-
-/* 5. Cụm lựa chọn và nút "Chọn +" — CĂN TRÁI theo mép vùng danh sách */
-#page-topics .topics-controls {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start; /* Căn trái */
-  gap: var(--space-2);
-  width: 100%;
-  margin-bottom: var(--space-5); /* 1.5rem = 24px (~3x khoảng cách cũ 8px tới tiêu đề kết quả) */
-}
-
-#page-topics .topics-domain-nav {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start; /* Căn trái */
-  gap: var(--space-2);
-  width: 100%;
-}
-
-#page-topics .topics-domain-nav__pill {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.45rem;
-  min-height: 2.375rem; /* 38px */
-  padding: 0.35rem 0.95rem;
-  background-color: var(--color-surface);
-  background-image: var(--gradient-surface);
-  color: var(--color-text);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  font-size: 0.875rem; /* 14px */
+  background: var(--color-surface);
+  font-size: 14px;
   font-weight: 600;
-  line-height: 1.4;
-  text-decoration: none;
-  box-shadow: var(--shadow-sm);
-  cursor: pointer;
-  transition:
-    background-color var(--transition-fast),
-    border-color var(--transition-fast),
-    box-shadow var(--transition-fast);
 }
-
-#page-topics .topics-domain-nav__pill:hover:not(:disabled) {
-  background-color: var(--color-surface-elevated);
-  background-image: var(--gradient-card-hover);
-  border-color: var(--color-focus);
-  color: var(--color-text);
-}
-
-#page-topics .topics-domain-nav__pill:active:not(:disabled) {
-  background-color: var(--color-surface-muted);
-  background-image: none;
-  box-shadow: var(--shadow-pressed);
-}
-
-/* Trạng thái đang chọn (Tất cả) */
-#page-topics .topics-domain-nav__pill[aria-pressed="true"] {
-  background-color: var(--color-primary);
-  background-image: var(--gradient-primary);
+#page-topics .topics-groups__button[aria-pressed="true"] {
+  background: var(--color-primary);
   color: var(--color-on-primary);
-  border-color: var(--color-focus);
-  font-weight: 700;
+  border-color: var(--color-primary);
 }
-
-#page-topics .topics-domain-nav__pill[aria-pressed="true"]:hover {
-  background-color: var(--color-primary-hover);
-  background-image: var(--gradient-primary-hover);
-  color: var(--color-on-primary);
-  border-color: var(--color-focus);
+#page-topics .topics-groups__button:hover {
+  border-color: var(--color-link);
 }
-
-/* Nút Chọn + (Mở hộp thoại Lĩnh vực và Sắp xếp) */
-
-/* Khi có bộ lọc tùy chỉnh từ Modal (chọn nhiều lĩnh vực) */
-
-/* 6. VÙNG KẾT QUẢ DANH SÁCH LIÊN TỤC (.topics-results)
-   Thay thế hoàn toàn 3 khối riêng biệt trước đây */
-
-/* Danh sách các hàng đề tài (.topics-rows) */
-
-/* Mỗi đề tài là một hàng ngang chiếm toàn bộ chiều rộng (.topic-row)
-   Phong cách roadmap tĩnh: Khung đứng yên, không nhấc lên/phóng to, viền và nền chuyển tiếp nhẹ */
-#page-topics .topic-row {
-  position: relative;
+#page-topics .topics-search__hint {
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: 6px;
+}
+#page-topics .topics-results {
   display: flex;
-  flex-direction: row;
-  align-items: center;
   justify-content: space-between;
-  gap: var(--space-3) var(--space-4);
-  padding: 0.875rem 1.125rem;
-  width: 100%;
-  border-radius: 0.625rem; /* 10px — trong khoảng 8-12px */
-  background-color: var(--color-row-bg);
-  background-image: var(--gradient-row-bg);
-  border: 1px solid var(--color-row-border);
-  box-shadow: none;
-  cursor: default;
-  overflow: hidden;
-  transition:
-    border-color 180ms ease,
-    box-shadow 180ms ease;
-}
-
-/* Lớp nền hover chuyển tiếp độ mờ (opacity) mượt mà 150-200ms */
-#page-topics .topic-row::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  background-color: var(--color-row-hover-tint);
-  opacity: 0;
-  transition: opacity 180ms ease;
-  pointer-events: none;
-}
-
-@media (hover: hover) {
-  #page-topics .topic-row:hover {
-    border-color: var(--color-row-border-hover);
-    box-shadow: var(--shadow-row-hover);
-  }
-
-  #page-topics .topic-row:hover::before {
-    opacity: 1;
-  }
-}
-
-#page-topics .topic-row:focus-within {
-  border-color: var(--color-row-border-hover);
-  box-shadow: var(--shadow-row-hover);
-}
-
-#page-topics .topic-row:focus-within::before {
-  opacity: 1;
-}
-
-/* Nửa bên trái: Số thứ tự + Tên đề tài + Metadata */
-
-#page-topics .topic-row__title {
-  color: var(--color-text);
-  font-size: 1.0625rem; /* 17px — trong khoảng 16-18px */
-  font-weight: 600;
-  line-height: 1.42;
-  overflow-wrap: break-word; /* Tên dài xuống dòng tự nhiên, không cắt mất chữ */
-}
-
-#page-topics .topic-row__meta {
-  display: flex;
-  flex-wrap: wrap;
   align-items: center;
-  gap: 0.3rem 0.5rem;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin-bottom: 12px;
+}
+#page-topics #results-status {
+  font-size: 14px;
   color: var(--color-muted);
-  font-size: 0.8125rem; /* 13px >= 12px */
-  line-height: 1.45;
+  min-height: 23px;
 }
-
-/* Badge từng lĩnh vực: đồng bộ màu sắc với dot và thanh lựa chọn */
-
-/* Nửa bên phải: Giảng viên + Nút chi tiết/Trạng thái */
-
-#page-topics .topic-row__action {
-  flex-shrink: 0;
-}
-
-/* 7. Trạng thái rỗng (.topics-empty) — Cùng cấp với danh sách */
-
-/* 8. HỘP THOẠI MODAL "LĨNH VỰC VÀ SẮP XẾP" (.topics-dialog) */
-
-/* 9. Cột phải — Số liệu minh họa, Giảng viên & Đề tài được quan tâm */
-
-/* 10. Khu vực Câu hỏi thường gặp (#topics-faq) ngay trong trang */
-
-/* 10.5. Responsive Laptop / Desktop hẹp (<= 1199px, đặc biệt 1024px):
-   Cột giữa bị co hẹp trong bố cục 3 cột (2:6:2) -> Cho phép cụm giảng viên và nút tác vụ
-   xuống hàng dưới tên đề tài, thụt đầu dòng thẳng hàng với tên đề tài để tên đề tài
-   chiếm 100% chiều rộng có thể, không bị ép chữ hay tràn ngang */
-@media (max-width: 1199px) {
-  #page-topics .topic-row {
-    flex-direction: column;
-    align-items: stretch;
-    gap: var(--space-2);
-  }
-}
-
-/* 11. Responsive Tablet (768px - 1023px):
-   Phần Hero và cột giữa rộng toàn khung ở trên, hai cột phụ xếp 2 cột cân đối phía dưới */
-@media (max-width: 1023px) {
-  #page-topics .discovery-layout {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-template-areas:
-      "hero   hero"
-      "center center"
-      "left   right";
-    gap: var(--space-4);
-  }
-
-  #page-topics .topics-hero {
-    grid-area: hero;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Hero canh giữa trong phạm vi cột giữa */
-    text-align: center;
-    gap: var(--space-3);
-  }
-
-  #page-topics .topics-hero__title {
-    display: block;
-    text-align: center;
-  }
-
-  #page-topics .topics-hero__desc {
-    text-align: center;
-    margin-inline: auto;
-  }
-
-  #page-topics .discovery-center {
-    grid-area: center;
-  }
-
-  #page-topics .discovery-sidebar--left {
-    grid-area: left;
-  }
-
-  #page-topics .discovery-sidebar--right {
-    grid-area: right;
-  }
-}
-
-/* 12. Responsive Mobile (< 768px):
-   - Thứ tự hiển thị: Hero -> Nội dung chính trước -> Hai cột phụ xếp dọc phía dưới
-   - Mỗi hàng đề tài tự động xuống dòng: Tên giảng viên & metadata chuyển xuống dưới tên đề tài
-   - Không có thanh cuộn ngang, vùng bấm tối thiểu 44 x 44px */
-@media (max-width: 767px) {
-  #page-topics .discovery-layout {
-    padding-block: 1.5rem var(--space-5); /* 24px từ mép dưới header đến nội dung hero */
-  }
-
-  #page-topics .discovery-layout {
-    grid-template-columns: minmax(0, 1fr);
-    grid-template-areas:
-      "hero"
-      "center"
-      "left"
-      "right";
-    gap: var(--space-4);
-  }
-
-  #page-topics .topics-hero {
-    grid-area: hero;
-    display: flex;
-    flex-direction: column;
-    align-items: center; /* Hero canh giữa */
-    text-align: center;
-    padding: 0;
-  }
-
-  #page-topics .topics-hero__title {
-    display: block;
-    text-align: center;
-  }
-
-  #page-topics .topics-hero__desc {
-    text-align: center;
-    margin-inline: auto;
-  }
-
-  #page-topics .topics-hero__line {
-    display: inline; /* Xuống dòng tự nhiên, không ép 1 dòng gây tràn ngang trên mobile */
-  }
-
-  #page-topics .topics-domain-nav__pill {
-    min-height: 2.75rem; /* 44px vùng bấm mobile */
-    padding-inline: var(--space-3);
-  }
-
-  #page-topics .topic-row {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-3);
-    padding: var(--space-3);
-  }
-}
-
-/* 13. Hỗ trợ prefers-reduced-motion */
-@media (prefers-reduced-motion: reduce) {
-  #page-topics .topic-row,
-  #page-topics .topic-row:hover,
-  #page-topics .topic-row:focus-within,
-  #page-topics .topics-domain-nav__pill:hover,
-  #page-topics .btn:hover:not(:disabled) {
-    transform: none !important;
-    transition:
-      border-color 180ms ease,
-      background-image 180ms ease,
-      box-shadow 180ms ease;
-  }
-}
-
-/* 14. Tối ưu Modal trên màn hình chiều cao thấp (Landscape / Low Height Devices) */
-
-/* Tích hợp: danh sách từ JSON, giữ bố cục TV1. */
-#page-topics .topics-controls {
+#page-topics .topics-results__actions {
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
   align-items: center;
-}
-#page-topics .topics-controls > label:first-child,
-#page-topics #topic-search {
-  width: 100%;
-}
-#page-topics .topics-domain-nav {
   flex-wrap: wrap;
+  gap: 8px;
+}
+#page-topics .topics-results__actions label {
+  font-weight: 400;
+  color: var(--color-muted);
+}
+#page-topics .topics-results__actions select {
+  width: auto;
+  font-size: 14px;
 }
 #page-topics .topics-list {
-  display: grid;
-  gap: 1rem;
-}
-#page-topics .topic-row {
-  display: block;
-  padding: 1.25rem;
-  min-width: 0;
-}
-#page-topics .topic-row h2 {
-  margin: 0.65rem 0;
-}
-#page-topics .topic-row__meta {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-  align-items: center;
-}
-#page-topics .topic-row__action {
-  margin-top: 1rem;
-}
-#page-topics .filter-dialog {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  padding: 1.5rem;
   border-radius: var(--radius-card);
-  width: min(28rem, calc(100vw - 2rem));
 }
-#page-topics #group-options {
-  display: grid;
-  gap: 1rem;
-  margin-block: 1rem;
+#page-topics .topics-list:empty {
+  display: none;
 }
-#page-topics #group-options label {
+#page-topics .topics-pagination {
   display: flex;
-  gap: 0.75rem;
-  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 24px;
 }
-#page-topics .guide-steps {
-  list-style: decimal;
-  padding-left: 1.2rem;
+#page-topics .topics-pagination__button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-link);
+  font-size: 14px;
 }
-#page-topics #results-status {
-  margin-block: 1rem;
+#page-topics .topics-pagination__button[aria-current="page"] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
 }
-#page-topics .discovery-layout > * {
-  min-width: 0;
-}
-
-/* Dự trữ chỗ cho bộ lọc được tải từ JSON để tránh layout shift. */
-#page-topics .topics-domain-nav {
-  min-height: 2.75rem;
-}
-#page-topics .overview-stats {
-  min-height: 9rem;
-}
-#page-topics #results-status {
-  min-height: 1.5rem;
+#page-topics .topics-guide {
+  border-top: 1px solid var(--color-border);
+  margin-top: 32px;
+  padding-top: 8px;
 }
 @media (max-width: 767px) {
-  #page-topics .topics-domain-nav {
-    min-height: 6rem;
+  #page-topics .topics-groups {
+    min-height: 96px;
+  }
+  #page-topics .topics-results__actions {
+    flex-basis: 100%;
+  }
+  #page-topics .topics-results__actions select {
+    flex: 1;
+  }
+  #page-topics .topic-row {
+    padding: 16px;
+  }
+  #page-topics .topic-row__title {
+    font-size: 17px;
   }
 }
+
+#page-topics .topics-results__heading { font-size: 16px; margin-bottom: 2px; }

@@ -193,3 +193,24 @@ function resolvePhotoUrl(value) {
     return null;
   }
 }
+
+/** Tạo hàng chủ đề dùng chung cho khám phá và hồ sơ giảng viên.
+ * @param {{group: object, topic: object}} entry Chủ đề và nhóm nguồn.
+ * @param {number} [headingLevel=2] Cấp heading của tên đề tài (2 hoặc 3).
+ * @returns {HTMLElement} Article có link chủ đề và link giảng viên độc lập.
+ */
+export function createTopicRow(entry, headingLevel = 2) {
+  const { group, topic } = entry;
+  const row = element("article", "topic-row");
+  const badge = element("span", "badge badge--" + group.id + " topic-row__group", group.name);
+  const heading = element(headingLevel === 3 ? "h3" : "h2", "topic-row__title");
+  const link = element("a", "", topic.name);
+  link.href = topicUrl(group, topic);
+  heading.append(link);
+  const meta = element("p", "topic-row__meta", "Hướng dẫn: ");
+  const lecturer = element("a", "", topic.lecturer.name);
+  lecturer.href = lecturerUrl(topic.lecturer.email);
+  meta.append(lecturer);
+  row.append(heading, meta, badge);
+  return row;
+}

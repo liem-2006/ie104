@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."
+      content="Tìm chủ đề nghiên cứu, xem kiến thức nền và người hướng dẫn."
     />
     <title>Khám phá chủ đề | UIT Discovery</title>
     <link rel="icon" href="../assets/images/uit-logo.png" />
@@ -19,27 +19,21 @@
     <a class="skip-link" href="#main-content">Đến nội dung chính</a>
     <header class="site-header">
       <div class="container site-header__inner">
-        <a class="site-header__brand" href="../index.html" aria-label="UIT Discovery — trang đầu"
+        <a class="site-header__brand" href="../index.html"
           ><img
             class="site-header__logo-img"
             src="../assets/images/uit-logo.png"
-            width="54"
-            height="42"
+            width="34"
+            height="30"
             alt="UIT"
-        /></a>
+          /><span>UIT Discovery</span></a
+        >
         <nav class="site-nav" aria-label="Điều hướng chính">
           <ul class="site-nav__list">
-            <li class="site-nav__item">
-              <a
-                class="site-nav__link site-nav__link--active"
-                href="../topics/index.html"
-                aria-current="page"
-                >Khám phá</a
-              >
+            <li>
+              <a class="site-nav__link" href="../topics/index.html" aria-current="page">Khám phá</a>
             </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link" href="../lecturers/index.html">Giảng viên</a>
-            </li>
+            <li><a class="site-nav__link" href="../lecturers/index.html">Giảng viên</a></li>
           </ul>
         </nav>
         <button
@@ -55,74 +49,73 @@
         </button>
       </div>
     </header>
-    <main id="main-content" class="container discovery-layout">
-      <section class="topics-hero" aria-labelledby="topics-title">
-        <span class="topics-hero__badge">Định hướng nghiên cứu khoa học</span>
-        <h1 id="topics-title" class="topics-hero__title">
-          <span class="topics-hero__line topics-hero__line--1">Tìm một hướng nghiên cứu</span
-          ><span class="topics-hero__line topics-hero__line--2">thuộc về bạn.</span>
-        </h1>
-        <p class="topics-hero__desc">
-          Tìm hiểu chủ đề, khám phá kiến thức nền và kết nối với giảng viên hướng dẫn.
+    <main id="main-content" class="container page">
+      <header class="page-header">
+        <h1>Khám phá chủ đề nghiên cứu</h1>
+        <p class="page-header__desc">
+          Tìm hướng nghiên cứu bạn quan tâm và kiến thức cần chuẩn bị.
         </p>
-      </section>
-      <section class="discovery-center" aria-label="Danh sách chủ đề">
-        <div class="topics-controls">
-          <label for="topic-search">Tìm theo chủ đề hoặc giảng viên</label
+        <p id="data-stats" class="topics-summary" aria-label="Tổng quan dữ liệu">
+          Đang tải thống kê…
+        </p>
+      </header>
+      <section class="topics-search" aria-label="Tìm và lọc chủ đề">
+        <div class="form-group">
+          <label for="topic-search">Tìm chủ đề hoặc giảng viên</label
           ><input
-            class="form-input"
-            type="search"
             id="topic-search"
+            type="search"
             placeholder="Ví dụ: học sâu, IDS, Nguyễn Tấn Cầm"
+            autocomplete="off"
           />
-          <div
-            id="group-pills"
-            role="group"
-            class="topics-domain-nav"
-            aria-label="Lọc nhóm chủ đề"
-          ></div>
-          <button type="button" id="open-groups" class="btn btn--outline">Chọn nhiều nhóm</button
-          ><label for="topic-sort">Sắp xếp</label
-          ><select id="topic-sort">
-            <option value="source">Theo dữ liệu gốc</option>
-            <option value="title">Tên A–Z</option></select
-          ><button type="button" id="reset-filters" class="btn btn--outline">Xóa bộ lọc</button>
         </div>
-        <p id="results-status" role="status" aria-live="polite">Đang tải dữ liệu…</p>
-        <div id="topics-list" class="topics-list"></div>
+        <div
+          id="group-pills"
+          class="topics-groups"
+          role="group"
+          aria-label="Lọc theo nhóm chủ đề"
+        ></div>
+        <p class="topics-search__hint">Có thể chọn nhiều nhóm.</p>
       </section>
-      <aside class="discovery-sidebar discovery-sidebar--left" aria-label="Tổng quan dữ liệu">
-        <section class="sidebar-panel">
-          <h2 class="sidebar-panel__title">Tổng quan</h2>
-          <dl id="data-stats" class="overview-stats"></dl>
-        </section>
-      </aside>
-      <aside class="discovery-sidebar discovery-sidebar--right" aria-label="Hướng dẫn">
-        <section class="sidebar-panel">
-          <h2 class="sidebar-panel__title">Bắt đầu từ đâu?</h2>
-          <ol class="guide-steps">
-            <li>Chọn nhóm và chủ đề bạn quan tâm.</li>
-            <li>Xem cây kiến thức nền và đầu ra kỳ vọng.</li>
-            <li>Tìm hiểu giảng viên và liên hệ trao đổi.</li>
-          </ol>
-        </section>
-      </aside>
+      <section aria-labelledby="results-heading">
+        <div class="topics-results">
+          <div>
+            <h2 id="results-heading" class="topics-results__heading" tabindex="-1">Chủ đề</h2>
+            <p id="results-status" role="status" aria-live="polite">Đang tải chủ đề…</p>
+          </div>
+          <div class="topics-results__actions">
+            <label for="topic-sort">Sắp xếp</label
+            ><select id="topic-sort">
+              <option value="source">Theo dữ liệu gốc</option>
+              <option value="title">Tên A–Z</option></select
+            ><button id="reset-filters" class="btn btn--quiet" type="button" hidden>
+              Xóa bộ lọc
+            </button>
+          </div>
+        </div>
+        <div id="topics-list" class="topics-list"></div>
+        <nav
+          id="topic-pagination"
+          class="topics-pagination"
+          aria-label="Phân trang chủ đề"
+          hidden
+        ></nav>
+      </section>
+      <details class="reading-guide topics-guide">
+        <summary>Bắt đầu như thế nào?</summary>
+        <ol>
+          <li>Chọn nhóm và chủ đề bạn quan tâm.</li>
+          <li>Xem cây kiến thức nền và đầu ra kỳ vọng.</li>
+          <li>Tìm hiểu giảng viên và chuẩn bị trao đổi.</li>
+        </ol>
+      </details>
     </main>
-    <dialog id="groups-dialog" aria-labelledby="groups-title">
-      <form method="dialog" class="filter-dialog">
-        <h2 id="groups-title">Chọn nhóm chủ đề</h2>
-        <p>Không chọn nhóm nào tương đương tất cả.</p>
-        <div id="group-options"></div>
-        <button class="btn" type="submit" value="apply">Áp dụng</button
-        ><button class="btn btn--outline" type="submit" value="cancel">Hủy</button>
-      </form>
-    </dialog>
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p>
-        <a href="../lecturers/index.html">Tìm giảng viên hướng dẫn</a>
+        <p>UIT Discovery · Đồ án IE104</p>
+        <a href="../lecturers/index.html">Giảng viên hướng dẫn</a>
       </div>
     </footer>
-    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript>
+    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem lộ trình.</p></noscript>
   </body>
 </html>

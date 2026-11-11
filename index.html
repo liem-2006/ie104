@@ -2,37 +2,34 @@
 <html lang="vi">
   <head>
     <meta charset="utf-8" />
-    <script src="./assets/js/theme.js"></script>
+    <script src="assets/js/theme.js"></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."
+      content="Khám phá đề tài, kiến thức nền và giảng viên hướng dẫn tại UIT."
     />
     <title>Định hướng nghiên cứu | UIT Discovery</title>
-    <link rel="icon" href="./assets/images/uit-logo.png" />
-    <link rel="stylesheet" href="./assets/css/reset.css" />
-    <link rel="stylesheet" href="./assets/css/style.css" />
+    <link rel="icon" href="assets/images/uit-logo.png" />
+    <link rel="stylesheet" href="assets/css/reset.css" />
+    <link rel="stylesheet" href="assets/css/style.css" />
   </head>
   <body id="page-home">
     <a class="skip-link" href="#main-content">Đến nội dung chính</a>
     <header class="site-header">
       <div class="container site-header__inner">
-        <a class="site-header__brand" href="./index.html" aria-label="UIT Discovery — trang đầu"
+        <a class="site-header__brand" href="index.html"
           ><img
             class="site-header__logo-img"
-            src="./assets/images/uit-logo.png"
-            width="54"
-            height="42"
+            src="assets/images/uit-logo.png"
+            width="34"
+            height="30"
             alt="UIT"
-        /></a>
+          /><span>UIT Discovery</span></a
+        >
         <nav class="site-nav" aria-label="Điều hướng chính">
           <ul class="site-nav__list">
-            <li class="site-nav__item">
-              <a class="site-nav__link" href="./topics/index.html">Khám phá</a>
-            </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link" href="./lecturers/index.html">Giảng viên</a>
-            </li>
+            <li><a class="site-nav__link" href="topics/index.html">Khám phá</a></li>
+            <li><a class="site-nav__link" href="lecturers/index.html">Giảng viên</a></li>
           </ul>
         </nav>
         <button
@@ -49,20 +46,31 @@
       </div>
     </header>
     <main id="main-content" class="container home">
-      <p class="badge">Định hướng nghiên cứu khoa học</p>
-      <h1>Tìm chủ đề, hiểu kiến thức nền, chọn người hướng dẫn.</h1>
-      <p>Khám phá các hướng nghiên cứu và roadmap nền tảng dành cho sinh viên bắt đầu tìm hiểu.</p>
+      <p class="eyebrow">Định hướng nghiên cứu khoa học</p>
+      <h1>Tìm đề tài, hiểu kiến thức cần chuẩn bị.</h1>
+      <p class="home__intro">
+        Khám phá các chủ đề nghiên cứu, xem lộ trình kiến thức nền và tìm hiểu người hướng dẫn trước
+        khi bắt đầu.
+      </p>
       <div class="home__actions">
-        <a class="btn" href="./topics/index.html">Khám phá chủ đề</a
-        ><a class="btn btn--outline" href="./lecturers/index.html">Tìm giảng viên</a>
+        <a class="btn" href="topics/index.html">Khám phá chủ đề</a
+        ><a class="btn btn--outline" href="lecturers/index.html">Tìm giảng viên</a>
       </div>
+      <section class="home__steps" aria-labelledby="home-steps">
+        <h2 id="home-steps">Bắt đầu từ điều bạn quan tâm</h2>
+        <ol>
+          <li>Chọn nhóm nghiên cứu và chủ đề phù hợp.</li>
+          <li>Xem kiến thức nền và đầu ra kỳ vọng.</li>
+          <li>Tìm hiểu giảng viên để chuẩn bị trao đổi.</li>
+        </ol>
+      </section>
     </main>
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p>
-        <a href="./lecturers/index.html">Tìm giảng viên hướng dẫn</a>
+        <p>UIT Discovery · Đồ án IE104</p>
+        <a href="lecturers/index.html">Giảng viên hướng dẫn</a>
       </div>
     </footer>
-    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript>
+    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem lộ trình.</p></noscript>
   </body>
 </html>
