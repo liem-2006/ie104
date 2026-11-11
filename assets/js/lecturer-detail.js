@@ -1,11 +1,170 @@
 /** @file Hồ sơ động theo email; giữ bố cục TV3 và token TV1. */
-import {loadResearch,loadLecturers,flattenTopics,normalizeEmail,topicUrl,element,avatar,externalLink,renderPageMessage} from './data.js';
-document.addEventListener('DOMContentLoaded',initProfile);
+import {
+  loadResearch,
+  loadLecturers,
+  flattenTopics,
+  normalizeEmail,
+  topicUrl,
+  element,
+  avatar,
+  externalLink,
+  renderPageMessage,
+} from "./data.js";
+document.addEventListener("DOMContentLoaded", initProfile);
 /** Tải đúng hồ sơ, không dùng dữ liệu mẫu làm fallback. @returns {Promise<void>} */
-async function initProfile(){const main=document.getElementById('main-content');try{const [research,lecturers]=await Promise.all([loadResearch(),loadLecturers()]);const email=normalizeEmail(new URLSearchParams(location.search).get('email'));const lecturer=lecturers.find(matchesEmail);if(!email||!lecturer){renderPageMessage(main,'Không tìm thấy giảng viên','Email trên đường dẫn không có trong danh bạ.','../index.html');return;}const related=flattenTopics(research).filter(matchesTopic);renderProfile(lecturer,related);/** So email danh bạ. @param {object} person Giảng viên. @returns {boolean} Khớp. */function matchesEmail(person){return normalizeEmail(person.email)===email;}/** So email trong đề tài. @param {object} entry Chủ đề. @returns {boolean} Khớp. */function matchesTopic(entry){return normalizeEmail(entry.topic.lecturer.email)===email;}}catch{renderPageMessage(main,'Không thể tải hồ sơ','Hãy tải lại trang để thử lại.','../index.html');}}
+
+async function initProfile() {
+  const main = document.getElementById("main-content");
+  try {
+    const [research, lecturers] = await Promise.all([loadResearch(), loadLecturers()]);
+    const email = normalizeEmail(new URLSearchParams(location.search).get("email"));
+    const lecturer = lecturers.find(matchesEmail);
+    if (!email || !lecturer) {
+      renderPageMessage(
+        main,
+        "Không tìm thấy giảng viên",
+        "Email trên đường dẫn không có trong danh bạ.",
+        "../index.html",
+      );
+      return;
+    }
+    const related = flattenTopics(research).filter(matchesTopic);
+    renderProfile(
+      lecturer,
+      related,
+    ); /** So email danh bạ. @param {object} person Giảng viên. @returns {boolean} Khớp. */
+    function matchesEmail(person) {
+      return normalizeEmail(person.email) === email;
+    } /** So email trong đề tài. @param {object} entry Chủ đề. @returns {boolean} Khớp. */
+    function matchesTopic(entry) {
+      return normalizeEmail(entry.topic.lecturer.email) === email;
+    }
+  } catch {
+    renderPageMessage(
+      main,
+      "Không thể tải hồ sơ",
+      "Hãy tải lại trang để thử lại.",
+      "../index.html",
+    );
+  }
+}
 /** Tạo section có h2. @param {string} title Tiêu đề. @returns {HTMLElement} Section. */
-function section(title){const node=element('section','profile-section');node.append(element('h2','profile-section__title',title));return node;}
+
+function section(title) {
+  const node = element("section", "profile-section");
+  node.append(element("h2", "profile-section__title", title));
+  return node;
+}
 /** Hiển thị hồ sơ và dữ liệu tùy chọn. @param {object} lecturer Giảng viên. @param {object[]} related Chủ đề liên quan. @returns {void} */
-function renderProfile(lecturer,related){document.title=lecturer.name+' | UIT Discovery';document.getElementById('profile-title').textContent=lecturer.name;document.getElementById('profile-status').textContent='';const card=element('article','profile-card');const header=element('div','profile-header');const info=element('div','profile-header__info');const mail=element('a','',lecturer.email);mail.href='mailto:'+normalizeEmail(lecturer.email);info.append(element('p','',lecturer.profile?.affiliation||'Chưa bổ sung đơn vị công tác.'),mail);header.append(avatar(lecturer,'profile-header__avatar'),info);card.append(header);const intro=section('Giới thiệu');intro.append(element('p','',lecturer.profile?.bio||'Chưa bổ sung thông tin giới thiệu.'));if(lecturer.profile?.researchAreas?.length){intro.append(element('h3','','Hướng nghiên cứu'));const list=element('ul');for(const area of lecturer.profile.researchAreas)list.append(element('li','',area));intro.append(list);}const source=externalLink('Nguồn thông tin',lecturer.profile?.sourceUrl);if(source){const note=element('p','profile-source-note');note.append(source);if(lecturer.profile.checkedAt)note.append(document.createTextNode(' · Ngày ghi nhận: '+lecturer.profile.checkedAt));intro.append(note);}card.append(intro);const profiles=section('Hồ sơ nghiên cứu');let count=0;for(const profile of lecturer.researchProfiles||[]){const link=externalLink(profile.label,profile.url);if(link){const p=element('p');p.append(link);profiles.append(p);count++;}}if(!count)profiles.append(element('p','','Chưa bổ sung liên kết hồ sơ nghiên cứu.'));card.append(profiles);const metrics=renderMetrics(lecturer.metrics||[]);if(metrics)card.append(metrics);const topics=section('Chủ đề nghiên cứu');const tags=element('div','profile-tags');const seen=new Set();for(const entry of related){if(!seen.has(entry.group.id)){tags.append(element('span','lecturer-tag lecturer-tag--'+entry.group.id,entry.group.name));seen.add(entry.group.id);}}topics.append(tags);const list=element('ul','related-topics-list');for(const entry of related){const li=element('li','related-topic-item');const link=element('a','related-topic-item__link',entry.topic.name);link.href=topicUrl(entry.group,entry.topic);li.append(link);list.append(li);}topics.append(related.length?list:element('p','','Chưa có chủ đề trong bộ dữ liệu hiện tại.'));card.append(topics);document.getElementById('profile-content').replaceChildren(card);}
+
+function renderProfile(lecturer, related) {
+  document.title = lecturer.name + " | UIT Discovery";
+  document.getElementById("profile-title").textContent = lecturer.name;
+  document.getElementById("profile-status").textContent = "";
+  const card = element("article", "profile-card");
+  const header = element("div", "profile-header");
+  const info = element("div", "profile-header__info");
+  const mail = element("a", "", lecturer.email);
+  mail.href = "mailto:" + normalizeEmail(lecturer.email);
+  info.append(
+    element("p", "", lecturer.profile?.affiliation || "Chưa bổ sung đơn vị công tác."),
+    mail,
+  );
+  header.append(avatar(lecturer, "profile-header__avatar"), info);
+  card.append(header);
+  const intro = section("Giới thiệu");
+  intro.append(element("p", "", lecturer.profile?.bio || "Chưa bổ sung thông tin giới thiệu."));
+  if (lecturer.profile?.researchAreas?.length) {
+    intro.append(element("h3", "", "Hướng nghiên cứu"));
+    const list = element("ul");
+    for (const area of lecturer.profile.researchAreas) list.append(element("li", "", area));
+    intro.append(list);
+  }
+  const source = externalLink("Nguồn thông tin", lecturer.profile?.sourceUrl);
+  if (source) {
+    const note = element("p", "profile-source-note");
+    note.append(source);
+    if (lecturer.profile.checkedAt)
+      note.append(document.createTextNode(" · Ngày ghi nhận: " + lecturer.profile.checkedAt));
+    intro.append(note);
+  }
+  card.append(intro);
+  const profiles = section("Hồ sơ nghiên cứu");
+  let count = 0;
+  for (const profile of lecturer.researchProfiles || []) {
+    const link = externalLink(profile.label, profile.url);
+    if (link) {
+      const p = element("p");
+      p.append(link);
+      profiles.append(p);
+      count++;
+    }
+  }
+  if (!count) profiles.append(element("p", "", "Chưa bổ sung liên kết hồ sơ nghiên cứu."));
+  card.append(profiles);
+  const metrics = renderMetrics(lecturer.metrics || []);
+  if (metrics) card.append(metrics);
+  const topics = section("Chủ đề nghiên cứu");
+  const tags = element("div", "profile-tags");
+  const seen = new Set();
+  for (const entry of related) {
+    if (!seen.has(entry.group.id)) {
+      tags.append(
+        element("span", "lecturer-tag lecturer-tag--" + entry.group.id, entry.group.name),
+      );
+      seen.add(entry.group.id);
+    }
+  }
+  topics.append(tags);
+  const list = element("ul", "related-topics-list");
+  for (const entry of related) {
+    const li = element("li", "related-topic-item");
+    const link = element("a", "related-topic-item__link", entry.topic.name);
+    link.href = topicUrl(entry.group, entry.topic);
+    li.append(link);
+    list.append(li);
+  }
+  topics.append(
+    related.length ? list : element("p", "", "Chưa có chủ đề trong bộ dữ liệu hiện tại."),
+  );
+  card.append(topics);
+  document.getElementById("profile-content").replaceChildren(card);
+}
 /** Render chỉ số có nguồn/ngày; không biến dữ liệu thiếu thành 0. @param {object[]} records Bản ghi chỉ số. @returns {HTMLElement|null} Khối số liệu. */
-function renderMetrics(records){const block=section('Chỉ số nghiên cứu');let count=0;for(const record of records){const source=externalLink(record.sourceName||'Nguồn chỉ số',record.sourceUrl);if(!source||!record.asOf)continue;const grid=element('div','metrics-grid');for(const [key,label] of [['citations','Trích dẫn'],['hIndex','h-index'],['i10Index','i10-index']]){if(typeof record[key]==='number'&&Number.isFinite(record[key])&&record[key]>=0){const metric=element('div','metric-card');metric.append(element('p','metric-card__value',record[key]),element('p','metric-card__label',label));grid.append(metric);}}if(!grid.children.length)continue;const note=element('p','profile-source-note');note.append(source,document.createTextNode(' · Ngày thống kê: '+record.asOf+(record.scope==='all-time'?' · Toàn bộ thời gian':'')));block.append(grid,note);count++;}return count?block:null;}
+
+function renderMetrics(records) {
+  const block = section("Chỉ số nghiên cứu");
+  let count = 0;
+  for (const record of records) {
+    const source = externalLink(record.sourceName || "Nguồn chỉ số", record.sourceUrl);
+    if (!source || !record.asOf) continue;
+    const grid = element("div", "metrics-grid");
+    for (const [key, label] of [
+      ["citations", "Trích dẫn"],
+      ["hIndex", "h-index"],
+      ["i10Index", "i10-index"],
+    ]) {
+      if (typeof record[key] === "number" && Number.isFinite(record[key]) && record[key] >= 0) {
+        const metric = element("div", "metric-card");
+        metric.append(
+          element("p", "metric-card__value", record[key]),
+          element("p", "metric-card__label", label),
+        );
+        grid.append(metric);
+      }
+    }
+    if (!grid.children.length) continue;
+    const note = element("p", "profile-source-note");
+    note.append(
+      source,
+      document.createTextNode(
+        " · Ngày thống kê: " +
+          record.asOf +
+          (record.scope === "all-time" ? " · Toàn bộ thời gian" : ""),
+      ),
+    );
+    block.append(grid, note);
+    count++;
+  }
+  return count ? block : null;
+}

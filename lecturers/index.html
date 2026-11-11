@@ -1,2 +1,80 @@
-<!doctype html>
-<html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="description" content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."><title>Giảng viên hướng dẫn | UIT Discovery</title><link rel="icon" href="../assets/images/uit-logo.png"><link rel="stylesheet" href="../assets/css/reset.css"><link rel="stylesheet" href="../assets/css/style.css"><link rel="stylesheet" href="../assets/css/lecturers.css"><script type="module" src="../assets/js/lecturers.js"></script></head><body id="page-lecturers"><a class="skip-link" href="#main-content">Đến nội dung chính</a><header class="site-header"><div class="container site-header__inner"><a class="site-header__brand" href="../index.html" aria-label="UIT Discovery — trang đầu"><img class="site-header__logo-img" src="../assets/images/uit-logo.png" width="54" height="42" alt="UIT"></a><nav class="site-nav" aria-label="Điều hướng chính"><ul class="site-nav__list"><li class="site-nav__item"><a class="site-nav__link" href="../topics/index.html">Khám phá</a></li><li class="site-nav__item"><a class="site-nav__link site-nav__link--active" href="../lecturers/index.html" aria-current="page">Giảng viên</a></li></ul></nav></div></header><main id="main-content" class="container site-main"><header class="page-header"><h1 class="page-header__title">Giảng viên hướng dẫn</h1><p class="page-header__desc">Tìm người hướng dẫn từ các chủ đề nghiên cứu hiện có.</p></header><form id="lecturer-filter" class="lecturers-filter" role="search"><div class="form-group"><label class="form-label" for="lecturer-search">Tìm theo tên hoặc email</label><input id="lecturer-search" class="form-input" type="search" placeholder="Tên giảng viên hoặc email"></div><div class="form-group"><label class="form-label" for="lecturer-group">Nhóm chủ đề</label><select id="lecturer-group" class="form-input"><option value="">Tất cả nhóm</option></select></div><button class="btn btn--outline" type="reset">Xóa bộ lọc</button></form><p id="lecturers-status" role="status" aria-live="polite">Đang tải dữ liệu…</p><div id="lecturers-list" class="lecturers-grid"></div></main><footer class="site-footer"><div class="container site-footer__inner"><p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p><a href="../lecturers/index.html">Tìm giảng viên hướng dẫn</a></div></footer><noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript></body></html>
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."
+    />
+    <title>Giảng viên hướng dẫn | UIT Discovery</title>
+    <link rel="icon" href="../assets/images/uit-logo.png" />
+    <link rel="stylesheet" href="../assets/css/reset.css" />
+    <link rel="stylesheet" href="../assets/css/style.css" />
+    <link rel="stylesheet" href="../assets/css/lecturers.css" />
+    <script type="module" src="../assets/js/lecturers.js"></script>
+  </head>
+  <body id="page-lecturers">
+    <a class="skip-link" href="#main-content">Đến nội dung chính</a>
+    <header class="site-header">
+      <div class="container site-header__inner">
+        <a class="site-header__brand" href="../index.html" aria-label="UIT Discovery — trang đầu"
+          ><img
+            class="site-header__logo-img"
+            src="../assets/images/uit-logo.png"
+            width="54"
+            height="42"
+            alt="UIT"
+        /></a>
+        <nav class="site-nav" aria-label="Điều hướng chính">
+          <ul class="site-nav__list">
+            <li class="site-nav__item">
+              <a class="site-nav__link" href="../topics/index.html">Khám phá</a>
+            </li>
+            <li class="site-nav__item">
+              <a
+                class="site-nav__link site-nav__link--active"
+                href="../lecturers/index.html"
+                aria-current="page"
+                >Giảng viên</a
+              >
+            </li>
+          </ul>
+        </nav>
+      </div>
+    </header>
+    <main id="main-content" class="container site-main">
+      <header class="page-header">
+        <h1 class="page-header__title">Giảng viên hướng dẫn</h1>
+        <p class="page-header__desc">Tìm người hướng dẫn từ các chủ đề nghiên cứu hiện có.</p>
+      </header>
+      <form id="lecturer-filter" class="lecturers-filter" role="search">
+        <div class="form-group">
+          <label class="form-label" for="lecturer-search">Tìm theo tên hoặc email</label
+          ><input
+            id="lecturer-search"
+            class="form-input"
+            type="search"
+            placeholder="Tên giảng viên hoặc email"
+          />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="lecturer-group">Nhóm chủ đề</label
+          ><select id="lecturer-group" class="form-input">
+            <option value="">Tất cả nhóm</option>
+          </select>
+        </div>
+        <button class="btn" type="submit">Tìm kiếm</button><button class="btn btn--outline" type="reset">Xóa bộ lọc</button>
+      </form>
+      <p id="lecturers-status" role="status" aria-live="polite">Đang tải dữ liệu…</p>
+      <div id="lecturers-list" class="lecturers-grid"></div>
+    </main>
+    <footer class="site-footer">
+      <div class="container site-footer__inner">
+        <p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p>
+        <a href="../lecturers/index.html">Tìm giảng viên hướng dẫn</a>
+      </div>
+    </footer>
+    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript>
+  </body>
+</html>

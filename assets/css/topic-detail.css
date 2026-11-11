@@ -34,7 +34,7 @@
 }
 
 #page-topic-detail .breadcrumb__link:hover {
-  color: var(--color-primary);
+  color: var(--color-link);
   text-decoration: underline;
 }
 
@@ -53,17 +53,10 @@
    2. Topic Header Section & Quick Switcher
    -------------------------------------------------------------------------- */
 #page-topic-detail .topic-header {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
   padding-top: var(--space-6);
   padding-bottom: var(--space-6);
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .topic-header {
-    background-color: #0f172a;
-    border-bottom-color: #1e293b;
-  }
 }
 
 #page-topic-detail .topic-switcher {
@@ -162,7 +155,7 @@
 
 #page-topic-detail .topic-meta-card__link {
   font-size: var(--font-size-sm);
-  color: var(--color-primary);
+  color: var(--color-link);
   font-weight: var(--font-weight-semibold);
   word-break: break-all;
 }
@@ -191,19 +184,11 @@
    3. Roadmap Section & Mind Map Component
    -------------------------------------------------------------------------- */
 #page-topic-detail .roadmap-section {
-  background-color: #f1f5f9;
+  background-color: var(--color-surface-muted);
   border-top: 1px solid var(--color-border);
   border-bottom: 1px solid var(--color-border);
   padding-top: var(--space-6);
   padding-bottom: var(--space-8);
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .roadmap-section {
-    background-color: #0b1120;
-    border-top-color: #1e293b;
-    border-bottom-color: #1e293b;
-  }
 }
 
 #page-topic-detail .roadmap-header {
@@ -229,21 +214,15 @@
 
 /* Khung chính của Mind Map (Container Thẻ nổi bật trên nền Slate) */
 #page-topic-detail .mindmap-component {
-  background-color: #ffffff;
-  border: 1.5px solid #cbd5e1;
+  background-color: var(--color-surface);
+  border: 1.5px solid var(--color-border);
   border-radius: 16px;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  box-shadow:
+    0 10px 25px -5px rgba(15, 23, 42, 0.08),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04);
   overflow: hidden;
   display: flex;
   flex-direction: column;
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-component {
-    background-color: #0f172a;
-    border-color: #334155;
-    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-  }
 }
 
 /* --------------------------------------------------------------------------
@@ -286,7 +265,7 @@
 #page-topic-detail .mindmap-view-btn--active {
   background-color: var(--color-primary);
   color: var(--color-on-primary);
-  border-color: var(--color-primary);
+  border-color: var(--color-link);
 }
 
 #page-topic-detail .mindmap-toolbar__controls {
@@ -313,8 +292,8 @@
 
 #page-topic-detail .mindmap-tool-btn:hover {
   background-color: var(--color-surface-raised);
-  border-color: var(--color-primary);
-  color: var(--color-primary);
+  border-color: var(--color-link);
+  color: var(--color-link);
 }
 
 /* --------------------------------------------------------------------------
@@ -328,17 +307,10 @@
   overflow: hidden;
   cursor: grab;
   user-select: none;
-  background-color: #f8fafc;
+  background-color: var(--color-bg);
   /* Lưới chấm bi NotebookLM Dot Grid tương phản sắc nét trên nền canvas */
-  background-image: radial-gradient(circle, #94a3b8 1.4px, transparent 1.4px);
+  background-image: radial-gradient(circle, var(--color-border) 1.4px, transparent 1.4px);
   background-size: 24px 24px;
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-viewport {
-    background-color: #020617;
-    background-image: radial-gradient(circle, #334155 1.4px, transparent 1.4px);
-  }
 }
 
 #page-topic-detail .mindmap-viewport:active {
@@ -368,16 +340,12 @@
 /* Đường nối Bezier mượt mà */
 #page-topic-detail .mindmap-curve {
   fill: none;
-  stroke: #3b82f6;
+  stroke: var(--color-link);
   stroke-width: 2.2px;
   stroke-linecap: round;
-  transition: stroke var(--transition-fast), stroke-width var(--transition-fast);
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-curve {
-    stroke: #60a5fa;
-  }
+  transition:
+    stroke var(--transition-fast),
+    stroke-width var(--transition-fast);
 }
 
 #page-topic-detail .mindmap-nodes {
@@ -400,9 +368,14 @@
   min-width: 130px;
   padding: 8px 14px;
   border-radius: 12px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08), 0 1px 2px rgba(15, 23, 42, 0.04);
+  box-shadow:
+    0 1px 3px rgba(15, 23, 42, 0.08),
+    0 1px 2px rgba(15, 23, 42, 0.04);
   cursor: pointer;
-  transition: transform 0.18s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.18s ease, border-color 0.18s ease;
+  transition:
+    transform 0.18s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.18s ease,
+    border-color 0.18s ease;
   border: 1.5px solid transparent;
   user-select: none;
   background-color: var(--color-surface);
@@ -411,12 +384,14 @@
 
 #page-topic-detail .mindmap-node:hover {
   transform: translateY(-2px) scale(1.02);
-  box-shadow: 0 6px 16px -2px rgba(37, 99, 235, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  box-shadow:
+    0 6px 16px -2px rgba(37, 99, 235, 0.15),
+    0 2px 4px -1px rgba(0, 0, 0, 0.06);
   z-index: 5;
 }
 
 #page-topic-detail .mindmap-node--selected {
-  outline: 2.5px solid #2563eb;
+  outline: 2.5px solid var(--color-focus);
   outline-offset: 2px;
   box-shadow: 0 8px 24px -4px rgba(37, 99, 235, 0.25);
   transform: scale(1.03);
@@ -427,9 +402,13 @@
 #page-topic-detail .mindmap-node--root {
   min-width: 220px;
   max-width: 290px;
-  background: linear-gradient(135deg, #eef2ff 0%, #e0e7ff 100%);
-  border-color: #818cf8;
-  color: #1e1b4b;
+  background: linear-gradient(
+    135deg,
+    var(--color-domain-nlp-bg) 0%,
+    var(--color-domain-nlp-bg) 100%
+  );
+  border-color: var(--color-domain-nlp-border);
+  color: var(--color-domain-nlp-accent);
   font-size: 14.5px;
   font-weight: 700;
   border-radius: 14px;
@@ -437,69 +416,37 @@
   box-shadow: 0 2px 8px rgba(99, 102, 241, 0.16);
 }
 
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-node--root {
-    background: #1e1b4b;
-    border-color: #6366f1;
-    color: #e0e7ff;
-  }
-}
-
 /* Node Trụ cột (Level 1) - Tông Xanh Biển Nhạt Sky */
 #page-topic-detail .mindmap-node--pillar {
   min-width: 140px;
   max-width: 240px;
-  background: #f0f7ff;
-  border-color: #93c5fd;
-  color: #0c4a6e;
+  background: var(--color-domain-sec-bg);
+  border-color: var(--color-domain-sec-border);
+  color: var(--color-domain-sec-accent);
   font-size: 13.5px;
   font-weight: 600;
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-node--pillar {
-    background-color: #172554;
-    border-color: #3b82f6;
-    color: #dbeafe;
-  }
 }
 
 /* Node Cơ sở (Level 2) - Tông Tím Lavender */
 #page-topic-detail .mindmap-node--intermediate {
   min-width: 140px;
   max-width: 230px;
-  background: #faf5ff;
-  border-color: #d8b4fe;
-  color: #581c87;
+  background: var(--color-domain-nlp-bg);
+  border-color: var(--color-domain-nlp-border);
+  color: var(--color-domain-nlp-accent);
   font-size: 13px;
   font-weight: 500;
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-node--intermediate {
-    background-color: #2e1065;
-    border-color: #9333ea;
-    color: #f3e8ff;
-  }
 }
 
 /* Node Lá tiên quyết (Level 3+) - Tông Xanh Ngọc Mint */
 #page-topic-detail .mindmap-node--leaf {
   min-width: 130px;
   max-width: 220px;
-  background: #f0fdf4;
-  border-color: #86efac;
-  color: #064e3b;
+  background: var(--color-domain-data-bg);
+  border-color: var(--color-domain-data-border);
+  color: var(--color-domain-data-accent);
   font-size: 12.5px;
   font-weight: 500;
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .mindmap-node--leaf {
-    background-color: #064e3b;
-    border-color: #10b981;
-    color: #d1fae5;
-  }
 }
 
 #page-topic-detail .mindmap-node__text {
@@ -519,7 +466,7 @@
   height: 20px;
   min-width: 20px;
   border-radius: 50%;
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border: 1.5px solid currentColor;
   color: inherit;
   font-size: 13px;
@@ -534,9 +481,9 @@
 }
 
 #page-topic-detail .mindmap-node__toggle:hover {
-  background-color: #2563eb;
-  color: #ffffff;
-  border-color: #2563eb;
+  background-color: var(--color-focus);
+  color: var(--color-surface);
+  border-color: var(--color-focus);
   transform: scale(1.1);
 }
 
@@ -548,7 +495,7 @@
   transform: translateX(-50%);
   background-color: rgba(15, 23, 42, 0.75);
   backdrop-filter: blur(4px);
-  color: #ffffff;
+  color: var(--color-surface);
   font-size: var(--font-size-xs);
   padding: var(--space-2) var(--space-4);
   border-radius: var(--radius-pill);
@@ -690,7 +637,7 @@
   font-weight: var(--font-weight-bold);
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  color: var(--color-primary);
+  color: var(--color-link);
   padding-bottom: var(--space-2);
   border-bottom: 2px solid var(--color-border);
 }
@@ -708,9 +655,16 @@
   overflow: hidden;
 }
 
-#page-topic-detail .roadmap-node--pillar { border-left: 4px solid var(--color-primary); }
-#page-topic-detail .roadmap-node--intermediate { border-left: 4px solid var(--color-purple); }
-#page-topic-detail .roadmap-node--leaf { border-left: 4px solid var(--color-success); background-color: var(--color-surface-raised); }
+#page-topic-detail .roadmap-node--pillar {
+  border-left: 4px solid var(--color-primary);
+}
+#page-topic-detail .roadmap-node--intermediate {
+  border-left: 4px solid var(--color-purple);
+}
+#page-topic-detail .roadmap-node--leaf {
+  border-left: 4px solid var(--color-success);
+  background-color: var(--color-surface-raised);
+}
 
 #page-topic-detail .roadmap-node__summary {
   display: flex;
@@ -724,8 +678,12 @@
   list-style: none;
 }
 
-#page-topic-detail .roadmap-node__summary::-webkit-details-marker { display: none; }
-#page-topic-detail .roadmap-node__summary:focus-visible { outline: 2px solid var(--color-focus); }
+#page-topic-detail .roadmap-node__summary::-webkit-details-marker {
+  display: none;
+}
+#page-topic-detail .roadmap-node__summary:focus-visible {
+  outline: 2px solid var(--color-focus);
+}
 
 #page-topic-detail .roadmap-node__name {
   flex: 1 1 auto;
@@ -756,7 +714,7 @@
 }
 
 #page-topic-detail .roadmap-branch__arrow {
-  color: var(--color-primary);
+  color: var(--color-link);
   font-weight: var(--font-weight-bold);
 }
 
@@ -764,17 +722,10 @@
    9. Footer Action Card
    -------------------------------------------------------------------------- */
 #page-topic-detail .topic-footer-action {
-  background-color: #ffffff;
+  background-color: var(--color-surface);
   border-top: 1px solid var(--color-border);
   padding-top: var(--space-7);
   padding-bottom: var(--space-8);
-}
-
-@media (prefers-color-scheme: dark) {
-  #page-topic-detail .topic-footer-action {
-    background-color: #0f172a;
-    border-top-color: #1e293b;
-  }
 }
 
 #page-topic-detail .topic-footer-card {
@@ -825,5 +776,89 @@
 @media (min-width: 480px) {
   #page-topic-detail .topic-footer-card__buttons {
     flex-direction: row;
+  }
+}
+
+/* Đồng bộ TV1, giữ engine tọa độ và bố cục roadmap TV2. */
+#page-topic-detail .mindmap-hint {
+  background: var(--color-surface);
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  width: max-content;
+  max-width: 90%;
+}
+#page-topic-detail .mindmap-svg {
+  color: var(--color-link);
+}
+#page-topic-detail .mindmap-component {
+  min-width: 0;
+}
+#page-topic-detail .topic-meta-card {
+  min-width: 0;
+}
+#page-topic-detail .topic-header__meta {
+  flex-wrap: wrap;
+}
+#page-topic-detail .topic-switcher__select {
+  max-width: 100%;
+  width: 100%;
+}
+#page-topic-detail .mindmap-node__toggle {
+  min-width: 28px;
+  width: 28px;
+  height: 28px;
+}
+#page-topic-detail .mindmap-node__toggle:hover {
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+}
+#page-topic-detail .roadmap-branch {
+  padding-left: clamp(0.25rem, 1vw, 0.75rem);
+  margin-left: 0;
+}
+#page-topic-detail .roadmap-node__summary {
+  flex-wrap: wrap;
+}
+#page-topic-detail .roadmap-node__name {
+  font-weight: 600;
+}
+#page-topic-detail .roadmap-pillars-grid {
+  grid-template-columns: minmax(0, 1fr);
+}
+#page-topic-detail .mindmap-toolbar__views {
+  flex-wrap: wrap;
+}
+#page-topic-detail .mindmap-drawer {
+  position: fixed;
+  top: 50%;
+  right: 1rem;
+  transform: translateY(-50%);
+  width: 25rem;
+  max-width: calc(100vw - 2rem);
+  height: auto;
+  max-height: 80vh;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-card);
+}
+#page-topic-detail .mindmap-drawer--open {
+  transform: translateY(-50%);
+}
+#page-topic-detail .mindmap-drawer__close {
+  min-width: 44px;
+  min-height: 44px;
+}
+@media (max-width: 767px) {
+  #page-topic-detail .topic-header__meta {
+    display: flex;
+    flex-direction: column;
+  }
+  #page-topic-detail .mindmap-toolbar {
+    padding: 0.75rem;
+  }
+  #page-topic-detail .roadmap-node__content {
+    padding: 0.5rem;
+  }
+  #page-topic-detail .mindmap-cards-view {
+    padding: 0.5rem;
   }
 }

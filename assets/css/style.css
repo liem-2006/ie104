@@ -14,67 +14,67 @@
 /* 1. Khai báo Design Tokens mặc định (Light Mode — UIT Discovery Light) */
 :root {
   /* Token bắt buộc theo hợp đồng Job 1: Nền chuyển nhẹ sang xanh da trời nhạt */
-  --color-bg: #F8FAFC;
-  --color-surface: #FFFFFF;
-  --color-text: #13202B;
+  --color-bg: #f8fafc;
+  --color-surface: #ffffff;
+  --color-text: #13202b;
   --color-muted: #475866;
-  --color-border: #CFDCE6;
-  --color-primary: #A9DCFA;
-  --color-on-primary: #0E3952;
-  --color-focus: #0F5E8C;
+  --color-border: #cfdce6;
+  --color-primary: #a9dcfa;
+  --color-on-primary: #0e3952;
+  --color-focus: #0f5e8c;
 
   /* Token bổ trợ màu liên kết, bề mặt phụ và trạng thái */
-  --color-link: #0E5682;
-  --color-link-hover: #093E60;
-  --color-primary-hover: #97D4F8;
-  --color-primary-active: #80C8F4;
-  --color-surface-elevated: #FFFFFF;
-  --color-surface-muted: #EAF0F6;
-  --color-disabled-bg: #E6EDF3;
+  --color-link: #0e5682;
+  --color-link-hover: #093e60;
+  --color-primary-hover: #97d4f8;
+  --color-primary-active: #80c8f4;
+  --color-surface-elevated: #ffffff;
+  --color-surface-muted: #eaf0f6;
+  --color-disabled-bg: #e6edf3;
   --color-disabled-text: #546675;
-  --color-badge-bg: #E5F2FC;
-  --color-badge-text: #0E496B;
-  --color-danger-text: #B91C1C;
+  --color-badge-bg: #e5f2fc;
+  --color-badge-text: #0e496b;
+  --color-danger-text: #b91c1c;
 
   /* Token Gradient nền trang: trắng/xám sáng chuyển nhẹ sang xanh da trời nhạt */
-  --gradient-page: linear-gradient(180deg, #FFFFFF 0%, #F4F8FC 45%, #EAF2F9 100%);
-  --gradient-surface: linear-gradient(180deg, #FFFFFF 0%, #F9FBFE 100%);
-  --gradient-primary: linear-gradient(135deg, #BAE3FB 0%, #9BD5F8 100%);
-  --gradient-primary-hover: linear-gradient(135deg, #C5E9FC 0%, #89CBF6 100%);
-  --gradient-primary-active: linear-gradient(135deg, #93D2F7 0%, #76BEEF 100%);
-  --gradient-card-hover: linear-gradient(180deg, #FFFFFF 0%, #F0F7FD 100%);
-  --gradient-hero-text: linear-gradient(180deg, #092C48 0%, #114B7B 45%, #1D6AA5 100%);
-  --color-hero-fallback: #114B7B;
+  --gradient-page: linear-gradient(180deg, #ffffff 0%, #f4f8fc 45%, #eaf2f9 100%);
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
+  --gradient-primary: linear-gradient(135deg, #bae3fb 0%, #9bd5f8 100%);
+  --gradient-primary-hover: linear-gradient(135deg, #c5e9fc 0%, #89cbf6 100%);
+  --gradient-primary-active: linear-gradient(135deg, #93d2f7 0%, #76beef 100%);
+  --gradient-card-hover: linear-gradient(180deg, #ffffff 0%, #f0f7fd 100%);
+  --gradient-hero-text: linear-gradient(180deg, #092c48 0%, #114b7b 45%, #1d6aa5 100%);
+  --color-hero-fallback: #114b7b;
 
   /* Token viền xanh đậm và nền gradient cho hàng đề tài (.topic-row) */
-  --color-row-bg: #FFFFFF;
-  --color-row-border: #94BBE9;
-  --color-row-border-hover: #2563EB;
+  --color-row-bg: #ffffff;
+  --color-row-border: #94bbe9;
+  --color-row-border-hover: #2563eb;
   --color-row-hover-tint: rgba(37, 99, 235, 0.035);
-  --gradient-row-bg: linear-gradient(180deg, #FFFFFF 0%, #F9FBFE 100%);
+  --gradient-row-bg: linear-gradient(180deg, #ffffff 0%, #f9fbfe 100%);
   --shadow-row-hover: 0 2px 6px rgba(37, 99, 235, 0.08);
 
   /* Token sắc nền nhẹ cho các lĩnh vực nghiên cứu (Light) */
-  --color-domain-sec-bg: #EDF5FC;
-  --gradient-domain-sec: linear-gradient(180deg, #F1F8FE 0%, #E7F1FA 100%);
-  --color-domain-sec-border: #C4DCEF;
-  --color-domain-sec-accent: #0E5682;
-  --color-domain-sec-icon-bg: #DCEBFA;
+  --color-domain-sec-bg: #edf5fc;
+  --gradient-domain-sec: linear-gradient(180deg, #f1f8fe 0%, #e7f1fa 100%);
+  --color-domain-sec-border: #c4dcef;
+  --color-domain-sec-accent: #0e5682;
+  --color-domain-sec-icon-bg: #dcebfa;
 
-  --color-domain-data-bg: #ECF7F5;
-  --gradient-domain-data: linear-gradient(180deg, #F0FAF8 0%, #E4F3F0 100%);
-  --color-domain-data-border: #BCE0DA;
-  --color-domain-data-accent: #0F5C54;
-  --color-domain-data-icon-bg: #D7F0EC;
+  --color-domain-data-bg: #ecf7f5;
+  --gradient-domain-data: linear-gradient(180deg, #f0faf8 0%, #e4f3f0 100%);
+  --color-domain-data-border: #bce0da;
+  --color-domain-data-accent: #0f5c54;
+  --color-domain-data-icon-bg: #d7f0ec;
 
-  --color-domain-nlp-bg: #F4F1FD;
-  --gradient-domain-nlp: linear-gradient(180deg, #F7F5FE 0%, #EFEBFB 100%);
-  --color-domain-nlp-border: #D8CEF8;
-  --color-domain-nlp-accent: #523A94;
-  --color-domain-nlp-icon-bg: #EAE4FC;
+  --color-domain-nlp-bg: #f4f1fd;
+  --gradient-domain-nlp: linear-gradient(180deg, #f7f5fe 0%, #efebfb 100%);
+  --color-domain-nlp-border: #d8cef8;
+  --color-domain-nlp-accent: #523a94;
+  --color-domain-nlp-icon-bg: #eae4fc;
 
   /* Token đường phân cách sidebar giữa các section lớn (Light Mode) */
-  --color-sidebar-divider: #79539C;
+  --color-sidebar-divider: #79539c;
 
   /* Bóng đổ tinh tế cho thẻ và menu */
   --shadow-sm: 0 1px 3px rgba(19, 32, 43, 0.05);
@@ -88,11 +88,11 @@
 
   /* Thang khoảng cách chuẩn */
   --space-1: 0.25rem; /* 4px */
-  --space-2: 0.5rem;  /* 8px */
+  --space-2: 0.5rem; /* 8px */
   --space-3: 0.75rem; /* 12px */
-  --space-4: 1rem;    /* 16px */
-  --space-5: 1.5rem;  /* 24px */
-  --space-6: 2rem;    /* 32px */
+  --space-4: 1rem; /* 16px */
+  --space-5: 1.5rem; /* 24px */
+  --space-6: 2rem; /* 32px */
 
   /* Bo góc và độ rộng tối đa của khung nội dung */
   --radius-card: 0.75rem; /* 12px */
@@ -106,66 +106,72 @@
 /* 2. Khai báo Design Tokens cho Chế độ Tối (Dark Mode — Xám than & Xanh xám trầm) */
 @media (prefers-color-scheme: dark) {
   :root {
-    --color-bg: #15171A;
+    --color-bg: #15171a;
     --color-surface: #202329;
-    --color-text: #F2F4F8;
-    --color-muted: #B6BEC8;
-    --color-border: #383D47;
-    --color-primary: #245AA3;
-    --color-on-primary: #FFFFFF;
-    --color-focus: #8CC4FF;
+    --color-text: #f2f4f8;
+    --color-muted: #b6bec8;
+    --color-border: #383d47;
+    --color-primary: #245aa3;
+    --color-on-primary: #ffffff;
+    --color-focus: #8cc4ff;
 
-    --color-link: #99CAFF;
-    --color-link-hover: #C2E0FF;
-    --color-primary-hover: #2C69BC;
-    --color-primary-active: #1B4682;
-    --color-surface-elevated: #282C35;
-    --color-surface-muted: #1B1D22;
-    --color-disabled-bg: #1F2126;
-    --color-disabled-text: #9DA6B2;
-    --color-badge-bg: #23344C;
-    --color-badge-text: #B8DAFF;
-    --color-danger-text: #FF8585;
+    --color-link: #99caff;
+    --color-link-hover: #c2e0ff;
+    --color-primary-hover: #2c69bc;
+    --color-primary-active: #1b4682;
+    --color-surface-elevated: #282c35;
+    --color-surface-muted: #1b1d22;
+    --color-disabled-bg: #1f2126;
+    --color-disabled-text: #9da6b2;
+    --color-badge-bg: #23344c;
+    --color-badge-text: #b8daff;
+    --color-danger-text: #ff8585;
 
     /* Gradient Nền trang Dark: xám than, đen xám và xanh xám trầm */
-    --gradient-page: linear-gradient(180deg, #15171A 0%, #171B21 50%, #1A212A 100%);
-    --gradient-surface: linear-gradient(180deg, #24272F 0%, #1F2228 100%);
-    --gradient-primary: linear-gradient(135deg, #2B67B5 0%, #1E4B8A 100%);
-    --gradient-primary-hover: linear-gradient(135deg, #3172C6 0%, #23569C 100%);
-    --gradient-primary-active: linear-gradient(135deg, #1E4E8C 0%, #163B6E 100%);
-    --gradient-card-hover: linear-gradient(180deg, #2A2E38 0%, #22262F 100%);
-    --gradient-hero-text: linear-gradient(180deg, #F4FAFF 0%, #B9DDFF 38%, #69B1FF 72%, #3B82F6 100%);
-    --color-hero-fallback: #69B1FF;
+    --gradient-page: linear-gradient(180deg, #15171a 0%, #171b21 50%, #1a212a 100%);
+    --gradient-surface: linear-gradient(180deg, #24272f 0%, #1f2228 100%);
+    --gradient-primary: linear-gradient(135deg, #2b67b5 0%, #1e4b8a 100%);
+    --gradient-primary-hover: linear-gradient(135deg, #3172c6 0%, #23569c 100%);
+    --gradient-primary-active: linear-gradient(135deg, #1e4e8c 0%, #163b6e 100%);
+    --gradient-card-hover: linear-gradient(180deg, #2a2e38 0%, #22262f 100%);
+    --gradient-hero-text: linear-gradient(
+      180deg,
+      #f4faff 0%,
+      #b9ddff 38%,
+      #69b1ff 72%,
+      #3b82f6 100%
+    );
+    --color-hero-fallback: #69b1ff;
 
     /* Token hàng đề tài: Viền xanh đậm rõ ràng trên nền xám than */
-    --color-row-bg: #1B1D23;
-    --color-row-border: #2B456B;
-    --color-row-border-hover: #5B9BF4;
+    --color-row-bg: #1b1d23;
+    --color-row-border: #2b456b;
+    --color-row-border-hover: #5b9bf4;
     --color-row-hover-tint: rgba(91, 155, 244, 0.06);
-    --gradient-row-bg: linear-gradient(180deg, #1E2127 0%, #17191E 100%);
+    --gradient-row-bg: linear-gradient(180deg, #1e2127 0%, #17191e 100%);
     --shadow-row-hover: 0 2px 6px rgba(0, 0, 0, 0.35);
 
     /* Sắc nền lĩnh vực trên nền Xám than */
-    --color-domain-sec-bg: #1D222B;
-    --gradient-domain-sec: linear-gradient(180deg, #1F2530 0%, #1B2028 100%);
-    --color-domain-sec-border: #313D4F;
-    --color-domain-sec-accent: #94C8FF;
+    --color-domain-sec-bg: #1d222b;
+    --gradient-domain-sec: linear-gradient(180deg, #1f2530 0%, #1b2028 100%);
+    --color-domain-sec-border: #313d4f;
+    --color-domain-sec-accent: #94c8ff;
     --color-domain-sec-icon-bg: #243347;
 
-    --color-domain-data-bg: #1C2425;
-    --gradient-domain-data: linear-gradient(180deg, #1E2728 0%, #1A2122 100%);
-    --color-domain-data-border: #2E4343;
-    --color-domain-data-accent: #84DFD2;
+    --color-domain-data-bg: #1c2425;
+    --gradient-domain-data: linear-gradient(180deg, #1e2728 0%, #1a2122 100%);
+    --color-domain-data-border: #2e4343;
+    --color-domain-data-accent: #84dfd2;
     --color-domain-data-icon-bg: #213837;
 
     --color-domain-nlp-bg: #272138;
-    --gradient-domain-nlp: linear-gradient(180deg, #2C2540 0%, #221D32 100%);
-    --color-domain-nlp-border: #4A3E6B;
-    --color-domain-nlp-accent: #C4B5FD;
-    --color-domain-nlp-icon-bg: #352B52;
+    --gradient-domain-nlp: linear-gradient(180deg, #2c2540 0%, #221d32 100%);
+    --color-domain-nlp-border: #4a3e6b;
+    --color-domain-nlp-accent: #c4b5fd;
+    --color-domain-nlp-icon-bg: #352b52;
 
     /* Token đường phân cách sidebar giữa các section lớn (Dark Mode) */
-    --color-sidebar-divider: #8B6BB1;
+    --color-sidebar-divider: #8b6bb1;
 
     --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3);
     --shadow-card-hover: 0 8px 22px rgba(0, 0, 0, 0.42), 0 2px 6px rgba(0, 0, 0, 0.28);
@@ -250,8 +256,11 @@ a {
   color: var(--color-link);
   text-decoration: underline;
   text-underline-offset: 0.18em;
-  transition: color var(--transition-fast), background-color var(--transition-fast),
-    border-color var(--transition-fast), transform var(--transition-fast),
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
     box-shadow var(--transition-fast);
 }
 
@@ -321,8 +330,11 @@ summary:focus-visible {
   text-decoration: none;
   cursor: pointer;
   box-shadow: var(--shadow-sm);
-  transition: background-color var(--transition-fast), border-color var(--transition-fast),
-    transform var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 .btn:hover:not(:disabled) {
@@ -396,7 +408,9 @@ select {
   font-family: var(--font-body);
   font-size: 0.875rem; /* 14px */
   line-height: 1.45;
-  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast);
 }
 
 input::placeholder {
@@ -535,7 +549,7 @@ summary::-webkit-details-marker {
   background-image: none;
   border-color: transparent;
   box-shadow: none;
-  color: #13202B; /* Light mode: chữ đậm màu hơn để nổi bật trên nền sáng */
+  color: #13202b; /* Light mode: chữ đậm màu hơn để nổi bật trên nền sáng */
   transform: none;
 }
 
@@ -555,7 +569,7 @@ summary::-webkit-details-marker {
   background-image: none;
   border-color: transparent;
   box-shadow: none;
-  color: #0E496B; /* Light mode: chữ màu nhấn đậm */
+  color: #0e496b; /* Light mode: chữ màu nhấn đậm */
   font-weight: 600;
 }
 
@@ -568,7 +582,7 @@ summary::-webkit-details-marker {
   background-image: none;
   border-color: transparent;
   box-shadow: none;
-  color: #092C48;
+  color: #092c48;
 }
 
 .site-header__link[aria-current="page"]:active,
@@ -618,12 +632,12 @@ summary::-webkit-details-marker {
 @media (prefers-color-scheme: dark) {
   .site-header__link,
   .site-nav__link {
-    color: #B6BEC8; /* Chữ sáng vừa phải, dễ đọc */
+    color: #b6bec8; /* Chữ sáng vừa phải, dễ đọc */
   }
 
   .site-header__link:hover,
   .site-nav__link:hover {
-    color: #FFFFFF; /* Hover sáng hơn, gần trắng */
+    color: #ffffff; /* Hover sáng hơn, gần trắng */
     background: none;
     background-color: transparent;
     border-color: transparent;
@@ -633,7 +647,7 @@ summary::-webkit-details-marker {
   .site-header__link--active,
   .site-nav__link[aria-current="page"],
   .site-nav__link--active {
-    color: #FFFFFF; /* Trang hiện tại: chữ sáng và đậm hơn, không nền */
+    color: #ffffff; /* Trang hiện tại: chữ sáng và đậm hơn, không nền */
     font-weight: 600;
     background: none;
     background-color: transparent;
@@ -644,7 +658,7 @@ summary::-webkit-details-marker {
   .site-header__link--active:hover,
   .site-nav__link[aria-current="page"]:hover,
   .site-nav__link--active:hover {
-    color: #FFFFFF;
+    color: #ffffff;
     background: none;
     background-color: transparent;
     border-color: transparent;
@@ -723,7 +737,9 @@ summary::-webkit-details-marker {
   color: var(--color-text);
   font-size: 0.8125rem;
   font-weight: 700;
-  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+  transition:
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
     transform var(--transition-fast);
 }
 
@@ -979,8 +995,11 @@ summary::-webkit-details-marker {
   border: 1px solid var(--color-border);
   border-radius: var(--radius-card);
   box-shadow: var(--shadow-sm);
-  transition: transform var(--transition-fast), box-shadow var(--transition-fast),
-    border-color var(--transition-fast), background-color var(--transition-fast);
+  transition:
+    transform var(--transition-fast),
+    box-shadow var(--transition-fast),
+    border-color var(--transition-fast),
+    background-color var(--transition-fast);
 }
 
 .topic-card:hover {
@@ -1272,31 +1291,144 @@ dialog::backdrop {
 
 /* Intégration Job 1 : tokens complémentaires, sans redéfinition par page. */
 :root {
- --font-size-xs:.8125rem; --font-size-sm:.9375rem; --font-size-base:1rem; --font-size-lg:1.125rem; --font-size-xl:1.25rem; --font-size-2xl:1.5rem; --font-size-3xl:2rem;
- --font-weight-medium:500; --font-weight-semibold:600; --font-weight-bold:700;
- --line-height-relaxed:1.7; --line-height-tight:1.25; --space-8:3rem;
- --radius-sm:.375rem; --radius-full:999px; --color-surface-raised:var(--color-surface-elevated);
- --color-tag-sec-bg:var(--color-domain-sec-bg); --color-tag-sec-text:var(--color-domain-sec-accent);
- --color-tag-data-bg:var(--color-domain-data-bg); --color-tag-data-text:var(--color-domain-data-accent);
- --color-tag-nlp-bg:var(--color-domain-nlp-bg); --color-tag-nlp-text:var(--color-domain-nlp-accent);
+  --font-size-xs: 0.8125rem;
+  --font-size-sm: 0.9375rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --line-height-relaxed: 1.7;
+  --line-height-tight: 1.25;
+  --space-8: 3rem;
+  --radius-sm: 0.375rem;
+  --radius-full: 999px;
+  --color-surface-raised: var(--color-surface-elevated);
+  --color-tag-sec-bg: var(--color-domain-sec-bg);
+  --color-tag-sec-text: var(--color-domain-sec-accent);
+  --color-tag-data-bg: var(--color-domain-data-bg);
+  --color-tag-data-text: var(--color-domain-data-accent);
+  --color-tag-nlp-bg: var(--color-domain-nlp-bg);
+  --color-tag-nlp-text: var(--color-domain-nlp-accent);
 }
-[hidden] { display:none !important; }
-body { min-width:0; }
-main { flex:1; }
-h1,h2,h3,p,a,summary { overflow-wrap:anywhere; }
-input,select { max-width:100%; min-height:2.75rem; padding:.6rem .8rem; border:1px solid var(--color-border); border-radius:var(--radius-sm); background:var(--color-surface); color:var(--color-text); font:inherit; }
-.skip-link { position:absolute; top:-6rem; left:1rem; z-index:100; padding:1rem; background:var(--color-surface); }
-.skip-link:focus { top:0; }
-.site-header__inner { flex-wrap:wrap; }
-.site-nav__list { flex-wrap:wrap; }
-.site-header__left { min-width:0; }
-.status-panel { padding-block:var(--space-6); }
-.badge { display:inline-block; padding:.25rem .65rem; border-radius:var(--radius-pill); background:var(--color-badge-bg); color:var(--color-badge-text); font-size:.8125rem; font-weight:600; }
-.badge--primary { background:var(--color-badge-bg); color:var(--color-badge-text); }
-.badge--success { background:var(--color-domain-data-bg); color:var(--color-domain-data-accent); }
-.badge--purple { background:var(--color-domain-nlp-bg); color:var(--color-domain-nlp-accent); }
-.badge--warning { background:var(--color-badge-bg); color:var(--color-badge-text); }
-.home { max-width:65rem; padding-block:5rem; }
-.home h1 { margin-block:1.5rem; }
-.home__actions { display:flex; flex-wrap:wrap; gap:1rem; margin-top:2rem; }
-@media (max-width:767px) { .site-header__inner { gap:.5rem; } .site-nav__list { gap:.25rem; } .site-nav__link { font-size:.875rem; padding:.6rem; } }
+[hidden] {
+  display: none !important;
+}
+body {
+  min-width: 0;
+}
+main {
+  flex: 1;
+}
+h1,
+h2,
+h3,
+p,
+a,
+summary {
+  overflow-wrap: anywhere;
+}
+input,
+select {
+  max-width: 100%;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.8rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+.skip-link {
+  position: absolute;
+  top: -6rem;
+  left: 1rem;
+  z-index: 100;
+  padding: 1rem;
+  background: var(--color-surface);
+}
+.skip-link:focus {
+  top: 0;
+}
+.site-header__inner {
+  flex-wrap: wrap;
+}
+.site-nav__list {
+  flex-wrap: wrap;
+}
+.site-header__left {
+  min-width: 0;
+}
+.status-panel {
+  padding-block: var(--space-6);
+}
+.badge {
+  display: inline-block;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-pill);
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+  font-size: 0.8125rem;
+  font-weight: 600;
+}
+.badge--primary {
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+}
+.badge--success {
+  background: var(--color-domain-data-bg);
+  color: var(--color-domain-data-accent);
+}
+.badge--purple {
+  background: var(--color-domain-nlp-bg);
+  color: var(--color-domain-nlp-accent);
+}
+.badge--warning {
+  background: var(--color-badge-bg);
+  color: var(--color-badge-text);
+}
+.home {
+  max-width: 65rem;
+  padding-block: 5rem;
+}
+.home h1 {
+  margin-block: 1.5rem;
+}
+.home__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+@media (max-width: 767px) {
+  .site-header__inner {
+    gap: 0.5rem;
+  }
+  .site-nav__list {
+    gap: 0.25rem;
+  }
+  .site-nav__link {
+    font-size: 0.875rem;
+    padding: 0.6rem;
+  }
+}
+
+:root {
+  --transition-normal: 250ms ease;
+}
+
+:root {
+  --line-height-normal: 1.5;
+  --color-purple: var(--color-domain-nlp-accent);
+  --color-success: var(--color-domain-data-accent);
+  --space-7: 2.5rem;
+}
+
+@media (max-width: 767px) {
+  .site-nav {
+    display: block;
+  }
+}
