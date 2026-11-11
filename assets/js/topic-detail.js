@@ -10,12 +10,42 @@ import {
 /**
  * @file topic-detail.js
  * @description Trực quan hóa Lộ trình nghiên cứu dạng Sơ đồ tư duy (Interactive Mind Map)
- * Chuẩn NotebookLM:
  * - Khởi đầu hiển thị gọn (Chủ đề & Trụ cột).
  * - Bấm vào node cha để xổ ra các node con kế cận, tiếp tục lần lượt tới node lá.
  * - Vẽ đường cong Bezier và mũi tên chỉ rõ hướng phân nhánh.
  * - Tự động tính độ rộng cột động, tránh chồng chữ.
  * -  Vanilla JS chuẩn môn học IE104.
+ */
+
+/**
+ * @typedef {object} Keyword
+ * @property {string} name Tên kiến thức.
+ * @property {string} outcome Đầu ra kiến thức kỳ vọng.
+ * @property {string[]} [subjects] Môn học gợi ý.
+ * @property {Keyword[]} [children] Kiến thức tiên quyết của keyword này.
+ */
+/**
+ * @typedef {object} MapNode
+ * @property {string} id Khóa runtime trong một cây, không ghi vào JSON.
+ * @property {string} name Tên node.
+ * @property {string} outcome Đầu ra kỳ vọng.
+ * @property {string[]} subjects Môn học gợi ý.
+ * @property {number} depth Độ sâu, gốc bằng 0.
+ * @property {boolean} isRoot Có phải chủ đề gốc hay không.
+ * @property {boolean} collapsed Trạng thái thu gọn các tiên quyết.
+ * @property {MapNode[]} children Các tiên quyết con.
+ * @property {MapNode} [parent] Node cần học sau node này.
+ * @property {HTMLElement} [domElement] Thẻ biểu diễn node.
+ * @property {number} [width] Chiều rộng đã đo.
+ * @property {number} [height] Chiều cao đã đo.
+ * @property {number} [x] Tọa độ mép trái.
+ * @property {number} [y] Tọa độ tâm dọc.
+ * @property {number} [span] Chiều cao dành cho cây con.
+ */
+/**
+ * @typedef {object} MapLink
+ * @property {MapNode} parent Kiến thức đích.
+ * @property {MapNode} child Tiên quyết cần học trước đích.
  */
 
 /**
@@ -49,17 +79,13 @@ const state = {
   dragStartX: 0,
   dragStartY: 0,
   activeView: "mindmap",
+  mapFrame: 0,
+  renderVersion: 0,
+  fitAfterRender: false,
+  toggleFocusId: "",
 };
 
-document.addEventListener(
-  "DOMContentLoaded",
-  /** Xử lý sự kiện của thành phần.
-   * @returns {*} Kết quả của thao tác.
-   */
-  () => {
-    initTopicDetailPage();
-  },
-);
+document.addEventListener("DOMContentLoaded", initTopicDetailPage);
 
 /** Khởi tạo toàn bộ trang chi tiết
  * @returns {Promise<void>} Hoàn tất khởi tạo hoặc hiển thị lỗi.
@@ -82,9 +108,8 @@ async function initTopicDetailPage() {
     initToolbarControls();
     initDrawerEvents();
     renderCardsView(found.topic);
-    renderMindMap();
     setView(matchMedia("(max-width:767px)").matches ? "cards" : "mindmap");
-    requestAnimationFrame(fitToScreen);
+    renderMindMap(true);
   } catch {
     renderErrorMessage("Không thể tải dữ liệu chủ đề. Hãy tải lại trang để thử lại.");
   }
@@ -132,8 +157,8 @@ function renderHeaderInfo(topic, group) {
 }
 
 /** Dựng bộ chọn chủ đề với URL đầy đủ.
- * @param {*} data Dữ liệu nguồn.
- * @param {*} currentTopic Phần tử đang xử lý.
+ * @param {object} data Dữ liệu nghiên cứu gồm danh sách nhóm.
+ * @param {object} currentTopic Chủ đề hiện tại để chọn đúng option.
  * @returns {void} Không trả về giá trị.
  */
 
@@ -141,7 +166,7 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   const container = document.getElementById("topic-switcher-container");
   if (!container) return;
 
-  container.innerHTML = "";
+  container.replaceChildren();
 
   const label = document.createElement("label");
   label.setAttribute("for", "topic-select-dropdown");
@@ -152,55 +177,39 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   select.id = "topic-select-dropdown";
   select.className = "topic-switcher__select";
 
-  data.groups.forEach(
-    /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-     * @param {*} g Nhóm nguồn.
-     * @returns {*} Kết quả của thao tác.
-     */
-    (g) => {
-      const optgroup = document.createElement("optgroup");
-      optgroup.label = `[${g.group.name}]`;
-
-      g.topics.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {*} t Chủ đề nguồn.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (t) => {
-          const opt = document.createElement("option");
-          opt.value = topicUrl(g.group, t);
-          opt.textContent = `${t.name} — ${t.lecturer.name}`;
-
-          if (g.group.id === state.currentGroup.id && t.name === currentTopic.name && t.lecturer.email === currentTopic.lecturer.email) {
-            opt.selected = true;
-          }
-          optgroup.appendChild(opt);
-        },
-      );
-
-      select.appendChild(optgroup);
-    },
-  );
-
-  select.addEventListener(
-    "change",
-    /** Xử lý sự kiện của thành phần.
-     * @param {Event} e Sự kiện trình duyệt.
-     * @returns {*} Kết quả của thao tác.
-     */
-    (e) => {
-      if (e.target.value) {
-        window.location.assign(e.target.value);
-      }
-    },
-  );
+  const fragment = document.createDocumentFragment();
+  for (const entry of data.groups) {
+    const optgroup = document.createElement("optgroup");
+    optgroup.label = "[" + entry.group.name + "]";
+    for (const topic of entry.topics) {
+      const option = document.createElement("option");
+      option.value = topicUrl(entry.group, topic);
+      option.textContent = topic.name + " — " + topic.lecturer.name;
+      option.selected =
+        entry.group.id === state.currentGroup.id &&
+        topic.name === currentTopic.name &&
+        topic.lecturer.email === currentTopic.lecturer.email;
+      optgroup.appendChild(option);
+    }
+    fragment.appendChild(optgroup);
+  }
+  select.appendChild(fragment);
+  select.addEventListener("change", navigateToSelectedTopic);
 
   container.appendChild(label);
   container.appendChild(select);
 }
 
+/** Điều hướng bằng URL đầy đủ của option, reset trạng thái cây qua trang mới.
+ * @param {Event} event Sự kiện thay đổi bộ chọn chủ đề.
+ * @returns {void}
+ */
+function navigateToSelectedTopic(event) {
+  if (event.target.value) window.location.assign(event.target.value);
+}
+
 /* ==========================================================================
-   MIND MAP ENGINE - NOTEBOOK LM STYLE
+   BỘ DỰNG CÂY TIÊN QUYẾT
    ========================================================================== */
 
 /** Khởi tạo trạng thái cây, mở gốc và thu gọn các nhánh.
@@ -223,10 +232,10 @@ function buildMindMapTree(topic) {
   };
 
   /** Chuyển keyword nguồn thành node tương tác, giữ nguyên children.
-   * @param {object} kw Keyword nguồn.
+   * @param {Keyword} kw Keyword nguồn.
    * @param {number} depth Độ sâu trong cây.
-   * @param {object} parentNode Node cha.
-   * @returns {object} Kết quả của thao tác.
+   * @param {MapNode} parentNode Node cần học sau keyword này.
+   * @returns {MapNode} Node runtime có trạng thái mở/thu và liên kết cha.
    */
   function convertKeyword(kw, depth, parentNode) {
     const node = {
@@ -241,36 +250,20 @@ function buildMindMapTree(topic) {
       children: [],
     };
 
-    if (Array.isArray(kw.children) && kw.children.length > 0) {
-      kw.children.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {object} childKw Keyword con.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (childKw) => {
-          node.children.push(convertKeyword(childKw, depth + 1, node));
-        },
-      );
+    for (const child of kw.children || []) {
+      node.children.push(convertKeyword(child, depth + 1, node));
     }
 
     return node;
   }
 
-  if (Array.isArray(topic.keywords)) {
-    topic.keywords.forEach(
-      /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-       * @param {object} kw Keyword nguồn.
-       * @returns {*} Kết quả của thao tác.
-       */
-      (kw) => {
-        state.rootNode.children.push(convertKeyword(kw, 1, state.rootNode));
-      },
-    );
+  for (const keyword of topic.keywords || []) {
+    state.rootNode.children.push(convertKeyword(keyword, 1, state.rootNode));
   }
 }
 
 /** Thu thập các node đang mở và các đường nối.
- * @returns {object} Kết quả của thao tác.
+ * @returns {{visibleNodes: MapNode[], links: MapLink[]}} Node và đường nối đang hiển thị.
  */
 
 function getVisibleNodesAndLinks() {
@@ -284,16 +277,10 @@ function getVisibleNodesAndLinks() {
   function traverse(node) {
     visibleNodes.push(node);
     if (!node.collapsed && node.children && node.children.length > 0) {
-      node.children.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {*} child Phần tử đang xử lý.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (child) => {
-          links.push({ parent: node, child: child });
-          traverse(child);
-        },
-      );
+      for (const child of node.children) {
+        links.push({ parent: node, child });
+        traverse(child);
+      }
     }
   }
 
@@ -301,311 +288,289 @@ function getVisibleNodesAndLinks() {
   return { visibleNodes, links };
 }
 
-/** Đo các node, bố trí cây và vẽ đường nối tiên quyết.
- * @returns {void} Không trả về giá trị.
+/** Gộp yêu cầu vẽ trong cùng khung hình; yêu cầu mới thay thế lượt cũ.
+ * @param {boolean} [fit=false] Căn vừa sau khi đã biết kích thước SVG mới.
+ * @param {string} [focusId=""] Khóa node cần trả focus sau khi dựng lại DOM.
+ * @returns {void}
  */
+function renderMindMap(fit = false, focusId = "") {
+  state.fitAfterRender ||= fit;
+  if (focusId) state.toggleFocusId = focusId;
+  state.renderVersion++;
+  cancelAnimationFrame(state.mapFrame);
+  state.mapFrame = requestAnimationFrame(buildMapFrame);
+}
 
-function renderMindMap() {
+/** Dựng DOM ở khung hình đầu, dành khung tiếp theo cho đọc kích thước.
+ * @returns {void}
+ */
+function buildMapFrame() {
   const nodesLayer = document.getElementById("mindmap-nodes");
   const svgLayer = document.getElementById("mindmap-svg");
-  if (!nodesLayer || !svgLayer) return;
-
-  nodesLayer.innerHTML = "";
-
-  // Giữ lại defs và xóa các đường link cũ
-  let linksGroup = document.getElementById("mindmap-links-group");
-  if (!linksGroup) {
-    linksGroup = document.createElementNS("http://www.w3.org/2000/svg", "g");
-    linksGroup.id = "mindmap-links-group";
-    svgLayer.appendChild(linksGroup);
-  }
-  linksGroup.innerHTML = "";
-
-  // Đảm bảo defs chứa đầu mũi tên luôn sẵn sàng
-  ensureSvgDefs(svgLayer);
-
+  if (!nodesLayer || !svgLayer || !state.rootNode) return;
+  const version = state.renderVersion;
   const { visibleNodes, links } = getVisibleNodesAndLinks();
+  mountMapNodes(nodesLayer, visibleNodes);
+  const linksGroup = prepareLinksLayer(svgLayer);
+  state.mapFrame = requestAnimationFrame(finishMapLayout);
 
-  // 1. Render tất cả các node vào DOM trước để lấy kích thước thật của chữ sau khi wrap
-  visibleNodes.forEach(
-    /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-     * @param {object} node Node kiến thức.
-     * @returns {*} Kết quả của thao tác.
-     */
-    (node) => {
-      const el = createNodeDomElement(node);
-      nodesLayer.appendChild(el);
-      node.domElement = el;
-    },
+  /** Chỉ hoàn thành lượt vẽ mới nhất, sau khi DOM có kích thước thật.
+   * @returns {void}
+   */
+  function finishMapLayout() {
+    if (version !== state.renderVersion) return;
+    state.mapFrame = 0;
+    measureMapNodes(visibleNodes);
+    const columns = groupNodesByDepth(visibleNodes);
+    const rightEdges = positionMapColumns(columns);
+    positionMapRows(columns);
+    applyNodePositions(visibleNodes);
+    resizeMapCanvas(svgLayer, visibleNodes, rightEdges);
+    drawMapLinks(linksGroup, links);
+    finishMapInteraction();
+  }
+}
+
+/** Khôi phục góc nhìn và focus sau khi tọa độ mới đã được áp dụng.
+ * @returns {void}
+ */
+function finishMapInteraction() {
+  if (state.fitAfterRender && state.activeView === "mindmap") fitToScreen();
+  if (state.toggleFocusId && state.activeView === "mindmap") {
+    document
+      .getElementById(state.toggleFocusId)
+      ?.querySelector("button")
+      ?.focus({ preventScroll: true });
+  }
+  state.fitAfterRender = false;
+  state.toggleFocusId = "";
+}
+
+/** Gắn node vào DOM theo một lô để trình duyệt chỉ cập nhật container một lần.
+ * @param {HTMLElement} layer Lớp chứa các node.
+ * @param {MapNode[]} nodes Node đang hiển thị theo thứ tự duyệt cây.
+ * @returns {void}
+ */
+function mountMapNodes(layer, nodes) {
+  const fragment = document.createDocumentFragment();
+  for (const node of nodes) {
+    node.domElement = createNodeDomElement(node);
+    fragment.appendChild(node.domElement);
+  }
+  layer.replaceChildren(fragment);
+}
+
+/** Lấy lớp đường nối và giữ định nghĩa đầu mũi tên qua mỗi lần vẽ.
+ * @param {SVGSVGElement} svg Lớp SVG của sơ đồ.
+ * @returns {SVGGElement} Lớp đường nối đã được xóa nội dung cũ.
+ */
+function prepareLinksLayer(svg) {
+  let group = document.getElementById("mindmap-links-group");
+  if (!group) {
+    group = document.createElementNS("http://www.w3.org/2000/svg", "g");
+    group.id = "mindmap-links-group";
+    svg.appendChild(group);
+  }
+  group.replaceChildren();
+  ensureSvgDefs(svg);
+  return group;
+}
+
+/** Chỉ đọc kích thước ở bước này; không ghi style xen giữa các phép đo.
+ * @param {MapNode[]} nodes Node đã có trong DOM.
+ * @returns {void}
+ */
+function measureMapNodes(nodes) {
+  for (const node of nodes) {
+    node.width = node.domElement.offsetWidth || 180;
+    node.height = node.domElement.offsetHeight || 42;
+  }
+}
+
+/** Lập chỉ mục cột một lần, dùng lại cho cả tọa độ ngang và chống va chạm.
+ * @param {MapNode[]} nodes Node đang hiển thị.
+ * @returns {MapNode[][]} Mỗi phần tử là các node ở cùng độ sâu.
+ */
+function groupNodesByDepth(nodes) {
+  const columns = [];
+  for (const node of nodes) {
+    if (!columns[node.depth]) columns[node.depth] = [];
+    columns[node.depth].push(node);
+  }
+  return columns;
+}
+
+/** Đặt cột sau cách mép phải cột trước một khoảng an toàn.
+ * @param {MapNode[][]} columns Các cột theo độ sâu.
+ * @returns {number[]} Mép phải lớn nhất của từng cột.
+ */
+function positionMapColumns(columns) {
+  const rightEdges = [];
+  state.rootNode.x = CONFIG.START_X;
+  rightEdges[0] = state.rootNode.x + state.rootNode.width;
+  for (let depth = 1; depth < columns.length; depth++) {
+    const x = (rightEdges[depth - 1] || 250) + CONFIG.MIN_COL_GAP;
+    let right = x;
+    for (const node of columns[depth]) {
+      node.x = x;
+      right = Math.max(right, x + node.width);
+    }
+    rightEdges[depth] = right;
+  }
+  return rightEdges;
+}
+
+/** Điều phối phân bố dọc, dịch nhánh va chạm rồi căn giữa node cha.
+ * @param {MapNode[][]} columns Các cột của cây đang hiển thị.
+ * @returns {void}
+ */
+function positionMapRows(columns) {
+  computeSubtreeSpan(state.rootNode);
+  assignNodeRows(state.rootNode, 45);
+  resolveColumnOverlaps(columns);
+  centerParentNodes(state.rootNode);
+}
+
+/** Tính chiều cao cây con, đủ chứa cả các nhánh và chính node cha.
+ * @param {MapNode} node Gốc cây con.
+ * @returns {number} Chiều cao cần thiết, gồm khoảng đệm giữa các node.
+ */
+function computeSubtreeSpan(node) {
+  let childrenSpan = 0;
+  if (!node.collapsed) {
+    for (const child of node.children) childrenSpan += computeSubtreeSpan(child);
+  }
+  node.span = Math.max(childrenSpan, node.height + CONFIG.NODE_MARGIN_Y);
+  return node.span;
+}
+
+/** Phân bổ nhánh theo chiều cao đã đo, căn cha giữa con đầu và con cuối.
+ * @param {MapNode} node Node cần đặt vị trí.
+ * @param {number} startY Mép trên của vùng dành cho cây con.
+ * @returns {void}
+ */
+function assignNodeRows(node, startY) {
+  if (node.collapsed || node.children.length === 0) {
+    node.y = startY + node.span / 2;
+    return;
+  }
+  let nextY = startY;
+  for (const child of node.children) {
+    assignNodeRows(child, nextY);
+    nextY += child.span;
+  }
+  node.y = (node.children[0].y + node.children[node.children.length - 1].y) / 2;
+}
+
+/** Dịch cả nhánh dưới khi hai node ở cùng cột không đủ khoảng trống.
+ * @param {MapNode[][]} columns Các node được nhóm theo độ sâu.
+ * @returns {void}
+ */
+function resolveColumnOverlaps(columns) {
+  for (const column of columns) {
+    const ordered = [...column].sort(compareNodeRows);
+    for (let index = 1; index < ordered.length; index++) {
+      const previous = ordered[index - 1];
+      const current = ordered[index];
+      const overlap =
+        previous.y + previous.height / 2 + CONFIG.NODE_MARGIN_Y - (current.y - current.height / 2);
+      if (overlap > 0) shiftSubtree(current, overlap);
+    }
+  }
+}
+
+/** So sánh vị trí dọc để quét va chạm từ trên xuống dưới.
+ * @param {MapNode} first Node thứ nhất.
+ * @param {MapNode} second Node thứ hai.
+ * @returns {number} Hiệu tọa độ Y.
+ */
+function compareNodeRows(first, second) {
+  return first.y - second.y;
+}
+
+/** Dịch node và các hậu duệ đang hiển thị cùng một khoảng dọc.
+ * @param {MapNode} node Gốc nhánh cần dịch.
+ * @param {number} offset Khoảng dịch xuống dưới theo pixel.
+ * @returns {void}
+ */
+function shiftSubtree(node, offset) {
+  node.y += offset;
+  if (!node.collapsed) {
+    for (const child of node.children) shiftSubtree(child, offset);
+  }
+}
+
+/** Căn lại node cha sau khi các nhánh con đã được dịch chống va chạm.
+ * @param {MapNode} node Node cần căn giữa theo hậu duệ.
+ * @returns {void}
+ */
+function centerParentNodes(node) {
+  if (node.collapsed || node.children.length === 0) return;
+  for (const child of node.children) centerParentNodes(child);
+  node.y = (node.children[0].y + node.children[node.children.length - 1].y) / 2;
+}
+
+/** Ghi toàn bộ tọa độ sau khi đã kết thúc các phép đọc kích thước.
+ * @param {MapNode[]} nodes Node đã tính x/y.
+ * @returns {void}
+ */
+function applyNodePositions(nodes) {
+  for (const node of nodes) {
+    node.domElement.style.left = node.x + "px";
+    node.domElement.style.top = node.y - node.height / 2 + "px";
+  }
+}
+
+/** Đặt vùng SVG đủ chứa mép phải và đáy của mọi node.
+ * @param {SVGSVGElement} svg Canvas cần thay đổi kích thước.
+ * @param {MapNode[]} nodes Node đang hiển thị.
+ * @param {number[]} rightEdges Mép phải của từng cột.
+ * @returns {void}
+ */
+function resizeMapCanvas(svg, nodes, rightEdges) {
+  let bottom = 0;
+  for (const node of nodes) bottom = Math.max(bottom, node.y + node.height / 2);
+  const width = (rightEdges[rightEdges.length - 1] || 600) + 160;
+  const height = Math.max(bottom + 100, 560);
+  svg.setAttribute("width", width);
+  svg.setAttribute("height", height);
+  svg.style.width = width + "px";
+  svg.style.height = height + "px";
+  svg.style.maxWidth = "none";
+  svg.style.maxHeight = "none";
+}
+
+/** Tạo các đường nối trong một lô; marker-start chỉ từ con về cha.
+ * @param {SVGGElement} group Lớp nhận đường nối.
+ * @param {MapLink[]} links Quan hệ nội bộ của cây hiện tại.
+ * @returns {void}
+ */
+function drawMapLinks(group, links) {
+  const fragment = document.createDocumentFragment();
+  for (const link of links) fragment.appendChild(createMapLink(link));
+  group.replaceChildren(fragment);
+}
+
+/** Tạo đường Bezier từ cạnh phải cha đến cạnh trái con, mũi tên ở phía cha.
+ * @param {MapLink} link Cặp node cha và tiên quyết con.
+ * @returns {SVGPathElement} Đường cong chưa gắn vào DOM.
+ */
+function createMapLink(link) {
+  const parent = link.parent;
+  const child = link.child;
+  const startX = parent.x + parent.width;
+  const endX = child.x - 2;
+  const distance = endX - startX;
+  const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute(
+    "d",
+    `M ${startX} ${parent.y} C ${startX + distance * 0.46} ${parent.y}, ${endX - distance * 0.46} ${child.y}, ${endX} ${child.y}`,
   );
-
-  // 2. Chờ DOM tính toán kích thước thực tế
-  requestAnimationFrame(
-    /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-     * @returns {*} Kết quả của thao tác.
-     */
-    () => {
-      // Đo kích thước từng node thực tế
-      visibleNodes.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {object} node Node kiến thức.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (node) => {
-          const el = node.domElement;
-          if (el) {
-            node.width = el.offsetWidth || 180;
-            node.height = el.offsetHeight || 42;
-          } else {
-            node.width = 180;
-            node.height = 42;
-          }
-        },
-      );
-
-      // 3. Tính toán vị trí X theo độ rộng động của từng cột (Dynamic Column X)
-      const depthMaxRight = {};
-      const maxDepth = Math.max(
-        ...visibleNodes.map(
-          /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-           * @param {object} n Node đang xét.
-           * @returns {*} Kết quả của thao tác.
-           */
-          (n) => n.depth,
-        ),
-      );
-
-      // Khởi tạo cột 0 (Root)
-      state.rootNode.x = CONFIG.START_X;
-      depthMaxRight[0] = state.rootNode.x + state.rootNode.width;
-
-      for (let d = 1; d <= maxDepth; d++) {
-        const prevRight = depthMaxRight[d - 1] || 250;
-        const colX = prevRight + CONFIG.MIN_COL_GAP;
-
-        let colMaxRight = colX;
-        visibleNodes
-          .filter(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {object} n Node đang xét.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (n) => n.depth === d,
-          )
-          .forEach(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {object} n Node đang xét.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (n) => {
-              n.x = colX;
-              colMaxRight = Math.max(colMaxRight, n.x + n.width);
-            },
-          );
-
-        depthMaxRight[d] = colMaxRight;
-      }
-
-      // 4. Tính toán vị trí Y theo cây phân cấp chống chồng lấn
-      const GAP_Y = CONFIG.NODE_MARGIN_Y;
-
-      // Bước 4.1: Tính khoảng không gian chiều dọc (span) cần thiết cho từng cây con
-
-      /** Tính chiều cao cần thiết của một cây con.
-       * @param {object} node Node kiến thức.
-       * @returns {number} Kết quả của thao tác.
-       */
-      function computeSubtreeSpan(node) {
-        if (!node.children || node.children.length === 0 || node.collapsed) {
-          node.span = node.height + GAP_Y;
-          return node.span;
-        }
-        let childrenSpan = 0;
-        node.children.forEach(
-          /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-           * @param {*} c Node con.
-           * @returns {*} Kết quả của thao tác.
-           */
-          (c) => {
-            childrenSpan += computeSubtreeSpan(c);
-          },
-        );
-        // Khoảng không gian của cây con ít nhất phải bằng chiều cao của chính node cha + đệm
-        node.span = Math.max(childrenSpan, node.height + GAP_Y);
-        return node.span;
-      }
-      computeSubtreeSpan(state.rootNode);
-
-      // Bước 4.2: Gán tọa độ Y theo phân bổ không gian span
-
-      /** Phân bố vị trí dọc theo chiều cao cây con.
-       * @param {object} node Node kiến thức.
-       * @param {number} startY Vị trí dọc bắt đầu.
-       * @returns {void} Không trả về giá trị.
-       */
-      function assignY(node, startY) {
-        if (!node.children || node.children.length === 0 || node.collapsed) {
-          node.y = startY + node.span / 2;
-        } else {
-          let curY = startY;
-          node.children.forEach(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {*} c Node con.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (c) => {
-              assignY(c, curY);
-              curY += c.span;
-            },
-          );
-          const firstChild = node.children[0];
-          const lastChild = node.children[node.children.length - 1];
-          node.y = (firstChild.y + lastChild.y) / 2;
-        }
-      }
-      assignY(state.rootNode, 45);
-
-      // Bước 4.3: Quét kiểm tra va chạm trên từng cột (Depth) và đẩy dồn nhánh dưới nếu có chạm
-      for (let d = 0; d <= maxDepth; d++) {
-        const colNodes = visibleNodes
-          .filter(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {object} n Node đang xét.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (n) => n.depth === d,
-          )
-          .sort(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {object} a Bản ghi thứ nhất.
-             * @param {object} b Bản ghi thứ hai.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (a, b) => a.y - b.y,
-          );
-        for (let i = 1; i < colNodes.length; i++) {
-          const prev = colNodes[i - 1];
-          const curr = colNodes[i];
-          const prevBottom = prev.y + prev.height / 2;
-          const currTop = curr.y - curr.height / 2;
-          const overlap = prevBottom + GAP_Y - currTop;
-          if (overlap > 0) {
-            /** Dịch cây con để giảm va chạm.
-             * @param {object} n Node đang xét.
-             * @param {number} dy Khoảng dịch dọc.
-             * @returns {void} Không trả về giá trị.
-             */
-            function shiftSubtree(n, dy) {
-              n.y += dy;
-              if (!n.collapsed && n.children) {
-                n.children.forEach(
-                  /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-                   * @param {*} c Node con.
-                   * @returns {*} Kết quả của thao tác.
-                   */
-                  (c) => shiftSubtree(c, dy),
-                );
-              }
-            }
-            shiftSubtree(curr, overlap);
-          }
-        }
-      }
-
-      // Bước 4.4: Căn giữa lại các node cha theo trung điểm các con
-
-      /** Căn node cha theo các node con đang hiển thị.
-       * @param {object} node Node kiến thức.
-       * @returns {void} Không trả về giá trị.
-       */
-      function reCenterParents(node) {
-        if (node.children && node.children.length > 0 && !node.collapsed) {
-          node.children.forEach(
-            /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-             * @param {*} c Node con.
-             * @returns {*} Kết quả của thao tác.
-             */
-            (c) => reCenterParents(c),
-          );
-          const firstChild = node.children[0];
-          const lastChild = node.children[node.children.length - 1];
-          node.y = (firstChild.y + lastChild.y) / 2;
-        }
-      }
-      reCenterParents(state.rootNode);
-
-      // 5. Cập nhật vị trí tuyệt đối cho từng phần tử Node DOM
-      visibleNodes.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {object} node Node kiến thức.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (node) => {
-          const el = node.domElement;
-          if (!el) return;
-          el.style.left = `${node.x}px`;
-          el.style.top = `${node.y - node.height / 2}px`;
-        },
-      );
-
-      // 6. Cập nhật kích thước SVG Canvas
-      const maxY = Math.max(
-        ...visibleNodes.map(
-          /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-           * @param {object} n Node đang xét.
-           * @returns {*} Kết quả của thao tác.
-           */
-          (n) => n.y + n.height / 2,
-        ),
-      );
-      const totalSvgWidth = (depthMaxRight[maxDepth] || 600) + 160;
-      const totalSvgHeight = Math.max(maxY + 100, 560);
-      svgLayer.setAttribute("width", totalSvgWidth);
-      svgLayer.setAttribute("height", totalSvgHeight);
-      svgLayer.style.width = `${totalSvgWidth}px`;
-      svgLayer.style.height = `${totalSvgHeight}px`;
-      svgLayer.style.maxWidth = "none";
-      svgLayer.style.maxHeight = "none";
-
-      // 7. Vẽ các đường cong Bezier và gắn đầu MŨI TÊN (Marker)
-      links.forEach(
-        /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-         * @param {*} link Liên kết trong cây.
-         * @returns {*} Kết quả của thao tác.
-         */
-        (link) => {
-          const p = link.parent;
-          const c = link.child;
-          if (!p || !c) return;
-
-          // Điểm bắt đầu: mép phải giữa node cha
-          const startX = p.x + p.width;
-          const startY = p.y;
-
-          // Điểm kết thúc: mép trái giữa node con (chạm nhẹ vào mép thẻ)
-          const endX = c.x - 2;
-          const endY = c.y;
-
-          // Điểm uốn cong Bezier mượt mà kiểu NotebookLM
-          const dx = endX - startX;
-          const cx1 = startX + dx * 0.46;
-          const cx2 = endX - dx * 0.46;
-
-          const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
-          path.setAttribute(
-            "d",
-            `M ${startX} ${startY} C ${cx1} ${startY}, ${cx2} ${endY}, ${endX} ${endY}`,
-          );
-          path.setAttribute("class", "mindmap-curve");
-          path.setAttribute("marker-start", "url(#mindmap-arrow)");
-          path.setAttribute("data-parent", p.id);
-          path.setAttribute("data-child", c.id);
-
-          linksGroup.appendChild(path);
-        },
-      );
-    },
-  );
+  path.setAttribute("class", "mindmap-curve");
+  path.setAttribute("marker-start", "url(#mindmap-arrow)");
+  path.setAttribute("data-parent", parent.id);
+  path.setAttribute("data-child", child.id);
+  return path;
 }
 
 /** Tạo đầu mũi tên hướng từ tiên quyết về kiến thức đích.
@@ -642,7 +607,7 @@ function ensureSvgDefs(svgLayer) {
 
 /** Dựng node tương tác và nút mở kiến thức tiên quyết.
  * @param {object} node Node kiến thức.
- * @returns {HTMLElement} Kết quả của thao tác.
+ * @returns {HTMLDetailsElement} Nhánh danh sách đóng/mở bằng bàn phím.
  */
 
 function createNodeDomElement(node) {
@@ -694,9 +659,9 @@ function createNodeDomElement(node) {
     // CHỈ KHI USER CLICK VÀO DẤU (+) HOẶC (-) MỚI THU GỌN / MỞ RỘNG ROADMAP
     toggleBtn.addEventListener(
       "click",
-      /** Xử lý sự kiện của thành phần.
-       * @param {Event} e Sự kiện trình duyệt.
-       * @returns {*} Kết quả của thao tác.
+      /** Đảo trạng thái nhánh, không kích hoạt sự kiện mở panel ở node cha.
+       * @param {MouseEvent} e Click nút mở/thu nhánh.
+       * @returns {void}
        */
       (e) => {
         e.stopPropagation();
@@ -710,8 +675,8 @@ function createNodeDomElement(node) {
   // KHI USER CLICK VÀO THẺ: CHỈ HIỆN THÔNG TIN CHI TIẾT TRONG DRAWER, KHÔNG ĐỔI TRẠNG THÁI MỞ/ĐÓNG
   el.addEventListener(
     "click",
-    /** Xử lý sự kiện của thành phần.
-     * @returns {*} Kết quả của thao tác.
+    /** Mở panel đầu ra kiến thức khi click thẻ node.
+     * @returns {void}
      */
     () => {
       selectNode(node);
@@ -720,9 +685,9 @@ function createNodeDomElement(node) {
 
   el.addEventListener(
     "keydown",
-    /** Xử lý sự kiện của thành phần.
-     * @param {Event} e Sự kiện trình duyệt.
-     * @returns {*} Kết quả của thao tác.
+    /** Mở thông tin node bằng Enter/Space khi focus ở chính thẻ node.
+     * @param {KeyboardEvent} e Phím trên thẻ node.
+     * @returns {void}
      */
     (e) => {
       if (e.target === el && (e.key === "Enter" || e.key === " ")) {
@@ -742,13 +707,7 @@ function createNodeDomElement(node) {
 
 function toggleNode(node) {
   node.collapsed = !node.collapsed;
-  renderMindMap();
-  requestAnimationFrame(restoreToggleFocus);
-  /** Giữ focus sau khi dựng lại node. @returns {void} */
-
-  function restoreToggleFocus() {
-    document.getElementById(node.id)?.querySelector("button")?.focus();
-  }
+  renderMindMap(false, node.id);
 }
 
 /** Hiển thị đầu ra và môn học của keyword trong panel.
@@ -757,63 +716,67 @@ function toggleNode(node) {
  */
 
 function selectNode(node) {
+  highlightSelectedNode(node);
+  renderDrawerContent(node);
+  openDrawer();
+}
+
+/** Chỉ đánh dấu node được chọn, bỏ đánh dấu cũ mà không dựng lại cây.
+ * @param {MapNode} node Node cần xem đầu ra.
+ * @returns {void}
+ */
+function highlightSelectedNode(node) {
   state.selectedNode = node;
-
-  document.querySelectorAll(".mindmap-node").forEach(
-    /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-     * @param {*} el Phần tử DOM.
-     * @returns {*} Kết quả của thao tác.
-     */
-    (el) => {
-      el.classList.remove("mindmap-node--selected");
-    },
-  );
-  if (node.domElement) {
-    node.domElement.classList.add("mindmap-node--selected");
+  for (const selected of document.querySelectorAll(".mindmap-node--selected")) {
+    selected.classList.remove("mindmap-node--selected");
   }
+  node.domElement?.classList.add("mindmap-node--selected");
+}
 
+/** Điền dữ liệu keyword vào panel, ẩn môn học/tiên quyết khi không có.
+ * @param {MapNode} node Node đang được xem.
+ * @returns {void}
+ */
+function renderDrawerContent(node) {
+  document.getElementById("drawer-title").textContent = node.name;
+  document.getElementById("drawer-outcome").textContent =
+    node.outcome || "Chưa bổ sung đầu ra kiến thức.";
+  renderDrawerBadge(node);
+  const subjectsSection = document.getElementById("drawer-subjects-section");
+  const prerequisitesSection = document.getElementById("drawer-prereqs-section");
+  subjectsSection.hidden = node.subjects.length === 0;
+  prerequisitesSection.hidden = node.children.length === 0;
+  document
+    .getElementById("drawer-subjects")
+    .replaceChildren(...node.subjects.map(createSubjectBadge));
+  document
+    .getElementById("drawer-prereqs")
+    .replaceChildren(...node.children.map(createPrerequisite));
+}
+
+/** Gán nhãn cấp kiến thức đúng với vị trí node trong cây hiện tại.
+ * @param {MapNode} node Node cần gán nhãn.
+ * @returns {void}
+ */
+function renderDrawerBadge(node) {
+  const badge = document.getElementById("drawer-badge");
+  const isLeaf = node.children.length === 0;
+  const variant = node.isRoot || node.depth === 1 ? "primary" : isLeaf ? "success" : "purple";
+  badge.className = "badge badge--" + variant;
+  badge.textContent = node.isRoot
+    ? "🎯 MỤC TIÊU ĐỀ TÀI"
+    : node.depth === 1
+      ? "🏛️ TRỤ CỘT ĐỀ TÀI"
+      : isLeaf
+        ? "🌱 NỀN TẢNG TIÊN QUYẾT (XUẤT PHÁT)"
+        : "🔷 KIẾN THỨC CƠ SỞ";
+}
+
+/** Mở dialog native và ghi nhận điểm trả focus khi người dùng đóng.
+ * @returns {void}
+ */
+function openDrawer() {
   const drawer = document.getElementById("mindmap-drawer");
-  const drawerTitle = document.getElementById("drawer-title");
-  const drawerBadge = document.getElementById("drawer-badge");
-  const drawerOutcome = document.getElementById("drawer-outcome");
-  const drawerSubjects = document.getElementById("drawer-subjects");
-  const drawerSubjectsSection = document.getElementById("drawer-subjects-section");
-  const drawerPrereqs = document.getElementById("drawer-prereqs");
-  const drawerPrereqsSection = document.getElementById("drawer-prereqs-section");
-
-  if (!drawer) return;
-
-  drawerTitle.textContent = node.name;
-  drawerOutcome.textContent = node.outcome || "Chưa bổ sung đầu ra kiến thức.";
-
-  if (node.isRoot) {
-    drawerBadge.className = "badge badge--primary";
-    drawerBadge.textContent = "🎯 MỤC TIÊU ĐỀ TÀI";
-  } else if (node.depth === 1) {
-    drawerBadge.className = "badge badge--primary";
-    drawerBadge.textContent = "🏛️ TRỤ CỘT ĐỀ TÀI";
-  } else if (!node.children || node.children.length === 0) {
-    drawerBadge.className = "badge badge--success";
-    drawerBadge.textContent = "🌱 NỀN TẢNG TIÊN QUYẾT (XUẤT PHÁT)";
-  } else {
-    drawerBadge.className = "badge badge--purple";
-    drawerBadge.textContent = "🔷 KIẾN THỨC CƠ SỞ";
-  }
-
-  if (Array.isArray(node.subjects) && node.subjects.length > 0) {
-    drawerSubjectsSection.style.display = "block";
-    drawerSubjects.replaceChildren(...node.subjects.map(createSubjectBadge));
-  } else {
-    drawerSubjectsSection.style.display = "none";
-  }
-
-  if (Array.isArray(node.children) && node.children.length > 0) {
-    drawerPrereqsSection.style.display = "block";
-    drawerPrereqs.replaceChildren(...node.children.map(createPrerequisite));
-  } else {
-    drawerPrereqsSection.style.display = "none";
-  }
-
   state.drawerTrigger = document.activeElement;
   drawer.hidden = false;
   if (!drawer.open) drawer.showModal();
@@ -821,10 +784,9 @@ function selectNode(node) {
   document.getElementById("drawer-close").focus();
 }
 
-/** Đóng Drawer
- * @returns {void} Không trả về giá trị.
+/** Gắn sự kiện đóng panel bằng nút và bàn phím.
+ * @returns {void}
  */
-
 function initDrawerEvents() {
   document.getElementById("drawer-close").addEventListener("click", closeDrawer);
   document.addEventListener("keydown", handleDrawerKey);
@@ -918,8 +880,7 @@ function zoomOut() {
 /** Chuyển về sơ đồ. @returns {void} */
 function showMap() {
   setView("mindmap");
-  renderMindMap();
-  requestAnimationFrame(fitToScreen);
+  renderMindMap(true);
 }
 /** Chuyển về danh sách. @returns {void} */
 function showCards() {
@@ -940,7 +901,7 @@ function setView(view) {
 }
 /** Căn lại map khi kích thước đổi. @returns {void} */
 function resizeMap() {
-  if (state.activeView === "mindmap") fitToScreen();
+  if (state.activeView === "mindmap") renderMindMap(true);
 }
 /** Fullscreen với lỗi được xử lý trong UI. @returns {Promise<void>} */
 
@@ -948,7 +909,7 @@ async function toggleFullscreen() {
   try {
     if (document.fullscreenElement) await document.exitFullscreen();
     else await document.querySelector(".mindmap-component").requestFullscreen();
-    requestAnimationFrame(fitToScreen);
+    renderMindMap(true);
   } catch {
     document.getElementById("mindmap-hint").textContent =
       "Trình duyệt không cho phép toàn màn hình.";
@@ -965,9 +926,9 @@ function initCanvasViewport() {
 
   viewport.addEventListener(
     "mousedown",
-    /** Xử lý sự kiện của thành phần.
-     * @param {Event} e Sự kiện trình duyệt.
-     * @returns {*} Kết quả của thao tác.
+    /** Bắt đầu kéo ở nền canvas, tránh thao tác trên node hoặc panel.
+     * @param {MouseEvent} e Sự kiện chuột trên canvas.
+     * @returns {void}
      */
     (e) => {
       if (e.target.closest(".mindmap-node") || e.target.closest(".mindmap-drawer")) return;
@@ -981,9 +942,9 @@ function initCanvasViewport() {
 
   window.addEventListener(
     "mousemove",
-    /** Xử lý sự kiện của thành phần.
-     * @param {Event} e Sự kiện trình duyệt.
-     * @returns {*} Kết quả của thao tác.
+    /** Cập nhật pan theo con trỏ khi một thao tác kéo đang diễn ra.
+     * @param {MouseEvent} e Sự kiện chuột trên canvas.
+     * @returns {void}
      */
     (e) => {
       if (!state.isDragging) return;
@@ -995,8 +956,8 @@ function initCanvasViewport() {
 
   window.addEventListener(
     "mouseup",
-    /** Xử lý sự kiện của thành phần.
-     * @returns {*} Kết quả của thao tác.
+    /** Kết thúc kéo và khôi phục con trỏ canvas.
+     * @returns {void}
      */
     () => {
       if (state.isDragging) {
@@ -1008,9 +969,9 @@ function initCanvasViewport() {
 
   viewport.addEventListener(
     "wheel",
-    /** Xử lý sự kiện của thành phần.
-     * @param {Event} e Sự kiện trình duyệt.
-     * @returns {*} Kết quả của thao tác.
+    /** Zoom quanh vị trí chuột khi giữ Ctrl; cuộn thường vẫn cuộn trang.
+     * @param {WheelEvent} e Sự kiện chuột trên canvas.
+     * @returns {void}
      */
     (e) => {
       if (!e.ctrlKey) return;
@@ -1055,40 +1016,38 @@ function renderCardsView(topic) {
   const container = document.getElementById("roadmap-pillars-grid");
   if (!container) return;
 
-  container.innerHTML = "";
+  container.replaceChildren();
   if (!topic.keywords || topic.keywords.length === 0) return;
 
-  topic.keywords.forEach(
-    /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-     * @param {object} kw Keyword nguồn.
-     * @param {number} index Vị trí trong danh sách.
-     * @returns {*} Kết quả của thao tác.
-     */
-    (kw, index) => {
-      const card = document.createElement("div");
-      card.className = "roadmap-pillar";
+  const fragment = document.createDocumentFragment();
+  for (const [index, keyword] of topic.keywords.entries()) {
+    fragment.appendChild(createPillarCard(keyword, index));
+  }
+  container.replaceChildren(fragment);
+}
 
-      const label = document.createElement("div");
-      label.className = "roadmap-pillar__label";
-      label.textContent = `Trụ cột ${index + 1}: ${kw.name}`;
-      card.appendChild(label);
-
-      const tree = document.createElement("div");
-      tree.className = "roadmap-tree";
-
-      const nodeEl = createCardNodeRecursive(kw, 0);
-      tree.appendChild(nodeEl);
-
-      card.appendChild(tree);
-      container.appendChild(card);
-    },
+/** Tạo một nhánh keyword gốc trong chế độ danh sách.
+ * @param {Keyword} keyword Kiến thức gốc của chủ đề.
+ * @param {number} index Vị trí để đánh số nhánh.
+ * @returns {HTMLElement} Thẻ nhánh và toàn bộ tiên quyết của nó.
+ */
+function createPillarCard(keyword, index) {
+  const card = element("div", "roadmap-pillar");
+  const label = element(
+    "div",
+    "roadmap-pillar__label",
+    "Trụ cột " + (index + 1) + ": " + keyword.name,
   );
+  const tree = element("div", "roadmap-tree");
+  tree.appendChild(createCardNodeRecursive(keyword, 0));
+  card.append(label, tree);
+  return card;
 }
 
 /** Dựng đệ quy keyword và các kiến thức tiên quyết.
  * @param {object} kw Keyword nguồn.
  * @param {number} depth Độ sâu trong cây.
- * @returns {HTMLElement} Kết quả của thao tác.
+ * @returns {HTMLDetailsElement} Nhánh danh sách đóng/mở bằng bàn phím.
  */
 function createCardNodeRecursive(kw, depth) {
   const details = document.createElement("details");
@@ -1152,14 +1111,12 @@ function createCardNodeRecursive(kw, depth) {
   if (kw.children && kw.children.length > 0) {
     const branch = document.createElement("div");
     branch.className = "roadmap-branch";
-    branch.innerHTML = `<div class="roadmap-branch__connector"><span class="roadmap-branch__arrow">&uarr;</span> Tiên quyết cần học trước:</div>`;
-    kw.children.forEach(
-      /** Áp dụng thao tác cho từng phần tử trong phép duyệt.
-       * @param {*} c Node con.
-       * @returns {*} Kết quả của thao tác.
-       */
-      (c) => branch.appendChild(createCardNodeRecursive(c, depth + 1)),
-    );
+    const connector = element("div", "roadmap-branch__connector");
+    connector.append(element("span", "roadmap-branch__arrow", "↑"), " Tiên quyết cần học trước:");
+    branch.appendChild(connector);
+    for (const child of kw.children) {
+      branch.appendChild(createCardNodeRecursive(child, depth + 1));
+    }
     content.appendChild(branch);
   }
 
