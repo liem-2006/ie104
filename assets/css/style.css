@@ -197,6 +197,10 @@ button:disabled {
   width: 34px;
   height: 30px;
   object-fit: contain;
+  /* Logo gốc màu xanh cần nền trắng để rõ cả ở theme tối. */
+  background: #fff;
+  padding: 2px;
+  border-radius: 6px;
 }
 .site-nav {
   order: 3;

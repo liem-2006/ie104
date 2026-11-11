@@ -50,6 +50,7 @@ function getGroup(entry) {
 
 function preventSubmit(event) {
   event.preventDefault();
+  renderLecturers();
 }
 
 /** Chờ reset native trước render. @returns {void} */
