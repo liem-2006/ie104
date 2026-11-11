@@ -158,9 +158,10 @@ export function avatar(lecturer, className) {
   const box = element("div", className, initials);
   box.setAttribute("aria-hidden", "true");
   if (lecturer.photo?.path) {
-    const url = new URL(lecturer.photo.path, projectRoot);
+    const photo = resolvePhotoUrl(lecturer.photo.path);
+    const url = photo ? new URL(photo) : null;
     // Ảnh chỉ từ HTTP(S); không nhận data/javascript hay file nội bộ máy.
-    if (["http:", "https:"].includes(url.protocol)) {
+    if (url) {
       const image = element("img");
       image.src = url.href;
       image.alt = lecturer.photo.alt || lecturer.name;
@@ -177,5 +178,18 @@ export function avatar(lecturer, className) {
   /** Ảnh lỗi trở về chữ cái. @returns {void} */
   function restoreInitials() {
     box.textContent = initials;
+  }
+}
+
+/** Kiểm tra đường dẫn ảnh, bỏ qua URL sai thay vì làm hỏng hồ sơ.
+ * @param {string} value Đường dẫn ảnh từ JSON.
+ * @returns {string|null} URL ảnh HTTP(S) hợp lệ hoặc null.
+ */
+function resolvePhotoUrl(value) {
+  try {
+    const url = new URL(value, projectRoot);
+    return ["http:", "https:"].includes(url.protocol) ? url.href : null;
+  } catch {
+    return null;
   }
 }

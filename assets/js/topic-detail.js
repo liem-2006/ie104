@@ -61,8 +61,8 @@ document.addEventListener(
   },
 );
 
-/** * Khởi tạo toàn bộ trang chi tiết
- * @returns {void} Không trả về giá trị.
+/** Khởi tạo toàn bộ trang chi tiết
+ * @returns {Promise<void>} Hoàn tất khởi tạo hoặc hiển thị lỗi.
  */
 
 async function initTopicDetailPage() {
@@ -735,7 +735,7 @@ function createNodeDomElement(node) {
   return el;
 }
 
-/** * Đảo trạng thái mở/thu gọn của node và re-render Mind Map
+/** Đảo trạng thái mở/thu gọn của node và re-render Mind Map
  * @param {object} node Node kiến thức.
  * @returns {void} Không trả về giá trị.
  */
@@ -821,7 +821,7 @@ function selectNode(node) {
   document.getElementById("drawer-close").focus();
 }
 
-/** * Đóng Drawer
+/** Đóng Drawer
  * @returns {void} Không trả về giá trị.
  */
 
@@ -836,6 +836,7 @@ function closeDrawer() {
   drawer.close();
   drawer.hidden = true;
   drawer.classList.remove("mindmap-drawer--open");
+  state.selectedNode?.domElement?.classList.remove("mindmap-node--selected");
   state.selectedNode = null;
   if (state.drawerTrigger?.isConnected) state.drawerTrigger.focus();
 }
@@ -864,7 +865,7 @@ function createPrerequisite(node) {
   return element("li", "", node.name + (node.outcome ? ": " + node.outcome : ""));
 }
 
-/** * Tự động căn vừa khung nhìn
+/** Tự động căn vừa khung nhìn
  * @returns {void} Không trả về giá trị.
  */
 
@@ -889,7 +890,7 @@ function fitToScreen() {
   applyTransform();
 }
 
-/** * Khởi tạo các nút công cụ Toolbar
+/** Khởi tạo các nút công cụ Toolbar
  * @returns {void} Không trả về giá trị.
  */
 

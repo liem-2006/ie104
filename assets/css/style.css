@@ -1289,7 +1289,7 @@ dialog::backdrop {
   }
 }
 
-/* Intégration Job 1 : tokens complémentaires, sans redéfinition par page. */
+/* Tích hợp Job 1: token bổ sung, không khai báo lại ở từng trang. */
 :root {
   --font-size-xs: 0.8125rem;
   --font-size-sm: 0.9375rem;
@@ -1390,14 +1390,14 @@ select {
   background: var(--color-badge-bg);
   color: var(--color-badge-text);
 }
-.home {
+#page-home .home {
   max-width: 65rem;
   padding-block: 5rem;
 }
-.home h1 {
+#page-home .home h1 {
   margin-block: 1.5rem;
 }
-.home__actions {
+#page-home .home__actions {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;

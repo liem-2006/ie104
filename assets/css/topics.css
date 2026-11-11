@@ -1572,7 +1572,7 @@
   }
 }
 
-/* Intégration : liste alimentée par JSON ; conserve le layout TV1. */
+/* Tích hợp: danh sách từ JSON, giữ bố cục TV1. */
 #page-topics .topics-controls {
   display: flex;
   flex-wrap: wrap;
