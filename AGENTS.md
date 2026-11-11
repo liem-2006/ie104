@@ -4,7 +4,7 @@
 
 - Đọc `idea/README.md` trước khi làm task; trang này ghi quyết định mới thay thế các phần cũ trong tài liệu ý tưởng.
 - Dữ liệu runtime nằm ở `data/research-data.json` theo yêu cầu nhóm trưởng. Không đổi schema, đường dẫn hoặc nội dung dữ liệu trong task frontend nếu chưa được giao.
-- Làm đúng phạm vi JOB-N.md hoặc Issue đã giao. Job 1 theo `idea/job-1-rules.md`: TV1 đề xuất nền chung để nhóm trưởng duyệt; TV2 tự thiết kế roadmap; chưa cần Issue nếu bản giao việc đã rõ. Đóng góp qua fork và PR theo `CONTRIBUTING.md`; @liem-2006 là người duyệt và merge.
+- Làm đúng phạm vi đã giao. Phiên bản tích hợp theo `idea/ke-hoach-tich-hop-sua-loi.md` và `idea/job-1-rules.md`: JavaScript và JSON động đã được nhóm trưởng cho phép; JOB-1.md cũ là lịch sử phạm vi ban đầu. Đóng góp qua fork/PR theo CONTRIBUTING.md; @liem-2006 duyệt và merge.
 
 ## BẮT BUỘC TUÂN THỦ KHI VIẾT CODE ĐỒ ÁN:
 1. **100% Vanilla Code:** Chỉ dùng HTML5, CSS3, JavaScript thuần.

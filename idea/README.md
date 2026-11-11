@@ -2,7 +2,7 @@
 
 ## Quyết định đang áp dụng
 
-- **Job 1 hiện hành:** HTML + CSS responsive, sáng/tối bằng CSS; đọc [quy tắc chung](job-1-rules.md). TV1: [khám phá và theme](../topics/JOB-1.md); TV2: [chi tiết và roadmap tự thiết kế](../topics/detail/JOB-1.md); TV3: [danh bạ, hồ sơ và schema giảng viên](../lecturers/JOB-1.md). Chưa làm JS. Bản tổng quan job chỉ lưu ngoài repo và nhóm trưởng gửi riêng.
+- **Phiên bản tích hợp hiện hành:** bốn màn hình động và trang vào, HTML/CSS/JavaScript thuần. Đọc [kế hoạch tích hợp và nghiệm thu](ke-hoach-tich-hop-sua-loi.md). TV1 cung cấp thiết kế chung, TV2 roadmap, TV3 giảng viên; các JOB-1.md cũ giữ làm lịch sử, không còn giới hạn chỉ HTML/CSS hoặc một trang mẫu.
 - TV3 được tạo `data/lecturers.json` theo schema trong task, dùng email nối với dữ liệu chủ đề; ảnh/hồ sơ/chỉ số nghiên cứu là tùy chọn có nguồn. Không sửa schema nghiên cứu để thêm thông tin này.
 
 - Tập trung frontend vanilla theo skill IE104; JSON tĩnh, không cần backend.
@@ -10,7 +10,7 @@
 - Mỗi bản ghi chỉ có một `lecturer` gồm `name`, `email`; keyword có `name`, `outcome`, `subjects` tùy chọn, `children` đệ quy không giới hạn cấp.
 - `children` là kiến thức học trước cha, không nối xuyên chủ đề. Chưa thêm ID chủ đề/keyword. Quy ước khóa lưu tiến độ được nhóm trưởng chốt ở chặng JavaScript.
 - Repo dùng `data/` ở gốc theo yêu cầu nhóm trưởng, thay cho `assets/data/` trong mẫu skill.
-- Job 1 gộp HTML/CSS: TV1 đề xuất nền chung để nhóm trưởng duyệt; TV2 tự thiết kế roadmap; TV3 chuẩn bị danh mục và hồ sơ. JavaScript làm ở job sau. Thành viên gửi PR từ fork; chủ repo duyệt và merge.
+- Nhóm trưởng đã cho phép giữ JavaScript hữu ích và hoàn thiện luồng dữ liệu trong nhánh integration/job-1-fixes. Thành viên gửi PR từ fork; chủ repo duyệt và merge. Không merge lại chồng PR #1–#3 sau khi dùng bản tích hợp.
 
 ## Tài liệu
 

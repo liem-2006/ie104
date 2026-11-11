@@ -1,3 +1,5 @@
+> **Bản giao việc ban đầu, lưu để đối chiếu.** Giới hạn chỉ HTML/CSS, chức năng disabled và một trang mẫu đã được thay thế bởi [kế hoạch tích hợp](../idea/ke-hoach-tich-hop-sua-loi.md). Các quy định schema và code còn phù hợp vẫn được giữ.
+
 # TV3 — Dữ liệu giảng viên, danh bạ và hồ sơ
 
 Đọc `../idea/job-1-rules.md`, AGENTS.md và skill. Task bao gồm `lecturers/detail/`; không được sửa dữ liệu nghiên cứu hoặc CSS chung của TV1.

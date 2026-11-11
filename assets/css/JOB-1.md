@@ -1,3 +1,5 @@
+> **Bản giao việc ban đầu, lưu để đối chiếu.** Giới hạn chỉ HTML/CSS, chức năng disabled và một trang mẫu đã được thay thế bởi [kế hoạch tích hợp](../../idea/ke-hoach-tich-hop-sua-loi.md). Các quy định schema và code còn phù hợp vẫn được giữ.
+
 # Job 1 — Các file CSS trong thư mục này
 
 Đọc [hợp đồng chung](../../idea/job-1-rules.md) và AGENTS.md. Đầu vào là HTML của từng trang và bộ token TV1 được nhóm trưởng duyệt. Đầu ra là các file CSS dưới đây, không tạo JavaScript.

@@ -1,3 +1,5 @@
+> **Bản giao việc ban đầu, lưu để đối chiếu.** Giới hạn chỉ HTML/CSS, chức năng disabled và một trang mẫu đã được thay thế bởi [kế hoạch tích hợp](../idea/ke-hoach-tich-hop-sua-loi.md). Các quy định schema và code còn phù hợp vẫn được giữ.
+
 # TV3 — Chuẩn bị data/lecturers.json
 
 Đặt file lecturers.json ngay trong thư mục này. Đọc [quy tắc chung](../idea/job-1-rules.md) và [task TV3](../lecturers/JOB-1.md).

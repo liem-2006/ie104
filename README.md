@@ -1,40 +1,42 @@
-# IE104 — Website định hướng nghiên cứu khoa học
+# IE104 — UIT Discovery
 
-Website giúp sinh viên khám phá chủ đề, xem cây kiến thức nền và tìm giảng viên liên quan. Đồ án dùng HTML5, CSS3, JavaScript thuần và JSON tĩnh; phát triển lần lượt HTML → CSS → JavaScript theo lịch môn học.
+Website giúp sinh viên khám phá chủ đề nghiên cứu, xem cây kiến thức nền và tìm giảng viên hướng dẫn. Phiên bản tích hợp dùng HTML5, CSS3, JavaScript thuần và JSON cục bộ; không có backend hoặc bước build.
 
-## Bắt đầu
+## Chạy website
 
-**Job 1:** dựng HTML/CSS responsive và theme sáng/tối. Bắt đầu tại [hợp đồng chung](idea/job-1-rules.md), sau đó đọc task [TV1](topics/JOB-1.md), [TV2](topics/detail/JOB-1.md) hoặc [TV3](lecturers/JOB-1.md). Các file giao việc mô tả từng file cần tạo; chưa phải mã giao diện đã triển khai.
+1. Mở root repo bằng VS Code và chạy Live Server (hoặc HTTP static server tương đương).
+2. Mở index.html để vào Khám phá hoặc Giảng viên.
+3. Không mở bằng file:// vì ES module và fetch cần HTTP. Không cần npm install để chạy website.
 
-1. Đọc [quyết định hiện hành](idea/README.md), [quy tắc code](AGENTS.md) và [hướng dẫn đóng góp](CONTRIBUTING.md).
-2. Nhận bản JOB-N.md hoặc Issue có phạm vi file, đầu vào, đầu ra và tiêu chí nghiệm thu do nhóm trưởng chốt. Job 1 đã có các bản giao việc, không cần chờ Issue.
-3. Fork repo, tạo nhánh riêng, làm task rồi gửi Pull Request về `liem-2006/ie104:main`.
+Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Tìm/lọc/sắp xếp hoạt động trên JSON. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Theme sáng/tối theo hệ điều hành/trình duyệt.
 
-Repo đang ở giai đoạn dựng khung; chưa có giao diện hoàn chỉnh. Khi bắt đầu tạo trang, chạy bằng HTTP server cục bộ (ví dụ Live Server của VS Code), không mở bằng `file://` vì website đọc JSON qua `fetch`.
+## Đọc trước khi nhận việc
 
-## Cấu trúc
+- [Quyết định hiện hành](idea/README.md), [quy chuẩn code](AGENTS.md), [đóng góp](CONTRIBUTING.md).
+- [Kế hoạch tích hợp và kết quả nghiệm thu](idea/ke-hoach-tich-hop-sua-loi.md): nguồn PR, hợp đồng URL, kiểm thử và giới hạn.
+- Ghi nhận sửa chữa [TV1](topics/SUA-CHUA-TV1.md), [TV2](topics/detail/SUA-CHUA-TV2.md), [TV3](lecturers/SUA-CHUA-TV3.md).
 
-```text
-data/research-data.json        # Nguồn chủ đề và roadmap dùng chung
-data/lecturers.json            # TV3 tạo hồ sơ giảng viên theo data/JOB-1.md
-assets/css/                   # reset.css, style.css và CSS từng trang khi đến task CSS
-assets/js/                    # data.js, main.js và JS chức năng khi đến task JS
-assets/images/                # Ảnh dùng trên website
-topics/detail/                # Trang khám phá và chi tiết chủ đề
-lecturers/detail/             # Danh bạ và chi tiết giảng viên
-saved/                        # Chủ đề đã lưu
-about/                        # Giới thiệu, nguồn dữ liệu và cách đọc roadmap
-idea/                         # Ngữ cảnh, kế hoạch và hợp đồng dữ liệu
-.agents/skills/                # Skill bắt buộc của môn IE104
-.github/                      # CODEOWNERS, mẫu task và mẫu PR
-```
+Các JOB-1.md là bản giao việc ban đầu được giữ để đối chiếu; giới hạn chỉ HTML/CSS, disabled filter và một trang mẫu đã được thay thế bằng phạm vi tích hợp có JavaScript.
 
-Job 1 tạo bốn trang `topics/index.html`, `topics/detail/index.html`, `lecturers/index.html`, `lecturers/detail/index.html` và CSS tương ứng. Trang chủ/404 là task riêng của nhóm trưởng; saved/about dành cho job sau. `.gitkeep` chỉ giữ thư mục trống. TV1 đề xuất nền chung để nhóm trưởng duyệt, TV2 tự thiết kế roadmap và TV3 làm dữ liệu/hồ sơ; dùng chung một bộ CSS nền.
+## Cấu trúc đang chạy
 
-Dữ liệu có cấu trúc `{ "groups": [{ "group": { "id", "name" }, "topics": [...] }] }`: 3 nhóm `sec`, `data`, `nlp`, 37 bản ghi. Mỗi chủ đề có một giảng viên và cây keyword đệ quy. Từ trang gốc tải `./data/research-data.json`; trang sâu phải tính đường dẫn tương ứng. Tên file dữ liệu và hợp đồng không đổi trong task giao diện nếu nhóm trưởng chưa duyệt.
+| Thành phần | Vai trò |
+|---|---|
+| index.html | Điểm vào tối giản |
+| topics/ và topics/detail/ | Khám phá và chi tiết/roadmap |
+| lecturers/ và lecturers/detail/ | Danh bạ và hồ sơ |
+| assets/css/ | Reset, token/thành phần chung và CSS scoped từng trang |
+| assets/js/data.js | JSON, URL, email và DOM dùng chung |
+| assets/js/*.js | Logic từng trang |
+| data/research-data.json | 3 nhóm, 37 chủ đề, cây keyword đệ quy |
+| data/lecturers.json | 16 giảng viên và thông tin mở rộng tùy chọn |
+| idea/ | Hợp đồng, kế hoạch, bối cảnh |
+| saved/, about/ | Thư mục dự phòng, chưa có tính năng runtime |
 
-## Quyền quản lý
+Giữ data/ ở root, không chuyển sang assets/data/. Không thêm ID vào JSON. Link chủ đề dùng group/topic/email, link hồ sơ dùng email; tạo bằng module chung để chạy được cả dưới /ie104/.
 
-Chủ repo: **@liem-2006**. Thành viên đóng góp qua fork và PR; không cấp quyền ghi vào repo chính. Chỉ chủ repo quyết định merge. CODEOWNERS chỉ yêu cầu người rà soát; bảo vệ nhánh trên GitHub mới thực thi yêu cầu duyệt.
+## Kiểm thử và quyền quản lý
 
-Đã bật bảo vệ `main`: cần một approval của CODEOWNER, hủy approval khi PR có commit mới, giải quyết hết trao đổi trước khi merge; chặn force-push và xóa nhánh. Chỉ dùng squash merge và tắt auto-merge. Chủ repo giữ ngoại lệ admin để tự cập nhật khung; không cần một thành viên duyệt PR của chính chủ repo. Không thêm thành viên vào Collaborators nếu muốn giữ mô hình chỉ chủ repo có quyền ghi.
+Chrome 157: đã kiểm tra đủ 37 chủ đề/16 hồ sơ, 40 tổ hợp responsive/theme, HTML-Validate và axe. Lighthouse mobile: performance 92–100, accessibility/best practices/SEO đều 100 trên các trang được audit. Kết quả và giới hạn W3C/Firefox/hosting thực được ghi trong kế hoạch; không xem kiểm thử tự động là xác nhận mọi trình duyệt.
+
+Nhánh bàn giao: integration/job-1-fixes. PR #1–#3 được giữ để đối chiếu; không merge chồng các PR gốc lên bản tích hợp. Chủ repo @liem-2006 duyệt và merge. Thành viên đóng góp qua fork/PR, không push vào repo chính. Không tự thay đổi bảo vệ main hoặc CODEOWNERS.

@@ -1,3 +1,5 @@
+> **Bản giao việc ban đầu, lưu để đối chiếu.** Giới hạn chỉ HTML/CSS, chức năng disabled và một trang mẫu đã được thay thế bởi [kế hoạch tích hợp](../../idea/ke-hoach-tich-hop-sua-loi.md). Các quy định schema và code còn phù hợp vẫn được giữ.
+
 # TV2 — Chi tiết chủ đề và cây roadmap
 
 Đọc `../../idea/job-1-rules.md`, AGENTS.md và skill. Task riêng này không kế thừa phạm vi sửa file của TV1 trong `topics/JOB-1.md`.

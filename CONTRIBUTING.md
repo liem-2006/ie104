@@ -2,7 +2,7 @@
 
 ## Nhận task
 
-Nhóm trưởng giao việc bằng JOB-N.md và có thể tạo Issue liên kết. Job 1 gộp HTML + CSS responsive; đọc idea/job-1-rules.md để biết thứ tự. TV1 được bắt đầu PR tạo nền chung; TV2/TV3 được chuẩn bị dữ liệu, phác thảo và HTML song song, rồi hoàn thiện CSS sau khi nền được duyệt. Các job sau theo phạm vi riêng. Không tự thêm framework hoặc làm trước chức năng ngoài task.
+Nhóm trưởng giao việc bằng JOB-N.md hoặc tài liệu task có phạm vi cụ thể. Phiên bản tích hợp hiện hành theo [kế hoạch sửa lỗi](idea/ke-hoach-tich-hop-sua-loi.md), đã cho phép JavaScript và JSON động. Đọc bản ghi sửa chữa TV1–TV3 trước khi tiếp tục; không áp dụng giới hạn HTML/CSS tĩnh của JOB-1.md cũ. Không thêm framework hoặc tính năng ngoài task.
 
 ## Fork và tạo nhánh
 
@@ -50,4 +50,4 @@ Giải quyết xung đột trong phạm vi task; hỏi nhóm trưởng nếu xun
 - Không commit mật khẩu, token, `.env`, file cá nhân hay công cụ sinh mã không cần thiết.
 - Người khác có thể đọc và giải thích phần code đã bàn giao; ghi rõ phần dùng AI và phần đã tự kiểm tra.
 
-Nhóm trưởng rà nội dung diff, tiêu chí task và giao diện trước khi approve/merge. PR có sửa mới sau khi duyệt cần được duyệt lại. PR nền TV1 chỉ nghiệm thu nền chung; liên kết xuyên các trang Job 1 được kiểm tra đầy đủ khi các PR phụ thuộc đã merge.
+Nhóm trưởng rà nội dung diff, tiêu chí task và giao diện trước khi approve/merge. PR có sửa mới sau khi duyệt cần được duyệt lại. Nhánh tích hợp phải kiểm tra đầy đủ liên kết xuyên trang. Giữ PR gốc để đối chiếu, không merge chồng lên nhánh tích hợp.
