@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       name="description"
-      content="Khám phá chủ đề nghiên cứu, kiến thức nền và giảng viên hướng dẫn tại UIT."
+      content="Thông tin giảng viên, hồ sơ nghiên cứu và các chủ đề hướng dẫn."
     />
     <title>Hồ sơ giảng viên | UIT Discovery</title>
     <link rel="icon" href="../../assets/images/uit-logo.png" />
@@ -19,21 +19,20 @@
     <a class="skip-link" href="#main-content">Đến nội dung chính</a>
     <header class="site-header">
       <div class="container site-header__inner">
-        <a class="site-header__brand" href="../../index.html" aria-label="UIT Discovery — trang đầu"
+        <a class="site-header__brand" href="../../index.html"
           ><img
             class="site-header__logo-img"
             src="../../assets/images/uit-logo.png"
-            width="54"
-            height="42"
+            width="34"
+            height="30"
             alt="UIT"
-        /></a>
+          /><span>UIT Discovery</span></a
+        >
         <nav class="site-nav" aria-label="Điều hướng chính">
           <ul class="site-nav__list">
-            <li class="site-nav__item">
-              <a class="site-nav__link" href="../../topics/index.html">Khám phá</a>
-            </li>
-            <li class="site-nav__item">
-              <a class="site-nav__link site-nav__link--active" href="../../lecturers/index.html"
+            <li><a class="site-nav__link" href="../../topics/index.html">Khám phá</a></li>
+            <li>
+              <a class="site-nav__link" href="../../lecturers/index.html" aria-current="page"
                 >Giảng viên</a
               >
             </li>
@@ -52,18 +51,22 @@
         </button>
       </div>
     </header>
-    <main id="main-content" class="container site-main">
-      <a class="breadcrumb-link" href="../index.html">← Danh bạ giảng viên</a>
+    <main id="main-content" class="container page profile-page" aria-busy="true">
+      <p id="profile-load-status" class="profile-page__loading" role="status">
+        Đang tải hồ sơ giảng viên…
+      </p>
+      <nav class="breadcrumb" aria-label="Đường dẫn">
+        <a href="../index.html">Giảng viên</a><span aria-hidden="true"> / </span><span>Hồ sơ</span>
+      </nav>
       <h1 id="profile-title">Hồ sơ giảng viên</h1>
-      <p id="profile-status" role="status" aria-live="polite">Đang tải dữ liệu…</p>
       <div id="profile-content"></div>
     </main>
     <footer class="site-footer">
       <div class="container site-footer__inner">
-        <p>UIT Discovery · Đồ án IE104 — Internet và Công nghệ Web</p>
-        <a href="../../lecturers/index.html">Tìm giảng viên hướng dẫn</a>
+        <p>UIT Discovery · Đồ án IE104</p>
+        <a href="../../lecturers/index.html">Giảng viên hướng dẫn</a>
       </div>
     </footer>
-    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem roadmap.</p></noscript>
+    <noscript><p class="container">Hãy bật JavaScript để tải dữ liệu và xem lộ trình.</p></noscript>
   </body>
 </html>

@@ -1,18 +1,19 @@
-/** @file Hồ sơ động theo email; giữ bố cục TV3 và token TV1. */
+/** @file Hồ sơ theo email; các phần tùy chọn chỉ dựng khi có dữ liệu. */
 import {
   loadResearch,
   loadLecturers,
   flattenTopics,
   normalizeEmail,
-  topicUrl,
   element,
   avatar,
   externalLink,
   renderPageMessage,
+  createTopicRow,
 } from "./data.js";
 document.addEventListener("DOMContentLoaded", initProfile);
-/** Tải đúng hồ sơ, không dùng dữ liệu mẫu làm fallback. @returns {Promise<void>} */
-
+/** Nạp hồ sơ đúng email và giải phóng trạng thái tải trong cả nhánh lỗi.
+ * @returns {Promise<void>}
+ */
 async function initProfile() {
   const main = document.getElementById("main-content");
   try {
@@ -28,14 +29,12 @@ async function initProfile() {
       );
       return;
     }
-    const related = flattenTopics(research).filter(matchesTopic);
-    renderProfile(
-      lecturer,
-      related,
-    ); /** So email danh bạ. @param {object} person Giảng viên. @returns {boolean} Khớp. */
+    renderProfile(lecturer, flattenTopics(research).filter(matchesTopic));
+    /** Đối chiếu khóa người trong danh bạ. @param {object} person Giảng viên. @returns {boolean} Khớp email. */
     function matchesEmail(person) {
       return normalizeEmail(person.email) === email;
-    } /** So email trong đề tài. @param {object} entry Chủ đề. @returns {boolean} Khớp. */
+    }
+    /** Đối chiếu người hướng dẫn trong chủ đề. @param {object} entry Chủ đề. @returns {boolean} Khớp email. */
     function matchesTopic(entry) {
       return normalizeEmail(entry.topic.lecturer.email) === email;
     }
@@ -46,65 +45,102 @@ async function initProfile() {
       "Hãy tải lại trang để thử lại.",
       "../index.html",
     );
+  } finally {
+    main.removeAttribute("aria-busy");
+    document.getElementById("profile-load-status")?.remove();
   }
 }
-/** Tạo section có h2. @param {string} title Tiêu đề. @returns {HTMLElement} Section. */
-
+/** Tạo section có heading cấp 2. @param {string} title Tiêu đề. @returns {HTMLElement} Section rỗng. */
 function section(title) {
-  const node = element("section", "profile-section");
-  node.append(element("h2", "profile-section__title", title));
-  return node;
+  const block = element("section", "profile-section");
+  block.append(element("h2", "profile-section__title", title));
+  return block;
 }
-/** Hiển thị hồ sơ và dữ liệu tùy chọn. @param {object} lecturer Giảng viên. @param {object[]} related Chủ đề liên quan. @returns {void} */
-
+/** Ghép các thành phần hồ sơ, giữ thứ tự và không tạo khối số liệu giả.
+ * @param {object} lecturer Giảng viên đã tìm thấy.
+ * @param {object[]} related Các chủ đề của giảng viên.
+ * @returns {void}
+ */
 function renderProfile(lecturer, related) {
   document.title = lecturer.name + " | UIT Discovery";
-  document.getElementById("profile-title").textContent = lecturer.name;
-  document.getElementById("profile-status").textContent = "";
+  const title = document.getElementById("profile-title");
+  title.textContent = lecturer.name;
   const card = element("article", "profile-card");
-  const header = element("div", "profile-header");
+  card.append(createProfileHeader(lecturer, title), createBiography(lecturer));
+  const links = createResearchLinks(lecturer.researchProfiles || []);
+  const metrics = renderMetrics(lecturer.metrics || []);
+  if (links) card.append(links);
+  if (metrics) card.append(metrics);
+  card.append(createRelatedTopics(related));
+  document.getElementById("profile-content").replaceChildren(card);
+}
+/** Tạo phần đầu với một h1, avatar, đơn vị nếu có và email.
+ * @param {object} lecturer Dữ liệu người hướng dẫn.
+ * @param {HTMLHeadingElement} title Heading chính đang có trong trang.
+ * @returns {HTMLElement} Phần đầu hồ sơ.
+ */
+function createProfileHeader(lecturer, title) {
+  const header = element("header", "profile-header");
   const info = element("div", "profile-header__info");
-  const mail = element("a", "", lecturer.email);
+  info.append(title);
+  if (lecturer.profile?.affiliation)
+    info.append(element("p", "profile-header__affiliation", lecturer.profile.affiliation));
+  const mail = element("a", "profile-header__email", lecturer.email);
   mail.href = "mailto:" + normalizeEmail(lecturer.email);
-  info.append(
-    element("p", "", lecturer.profile?.affiliation || "Chưa bổ sung đơn vị công tác."),
-    mail,
-  );
+  info.append(mail);
   header.append(avatar(lecturer, "profile-header__avatar"), info);
-  card.append(header);
-  const intro = section("Giới thiệu");
-  intro.append(element("p", "", lecturer.profile?.bio || "Chưa bổ sung thông tin giới thiệu."));
+  return header;
+}
+/** Dựng giới thiệu và nguồn; khi thiếu chỉ dùng một ghi chú ngắn.
+ * @param {object} lecturer Giảng viên và profile tùy chọn.
+ * @returns {HTMLElement} Khối giới thiệu.
+ */
+function createBiography(lecturer) {
+  const block = section("Giới thiệu");
+  block.append(
+    element(
+      "p",
+      "profile-section__text",
+      lecturer.profile?.bio ||
+        "Thông tin hồ sơ đang được bổ sung. Bạn có thể xem các chủ đề bên dưới và liên hệ giảng viên qua email.",
+    ),
+  );
   if (lecturer.profile?.researchAreas?.length) {
-    intro.append(element("h3", "", "Hướng nghiên cứu"));
-    const list = element("ul");
+    block.append(element("h3", "profile-section__subtitle", "Hướng nghiên cứu"));
+    const list = element("ul", "profile-areas");
     for (const area of lecturer.profile.researchAreas) list.append(element("li", "", area));
-    intro.append(list);
+    block.append(list);
   }
   const source = externalLink("Nguồn thông tin", lecturer.profile?.sourceUrl);
   if (source) {
     const note = element("p", "profile-source-note");
     note.append(source);
-    if (lecturer.profile.checkedAt)
-      note.append(document.createTextNode(" · Ngày ghi nhận: " + lecturer.profile.checkedAt));
-    intro.append(note);
+    if (lecturer.profile.checkedAt) note.append(" · Ngày ghi nhận: " + lecturer.profile.checkedAt);
+    block.append(note);
   }
-  card.append(intro);
-  const profiles = section("Hồ sơ nghiên cứu");
-  let count = 0;
-  for (const profile of lecturer.researchProfiles || []) {
+  return block;
+}
+/** Chỉ dựng section liên kết khi có ít nhất một URL an toàn.
+ * @param {object[]} profiles Các hồ sơ nghiên cứu nguồn.
+ * @returns {HTMLElement|null} Section liên kết hoặc null khi không có.
+ */
+function createResearchLinks(profiles) {
+  const block = section("Hồ sơ nghiên cứu");
+  const links = element("div", "profile-links");
+  for (const profile of profiles) {
     const link = externalLink(profile.label, profile.url);
-    if (link) {
-      const p = element("p");
-      p.append(link);
-      profiles.append(p);
-      count++;
-    }
+    if (link) links.append(link);
   }
-  if (!count) profiles.append(element("p", "", "Chưa bổ sung liên kết hồ sơ nghiên cứu."));
-  card.append(profiles);
-  const metrics = renderMetrics(lecturer.metrics || []);
-  if (metrics) card.append(metrics);
-  const topics = section("Chủ đề nghiên cứu");
+  if (!links.children.length) return null;
+  block.append(links);
+  return block;
+}
+/** Dựng chủ đề liên quan bằng cùng component hàng của trang khám phá.
+ * @param {object[]} related Chủ đề kèm metadata nhóm.
+ * @returns {HTMLElement} Section danh sách và nhóm thực tế.
+ */
+function createRelatedTopics(related) {
+  const block = section("Chủ đề nghiên cứu");
   const tags = element("div", "profile-tags");
   const seen = new Set();
   for (const entry of related) {
@@ -115,20 +151,19 @@ function renderProfile(lecturer, related) {
       seen.add(entry.group.id);
     }
   }
-  topics.append(tags);
+  if (tags.children.length) block.append(tags);
+  if (!related.length) {
+    block.append(element("p", "", "Chưa có chủ đề trong bộ dữ liệu hiện tại."));
+    return block;
+  }
   const list = element("ul", "related-topics-list");
   for (const entry of related) {
-    const li = element("li", "related-topic-item");
-    const link = element("a", "related-topic-item__link", entry.topic.name);
-    link.href = topicUrl(entry.group, entry.topic);
-    li.append(link);
-    list.append(li);
+    const item = element("li", "related-topic-item");
+    item.append(createTopicRow(entry, 3));
+    list.append(item);
   }
-  topics.append(
-    related.length ? list : element("p", "", "Chưa có chủ đề trong bộ dữ liệu hiện tại."),
-  );
-  card.append(topics);
-  document.getElementById("profile-content").replaceChildren(card);
+  block.append(list);
+  return block;
 }
 /** Render chỉ số có nguồn/ngày; không biến dữ liệu thiếu thành 0. @param {object[]} records Bản ghi chỉ số. @returns {HTMLElement|null} Khối số liệu. */
 

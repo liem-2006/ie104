@@ -1,264 +1,136 @@
-/* ==========================================================================
-   IE104 - Chi tiết Hồ sơ Giảng viên (lecturer-detail.css)
-   Phụ trách: TV3 (ckiet)
-   Phạm vi: Scoped theo #page-lecturer-detail
-   Tuân thủ: HTML5/CSS3 thuần, BEM, Flexbox/Grid, Responsive, Sáng/Tối
-   ========================================================================== */
-
-/* Định dạng cơ bản body */
-#page-lecturer-detail {
-  margin: 0;
-  padding: 0;
-  font-family: var(--font-body);
-  background-color: var(--color-bg);
-  color: var(--color-text);
-  line-height: 1.6;
+/* TV3 — hồ sơ với nội dung tùy chọn và component chủ đề dùng chung. */
+#page-lecturer-detail .profile-page {
+  position: relative;
+}
+#page-lecturer-detail .profile-page[aria-busy="true"] {
   min-height: 100vh;
-  display: flex;
-  flex-direction: column;
 }
-
-/* Main Layout & Breadcrumb */
-#page-lecturer-detail .site-main {
-  flex: 1 0 auto;
-  padding-top: var(--space-4);
-  padding-bottom: var(--space-6);
+#page-lecturer-detail .profile-page[aria-busy="true"] > :not(.profile-page__loading) {
+  visibility: hidden;
 }
-
-#page-lecturer-detail .breadcrumb-link {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  color: var(--color-link);
-  text-decoration: none;
-  font-weight: 600;
-  font-size: 0.95rem;
-  padding: var(--space-1) 0;
+#page-lecturer-detail .profile-page__loading {
+  position: absolute;
+  top: 24px;
+  left: 16px;
+  color: var(--color-muted);
 }
-
-#page-lecturer-detail .breadcrumb-link:hover {
-  text-decoration: underline;
-}
-
-#page-lecturer-detail .breadcrumb-link:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-/* Thẻ hồ sơ tổng thể */
-#page-lecturer-detail .profile-card {
-  background-color: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-5);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-}
-
-@media (max-width: 767px) {
-  #page-lecturer-detail .profile-card {
-    padding: var(--space-4);
-  }
-}
-
 #page-lecturer-detail .profile-header {
   display: flex;
   align-items: flex-start;
-  gap: var(--space-4);
-  padding-bottom: var(--space-5);
+  gap: 20px;
+  padding-bottom: 28px;
   border-bottom: 1px solid var(--color-border);
 }
-
-@media (max-width: 600px) {
-  #page-lecturer-detail .profile-header {
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-}
-
 #page-lecturer-detail .profile-header__avatar {
-  width: 96px;
-  height: 96px;
-  border-radius: var(--radius-full);
-  background-color: var(--color-primary);
-  color: var(--color-on-primary);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: 700;
-  font-size: 2.2rem;
-  flex-shrink: 0;
-  user-select: none;
-  box-shadow: 0 4px 10px rgba(2, 132, 199, 0.25);
-}
-
-#page-lecturer-detail .profile-header__info {
-  flex: 1 1 auto;
-}
-
-/* Các section con trong hồ sơ */
-#page-lecturer-detail .profile-section {
-  padding-top: var(--space-5);
-  padding-bottom: var(--space-5);
-  border-bottom: 1px solid var(--color-border);
-}
-
-#page-lecturer-detail .profile-section:last-child {
-  border-bottom: none;
-  padding-bottom: 0;
-}
-
-#page-lecturer-detail .profile-section__title {
-  margin-top: 0;
-  margin-bottom: var(--space-3);
-  font-family: var(--font-heading);
-  font-size: 1.25rem;
-  color: var(--color-text);
-}
-
-/* Phần Tiểu sử & Lĩnh vực */
-
-/* Liên kết học thuật & công bố */
-
-/* Chỉ số trích dẫn khoa học */
-#page-lecturer-detail .metrics-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: var(--space-3);
-  margin-bottom: var(--space-3);
-}
-
-#page-lecturer-detail .metric-card {
-  background-color: var(--color-bg);
+  width: 72px;
+  height: 72px;
+  flex: 0 0 72px;
+  border-radius: 50%;
+  background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-4);
-  text-align: center;
-}
-
-#page-lecturer-detail .metric-card__value {
-  display: block;
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: var(--color-link);
-  line-height: 1.2;
-  margin-bottom: var(--space-1);
-}
-
-#page-lecturer-detail .metric-card__label {
-  display: block;
-  font-size: 0.88rem;
-  color: var(--color-muted);
-  font-weight: 500;
-}
-
-#page-lecturer-detail .profile-source-note {
-  margin: 0;
-  font-size: 0.85rem;
-  color: var(--color-muted);
-  line-height: 1.5;
-}
-
-#page-lecturer-detail .profile-source-note a {
-  color: var(--color-link);
-  text-decoration: underline;
-}
-
-#page-lecturer-detail .profile-source-note a:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-/* Danh sách đề tài hướng dẫn */
-#page-lecturer-detail .related-topics-list {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-3);
-}
-
-#page-lecturer-detail .related-topic-item {
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
-  padding: var(--space-4);
-  background-color: var(--color-bg);
-}
-
-#page-lecturer-detail .related-topic-item__link {
-  color: var(--color-link);
-  text-decoration: none;
-  font-size: 1.05rem;
-}
-
-#page-lecturer-detail .related-topic-item__link:hover {
-  text-decoration: underline;
-}
-
-#page-lecturer-detail .related-topic-item__link:focus-visible {
-  outline: 2px solid var(--color-focus);
-  outline-offset: 2px;
-}
-
-/* Tags lĩnh vực */
-#page-lecturer-detail .lecturer-tag {
-  display: inline-block;
-  padding: 0.2rem 0.6rem;
-  border-radius: var(--radius-full);
-  font-size: 0.78rem;
+  font-size: 24px;
   font-weight: 600;
-  line-height: 1.2;
-}
-
-#page-lecturer-detail .lecturer-tag--sec {
-  background-color: var(--color-tag-sec-bg);
-  color: var(--color-tag-sec-text);
-}
-
-#page-lecturer-detail .lecturer-tag--data {
-  background-color: var(--color-tag-data-bg);
-  color: var(--color-tag-data-text);
-}
-
-#page-lecturer-detail .lecturer-tag--nlp {
-  background-color: var(--color-tag-nlp-bg);
-  color: var(--color-tag-nlp-text);
-}
-
-/* Footer */
-
-#page-lecturer-detail #profile-title {
-  margin-block: 1rem;
+  overflow: hidden;
 }
 #page-lecturer-detail .profile-header__avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: inherit;
 }
 #page-lecturer-detail .profile-header__info {
   min-width: 0;
 }
+#page-lecturer-detail .profile-header__affiliation {
+  color: var(--color-muted);
+  margin-top: 8px;
+  max-width: 70ch;
+}
+#page-lecturer-detail .profile-header__email {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  margin-top: 4px;
+}
 #page-lecturer-detail .profile-section {
-  margin-top: 1.5rem;
+  margin-top: 32px;
 }
-#page-lecturer-detail .profile-section h2 {
-  margin-bottom: 0.75rem;
+#page-lecturer-detail .profile-section__title {
+  margin-bottom: 14px;
 }
-#page-lecturer-detail .metrics-grid {
+#page-lecturer-detail .profile-section__text {
+  max-width: 75ch;
+  color: var(--color-muted);
+}
+#page-lecturer-detail .profile-section__subtitle {
+  font-size: 16px;
+  margin-block: 20px 8px;
+}
+#page-lecturer-detail .profile-areas {
+  padding-left: 22px;
+  max-width: 75ch;
+  color: var(--color-muted);
+}
+#page-lecturer-detail .profile-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
+  gap: 8px 24px;
 }
-#page-lecturer-detail .metric-card {
-  min-width: 8rem;
+#page-lecturer-detail .profile-links a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
 }
 #page-lecturer-detail .profile-source-note {
-  margin-top: 0.75rem;
+  font-size: 12px;
+  color: var(--color-muted);
+  margin-top: 12px;
+  max-width: 80ch;
 }
 #page-lecturer-detail .profile-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.5rem;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+#page-lecturer-detail .metrics-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px 40px;
+}
+#page-lecturer-detail .metric-card__value {
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--color-text);
+}
+#page-lecturer-detail .metric-card__label {
+  font-size: 14px;
+  color: var(--color-muted);
+}
+#page-lecturer-detail .related-topics-list {
+  list-style: none;
+  padding: 0;
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  background: var(--color-surface);
+}
+#page-lecturer-detail .related-topic-item + .related-topic-item {
+  border-top: 1px solid var(--color-border);
+}
+@media (max-width: 767px) {
+  #page-lecturer-detail .profile-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  #page-lecturer-detail .profile-header__avatar {
+    width: 56px;
+    height: 56px;
+    flex-basis: 56px;
+    font-size: 18px;
+  }
+  #page-lecturer-detail .topic-row {
+    padding: 16px;
+  }
 }

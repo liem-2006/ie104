@@ -13,6 +13,7 @@ let lecturers = [];
 let topics = [];
 let groups = [];
 document.addEventListener("DOMContentLoaded", initLecturers);
+
 /** Khởi tạo danh bạ. @returns {Promise<void>} */
 
 async function initLecturers() {
@@ -38,31 +39,36 @@ async function initLecturers() {
       "Không thể tải danh bạ. Hãy tải lại trang để thử lại.";
   }
 }
+
 /** Metadata nhóm. @param {object} entry Nhóm nguồn. @returns {object} Nhóm. */
 
 function getGroup(entry) {
   return entry.group;
 }
+
 /** Ngăn submit điều hướng. @param {SubmitEvent} event Submit. @returns {void} */
 
 function preventSubmit(event) {
   event.preventDefault();
 }
+
 /** Chờ reset native trước render. @returns {void} */
 
 function resetSearch() {
   requestAnimationFrame(renderLecturers);
 }
+
 /** Lấy chủ đề theo email. @param {object} lecturer Giảng viên. @returns {object[]} Các chủ đề. */
 
 function relatedTopics(lecturer) {
-  return topics.filter(
-    matchesEmail,
-  ); /** So email chuẩn hóa. @param {object} entry Chủ đề. @returns {boolean} Khớp. */
+  return topics.filter(matchesEmail);
+
+  /** So email chuẩn hóa. @param {object} entry Chủ đề. @returns {boolean} Khớp. */
   function matchesEmail(entry) {
     return normalizeEmail(entry.topic.lecturer.email) === normalizeEmail(lecturer.email);
   }
 }
+
 /** Lọc và render danh bạ. @returns {void} */
 
 function renderLecturers() {
@@ -80,11 +86,14 @@ function renderLecturers() {
       searchText(lecturer.name + " " + lecturer.email).includes(query) &&
       (!group || relatedTopics(lecturer).some(inGroup))
     );
-  } /** Kiểm tra nhóm. @param {object} entry Chủ đề. @returns {boolean} Khớp nhóm. */
+  }
+
+  /** Kiểm tra nhóm. @param {object} entry Chủ đề. @returns {boolean} Khớp nhóm. */
   function inGroup(entry) {
     return entry.group.id === group;
   }
 }
+
 /** Card theo bố cục TV3, dùng token TV1. @param {object} lecturer Giảng viên. @returns {HTMLElement} Card. */
 
 function createLecturerCard(lecturer) {
@@ -103,17 +112,15 @@ function createLecturerCard(lecturer) {
     if (ids.has(group.id))
       tags.append(element("span", "lecturer-tag lecturer-tag--" + group.id, group.name));
   }
-  const link = element("a", "btn btn--outline", "Xem hồ sơ");
+  const link = element("a", "lecturer-card__profile-link", "Xem hồ sơ");
   link.href = lecturerUrl(lecturer.email);
   link.setAttribute("aria-label", "Xem hồ sơ " + lecturer.name);
-  card.append(
-    header,
-    tags,
-    element("p", "lecturer-card__topic-count", related.length + " chủ đề"),
-    link,
-  );
+  const footer = element("div", "lecturer-card__footer");
+  footer.append(element("p", "lecturer-card__topic-count", related.length + " chủ đề"), link);
+  card.append(header, tags, footer);
   return card;
 }
+
 /** Mã nhóm từ context. @param {object} entry Chủ đề. @returns {string} ID nhóm. */
 
 function getGroupId(entry) {
