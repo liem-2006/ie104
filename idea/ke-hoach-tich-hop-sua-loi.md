@@ -108,3 +108,130 @@ HTML-Validate dùng preset recommended; tắt quy tắc phong cách void-style, 
 Đã thêm assets/js/theme.js và nút trên header của năm trang. Nút có nhãn Chế độ tối, aria-pressed phản ánh trạng thái, dùng được bằng Enter/Space và hiển thị ở mobile. CSS dùng cùng token TV1; selector thủ công áp dụng được cả khi hệ điều hành đang ở theme ngược lại. Chưa chọn thì vẫn theo hệ thống; giá trị lưu không hợp lệ được bỏ qua.
 
 Đã kiểm tra chuyển hai chiều, giữ qua reload/cả năm trang, đồng bộ tab, bàn phím và màn hình 320px; storage bị chặn không phát sinh pageerror. Khi tắt JS, nút ẩn và CSS vẫn theo hệ thống. HTML-Validate: 0 lỗi trên năm trang; axe: 0 vi phạm phát hiện trên 10 trường hợp mobile với theme chọn thủ công ngược hệ thống. Các điểm Lighthouse ở bảng trên được ghi nhận trước lần bổ sung nút này.
+
+
+## Tối ưu sau tích hợp và đối chiếu quy chuẩn IE104
+
+> **Bản nghiệm thu tối ưu ngày 11/11/2026:** giữ giao diện TV1, dữ liệu và các chức năng đã chốt; refactor JavaScript, giảm CSS thừa và sửa trạng thái tải. Kết quả trong mục này là kết quả mới. Bảng kiểm thử/Lighthouse ở phía trên được giữ làm lịch sử, không thay thế bằng chứng cho phiên bản này.
+
+### Mốc và phạm vi thực hiện
+
+- Mốc trước tối ưu: commit `9a0bd27` trên nhánh `integration/job-1-fixes` (đã có nút sáng/tối).
+- `9e9a12e` — tách các bước dựng roadmap, gom lượt vẽ, làm rõ JSDoc và cấu trúc node/link runtime.
+- `11dd2db` — dọn CSS không còn dùng và hợp nhất token chung.
+- `45f1c6a` — sửa layout shift khi tải roadmap, nhãn accessibility của nút theme và JSDoc hàng chủ đề; gồm các sửa chữa phát hiện trong chặng kiểm thử.
+- Commit tài liệu tiếp theo ghi nhận kết quả nghiệm thu tại chính mục này; tra bằng `git log --oneline`.
+
+Giữ Vanilla HTML/CSS/JS, BEM và scope CSS riêng theo ID trang. Không thêm thư viện chạy web, build bắt buộc, backend hoặc chức năng sản phẩm. Công cụ QA và fixture chỉ nằm trong thư mục tạm của máy, không phải dependency của repo. Hai JSON nguồn giữ nguyên cả nội dung và SHA-256; URL và khóa `ie104.theme` không đổi. Không push, merge hoặc deploy trong đợt này.
+
+### Checklist công việc đã thực hiện
+
+- [x] Ghi nhận dung lượng ban đầu và tọa độ/kích thước mọi node trong 37 roadmap trước khi sửa.
+- [x] Tách DOM, đo kích thước, bố trí cột/hàng, xử lý va chạm, cập nhật canvas và đường nối thành các hàm riêng.
+- [x] Đối chiếu bản tách hàm trước tối ưu tiếp: 37/37 cây có tọa độ và kích thước node khớp bản gốc.
+- [x] Lập chỉ mục node theo độ sâu một lần, dùng lại trong bố trí cột và chống va chạm.
+- [x] Tách pha đọc kích thước khỏi ghi vị trí; dựng node/đường nối/danh sách theo lô bằng DocumentFragment.
+- [x] Gom yêu cầu vẽ bằng requestAnimationFrame, hủy lượt đang chờ khi có yêu cầu mới; fit/focus thực hiện sau khi bố trí xong.
+- [x] Tách chọn node, nội dung panel và mở dialog; thay comment chung chung bằng mô tả thao tác và kiểu trả về cụ thể.
+- [x] Thêm typedef nội bộ Keyword, MapNode, MapLink; sửa JSDoc createTopicRow trả HTMLElement.
+- [x] Đối chiếu selector với HTML và class tạo từ JavaScript; giữ các modifier nhóm giảng viên được ghép động từ dữ liệu.
+- [x] Bỏ 304 nhánh selector không được dùng trong năm CSS; dọn thành phần tài khoản, mẫu thống kê/giảng viên và dialog cũ.
+- [x] Gom các nhóm token cơ sở về một khối :root; giữ riêng override tối thủ công và fallback theo hệ điều hành.
+- [x] Giữ trạng thái tải có chừa không gian, công bố nội dung roadmap sau khi dữ liệu đã sẵn sàng.
+- [x] Sửa nhãn nút theme thành “Giao diện sáng/tối”, bao gồm chữ Sáng/Tối hiển thị trên nút; giữ aria-pressed.
+- [x] Chạy lại kiểm thử chức năng, lỗi, responsive, accessibility, validator cục bộ và 15 lượt Lighthouse.
+- [ ] Xác nhận bằng W3C trực tuyến: dịch vụ hiện trả HTTP 403.
+- [ ] Kiểm tra Firefox, Safari/iOS và thiết bị thật; kiểm tra hosting thật sau khi có đợt deploy riêng.
+
+### Vấn đề và thay đổi
+
+| Vấn đề trước sửa | Thay đổi thực hiện | File liên quan | Lý do |
+|---|---|---|---|
+| renderMindMap trộn nhiều bước, hơn 300 dòng | Hàm chính nhận yêu cầu; từng bước dựng/đo/tính/vẽ nằm trong hàm riêng có JSDoc | assets/js/topic-detail.js | Dễ đọc, giải thích và bảo trì theo nguyên tắc đơn nhiệm |
+| Lọc lại toàn bộ node ở từng độ sâu | groupNodesByDepth tạo chỉ mục cột dùng lại | assets/js/topic-detail.js | Giảm phép duyệt lặp trong mỗi lượt bố trí |
+| Dựng lại DOM ngay ở mỗi yêu cầu | Hủy frame cũ, chỉ dựng trạng thái mới nhất; DocumentFragment cập nhật container theo lô | assets/js/topic-detail.js | Tránh cập nhật dư khi đóng/mở hoặc resize nhanh |
+| Fit và trả focus có thể chạy trước khi tọa độ mới sẵn sàng | Hoàn tất hai thao tác sau bước đo/vẽ cuối cùng | assets/js/topic-detail.js | Tránh dùng kích thước cũ hoặc focus vào node sắp bị thay thế |
+| Comment lặp, kiểu trả về không cụ thể | Mô tả đúng sự kiện/thuật toán; typedef cây; sửa kiểu trả về của hàng chủ đề | assets/js/topic-detail.js, assets/js/topics.js | Chú thích phục vụ người đọc và tiêu chí chất lượng code |
+| CSS còn nhiều thành phần không có trong giao diện hiện hành | Xóa selector đã đối chiếu; giữ selector trạng thái và class ghép động | assets/css/style.css, topics.css, lecturers.css, lecturer-detail.css | Giảm mã tải và tránh hiểu nhầm về tính năng |
+| Token cơ sở nằm rải rác trong nhiều khối :root | Gom về khối chung, giữ override theme độc lập | assets/css/style.css | Dễ quản lý màu/chữ/khoảng cách mà không đổi giao diện |
+| Placeholder tiêu đề/bộ chọn thay đổi kích thước khi JSON tới | aria-busy, thông báo tải có role=status, giữ không gian và ẩn placeholder bằng visibility trong lúc chờ | topics/detail/index.html, assets/css/topic-detail.css, assets/js/topic-detail.js | Giảm layout shift, không che lỗi bằng overflow-x:hidden |
+| Nhãn “Chế độ tối” không chứa chữ Sáng đang hiển thị | Nhãn ổn định “Giao diện sáng/tối” trên cả năm trang | Năm file index.html | Khớp nhãn nhìn thấy với accessible name, hỗ trợ điều khiển giọng nói |
+
+Không cần đổi tên các block BEM đang dùng: các tên dạng topic-meta-card, profile-header hoặc mindmap-node là block hợp lệ. CSS trang sau sửa đều còn scope theo ID; CSS shared/reset tiếp tục dùng chung.
+
+### Luồng dựng roadmap sau refactor
+
+1. renderMindMap ghi nhận yêu cầu fit/focus, tăng phiên bản vẽ và hẹn buildMapFrame; yêu cầu mới hủy frame cũ đang chờ.
+2. buildMapFrame lấy cây đang mở, dựng node bằng DocumentFragment và chuẩn bị lớp SVG.
+3. Khung hình tiếp theo chỉ đọc kích thước node. groupNodesByDepth lập các cột một lần.
+4. Tính tọa độ ngang; tính chiều cao cây con, phân bố hàng, dịch nhánh va chạm và căn lại cha. Giai đoạn này chỉ xử lý dữ liệu hình học.
+5. Ghi vị trí node, kích thước canvas và các đường Bezier theo lô; cuối cùng căn vừa/trả focus nếu có yêu cầu.
+
+Giữ thuật toán hình học và hướng tiên quyết con → cha. Mọi cấp children vẫn được duyệt đệ quy. Pan/zoom chỉ thay transform, không dựng lại node. Keyword/list và JSON không thêm ID lưu trữ hoặc quan hệ xuyên chủ đề.
+
+### Dung lượng trước và sau
+
+Số byte UTF-8 của mã nguồn chưa nén, không minify. CSS gồm năm stylesheet ứng dụng, không tính reset.css vì không đổi. JavaScript gồm sáu module/script hiện hành.
+
+| Thành phần | Trước | Sau | Chênh lệch |
+|---|---:|---:|---:|
+| Tổng CSS ứng dụng | 121.961 B | 79.900 B | Giảm 42.061 B, khoảng 34,49% |
+| style.css | 41.972 B | 27.703 B | Giảm 14.269 B |
+| topics.css | 40.989 B | 17.510 B | Giảm 23.479 B |
+| topic-detail.css | 22.368 B | 22.937 B | Tăng 569 B cho trạng thái tải |
+| lecturers.css | 6.952 B | 5.588 B | Giảm 1.364 B |
+| lecturer-detail.css | 9.680 B | 6.162 B | Giảm 3.518 B |
+| Tổng JavaScript | 70.254 B | 70.033 B | Giảm 221 B |
+| Riêng topic-detail.js | 40.693 B | 40.376 B | Giảm 317 B, đồng thời thêm typedef/JSDoc cụ thể |
+
+Mục tiêu refactor JS là giảm công việc lặp và làm rõ trách nhiệm, không phải rút số dòng bằng cách bỏ chú thích.
+
+### Kết quả kiểm thử mới
+
+Môi trường: Chrome 157.0.8103.50 headless, HTTP cục bộ root và tiền tố /ie104/. Lighthouse 13.6.0, mobile mặc định. Công cụ tự động không thay thế kiểm thử trình đọc màn hình hoặc thiết bị thật.
+
+| Hạng mục | Kết quả thực tế |
+|---|---|
+| Dữ liệu | Parse được, giữ nguyên 3 nhóm/37 chủ đề/16 giảng viên và SHA-256 hai JSON |
+| 37 chủ đề và 16 hồ sơ | Đúng tên, người hướng dẫn và số chủ đề liên quan; link dùng email và đủ khóa URL |
+| Toàn bộ cây mở rộng | Đủ 234 keyword + 37 gốc; 0 cặp node chồng nhau; 37/37 bố cục khớp mốc trước tối ưu |
+| Năm yêu cầu đóng/mở/resize liên tiếp trong một frame | Chỉ 1 lượt thay nội dung lớp node |
+| Pan/zoom/fit | Hoạt động; node DOM cũ vẫn còn kết nối, không bị dựng lại bởi pan/zoom/fit |
+| Tìm/lọc/sắp xếp | Tìm tên giảng viên không dấu; OR nhóm + AND từ khóa; A–Z; reset; không kết quả; dialog áp dụng/hủy |
+| Điều hướng | Quick switch, mở trực tiếp, reload, Back/Forward; 5 URL thiếu/sai không trả dữ liệu mẫu |
+| Roadmap tương tác | Mở/thu nhanh, danh sách/sơ đồ, fullscreen, Enter/Space, Escape và trả focus |
+| Fixture cây 9 cấp ở 320px | Đủ node, tên/outcome dài, subjects có/không có, chữ chứa HTML không trở thành thẻ |
+| Fixture trùng tên | Chọn đúng chủ đề theo email của người hướng dẫn thứ hai |
+| 12 tình huống lỗi/rỗng | HTTP 500, JSON sai cú pháp, hai nguồn rỗng × 4 màn hình; có thông báo, không kẹt aria-busy |
+| Hồ sơ thiếu/lỗi thông tin | Ảnh hỏng về chữ cái; link javascript bị bỏ; 0 thật vẫn hiện, chỉ số thiếu không đổi thành 0 |
+| Theme | Bàn phím, reload, chuyển trang, đồng bộ tab; storage bị chặn không gây lỗi; tắt JS vẫn có fallback tối và nút ẩn |
+| Responsive | 5 trang × 5 độ rộng × 2 theme = 50 trường hợp: không tràn ngang, một h1 và điều hướng/nút theme hiện đủ |
+| Đối chiếu ảnh sau dọn CSS | 20/20 ảnh mobile/desktop, sáng/tối khớp bản trước dọn CSS; sửa trạng thái tải được kiểm tra riêng sau đó |
+| Accessibility | axe WCAG 2 A/AA và 2.1 A/AA: 0 vi phạm phát hiện trên 20 trường hợp (mobile/desktop, hai theme), thêm dialog node không vi phạm |
+| HTML | HTML-Validate: 0 lỗi trên năm trang với cấu hình đã ghi ở mục kiểm thử lịch sử |
+| JS/CSS | Parse thành công; không phát hiện hàm thiếu JSDoc/returns qua kiểm tra AST; không thiếu token, không selector CSS trang ngoài scope |
+| Runtime | Không pageerror trong các luồng và fixture đã chạy |
+| Subpath | Năm trang chạy dưới /ie104/; các URL nội bộ/asset do trang tạo giữ đúng tiền tố |
+
+### Lighthouse: ba lượt mỗi trang
+
+Bảng dưới thay thế kết quả Lighthouse cũ cho bản tối ưu. Ba nhóm Accessibility, Best Practices, SEO đều đạt 100 ở cả 15 lượt. Điểm là số đo cục bộ; không suy ra điểm hosting thật. Thay đổi cuối ở topics.js chỉ sửa JSDoc và đặt tên tham số rồi destructure trong thân hàm, giữ nguyên hành vi render đã kiểm tra.
+
+| Trang | Performance lượt 1 / 2 / 3 | Performance trung vị | Accessibility / Best Practices / SEO trung vị |
+|---|---|---:|---|
+| Trang vào | 100 / 100 / 100 | 100 | 100 / 100 / 100 |
+| Khám phá | 100 / 100 / 100 | 100 | 100 / 100 / 100 |
+| Chi tiết/roadmap | 92 / 92 / 92 | 92 | 100 / 100 / 100 |
+| Danh bạ | 97 / 97 / 97 | 97 | 100 / 100 / 100 |
+| Hồ sơ | 93 / 93 / 93 | 93 | 100 / 100 / 100 |
+
+Lượt chẩn đoán trước khi sửa trạng thái tải cho roadmap đạt Performance 85, CLS khoảng 0,301. Sau sửa, cả ba lượt có CLS khoảng 0,00374 và Performance 92. Bộ Lighthouse lịch sử phía trên chạy trước khi bổ sung nút theme, không phải phép so sánh trước/sau có cùng điều kiện; không dùng bảng đó để khẳng định mức tăng hiệu năng của đợt này.
+
+### Giới hạn và cách kiểm tra tiếp
+
+- Đã thử lại W3C HTML bằng trang vào và truy cập dịch vụ CSS Validator: cả hai trả HTTP 403. Chưa có báo cáo W3C hợp lệ; không đánh dấu pass W3C hoặc dùng HTML-Validate thay cho chứng nhận của dịch vụ này.
+- Không tìm thấy Firefox tại các vị trí cài đặt Windows thông dụng hoặc đường dẫn Firefox của Playwright. Chưa chạy Firefox/Safari/iOS, thiết bị thật và screen reader.
+- Chưa deploy/push/merge; đường dẫn /ie104/ mới được kiểm tra bằng server cục bộ. Cache và nén HTTP phụ thuộc hosting, không phải tính năng backend cần thêm vào đồ án.
+- Kiểm tra lại hosting và W3C khi môi trường sẵn sàng. Không cần thêm chức năng để hoàn thành bước đó.
+
+Tự chạy: mở repo bằng VS Code Live Server qua HTTP; bắt đầu ở index.html. Thử luồng Khám phá → chủ đề → giảng viên → chủ đề liên quan, đổi theme và kích thước cửa sổ. Khi sửa roadmap, thử đóng/mở nhanh, đổi view, căn vừa và bàn phím trước khi tạo PR. Công cụ QA tạm trên máy không phải yêu cầu cài đặt để thành viên chạy website.
