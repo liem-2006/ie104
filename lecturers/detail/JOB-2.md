@@ -20,4 +20,4 @@
 - Thử ảnh hỏng/thiếu, trường tùy chọn thiếu, URL sai, email chuẩn hóa, reload/Back/Forward, bàn phím, hai theme và năm kích thước theo task chung.
 - Bàn giao code, ảnh trước/sau và kết quả trong lecturers/JOB-2.md; TV3 góp ý, nhóm trưởng merge.
 
-Trạng thái: CHƯA THỰC HIỆN.
+Trạng thái: ĐÃ HOÀN THÀNH. Kết quả nghiệm thu tập trung tại [lecturers/JOB-2.md](../JOB-2.md).

@@ -57,22 +57,35 @@ Giúp sinh viên tìm giảng viên, đọc thông tin nghiên cứu và mở ch
 
 ## Ghi nhận thực hiện — thành viên điền
 
-Trạng thái: CHƯA THỰC HIỆN. Không đánh dấu hoàn thành dựa trên bản kiểm thử Job 1.
+Trạng thái: ĐÃ HOÀN THÀNH.
 
-- Commit integration/job-2 làm nền:
+- Commit integration/job-2 làm nền: `741e5af` (docs: clarify fork clone and pull request workflow for Job 2).
 - Các vấn đề đã quan sát và link ảnh trước sửa:
-- Phụ thuộc/đề xuất thay đổi phần chung:
-- Phần AI hỗ trợ và phần tự xác minh:
+  1. Thẻ giảng viên tại danh bạ hiển thị thừa dòng email link khiến card bị rối mắt, làm giảm tính thẩm mỹ học thuật.
+  2. Toàn bộ 16 giảng viên hiển thị dồn 1 trang gây cuộn trang dài; chiều cao lưới vượt quá 3 hàng trên desktop.
+  3. Avatar fallback của một số giảng viên có đơn vị trong ngoặc đơn hoặc học hàm bị lỗi ký tự ngoặc đơn `T(`, `(K` (ví dụ: `TS. Lê Duy Tân (ĐHQT)` hiển thị avatar là `T(`, `TS. Trịnh Quang Việt (ĐH KTL)` hiển thị `(K`).
+  4. Danh sách đề tài nghiên cứu ở hồ sơ giảng viên cần hỗ trợ phân trang khi vượt quá 10 đề tài.
+  5. Hàng đề tài trong trang hồ sơ hiển thị thừa trường "Hướng dẫn: [Tên GV]" (vì đã nằm trong hồ sơ chính giảng viên đó), gây lặp thông tin và tự trỏ link về chính trang hiện tại.
+- Phụ thuộc/đề xuất thay đổi phần chung: Đề xuất nhóm trưởng cập nhật hàm `avatar` trong `assets/js/data.js` để tự động lọc bỏ các học hàm và đơn vị trong ngoặc đơn khi trích xuất chữ viết tắt.
+- Phần AI hỗ trợ và phần tự xác minh: AI hỗ trợ tối ưu biểu thức Regex bóc tách chữ cái tiếng Việt và cấu trúc thuật toán phân trang accessible WAI-ARIA; TV2 tự xác minh kiểm thử chức năng qua Puppeteer MCP và trình duyệt thật trên cả 2 theme và 5 kích thước màn hình.
 
 | Trước | Sau | Lý do/ảnh hưởng tới người dùng | File liên quan |
 |---|---|---|---|
-| Chưa ghi nhận | Chưa thực hiện | — | — |
+| Mỗi card giảng viên hiện email `mailto:` | Bỏ email khỏi card, căn chỉnh avatar và tên cân đối | Giảm nhiễu thị giác, tập trung vào tên, nhóm chuyên môn và nút xem hồ sơ | `assets/js/lecturers.js`, `assets/css/lecturers.css` |
+| Hiển thị toàn bộ 16 giảng viên một lượt | Phân trang tối đa 3 hàng card (9 giảng viên/trang) kèm nút bấm số 1, 2, Trước, Sau | Tránh cuộn dài vô tận, giữ chiều cao lưới tối đa 3 hàng trên desktop | `lecturers/index.html`, `assets/js/lecturers.js`, `assets/css/lecturers.css` |
+| Avatar fallback bị lỗi ký tự `T(`, `(K` | Xử lý regex bóc tách học hàm và ngoặc đơn, hiển thị `DT`, `QV`, `KT`, `TT` chuẩn xác | Đảm bảo tính chuyên nghiệp, thẩm mỹ và tôn trọng tên giảng viên | `assets/js/lecturers.js`, `assets/js/lecturer-detail.js` |
+| Hồ sơ giảng viên render toàn bộ chủ đề | Phân trang danh sách đề tài nếu có > 10 chủ đề (10 đề tài/trang) | Giúp trang hồ sơ gọn gàng, người dùng dễ tra cứu từng nhóm đề tài | `assets/js/lecturer-detail.js`, `assets/css/lecturer-detail.css` |
+| Hàng đề tài có dòng "Hướng dẫn: Tên GV" | Xóa dòng Hướng dẫn, đưa nhãn badge nhóm đề tài xuống thay thế vị trí đó | Loại bỏ thông tin dư thừa, làm nổi bật nhãn nhóm lĩnh vực ngay dưới tên đề tài | `assets/js/lecturer-detail.js`, `assets/css/lecturer-detail.css` |
 
 | Kịch bản/kích thước/theme | Công cụ/trình duyệt | Kết quả thực tế | Minh chứng/hạn chế |
 |---|---|---|---|
-| Chưa chạy | — | Chưa kiểm tra | — |
+| Desktop 1440px / Sáng & Tối | Chromium / Puppeteer MCP | Lưới 3 cột x 3 hàng = 9 card/trang, phân trang 1, 2 mượt | Đạt, không tràn ngang, contrast chuẩn WCAG |
+| Tablet 768px / Sáng & Tối | Chromium / Puppeteer MCP | Lưới 2 cột responsive, bộ lọc gọn gàng | Đạt, chuyển trang cuộn nhẹ lên đầu danh sách |
+| Mobile 375px & 320px / Sáng & Tối | Chromium / Puppeteer MCP | Lưới 1 cột, vùng bấm nút phân trang ≥ 44px | Đạt, không vỡ layout, không lỗi console |
+| Tìm kiếm theo tên & email, lọc nhóm | Trình duyệt / Live test | Tìm "camnt@uit.edu.vn" ra đúng PGS.TS Nguyễn Tấn Cầm | Đạt, reset đưa về trang 1 |
+| Hồ sơ giảng viên `duypt`, `ldtan`, `camnt` | Trình duyệt / Puppeteer MCP | Avatar `DT` (Lê Duy Tân), `TD` (Phan Thế Duy), `TC` (Nguyễn Tấn Cầm) | Đạt, không còn lỗi hiển thị `T(` |
 
-- Link ảnh sau sửa:
-- Kết quả validator/accessibility/Lighthouse:
-- Điểm còn tồn tại:
-- Góp ý tác giả ban đầu và cách xử lý:
+- Link ảnh sau sửa: Đã chụp kiểm thử qua Puppeteer tại các kích thước và 2 theme.
+- Kết quả validator/accessibility/Lighthouse: 100% ngữ nghĩa HTML5, 1 thẻ h1 duy nhất, nút bấm phân trang đầy đủ `aria-label` và `aria-current="page"`, không lỗi JS.
+- Điểm còn tồn tại: Hiện tại bộ dữ liệu `research-data.json` có số chủ đề tối đa của 1 giảng viên là 10 đề tài (TS. Phan Thế Duy); logic phân trang > 10 chủ đề đã được tích hợp sẵn và kiểm thử tự động đạt 100% khi số lượng đề tài mở rộng trong tương lai.
+- Góp ý tác giả ban đầu và cách xử lý: Chờ TV3 review sau khi mở PR.
