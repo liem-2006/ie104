@@ -1,93 +1,219 @@
-/* TV3 — danh bạ: cùng token với khám phá, lưới 1/2/3 cột. */
+/* TV2 Job 2 — Danh bạ giảng viên: nâng cấp giao diện, phân trang và responsive. */
+
+#page-lecturers {
+  --card-border-color: #cbd5e1;
+  --card-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme="dark"] #page-lecturers {
+  --card-border-color: #334155;
+  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) #page-lecturers {
+    --card-border-color: #334155;
+    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
+  }
+}
+
 #page-lecturers .lecturers-filter {
   display: grid;
   gap: 16px;
   align-items: end;
   margin-bottom: 24px;
 }
+
+#page-lecturers .lecturers-filter input,
+#page-lecturers .lecturers-filter select {
+  border: 1.5px solid var(--card-border-color);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+#page-lecturers .lecturers-filter input:focus,
+#page-lecturers .lecturers-filter select:focus {
+  border-color: var(--color-primary);
+  outline: 2px solid var(--color-focus);
+}
+
 #page-lecturers .lecturers-filter > .btn {
   justify-self: start;
 }
+
 #page-lecturers .lecturers-status {
   color: var(--color-muted);
   font-size: 14px;
   margin-bottom: 16px;
   min-height: 23px;
+  font-weight: 500;
 }
+
 #page-lecturers .lecturers-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 16px;
+  gap: 20px;
 }
+
 #page-lecturers .lecturer-card {
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 20px;
+  padding: 22px;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
+  border: 1.5px solid var(--card-border-color);
   border-radius: 12px;
+  box-shadow: var(--card-shadow);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
+
+#page-lecturers .lecturer-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--color-primary);
+  box-shadow: 0 6px 18px rgba(0, 86, 179, 0.14);
+}
+
 #page-lecturers .lecturer-card__header {
   display: flex;
-  align-items: flex-start;
-  gap: 12px;
+  align-items: center;
+  gap: 14px;
 }
+
 #page-lecturers .lecturer-card__avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 44px;
-  flex: 0 0 44px;
+  width: 48px;
+  height: 48px;
+  flex: 0 0 48px;
   border-radius: 50%;
   background: var(--color-surface-muted);
-  color: var(--color-text);
-  font-size: 14px;
-  font-weight: 600;
+  border: 1.5px solid var(--card-border-color);
+  color: var(--color-primary);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   overflow: hidden;
+  user-select: none;
 }
+
 #page-lecturers .lecturer-card__avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 #page-lecturers .lecturer-card__meta {
   min-width: 0;
+  flex: 1;
 }
+
 #page-lecturers .lecturer-card__name {
-  font-size: 18px;
-  margin-bottom: 6px;
-  line-height: 1.4;
+  font-size: 17px;
+  margin: 0;
+  line-height: 1.35;
+  color: var(--color-text);
+  font-weight: 600;
 }
-#page-lecturers .lecturer-card__email-link {
-  font-size: 14px;
-}
+
 #page-lecturers .lecturer-card__tags {
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
+  min-height: 28px;
 }
+
 #page-lecturers .lecturer-card__footer {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 12px;
   margin-top: auto;
-  padding-top: 4px;
+  padding-top: 10px;
+  border-top: 1px solid var(--color-border);
 }
+
 #page-lecturers .lecturer-card__topic-count {
   color: var(--color-muted);
-  font-size: 14px;
+  font-size: 13.5px;
+  margin: 0;
 }
+
 #page-lecturers .lecturer-card__profile-link {
   display: inline-flex;
   align-items: center;
+  gap: 4px;
   min-height: 44px;
+  padding: 0 4px;
   font-size: 14px;
   font-weight: 600;
+  color: var(--color-primary);
+  text-decoration: none;
+  transition: color 0.15s ease, transform 0.15s ease;
 }
+
+#page-lecturers .lecturer-card__profile-link:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+  transform: translateX(2px);
+}
+
+/* Thanh phân trang */
+#page-lecturers .lecturers-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 36px;
+  padding: 12px 0;
+}
+
+#page-lecturers .lecturers-pagination__button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#page-lecturers .lecturers-pagination__button:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+#page-lecturers .lecturers-pagination__button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: var(--color-border);
+}
+
+#page-lecturers .lecturers-pagination__button[aria-current="page"] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  cursor: default;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+#page-lecturers .lecturers-filter__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
 @media (min-width: 768px) {
   #page-lecturers .lecturers-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -96,10 +222,9 @@
     grid-template-columns: minmax(0, 1fr) 240px auto;
   }
 }
+
 @media (min-width: 1024px) {
   #page-lecturers .lecturers-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-
-#page-lecturers .lecturers-filter__actions { display:flex; flex-wrap:wrap; gap:8px; }
