@@ -24,7 +24,7 @@ Phụ thuộc PR/trang chưa merge và phần cần kiểm tra lại khi tích h
 
 ## Bổ sung cho Job 2
 
-- Người nhận / task / commit main làm nền:
+- Người nhận / task / commit integration/job-2 làm nền:
 - Vấn đề UX và ảnh trước sửa:
 - Bảng trước → sau → lý do → file:
 - Ảnh sau sửa desktop/mobile, sáng/tối:
@@ -34,3 +34,4 @@ Phụ thuộc PR/trang chưa merge và phần cần kiểm tra lại khi tích h
 - Góp ý của tác giả ban đầu và cách xử lý:
 - [ ] Không sửa JSON/schema, không mất chức năng hoặc tự đổi style chung.
 - [ ] Ghi nhận trong JOB-2.md; không ghi đè lịch sử Job 1.
+- [ ] PR Job 2 chọn base liem-2006/ie104:integration/job-2, compare nhánh task trên fork.

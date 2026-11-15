@@ -1,6 +1,9 @@
 # Job 2 — TV2: phần hồ sơ giảng viên
 
-> Đây là phần thứ hai của [task TV2](../JOB-2.md). Cùng một PR, cùng quy tắc và checklist; ghi kết quả tập trung tại task TV2, không tạo báo cáo riêng.
+> Git Job 2: clone fork cá nhân → fetch upstream → tạo nhánh task riêng từ upstream/integration/job-2 → push lên origin → PR về liem-2006/ie104:integration/job-2. Xem [hướng dẫn clone mới hoặc dùng repo có sẵn](../../CONTRIBUTING.md). Không viết trực tiếp trên nhánh chung.
+
+
+> Đây là phần thứ hai của [task TV2](../JOB-2.md). Cùng một PR gửi vào integration/job-2, lấy upstream/integration/job-2 làm nền; cùng quy tắc và checklist; ghi kết quả tập trung tại task TV2, không tạo báo cáo riêng.
 
 ## Đầu vào và file đích
 

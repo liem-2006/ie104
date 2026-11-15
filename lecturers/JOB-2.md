@@ -1,6 +1,9 @@
 # Job 2 — TV2: kiểm tra chéo và nâng cấp danh bạ/hồ sơ
 
-> Người thực hiện: TV2. Phần gốc: TV3. Một task và một PR bao gồm cả hai trang, không có hạn bàn giao cố định. Bản nền là main sau khi PR integration/job-1-fixes được nhóm trưởng merge.
+> Git Job 2: clone fork cá nhân → fetch upstream → tạo nhánh task riêng từ upstream/integration/job-2 → push lên origin → PR về liem-2006/ie104:integration/job-2. Xem [hướng dẫn clone mới hoặc dùng repo có sẵn](../CONTRIBUTING.md). Không viết trực tiếp trên nhánh chung.
+
+
+> Người thực hiện: TV2. Phần gốc: TV3. Một task và một PR bao gồm cả hai trang, không có hạn bàn giao cố định. PR #4 đã merge vào main. Nhánh làm nền và nhận PR Job 2 là integration/job-2.
 
 ## Mục tiêu, đầu vào và phạm vi
 
@@ -30,7 +33,7 @@ Giúp sinh viên tìm giảng viên, đọc thông tin nghiên cứu và mở ch
 - Tác giả TV3 góp ý PR của TV2 trước khi nhóm trưởng quyết định merge.
 ## Quy trình và ràng buộc chung
 
-1. Chờ nhóm trưởng merge PR tích hợp vào main. Đồng bộ upstream/main và tạo nhánh Job 2 mới theo CONTRIBUTING.md; không dùng nhánh PR Job 1 cũ.
+1. PR #4 đã merge. Đồng bộ upstream/integration/job-2 và tạo nhánh Job 2 mới theo CONTRIBUTING.md; không dùng nhánh PR Job 1 cũ.
 2. Đọc AGENTS.md, skill IE104, idea/README.md, kế hoạch tích hợp và bản ghi sửa chữa được dẫn ở trên. Chạy website qua HTTP; không dùng file://.
 3. Trước khi sửa, ghi vấn đề thực tế: màn hình/kích thước/theme, bước tái hiện, ảnh trước sửa, ảnh hưởng người dùng và giải pháp dự kiến. Không sửa chỉ để tạo khác biệt.
 4. Vận dụng kiến thức thiết kế giao diện IE106 đã học: phân cấp thông tin, nhất quán, khả năng đọc, phản hồi thao tác và giảm thao tác không cần thiết. Đây không phải bộ tiêu chí chấm IE106 mới; cấu trúc/code vẫn theo IE104.
@@ -39,7 +42,7 @@ Giúp sinh viên tìm giảng viên, đọc thông tin nghiên cứu và mở ch
 7. Giữ nguyên JSON, schema, URL, dữ liệu và logic nghiệp vụ. Chủ đề nhận group/topic/email; hồ sơ nhận email. Dùng API chung, không thêm ID, không tự fallback dữ liệu mẫu. Không thêm backend, đăng nhập hoặc lưu tiến độ.
 8. Nhóm trưởng quản lý index.html ở root, assets/css/style.css, reset.css, assets/js/data.js, theme.js, dữ liệu và cấu hình repo. Không sửa các file này; ghi đề xuất phụ thuộc trong PR để nhóm trưởng xử lý trước khi tích hợp.
 9. Không sửa lịch sử SUA-CHUA-TV*.md hoặc JOB-1.md. Job 2 thay phân công nhân sự Job 1; yêu cầu chức năng hiện hành tiếp tục có hiệu lực.
-10. Một PR/người vào main, không đặt thời hạn trong tài liệu. Tác giả ban đầu góp ý phần được sửa chéo; nhóm trưởng là người quyết định và merge.
+10. Một PR/người vào integration/job-2, không đặt thời hạn trong tài liệu. Tác giả ban đầu góp ý phần được sửa chéo; nhóm trưởng là người quyết định và merge.
 
 ## Đầu ra và nghiệm thu chung
 
@@ -56,7 +59,7 @@ Giúp sinh viên tìm giảng viên, đọc thông tin nghiên cứu và mở ch
 
 Trạng thái: CHƯA THỰC HIỆN. Không đánh dấu hoàn thành dựa trên bản kiểm thử Job 1.
 
-- Commit main làm nền:
+- Commit integration/job-2 làm nền:
 - Các vấn đề đã quan sát và link ảnh trước sửa:
 - Phụ thuộc/đề xuất thay đổi phần chung:
 - Phần AI hỗ trợ và phần tự xác minh:

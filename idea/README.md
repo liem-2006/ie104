@@ -2,7 +2,7 @@
 
 ## Ưu tiên hiện hành: Job 2 (12/11/2026)
 
-Job 2 thay phân công Job 1: TV1 sửa roadmap của TV2, TV2 sửa giảng viên của TV3, TV3 sửa khám phá của TV1. Đọc [quy trình](../CONTRIBUTING.md). Chờ PR tích hợp được nhóm trưởng merge vào main trước khi tạo nhánh mới.
+Job 2 thay phân công Job 1: TV1 sửa roadmap của TV2, TV2 sửa giảng viên của TV3, TV3 sửa khám phá của TV1. Đọc [quy trình](../CONTRIBUTING.md). PR #4 đã merge; tạo nhánh task từ upstream/integration/job-2 và gửi PR về integration/job-2, không gửi thẳng main.
 
 Nhóm trưởng quản lý token, component, trang vào và module chung; các dòng “TV1 quản lý nền chung” dưới đây là ngữ cảnh Job 1. Không sửa dữ liệu hoặc lịch sử ghi nhận. Các quy tắc chức năng/style vẫn được giữ. IE104 áp dụng code/cấu trúc, IE106 áp dụng kiến thức đã học về khả năng sử dụng giao diện.
 

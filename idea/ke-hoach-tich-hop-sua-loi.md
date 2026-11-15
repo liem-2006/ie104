@@ -380,3 +380,10 @@ Phần này cập nhật trạng thái bàn giao sau thiết kế lại; kết q
 ### Xác nhận công bố
 
 Đã push nhánh integration/job-1-fixes và mở [PR #4](https://github.com/liem-2006/ie104/pull/4) vào main ngày 12/11/2026. Commit giao việc: 3ad3c5c. PR có liên kết ba bản ghi sửa chữa, các task Job 2 và kết quả kiểm thử bản nền. Chờ nhóm trưởng duyệt/merge; chưa merge, chưa đóng PR #1–#3, chưa deploy.
+## Nhánh nhận PR Job 2 — cập nhật 12/11/2026
+
+PR #4 đã được nhóm trưởng yêu cầu merge và GitHub xác nhận thành công vào main, commit 265b38986d832d0714e987dd1a75f5ea2f2aa09f. Trạng thái “chờ merge” ở các bản ghi trước là lịch sử.
+
+Tạo integration/job-2 từ origin/main tại commit trên. Thành viên tạo nhánh task mới từ upstream/integration/job-2, gửi một PR/người với base integration/job-2. Nhóm trưởng duyệt/merge từng PR vào nhánh này; hoàn tất kiểm thử mới mở PR tổng vào main. Không thay quyền repo, không tự thêm thành viên hoặc deploy.
+
+Đã đồng bộ các JOB-2.md, README, CONTRIBUTING, AGENTS, ngữ cảnh idea, mẫu PR và bản tổng quan local theo nhánh đích mới. Chỉ thay tài liệu, không sửa code/dữ liệu. Các hướng dẫn Job 1 và biên bản cũ giữ làm lịch sử.

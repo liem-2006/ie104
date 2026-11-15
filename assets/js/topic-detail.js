@@ -59,6 +59,13 @@ const CONFIG = {
   MIN_ZOOM: 0.02,
   MAX_ZOOM: 2.2,
   ZOOM_STEP: 0.2,
+  DRAG_THRESHOLD: 6, // Ngưỡng dịch chuyển (px) để phân biệt chạm (tap) và kéo (pan)
+};
+
+/** Đường dẫn SVG cho hai trạng thái của nút Toàn màn hình */
+const FULLSCREEN_ICONS = {
+  ENTER: "M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z",
+  EXIT: "M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z",
 };
 
 /**
@@ -76,23 +83,106 @@ const state = {
   panY: 80,
   scale: 1,
   isDragging: false,
+  activePointerId: null,
+  pointerStartX: 0,
+  pointerStartY: 0,
+  dragOriginPanX: 0,
+  dragOriginPanY: 0,
+  dragThresholdMet: false,
+  dragDirection: null,
+  suppressClickUntil: 0,
   dragStartX: 0,
   dragStartY: 0,
   activeView: "mindmap",
   mapFrame: 0,
   renderVersion: 0,
   fitAfterRender: false,
+  centerAfterRender: false,
   toggleFocusId: "",
   nodeBounds: null,
+  canvasInitialized: false,
+  initialScrollDone: false,
+  userHasScrolled: false,
+  isBackForward: false,
+  lastViewportWidth: 0,
+};
+
+window.__topicDetailDebug = {
+  state,
+  trackInitialScrollIntent,
+  scrollRoadmapIntoFirstScreen,
+  cleanupInitialScrollListeners,
 };
 
 document.addEventListener("DOMContentLoaded", initTopicDetailPage);
+
+/** Ghi nhận thao tác cuộn thủ công hoặc điều hướng lịch sử để không tự động cuộn đè.
+ * @returns {void}
+ */
+function trackInitialScrollIntent() {
+  const navEntry = performance.getEntriesByType?.("navigation")?.[0];
+  if (navEntry && navEntry.type === "back_forward") {
+    state.isBackForward = true;
+    cleanupInitialScrollListeners();
+    return;
+  }
+
+  window.addEventListener("wheel", onUserScrollIntent, { passive: true });
+  window.addEventListener("touchmove", onUserScrollIntent, { passive: true });
+  window.addEventListener("keydown", onUserKeydownIntent, { passive: true });
+  window.addEventListener(
+    "popstate",
+    () => {
+      state.isBackForward = true;
+      cleanupInitialScrollListeners();
+    },
+    { once: true },
+  );
+}
+
+/** Xử lý sự kiện cuộn bánh xe hoặc cử chỉ vuốt để đánh dấu ý định cuộn của người dùng.
+ * @returns {void}
+ */
+function onUserScrollIntent() {
+  state.userHasScrolled = true;
+  cleanupInitialScrollListeners();
+}
+
+/** Xử lý phím bấm: chỉ đánh dấu khi nhận các phím cuộn trang (Arrow, Page, Home, End, Space).
+ * Không gỡ listener khi gặp phím khác (như Tab, Shift) để đảm bảo không bỏ sót ý định cuộn.
+ * @param {KeyboardEvent} e Sự kiện phím.
+ * @returns {void}
+ */
+function onUserKeydownIntent(e) {
+  const scrollKeys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End"];
+  const isSpace = e.key === " " || e.key === "Spacebar";
+  const target = e.target;
+  const isEditable =
+    target &&
+    (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
+
+  if (scrollKeys.includes(e.key) || (isSpace && !isEditable)) {
+    state.userHasScrolled = true;
+    cleanupInitialScrollListeners();
+  }
+}
+
+/** Dọn dẹp các listener theo dõi ý định cuộn ban đầu để tránh tích lũy.
+ * @returns {void}
+ */
+function cleanupInitialScrollListeners() {
+  window.removeEventListener("wheel", onUserScrollIntent);
+  window.removeEventListener("touchmove", onUserScrollIntent);
+  window.removeEventListener("keydown", onUserKeydownIntent);
+}
 
 /** Khởi tạo toàn bộ trang chi tiết
  * @returns {Promise<void>} Hoàn tất khởi tạo hoặc hiển thị lỗi.
  */
 
 async function initTopicDetailPage() {
+  state.lastViewportWidth = window.innerWidth;
+  trackInitialScrollIntent();
   try {
     state.researchData = await loadResearch();
     const found = findDataTopic(state.researchData, readTopicQuery());
@@ -109,9 +199,11 @@ async function initTopicDetailPage() {
     initToolbarControls();
     initDrawerEvents();
     renderCardsView(found.topic);
-    setView(matchMedia("(max-width:767px)").matches ? "cards" : "mindmap");
+    // Mặc định mở chế độ Sơ đồ trên cả mobile và desktop theo yêu cầu mới
+    setView("mindmap");
     renderMindMap(true);
-  } catch {
+  } catch (err) {
+    console.error("Lỗi khởi tạo chi tiết chủ đề:", err);
     renderErrorMessage("Không thể tải dữ liệu chủ đề. Hãy tải lại trang để thử lại.");
   } finally {
     // Công bố nội dung theo một lần cập nhật, tránh xê dịch các placeholder khi JSON tới.
@@ -331,11 +423,17 @@ function buildMapFrame() {
   }
 }
 
-/** Khôi phục góc nhìn và focus sau khi tọa độ mới đã được áp dụng.
+/** Khôi phục góc nhìn, căn giữa hoặc fit, trả focus và cuộn màn hình đầu sau khi bố cục xong.
  * @returns {void}
  */
 function finishMapInteraction() {
-  if (state.fitAfterRender && state.activeView === "mindmap") fitToScreen();
+  if (state.activeView === "mindmap") {
+    if (state.fitAfterRender) {
+      fitToScreen();
+    } else if (state.centerAfterRender) {
+      centerMapKeepScale();
+    }
+  }
   if (state.toggleFocusId && state.activeView === "mindmap") {
     document
       .getElementById(state.toggleFocusId)
@@ -343,7 +441,38 @@ function finishMapInteraction() {
       ?.focus({ preventScroll: true });
   }
   state.fitAfterRender = false;
+  state.centerAfterRender = false;
   state.toggleFocusId = "";
+  if (!state.initialScrollDone) {
+    state.initialScrollDone = true;
+    scrollRoadmapIntoFirstScreen();
+  }
+}
+
+/** Đưa khung sơ đồ lộ trình vào chính giữa màn hình đầu tiên một lần duy nhất khi mở chủ đề.
+ * @returns {void}
+ */
+function scrollRoadmapIntoFirstScreen() {
+  cleanupInitialScrollListeners();
+  if (state.userHasScrolled || state.isBackForward) return;
+  const component = document.querySelector(".mindmap-component");
+  if (!component) return;
+  const header = document.querySelector(".site-header");
+  const headerPos = header ? getComputedStyle(header).position : "static";
+  const headerHeight =
+    header && (headerPos === "sticky" || headerPos === "fixed")
+      ? header.getBoundingClientRect().height
+      : 0;
+  const rect = component.getBoundingClientRect();
+  const availableHeight = Math.max(1, window.innerHeight - headerHeight);
+  // Tính vị trí cuộn sao cho khung .mindmap-component nằm chính giữa viewport khả dụng (tương đương block: "center");
+  // nếu màn hình quá thấp (rect.height > availableHeight), ưu tiên thấy trọn thanh công cụ và vùng canvas phía trên.
+  const targetTopInViewport =
+    rect.height <= availableHeight
+      ? headerHeight + (availableHeight - rect.height) / 2
+      : headerHeight + 8;
+  const targetScrollY = Math.max(0, window.scrollY + rect.top - targetTopInViewport);
+  window.scrollTo(0, Math.round(targetScrollY));
 }
 
 /** Gắn node vào DOM theo một lô để trình duyệt chỉ cập nhật container một lần.
@@ -676,10 +805,11 @@ function createNodeDomElement(node) {
   // KHI USER CLICK VÀO THẺ: CHỈ HIỆN THÔNG TIN CHI TIẾT TRONG DRAWER, KHÔNG ĐỔI TRẠNG THÁI MỞ/ĐÓNG
   el.addEventListener(
     "click",
-    /** Mở panel đầu ra kiến thức khi click thẻ node.
+    /** Mở panel đầu ra kiến thức khi chạm/click thẻ node (bỏ qua nếu vừa kết thúc thao tác kéo).
      * @returns {void}
      */
     () => {
+      if (performance.now() < state.suppressClickUntil) return;
       selectNode(node);
     },
   );
@@ -701,13 +831,18 @@ function createNodeDomElement(node) {
   return el;
 }
 
-/** Đảo trạng thái mở/thu gọn của node và re-render Mind Map
- * @param {object} node Node kiến thức.
+/** Đảo trạng thái mở/thu gọn của node và re-render Mind Map.
+ * Khi mở nhánh (+), tự động căn giữa cây đang hiển thị và tuyệt đối giữ nguyên mức zoom (scale).
+ * @param {MapNode} node Node kiến thức.
  * @returns {void} Không trả về giá trị.
  */
 
 function toggleNode(node) {
+  const isExpanding = node.collapsed;
   node.collapsed = !node.collapsed;
+  // Tuyệt đối không kích hoạt fitToScreen khi mở/thu nhánh để giữ nguyên state.scale hiện tại
+  state.fitAfterRender = false;
+  state.centerAfterRender = isExpanding;
   renderMindMap(false, node.id);
 }
 
@@ -828,7 +963,7 @@ function createPrerequisite(node) {
   return element("li", "", node.name + (node.outcome ? ": " + node.outcome : ""));
 }
 
-/** Tự động căn vừa khung nhìn
+/** Tự động căn vừa khung nhìn (thay đổi cả scale và pan, chừa đệm 40px mỗi cạnh).
  * @returns {void} Không trả về giá trị.
  */
 
@@ -845,6 +980,41 @@ function fitToScreen() {
   );
   state.panX = (width - bounds.width * state.scale) / 2 - bounds.left * state.scale;
   state.panY = (height - bounds.height * state.scale) / 2 - bounds.top * state.scale;
+  applyTransform();
+}
+
+/** Căn giữa bounding box của toàn bộ node đang hiển thị về tâm viewport mà không thay đổi scale.
+ * @returns {void}
+ */
+function centerMapKeepScale() {
+  const viewport = document.getElementById("mindmap-viewport");
+  const bounds = state.nodeBounds;
+  if (!viewport || !bounds || !viewport.clientWidth || !viewport.clientHeight) return;
+  // Tính tâm hình học của toàn bộ các node đang hiển thị trong không gian tọa độ sơ đồ
+  const boundsCenterX = bounds.left + bounds.width / 2;
+  const boundsCenterY = bounds.top + bounds.height / 2;
+  // Dịch panX và panY để đưa tâm cây về đúng tâm viewport ở mức state.scale hiện tại
+  state.panX = viewport.clientWidth / 2 - boundsCenterX * state.scale;
+  state.panY = viewport.clientHeight / 2 - boundsCenterY * state.scale;
+  applyTransform();
+}
+
+/** Phóng to hoặc thu nhỏ sơ đồ quanh một điểm neo cố định trong khung nhìn.
+ * @param {number} targetScale Mức tỷ lệ mới trước khi giới hạn.
+ * @param {number} anchorX Tọa độ ngang của điểm neo trong viewport (px).
+ * @param {number} anchorY Tọa độ dọc của điểm neo trong viewport (px).
+ * @returns {void}
+ */
+function zoomAtPoint(targetScale, anchorX, anchorY) {
+  const newScale = Math.min(Math.max(targetScale, CONFIG.MIN_ZOOM), CONFIG.MAX_ZOOM);
+  if (newScale === state.scale) return;
+  // Quy đổi điểm neo từ tọa độ viewport sang tọa độ thế giới: worldPoint = (a - p) / s
+  const worldX = (anchorX - state.panX) / state.scale;
+  const worldY = (anchorY - state.panY) / state.scale;
+  // Tính lại pan sao cho worldPoint đứng yên dưới điểm neo sau khi đổi sang newScale: newPan = a - worldPoint * newScale
+  state.panX = anchorX - worldX * newScale;
+  state.panY = anchorY - worldY * newScale;
+  state.scale = newScale;
   applyTransform();
 }
 
@@ -877,20 +1047,32 @@ function initToolbarControls() {
   document.getElementById("btn-view-mindmap").addEventListener("click", showMap);
   document.getElementById("btn-view-cards").addEventListener("click", showCards);
   const full = document.getElementById("btn-fullscreen");
-  if (!document.fullscreenEnabled) full.hidden = true;
-  else full.addEventListener("click", toggleFullscreen);
+  if (!document.fullscreenEnabled) {
+    full.hidden = true;
+  } else {
+    full.addEventListener("click", toggleFullscreen);
+    document.addEventListener("fullscreenchange", handleFullscreenChange);
+    syncFullscreenButtonState();
+  }
   window.addEventListener("resize", resizeMap);
 }
-/** Phóng to. @returns {void} */
+
+/** Phóng to quanh tâm khung nhìn sơ đồ. @returns {void} */
 function zoomIn() {
-  state.scale = Math.min(state.scale + CONFIG.ZOOM_STEP, CONFIG.MAX_ZOOM);
-  applyTransform();
+  const viewport = document.getElementById("mindmap-viewport");
+  const anchorX = viewport ? viewport.clientWidth / 2 : 0;
+  const anchorY = viewport ? viewport.clientHeight / 2 : 0;
+  zoomAtPoint(state.scale + CONFIG.ZOOM_STEP, anchorX, anchorY);
 }
-/** Thu nhỏ. @returns {void} */
+
+/** Thu nhỏ quanh tâm khung nhìn sơ đồ. @returns {void} */
 function zoomOut() {
-  state.scale = Math.max(state.scale - CONFIG.ZOOM_STEP, 0.02);
-  applyTransform();
+  const viewport = document.getElementById("mindmap-viewport");
+  const anchorX = viewport ? viewport.clientWidth / 2 : 0;
+  const anchorY = viewport ? viewport.clientHeight / 2 : 0;
+  zoomAtPoint(state.scale - CONFIG.ZOOM_STEP, anchorX, anchorY);
 }
+
 /** Chuyển về sơ đồ. @returns {void} */
 function showMap() {
   setView("mindmap");
@@ -913,78 +1095,200 @@ function setView(view) {
     button.setAttribute("aria-pressed", String(view === name));
   }
 }
-/** Căn lại map khi kích thước đổi. @returns {void} */
+
+/** Căn lại map khi chiều ngang khung nhìn thay đổi (tránh thanh địa chỉ mobile ẩn/hiện làm mất zoom).
+ * @returns {void}
+ */
 function resizeMap() {
+  const currentWidth = window.innerWidth;
+  if (currentWidth === state.lastViewportWidth) return;
+  state.lastViewportWidth = currentWidth;
   if (state.activeView === "mindmap") renderMindMap(true);
 }
-/** Fullscreen với lỗi được xử lý trong UI. @returns {Promise<void>} */
 
+/** Đồng bộ biểu tượng, nhãn văn bản và thuộc tính ARIA của nút Toàn màn hình.
+ * @returns {void}
+ */
+function syncFullscreenButtonState() {
+  const btn = document.getElementById("btn-fullscreen");
+  if (!btn) return;
+  const label = document.getElementById("fullscreen-label");
+  const path = document.getElementById("fullscreen-icon-path");
+  const isFullscreen = Boolean(document.fullscreenElement);
+  const text = isFullscreen ? "Thoát toàn màn hình" : "Toàn màn hình";
+  btn.setAttribute("aria-label", text);
+  btn.setAttribute("title", text);
+  btn.setAttribute("aria-pressed", String(isFullscreen));
+  if (label) label.textContent = text;
+  if (path) {
+    path.setAttribute("d", isFullscreen ? FULLSCREEN_ICONS.EXIT : FULLSCREEN_ICONS.ENTER);
+  }
+}
+
+/** Xử lý sự kiện thay đổi trạng thái toàn màn hình (kể cả khi thoát bằng phím Escape).
+ * @returns {void}
+ */
+function handleFullscreenChange() {
+  syncFullscreenButtonState();
+  if (state.activeView === "mindmap") renderMindMap(true);
+}
+
+/** Bật hoặc thoát chế độ toàn màn hình với xử lý lỗi an toàn.
+ * @returns {Promise<void>}
+ */
 async function toggleFullscreen() {
   try {
-    if (document.fullscreenElement) await document.exitFullscreen();
-    else await document.querySelector(".mindmap-component").requestFullscreen();
-    renderMindMap(true);
+    if (document.fullscreenElement) {
+      await document.exitFullscreen();
+    } else {
+      await document.querySelector(".mindmap-component").requestFullscreen();
+    }
+    syncFullscreenButtonState();
+    if (state.activeView === "mindmap") renderMindMap(true);
   } catch {
     document.getElementById("mindmap-hint").textContent =
       "Trình duyệt không cho phép toàn màn hình.";
   }
 }
 
-/** Khởi tạo kéo sơ đồ và Ctrl + cuộn để zoom.
+/** Khởi tạo kéo sơ đồ bằng Pointer Events (hỗ trợ cả chuột và cảm ứng) và Ctrl + cuộn để zoom.
  * @returns {void} Không trả về giá trị.
  */
 function initCanvasViewport() {
+  if (state.canvasInitialized) return;
   const viewport = document.getElementById("mindmap-viewport");
   const stage = document.getElementById("mindmap-stage");
   if (!viewport || !stage) return;
+  state.canvasInitialized = true;
+
+  /** Giải phóng trạng thái kéo hiện tại khi nhả trỏ, hủy cảm ứng hoặc mất pointer capture.
+   * @param {PointerEvent} [e] Sự kiện con trỏ kết thúc hoặc bị hủy.
+   * @returns {void}
+   */
+  function endPointerPan(e) {
+    if (state.activePointerId === null) return;
+    if (e && e.pointerId !== undefined && e.pointerId !== state.activePointerId) return;
+
+    if (state.dragThresholdMet && state.isDragging) {
+      state.suppressClickUntil = performance.now() + 120;
+    }
+
+    // Nếu cử chỉ là vuốt dọc hoặc bị hủy (pointercancel), khôi phục nguyên trạng tọa độ gốc
+    if (state.dragDirection === "vertical-ignored" || (e && e.type === "pointercancel")) {
+      if (state.isDragging) {
+        state.panX = state.dragOriginPanX;
+        state.panY = state.dragOriginPanY;
+        applyTransform();
+      }
+    }
+
+    try {
+      if (e && viewport.hasPointerCapture?.(e.pointerId)) {
+        viewport.releasePointerCapture(e.pointerId);
+      }
+    } catch {
+      // Bỏ qua nếu sự kiện giả lập không đăng ký pointer capture phần cứng
+    }
+
+    state.activePointerId = null;
+    state.isDragging = false;
+    state.dragThresholdMet = false;
+    state.dragDirection = null;
+    viewport.classList.remove("mindmap-viewport--dragging");
+  }
 
   viewport.addEventListener(
-    "mousedown",
-    /** Bắt đầu kéo ở nền canvas, tránh thao tác trên node hoặc panel.
-     * @param {MouseEvent} e Sự kiện chuột trên canvas.
+    "pointerdown",
+    /** Ghi nhận điểm bắt đầu tương tác trên vùng canvas, bỏ qua nút đóng/mở nhánh và drawer.
+     * @param {PointerEvent} e Sự kiện nhấn chuột hoặc chạm cảm ứng.
      * @returns {void}
      */
     (e) => {
-      if (e.target.closest(".mindmap-node") || e.target.closest(".mindmap-drawer")) return;
+      if (e.pointerType === "mouse" && e.button !== 0) return;
+      if (e.target.closest(".mindmap-node__toggle") || e.target.closest(".mindmap-drawer")) return;
 
-      state.isDragging = true;
+      state.activePointerId = e.pointerId;
+      state.pointerStartX = e.clientX;
+      state.pointerStartY = e.clientY;
+      state.dragOriginPanX = state.panX;
+      state.dragOriginPanY = state.panY;
       state.dragStartX = e.clientX - state.panX;
       state.dragStartY = e.clientY - state.panY;
-      viewport.style.cursor = "grabbing";
+      state.dragThresholdMet = false;
+      state.dragDirection = null;
+      state.isDragging = false;
     },
   );
 
   window.addEventListener(
-    "mousemove",
-    /** Cập nhật pan theo con trỏ khi một thao tác kéo đang diễn ra.
-     * @param {MouseEvent} e Sự kiện chuột trên canvas.
+    "pointermove",
+    /** Xử lý di chuyển con trỏ: phân biệt chuột, cảm ứng toàn màn hình và cảm ứng trong trang.
+     * @param {PointerEvent} e Sự kiện di chuyển con trỏ hoặc ngón tay.
      * @returns {void}
      */
     (e) => {
-      if (!state.isDragging) return;
-      state.panX = e.clientX - state.dragStartX;
-      state.panY = e.clientY - state.dragStartY;
-      applyTransform();
-    },
-  );
+      if (state.activePointerId === null || e.pointerId !== state.activePointerId) return;
+      const dx = e.clientX - state.pointerStartX;
+      const dy = e.clientY - state.pointerStartY;
+      const isFullscreen = Boolean(document.fullscreenElement);
+      const isMouse = e.pointerType === "mouse";
 
-  window.addEventListener(
-    "mouseup",
-    /** Kết thúc kéo và khôi phục con trỏ canvas.
-     * @returns {void}
-     */
-    () => {
-      if (state.isDragging) {
-        state.isDragging = false;
-        viewport.style.cursor = "grab";
+      if (!state.dragThresholdMet) {
+        if (Math.hypot(dx, dy) < CONFIG.DRAG_THRESHOLD) return;
+        state.dragThresholdMet = true;
+
+        if (isMouse || isFullscreen) {
+          // Chuột hoặc toàn màn hình: kéo tự do cả hai chiều X và Y
+          state.dragDirection = "all";
+          state.isDragging = true;
+          viewport.classList.add("mindmap-viewport--dragging");
+          try {
+            viewport.setPointerCapture?.(e.pointerId);
+          } catch {}
+        } else {
+          // Cảm ứng khi nằm trong trang: phân định hướng dựa vào độ lệch dx và dy
+          const absDx = Math.abs(dx);
+          const absDy = Math.abs(dy);
+          if (absDy >= absDx) {
+            // Thiên về dọc: người dùng muốn cuộn trang! Bỏ luồng kéo, không đổi pan/scale và không bắt capture
+            state.dragDirection = "vertical-ignored";
+            state.isDragging = false;
+            return;
+          } else {
+            // Thiên về ngang: khóa hướng kéo ngang của cây
+            state.dragDirection = "horizontal";
+            state.isDragging = true;
+            viewport.classList.add("mindmap-viewport--dragging");
+            try {
+              viewport.setPointerCapture?.(e.pointerId);
+            } catch {}
+          }
+        }
+      }
+
+      if (!state.isDragging) return;
+
+      if (state.dragDirection === "all") {
+        state.panX = e.clientX - state.dragStartX;
+        state.panY = e.clientY - state.dragStartY;
+        applyTransform();
+      } else if (state.dragDirection === "horizontal") {
+        // Chỉ cập nhật trục X, khóa chặt panY ở mức ban đầu để tránh trôi cây theo chiều dọc
+        state.panX = e.clientX - state.dragStartX;
+        state.panY = state.dragOriginPanY;
+        applyTransform();
       }
     },
   );
 
+  window.addEventListener("pointerup", endPointerPan);
+  window.addEventListener("pointercancel", endPointerPan);
+  viewport.addEventListener("lostpointercapture", endPointerPan);
+
   viewport.addEventListener(
     "wheel",
-    /** Zoom quanh vị trí chuột khi giữ Ctrl; cuộn thường vẫn cuộn trang.
-     * @param {WheelEvent} e Sự kiện chuột trên canvas.
+    /** Zoom quanh vị trí con trỏ chuột khi giữ Ctrl; cuộn thường vẫn cuộn trang.
+     * @param {WheelEvent} e Sự kiện cuộn chuột trên canvas.
      * @returns {void}
      */
     (e) => {
@@ -993,20 +1297,10 @@ function initCanvasViewport() {
       // Giảm độ nhạy cuộn chuột / trackpad: chỉ thay đổi ~3.5% mỗi nấc cuộn để thao tác mượt mà
       const delta = Math.sign(e.deltaY);
       const zoomFactor = delta < 0 ? 1.035 : 0.965;
-      const newScale = Math.min(
-        Math.max(state.scale * zoomFactor, CONFIG.MIN_ZOOM),
-        CONFIG.MAX_ZOOM,
-      );
-
       const rect = viewport.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
       const mouseY = e.clientY - rect.top;
-
-      state.panX = mouseX - (mouseX - state.panX) * (newScale / state.scale);
-      state.panY = mouseY - (mouseY - state.panY) * (newScale / state.scale);
-      state.scale = newScale;
-
-      applyTransform();
+      zoomAtPoint(state.scale * zoomFactor, mouseX, mouseY);
     },
     { passive: false },
   );

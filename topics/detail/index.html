@@ -128,40 +128,46 @@
                 −</button
               ><button
                 type="button"
-                class="mindmap-tool-btn"
+                class="mindmap-tool-btn mindmap-tool-btn--with-label"
                 id="btn-zoom-reset"
-                aria-label="Căn vừa khung"
-                title="Căn vừa khung"
+                aria-label="Căn vừa sơ đồ trong khung"
+                title="Căn vừa sơ đồ trong khung"
               >
                 <svg
+                  class="mindmap-tool-btn__icon"
                   viewBox="0 0 24 24"
                   width="18"
                   height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
+                  fill="currentColor"
                   aria-hidden="true"
                 >
-                  <path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"></path>
-                </svg></button
+                  <path
+                    d="M6 16h12V8H6v8zm-2 4h4v-2H4v-2H2v4c0 1.1.9 2 2 2zm0-16v4H2V4c0-1.1.9-2 2-2h4v2H4zm16-2h-4v2h4v4h2V4c0-1.1-.9-2-2-2zm0 18h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4z"
+                  ></path>
+                </svg>
+                <span class="mindmap-tool-btn__label">Căn vừa</span></button
               ><button
                 type="button"
-                class="mindmap-tool-btn"
+                class="mindmap-tool-btn mindmap-tool-btn--with-label"
                 id="btn-fullscreen"
                 aria-label="Toàn màn hình"
                 title="Toàn màn hình"
+                aria-pressed="false"
               >
                 <svg
+                  class="mindmap-tool-btn__icon"
                   viewBox="0 0 24 24"
                   width="18"
                   height="18"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="1.8"
+                  fill="currentColor"
                   aria-hidden="true"
                 >
-                  <path d="M9 3H3v6M15 3h6v6M3 15v6h6M21 15v6h-6"></path>
+                  <path
+                    id="fullscreen-icon-path"
+                    d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"
+                  ></path>
                 </svg>
+                <span class="mindmap-tool-btn__label" id="fullscreen-label">Toàn màn hình</span>
               </button>
             </div>
           </div>
