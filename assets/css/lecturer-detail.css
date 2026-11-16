@@ -1,134 +1,338 @@
-/* TV3 — hồ sơ với nội dung tùy chọn và component chủ đề dùng chung. */
+/* TV2 Job 2 — Hồ sơ giảng viên: nâng cấp giao diện, phân trang chủ đề và tối ưu responsive. */
+
+#page-lecturer-detail {
+  --card-border-color: #cbd5e1;
+  --card-shadow: 0 2px 10px rgba(15, 23, 42, 0.08);
+}
+
+html[data-theme="dark"] #page-lecturer-detail {
+  --card-border-color: #334155;
+  --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+}
+
+@media (prefers-color-scheme: dark) {
+  html:not([data-theme="light"]) #page-lecturer-detail {
+    --card-border-color: #334155;
+    --card-shadow: 0 2px 10px rgba(0, 0, 0, 0.35);
+  }
+}
+
 #page-lecturer-detail .profile-page {
   position: relative;
 }
+
 #page-lecturer-detail .profile-page[aria-busy="true"] {
   min-height: 100vh;
 }
+
 #page-lecturer-detail .profile-page[aria-busy="true"] > :not(.profile-page__loading) {
   visibility: hidden;
 }
+
 #page-lecturer-detail .profile-page__loading {
   position: absolute;
   top: 24px;
   left: 16px;
   color: var(--color-muted);
+  font-size: 15px;
 }
+
+#page-lecturer-detail .profile-card {
+  background: var(--color-surface);
+  border: 1.5px solid var(--card-border-color);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: var(--card-shadow);
+  margin-top: 16px;
+}
+
 #page-lecturer-detail .profile-header {
   display: flex;
-  align-items: flex-start;
-  gap: 20px;
+  align-items: center;
+  gap: 24px;
   padding-bottom: 28px;
-  border-bottom: 1px solid var(--color-border);
+  border-bottom: 1.5px solid var(--card-border-color);
 }
+
 #page-lecturer-detail .profile-header__avatar {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 72px;
-  height: 72px;
-  flex: 0 0 72px;
+  width: 76px;
+  height: 76px;
+  flex: 0 0 76px;
   border-radius: 50%;
   background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  font-size: 24px;
-  font-weight: 600;
+  border: 2px solid var(--color-primary);
+  color: var(--color-primary);
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
   overflow: hidden;
+  user-select: none;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
+
 #page-lecturer-detail .profile-header__avatar img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
+
 #page-lecturer-detail .profile-header__info {
   min-width: 0;
+  flex: 1;
 }
+
+#page-lecturer-detail .profile-header__info h1 {
+  font-size: 26px;
+  margin: 0;
+  color: var(--color-text);
+  line-height: 1.3;
+}
+
 #page-lecturer-detail .profile-header__affiliation {
   color: var(--color-muted);
   margin-top: 8px;
-  max-width: 70ch;
+  margin-bottom: 0;
+  max-width: 75ch;
+  font-size: 15px;
+  line-height: 1.5;
 }
+
 #page-lecturer-detail .profile-header__email {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
   margin-top: 4px;
+  color: var(--color-link);
+  font-size: 15px;
+  font-weight: 500;
 }
+
 #page-lecturer-detail .profile-section {
-  margin-top: 32px;
+  margin-top: 36px;
 }
+
 #page-lecturer-detail .profile-section__title {
   margin-bottom: 14px;
+  font-size: 20px;
+  color: var(--color-text);
 }
+
 #page-lecturer-detail .profile-section__text {
-  max-width: 75ch;
+  max-width: 80ch;
   color: var(--color-muted);
+  line-height: 1.6;
+  font-size: 15px;
 }
+
 #page-lecturer-detail .profile-section__subtitle {
   font-size: 16px;
   margin-block: 20px 8px;
+  font-weight: 600;
 }
+
 #page-lecturer-detail .profile-areas {
   padding-left: 22px;
   max-width: 75ch;
   color: var(--color-muted);
+  line-height: 1.6;
 }
+
 #page-lecturer-detail .profile-links {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px 24px;
+  gap: 12px 24px;
 }
+
 #page-lecturer-detail .profile-links a {
   display: inline-flex;
   align-items: center;
   min-height: 44px;
+  padding: 0 4px;
+  font-weight: 500;
 }
+
 #page-lecturer-detail .profile-source-note {
-  font-size: 12px;
+  font-size: 13px;
   color: var(--color-muted);
   margin-top: 12px;
   max-width: 80ch;
 }
+
 #page-lecturer-detail .profile-tags {
   display: flex;
   flex-wrap: wrap;
   gap: 8px;
   margin-bottom: 16px;
 }
+
+#page-lecturer-detail .profile-topics-summary {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-bottom: 12px;
+  font-weight: 500;
+}
+
 #page-lecturer-detail .metrics-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 24px 40px;
+  gap: 20px 36px;
 }
+
+#page-lecturer-detail .metric-card {
+  padding: 16px 20px;
+  background: var(--color-surface);
+  border: 1.5px solid var(--card-border-color);
+  border-radius: 10px;
+  min-width: 120px;
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
+}
+
 #page-lecturer-detail .metric-card__value {
-  font-size: 26px;
+  font-size: 28px;
   font-weight: 700;
-  color: var(--color-text);
+  color: var(--color-primary);
+  margin: 0;
+  line-height: 1.2;
 }
+
 #page-lecturer-detail .metric-card__label {
-  font-size: 14px;
+  font-size: 13.5px;
   color: var(--color-muted);
+  margin: 4px 0 0 0;
+  font-weight: 500;
 }
+
 #page-lecturer-detail .related-topics-list {
   list-style: none;
   padding: 0;
-  border: 1px solid var(--color-border);
+  margin: 0;
+  border: 1.5px solid var(--card-border-color);
   border-radius: 12px;
   background: var(--color-surface);
+  overflow: hidden;
+  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
 }
+
 #page-lecturer-detail .related-topic-item + .related-topic-item {
-  border-top: 1px solid var(--color-border);
+  border-top: 1.5px solid var(--card-border-color);
 }
+
+/* Tối ưu hàng đề tài trong hồ sơ: Xóa trường Hướng dẫn, nhãn nhóm căn phải gọn gàng, không để dưới tên đề tài */
+#page-lecturer-detail .topic-row {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 16px !important;
+  padding: 18px 24px;
+  transition: background-color 0.15s ease;
+}
+
+#page-lecturer-detail .topic-row:hover {
+  background-color: var(--color-surface-muted);
+}
+
+#page-lecturer-detail .topic-row__title {
+  font-size: 17px;
+  line-height: 1.45;
+  margin: 0;
+  flex: 1;
+}
+
+#page-lecturer-detail .topic-row__title a {
+  color: var(--color-text);
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+#page-lecturer-detail .topic-row__title a:hover {
+  color: var(--color-link);
+  text-decoration: underline;
+}
+
+#page-lecturer-detail .topic-row__group {
+  grid-column: auto !important;
+  grid-row: auto !important;
+  align-self: center !important;
+  flex-shrink: 0;
+  max-width: none !important;
+  margin: 0 !important;
+}
+
+@media (max-width: 640px) {
+  #page-lecturer-detail .topic-row {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 8px !important;
+  }
+}
+
+/* Thanh phân trang chủ đề nghiên cứu */
+#page-lecturer-detail .profile-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 24px;
+  padding: 12px 0;
+}
+
+#page-lecturer-detail .profile-pagination__button {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 8px 14px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+#page-lecturer-detail .profile-pagination__button:hover:not(:disabled) {
+  background: var(--color-surface-muted);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+#page-lecturer-detail .profile-pagination__button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  border-color: var(--color-border);
+}
+
+#page-lecturer-detail .profile-pagination__button[aria-current="page"] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  cursor: default;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
 @media (max-width: 767px) {
+  #page-lecturer-detail .profile-card {
+    padding: 20px 16px;
+    border-radius: 12px;
+  }
   #page-lecturer-detail .profile-header {
     flex-direction: column;
+    align-items: flex-start;
     gap: 16px;
   }
   #page-lecturer-detail .profile-header__avatar {
-    width: 56px;
-    height: 56px;
-    flex-basis: 56px;
-    font-size: 18px;
+    width: 60px;
+    height: 60px;
+    flex-basis: 60px;
+    font-size: 20px;
   }
   #page-lecturer-detail .topic-row {
     padding: 16px;
