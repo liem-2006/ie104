@@ -387,3 +387,133 @@ PR #4 đã được nhóm trưởng yêu cầu merge và GitHub xác nhận thà
 Tạo integration/job-2 từ origin/main tại commit trên. Thành viên tạo nhánh task mới từ upstream/integration/job-2, gửi một PR/người với base integration/job-2. Nhóm trưởng duyệt/merge từng PR vào nhánh này; hoàn tất kiểm thử mới mở PR tổng vào main. Không thay quyền repo, không tự thêm thành viên hoặc deploy.
 
 Đã đồng bộ các JOB-2.md, README, CONTRIBUTING, AGENTS, ngữ cảnh idea, mẫu PR và bản tổng quan local theo nhánh đích mới. Chỉ thay tài liệu, không sửa code/dữ liệu. Các hướng dẫn Job 1 và biên bản cũ giữ làm lịch sử.
+## Kế hoạch tích hợp và ghi nhận sửa chữa Job 2 — 16/11/2026
+
+> **Trạng thái: mới cập nhật kế hoạch, chưa thực hiện tích hợp hoặc merge Job 2.** Phải bàn giao bản chạy thử để nhóm trưởng kiểm tra và cho phép trước khi merge. Phần này là hướng dẫn hiện hành cho đợt tích hợp Job 2; các trạng thái và kết quả ở phần trước được giữ nguyên như lịch sử, không phải nghiệm thu bản Job 2.
+
+### 1. Ngữ cảnh để mọi thành viên đọc chung
+
+- Job 1 đã được tích hợp, sửa lỗi và thiết kế lại theo hướng tra cứu học thuật; PR #4 đã merge vào main tại `265b38986d832d0714e987dd1a75f5ea2f2aa09f` theo yêu cầu nhóm trưởng.
+- Nhánh `integration/job-2` nhận bài kiểm tra và nâng cấp chéo. Mốc local khi viết kế hoạch: `741e5af`; phải kiểm tra remote lại trước triển khai.
+- Phân công Job 2: **TV1 làm chi tiết/roadmap (phần gốc Job 1 của TV2); TV2 làm danh bạ/hồ sơ (phần gốc của TV3); TV3 làm khám phá (phần gốc của TV1)**. Số TV trong tên tài liệu `job2-...` chỉ người nhận Job 2, không đổi tên hay ghi đè đóng góp Job 1.
+- Đợt này giữ các cải tiến hữu ích của thành viên, sửa lỗi liên kết và tương tác, đồng nhất phần dùng chung; không làm lại giao diện toàn bộ hoặc thêm nghiệp vụ.
+- Giữ Vanilla HTML/CSS/JS, BEM, CSS scope theo trang, hàm đơn nhiệm/JSDoc, theme sáng/tối và thiết kế học thuật hiện hành. IE106 định hướng khả năng sử dụng; IE104 vẫn là quy chuẩn code. Không backend, thư viện, đăng nhập hoặc lưu tiến độ.
+
+### 2. Nguồn PR và các phát hiện cần xác nhận lại
+
+Các SHA dưới đây là mốc của lần rà soát trước, không thay thế việc kiểm tra GitHub khi bắt đầu. Nếu có commit mới, đọc diff mới và ghi thêm mốc, không xóa nguồn cũ.
+
+| Người nhận Job 2 | PR | Commit đã rà soát | Tình trạng/điểm cần xử lý |
+|---|---|---|---|
+| TV1 — chi tiết/roadmap | [#8](https://github.com/liem-2006/ie104/pull/8) | `48c857ec41157ca67775b0365cd67a3933ad57ba` | Đang nhắm main trong lần rà trước; cần đổi đích sau khi được phép. Giữ cải tiến pointer/zoom, xử lý mặc định mobile, tự cuộn, debug và minh chứng |
+| TV2 — danh bạ/hồ sơ | [#6](https://github.com/liem-2006/ie104/pull/6) | `a2b32b20ec527a1320125e456ef8771f70129eb7` | Giữ sửa email đúng; xử lý tương thích link chủ đề cũ, focus phân trang, ảnh/token và bổ sung ghi nhận còn thiếu |
+| TV3 — khám phá | [#7](https://github.com/liem-2006/ie104/pull/7) | `a0dc22027cd7696d6e34820695b2baff058e195a` | Giữ cải tiến tìm/lọc/trạng thái rỗng; kiểm thử hồi quy sau khi ghép |
+
+Nhóm trưởng xác nhận `hunglkt@uit.edu.vn` là lỗi chính tả, email đúng là `hunglk@uit.edu.vn`. Giữ sửa đổi đồng bộ trong hai JSON; không hoàn tác. Vấn đề kỹ thuật cần sửa là URL chủ đề cũ chưa được ánh xạ tương thích, dù URL hồ sơ cũ đã có xử lý riêng. Đây là xác nhận dữ liệu từ nhóm trưởng, không phải tuyên bố kiểm chứng học thuật độc lập.
+
+Lần kiểm tra riêng từng PR đã ghi nhận 40 trường hợp responsive không tràn ngang, bốn ca axe không phát hiện vi phạm và không có pageerror trong luồng đã thử. Đồng thời đã tái hiện mất focus khi đổi trang danh bạ, link chủ đề email cũ không tìm thấy, mobile roadmap mặc định sơ đồ và tự cuộn khỏi tiêu đề. Các kết quả này **không chứng minh bản ghép đã đạt**, không thay kiểm thử lại bên dưới; ảnh tương đối cần thử bằng fixture, chưa kết luận lỗi trên dữ liệu ảnh thật.
+
+### 3. Đầu ra tài liệu và quy tắc ghi lịch sử
+
+Ngoài code trên nhánh thử `review/job-2-combined`, bắt buộc tạo ba bản ghi khi triển khai:
+
+| File sẽ tạo, tính từ gốc repo | Phạm vi |
+|---|---|
+| `topics/detail/job2-sua-chua-tv1.md` | Chi tiết chủ đề, roadmap, panel và tương tác |
+| `lecturers/job2-sua-chua-tv2.md` | Cả danh bạ, hồ sơ, email và dữ liệu giảng viên |
+| `topics/job2-sua-chua-tv3.md` | Khám phá, tìm/lọc, phân trang và trạng thái kết quả |
+
+Hiện các file này là **đầu ra dự kiến**, chưa ghi là đã tạo. Khi tạo xong, thêm liên kết tương đối vào các JOB-2.md liên quan và kế hoạch này. JOB-2.md vẫn là tài liệu giao việc; job2-sua-chua là lịch sử nhận bài, tích hợp và sửa chữa. Không thay thế SUA-CHUA-TV*.md hoặc JOB-1.md của đợt trước, không tạo thêm báo cáo riêng. Tổng quan `job-history/job-2.md` vẫn chỉ lưu local.
+
+Mỗi bản ghi mới phải có đầy đủ:
+
+1. **Ô tóm tắt đầu file:** người nhận theo Job 2, phần gốc thuộc ai, PR nguồn, bản nền, trạng thái hiện tại, việc thành viên cần đọc/làm tiếp; liên kết JOB-2.md, ghi nhận Job 1 và kế hoạch tổng.
+2. **Nguồn và đóng góp gốc:** SHA PR, chức năng/cải tiến giữ lại, phần thay thế và phần không áp dụng cùng lý do; không quy đóng góp của thành viên thành việc do người tích hợp viết.
+3. **Bảng thay đổi:** mã thay đổi, trước → sau → lý do/ảnh hưởng → file liên quan → người thực hiện/vai trò → commit → kiểm thử/minh chứng. Mỗi thay đổi logic hoặc hành vi cần một dòng rõ ràng; không chỉ viết “đồng bộ giao diện”.
+4. **Thay đổi dùng chung:** ghi nguồn thay đổi module/token/dữ liệu do nhóm trưởng phụ trách và ảnh hưởng tới phần của TV; dẫn về cùng bản ghi ở kế hoạch tổng, không mô tả thành ba cách xử lý khác nhau.
+5. **Nhật ký theo mốc:** ngày, commit/bản thử, nội dung, lý do, góp ý liên quan, trạng thái. Ghi các mốc nhận PR → tích hợp → sửa lỗi → kiểm thử → nhóm trưởng góp ý → sửa sau góp ý → duyệt → merge. Chỉ ghi mốc đã xảy ra; việc chưa làm để checklist trống.
+6. **Quy ước tiếp tục:** dữ liệu/URL/API dùng chung, phạm vi file và hành vi cần giữ, cách chạy HTTP và các bước tái hiện/tự kiểm tra phần mình.
+7. **Nghiệm thu:** kết quả thực tế, công cụ/môi trường/ngày/commit được thử, ảnh trước–sau khi đổi giao diện, giới hạn và vấn đề chưa xử lý. Không chuyển tự báo cáo của thành viên thành kết quả đã được người tích hợp xác minh.
+8. **Duyệt và merge:** ghi đúng phản hồi nhóm trưởng và SHA được duyệt. Khi chưa duyệt ghi “Chờ nhóm trưởng kiểm tra”; chỉ ghi PR/commit merge sau khi GitHub xác nhận. Tài liệu mô tả một commit không tự tham chiếu hash của commit đang chứa chính thay đổi đó; dùng SHA code đã chốt hoặc bổ sung ở mốc sau.
+
+Không xóa kết quả hoặc quyết định cũ khi có bản mới. Thêm mốc “thay thế bởi ...” và lý do để người đọc hiểu tiến trình. Đầu file phải chỉ rõ trạng thái mới nhất để tránh thành viên làm theo hướng dẫn đã hết hiệu lực.
+
+### 4. Trình tự triển khai và đầu ra từng bước
+
+#### Bước 1 — Chốt đầu vào
+
+- [ ] Đọc quy chuẩn, kiểm tra working tree, bảo toàn thay đổi có sẵn; lấy trạng thái main, integration/job-2 và ba PR mới nhất.
+- [ ] Ghi SHA nguồn mới, diff so với lần rà trước, nhánh đích và phạm vi từng TV. Không tự nhận xét công khai, đóng PR hoặc đổi nhánh đích trong bước này.
+- [ ] Tạo ba bản ghi job2-sua-chua theo cấu trúc trên với trạng thái đang triển khai, chưa nghiệm thu.
+
+#### Bước 2 — Tích hợp cách ly
+
+- [ ] Tạo local `review/job-2-combined` từ integration/job-2 mới nhất. Nếu nhánh đã tồn tại, kiểm tra tiến độ và tiếp tục an toàn, không reset mất việc.
+- [ ] Áp dụng diff từng PR theo thứ tự #7 → #6 → #8, mỗi phần một commit có PR/SHA/tác giả nguồn; không áp dụng lại commit nền đã có.
+- [ ] Kiểm tra sau từng phần và ghi xung đột/quyết định giải quyết nếu có. Chưa thay đổi nhánh chung trên GitHub.
+
+#### Bước 3 — Email và module chung
+
+- [ ] Giữ email đúng trong hai JSON; thêm ánh xạ email cũ sang mới trong module dữ liệu chung sau trim/lowercase, dùng khi tra cả hồ sơ và chủ đề.
+- [ ] Bỏ alias cục bộ trùng lặp; link mới sinh email đúng. Email sai khác vẫn không tìm thấy, không fallback mẫu. Giữ hợp đồng URL group/topic/email và schema.
+- [ ] Ghi rõ ngoại lệ được nhóm trưởng cho phép: hai JSON được sửa email chính tả; dữ liệu khác và số lượng phải được bảo toàn. Yêu cầu “không thay JSON” của nhiệm vụ gốc được thay thế chỉ trong phạm vi này.
+
+#### Bước 4 — TV2: danh bạ/hồ sơ
+
+- [ ] Sửa focus phân trang về đầu danh sách sau khi cập nhật, thông báo kết quả rõ; giữ 9 người/trang và 10 chủ đề/trang hồ sơ.
+- [ ] Dùng chung xử lý ảnh với đường dẫn tính đúng từ gốc dự án; kiểm thử ảnh tương đối ở hai cấp thư mục, ảnh hỏng/thiếu dùng avatar chữ cái; gom logic tên/avatar trùng lặp phù hợp.
+- [ ] Khôi phục email trên thẻ theo yêu cầu tra cứu; thay màu riêng bằng token tương ứng, giữ cải tiến hữu ích còn lại.
+- [ ] Bổ sung ghi nhận thực hiện còn thiếu tại JOB-2.md danh bạ/hồ sơ, phân biệt phần thành viên làm và phần người tích hợp sửa; ghi lịch sử chi tiết trong job2-sua-chua-tv2.md.
+
+#### Bước 5 — TV1: roadmap
+
+- [ ] Giữ pointer/zoom hữu ích; mobile mặc định Danh sách theo nhiệm vụ đã giao, vẫn chọn Sơ đồ được.
+- [ ] Bỏ tự cuộn xuống cây khi tải trang và đối tượng debug trên window; giữ hiển thị tên/metadata ở đầu.
+- [ ] Sửa URL minh họa bằng chủ đề thật, bổ sung minh chứng; kiểm thử cuộn mobile/pan/zoom/fullscreen/panel. Ghi việc thay hành vi của PR và căn cứ yêu cầu trong job2-sua-chua-tv1.md.
+
+#### Bước 6 — TV3 và các điểm nối
+
+- [ ] Giữ cải tiến tìm kiếm, hướng dẫn lọc và trạng thái rỗng; bảo toàn phân trang 12, reset và focus.
+- [ ] Kiểm tra module/token/theme/liên kết giữa các phần; không tạo thay đổi không cần thiết để mọi TV đều có sửa code. Nếu phần TV3 không cần sửa, ghi rõ giữ nguyên và chỉ kiểm thử tích hợp.
+- [ ] Cập nhật ba bản ghi, JOB-2.md và kế hoạch tổng theo công việc thực tế. Commit sửa lỗi theo phần việc; chưa push, merge hoặc deploy.
+
+### 5. Kiểm thử bản tích hợp và ghi nhận kết quả
+
+Tất cả mục dưới đây đang **chưa chạy trên bản tích hợp Job 2**. Ghi kết quả theo commit ứng viên mới, không sao chép điểm Job 1 hoặc điểm thành viên tự báo cáo.
+
+| Nhóm kiểm tra | Tiêu chí |
+|---|---|
+| Dữ liệu | 3 nhóm, 37 chủ đề, 234 keyword, 16 hồ sơ; không mất/trùng liên kết giảng viên; diff hai JSON chỉ gồm sửa email được phép |
+| Email/URL | Cũ và mới mở đúng chủ đề/hồ sơ; email hoa/khoảng trắng đúng; email sai không fallback; link mới dùng email đúng |
+| Liên thông | Mở tất cả chủ đề/hồ sơ, đúng giảng viên; URL trực tiếp, reload, Back/Forward; root và /ie104/ |
+| Khám phá | 12/12/12/1, tìm không dấu, OR nhóm + AND truy vấn, sắp xếp toàn dữ liệu trước phân trang; 0/ít/nhiều kết quả, reset/focus |
+| Danh bạ/hồ sơ | 9/7, tìm/lọc và phân trang reset hợp lý; bàn phím không mất focus; chủ đề liên quan đúng email; ảnh tương đối/hỏng/thiếu |
+| Roadmap | Cả 37 cây đủ node, không chồng khi mở toàn bộ; cây sâu/tên dài/subjects tùy chọn; quickselect/reset, mở/thu, pan/zoom/fit/fullscreen, panel/Escape/trả focus |
+| Giao diện | Năm trang × 320/375/768/1024/1440px × hai theme; xem trực tiếp bố cục, không tràn ngang/mất nội dung; mobile mặc định danh sách |
+| Lỗi/truy cập | JSON lỗi/sai định dạng/rỗng, storage bị chặn, trạng thái tải/không tìm thấy; bàn phím/focus, không JS error chưa bắt; axe |
+| Chuẩn/hiệu năng | HTML/CSS validator, token/asset, Lighthouse mobile ba lần/trang lấy trung vị: P ≥90, A/BP/SEO ≥95; ghi nguyên nhân nếu chưa đạt |
+
+Ghi công cụ/phiên bản/trình duyệt/ngày/URL/commit. Thử W3C và Firefox nếu có; công cụ thiếu hoặc dịch vụ chặn ghi là chưa xác minh. Không coi headless là đã thử thiết bị cảm ứng thật. Lưu ảnh trước–sau riêng theo Job 2, không ghi đè ảnh Job 1.
+
+### 6. Điểm dừng bắt buộc để nhóm trưởng kiểm tra
+
+- [ ] Bàn giao commit bản thử, cách chạy HTTP, URL năm trang, ba bản ghi sửa chữa và báo cáo ngắn kết quả/vấn đề còn lại.
+- [ ] Hướng dẫn nhóm trưởng thử khám phá → roadmap → hồ sơ → danh bạ, tìm/lọc/phân trang, hai theme, cửa sổ nhỏ và link dùng email cũ/mới.
+- [ ] **Dừng, chờ nhóm trưởng tự kiểm tra và cho phép merge. Không tự push bản ghép, merge, đóng PR hoặc deploy.**
+- [ ] Mỗi góp ý tạo một mốc lịch sử: vấn đề → sửa → commit → kiểm thử lại → bàn giao lại. Không ghi nhận im lặng hoặc hết thời gian chờ là duyệt.
+
+### 7. Thực hiện merge sau khi có phép rõ ràng
+
+1. Ghi nhận phạm vi cho phép và SHA bản thử đã được duyệt. Kiểm tra lại PR/nhánh đích; nếu có thay đổi ảnh hưởng bản duyệt, ghép/kiểm thử lại rồi gửi nhóm trưởng duyệt bản mới.
+2. Sau khi được phép merge Job 2, đổi base PR #8 sang integration/job-2; kiểm tra lại diff vì đổi base có thể đổi nội dung so sánh.
+3. Merge #7 → #6 → #8 vào integration/job-2 bằng phương thức repo cho phép; đưa các commit sửa lỗi và tài liệu đã duyệt vào nhánh này. Không đưa lại các commit nhập PR trên nhánh thử nếu nội dung đã có từ merge PR.
+4. Đối chiếu code/asset/dữ liệu cuối với bản thử được duyệt, chỉ cho phép tài liệu khác ở cập nhật trạng thái/commit merge; chạy kiểm tra nhanh các luồng chính. Nếu không khớp, chưa mở đường cho merge main cho đến khi giải quyết và kiểm thử.
+5. Cập nhật ba bản ghi và kế hoạch tổng bằng PR/commit merge thực tế, rồi mở PR tổng từ integration/job-2 vào main. Không tự đăng review hay nhận xét thay thành viên.
+6. **Merge main cần nhóm trưởng cho phép riêng.** Sau khi được phép và GitHub xác nhận, thêm mốc cuối cùng; không tự deploy. Nếu cần quay lại, giữ mốc nền và dùng revert có kiểm soát khi được yêu cầu, không force-push/reset nhánh chung.
+
+### Nhật ký cập nhật kế hoạch
+
+| Ngày | Nội dung | Trạng thái |
+|---|---|---|
+| 16/11/2026 | Chốt tích hợp cách ly, giữ email đúng, sửa tương thích URL và bắt buộc nhóm trưởng kiểm tra trước merge | Kế hoạch, chưa triển khai |
+| 16/11/2026 | Bổ sung ba file job2-sua-chua theo phân công Job 2; quy định truy vết PR, đóng góp, thay đổi, góp ý, kiểm thử, duyệt và merge; giữ nguyên lịch sử Job 1 | Đã cập nhật tài liệu kế hoạch; chưa tạo ba bản ghi hoặc sửa code |
