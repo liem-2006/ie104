@@ -660,3 +660,27 @@ Lighthouse 13.6.0, Chrome headless, HTTP local, cấu hình mobile mặc định
 | lecturer-detail | 95 | 100 | 100 | 100 |
 
 Số đo đầy đủ: `idea/minh-chung-giao-dien/material-20261117/lighthouse-summary.json`. Đây là số đo mới cho đợt Material, không phải số đo Job 1. Kiểm thử tự động không bảo đảm mọi tương tác/thiết bị thực đã được xác minh. Chưa push, merge hoặc deploy; bản local chờ nhóm trưởng xem.
+
+
+## Nhóm trưởng cải thiện sau tích hợp Job 2 — hộp chuyển chủ đề và footer
+
+Ngày 17/11/2026; bản trước sửa `f6fc28f`, working tree sạch. Backup local `backup/job-2-before-picker-footer-20261117`. Xem lại an toàn bằng `git worktree add ../ie104-before-picker-footer backup/job-2-before-picker-footer-20261117`; giữ backup Material cũ.
+
+- [x] `01e7f10`: Hộp lọc chủ đề cùng email giảng viên (hàm normalizeEmail chung), đủ mọi nhóm; tìm theo tên không dấu, A–Z trong nhóm; tên giảng viên ghi một lần, chủ đề hiện tại có Đang xem.
+- [x] Đóng backdrop chỉ khi pointer bắt đầu/kết thúc ngoài hộp; Escape/nút Đóng trả focus. Chỉ danh sách cuộn, mở lại reset tìm kiếm và scroll.
+- [x] `0e8efec`: Footer năm trang thống nhất nhận diện, mục đích dự án, tên trường; bỏ link danh bạ, CSS chung căn trái, padding 24px.
+- [x] Cập nhật ba bản ghi sửa chữa và bốn JOB-2.md, phân biệt đóng góp gốc với chỉnh sửa nhóm trưởng. Không đổi dữ liệu/schema/URL.
+
+### Kiểm thử mới
+
+- 37 chủ đề mở hộp: số lượng và email của mọi link khớp toàn bộ chủ đề giảng viên trong dữ liệu; có người chỉ một chủ đề.
+- Email cũ HUNGLKT kèm khoảng trắng tìm đúng giảng viên; tìm phan tich ra Phân tích mã độc; không kết quả trả 0; mở lại xóa query.
+- Click/tap backdrop đóng và trả focus; kéo từ trong ra ngoài giữ mở; Escape và nút Đóng hoạt động. Touch là mô phỏng Chromium, không phải thiết bị thật.
+- 50 tổ hợp năm trang × 5 chiều rộng 320/375/768/1024/1440 × hai theme: không tràn ngang, footer không còn link.
+- 10 tổ hợp hộp mở/cuộn cuối × chiều rộng/theme: nút Đóng nằm trong viewport. Đã xem trực tiếp ảnh hộp mobile sau khi cuộn.
+- Axe WCAG2A/AA,21AA năm trang (trang chi tiết mở dialog): 0 vi phạm; HTML Validate năm nguồn 0 lỗi, cấu hình recommended với void-style/no-trailing-whitespace/long-title/no-inline-style tắt như đợt trước. Không pageerror trong luồng kiểm tra.
+- Minh chứng: `idea/minh-chung-giao-dien/picker-footer-20261117/` trước/sau hộp và trang chủ.
+
+### Bàn giao và giới hạn
+
+Chạy HTTP từ repo bằng `python -m http.server 8876`, hoặc dùng server đang chạy tại http://127.0.0.1:8876/. Kiểm tra chủ đề → chuyển chủ đề → cuộn/tìm/đóng và footer các trang. Chưa kiểm tra Firefox, thiết bị thật, W3C chính thức; không chạy lại Lighthouse vì đợt này giới hạn hộp chọn/footer. Không coi số Lighthouse Material là số đo mới. Tất cả thay đổi local trên review/job-2-combined, chưa push/merge/deploy.

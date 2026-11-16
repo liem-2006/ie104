@@ -71,3 +71,20 @@ TV1: Sơ đồ mặc định trên mọi thiết bị; thay cây lồng nhau b�
 Đây là thay đổi của người tích hợp, không ghi thành đóng góp mới của thành viên. Không sửa lịch sử Job 1. Quy tắc mới thay thế mặc định Danh sách mobile và danh sách cây lồng nhau.
 
 Tự kiểm tra: chạy HTTP từ repo, mở phần được giao, thử sáng/tối, bàn phím và mobile; với roadmap mở cả hai tab, kiểm tra đầu ra và môn học. Chưa push/merge/deploy. Xem mục Material trong kế hoạch tổng để biết backup, ảnh và giới hạn kiểm thử.
+
+
+## Nhóm trưởng cải thiện sau tích hợp Job 2 — hộp chuyển chủ đề và footer
+
+Ngày 17/11/2026. Đây là chỉnh sửa của nhóm trưởng trên bản tích hợp, không ghi thành đóng góp mới của TV1. Bản nền `f6fc28f`; backup `backup/job-2-before-picker-footer-20261117`. Trạng thái: local/chờ duyệt; chưa push, merge hoặc deploy.
+
+**Đóng góp giữ lại:** Sơ đồ/Danh sách, pan/zoom, panel kiến thức, tooltip, URL và nội dung roadmap.
+
+| Trước | Sau | Lý do | File liên quan | Commit | Kiểm thử |
+|---|---|---|---|---|---|
+| Hộp chọn toàn cục; footer dẫn danh bạ | Hộp từ toàn bộ 37 chủ đề thành chủ đề cùng giảng viên qua email chuẩn hóa; thêm đóng backdrop, giữ thanh điều khiển khi cuộn, reset tìm kiếm/cuộn, nhãn Đang xem. | Phạm vi chuyển chủ đề rõ ràng; footer mô tả dự án | assets/js/topic-detail.js; assets/css/topic-detail.css; topics/detail/index.html | 01e7f10; 0e8efec | 37/37 chủ đề khớp danh sách theo giảng viên; alias/hoa/khoảng trắng đúng; tìm không dấu, rỗng, reset, Escape, click/tap ngoài và kéo từ trong ra ngoài đạt. |
+
+Phần chung do nhóm trưởng sửa: footer trên cả năm trang và CSS chung; không sửa JSON/schema. Quy tắc mới thay yêu cầu cũ về hộp toàn bộ chủ đề và link footer. Giữ nguyên lịch sử ở trên.
+
+Minh chứng trước/sau: thư mục `idea/minh-chung-giao-dien/picker-footer-20261117/` trong repo, gồm before-picker/after-picker-mobile/after-picker-desktop và before-home/after-home.
+
+Tự kiểm tra: chạy HTTP tại repo, mở phần được giao, kiểm tra hai theme, thu nhỏ cửa sổ và footer. TV1 mở hộp, cuộn xuống cuối, thử đóng bằng nền tối/Escape/nút, tìm không dấu và xác nhận chỉ hiện đề tài cùng giảng viên. Giới hạn: Chrome headless và mô phỏng touch; chưa Firefox/thiết bị thật/W3C chính thức. Không dùng kết quả lịch sử thay cho nghiệm thu mới.
