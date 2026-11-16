@@ -335,7 +335,7 @@
 #page-topic-detail .knowledge-section { border: 1px solid var(--color-border); border-radius: var(--radius-card); background: var(--color-surface); }
 #page-topic-detail .knowledge-section__summary { display: flex; align-items: center; flex-wrap: wrap; gap: 12px; padding: 16px; min-height: 48px; cursor: pointer; border-radius: var(--radius-card); }
 #page-topic-detail .knowledge-section__summary::before { content: "+"; color: var(--color-primary); }
-#page-topic-detail .knowledge-section[open] > summary::before { content: "?"; }
+#page-topic-detail .knowledge-section[open] > summary::before { content: "−"; }
 #page-topic-detail .knowledge-section__title { flex: 1; min-width: 0; font-weight: 600; overflow-wrap: anywhere; }
 #page-topic-detail .knowledge-section__count { font-size: 14px; color: var(--color-muted); }
 #page-topic-detail .knowledge-section__summary:hover { background: var(--color-surface-muted); }
@@ -432,3 +432,5 @@
 #page-topic-detail .mindmap-view-btn { border-radius: var(--radius-sm); min-height: 44px; }
 #page-topic-detail .mindmap-view-btn--active { background: var(--color-primary); color: var(--color-on-primary); }
 #page-topic-detail .mindmap-drawer { box-shadow: var(--shadow-overlay); }
+
+#page-topic-detail .mindmap-view-toggle .mindmap-view-btn--active, #page-topic-detail .mindmap-view-btn.mindmap-view-btn--active { background: var(--color-primary); color: var(--color-on-primary); }

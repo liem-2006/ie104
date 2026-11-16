@@ -1278,21 +1278,21 @@ function createPillarCard(keyword, index) {
   return card;
 }
 
-/** Chuy?n c?y th?nh danh s?ch h?u th? t?, gi? m?i l?n xu?t hi?n.
- * @param {Keyword} keyword Node ngu?n, kh?ng b? thay ??i.
- * @returns {Keyword[]} C?c con ??ng tr??c cha, gi? th? t? nh?nh ngu?n.
+/** Flatten prerequisites in postorder without changing source nodes.
+ * @param {Keyword} keyword Source keyword.
+ * @returns {Keyword[]} Children before their parent, preserving sibling order.
  */
 function flattenKnowledge(keyword) {
   const nodes = [];
-  // H?u th? t? ch? ??m b?o ti?n quy?t tr??c cha, kh?ng ?p th? t? gi?a c?c nh?nh.
+  // Postorder preserves prerequisite relationships without imposing sibling dependencies.
   for (const child of keyword.children || []) nodes.push(...flattenKnowledge(child));
   nodes.push(keyword);
   return nodes;
 }
 
-/** T?o m?t m?c ki?n th?c ph?ng v?i quan h? ti?n quy?t tr?c ti?p.
- * @param {Keyword} keyword N?i dung t? JSON.
- * @returns {HTMLLIElement} M?c ??c ??y ?? ??u ra v? m?n h?c n?u c?.
+/** Render a flat keyword entry with its immediate prerequisites.
+ * @param {Keyword} keyword Source JSON node.
+ * @returns {HTMLLIElement} Full outcome and optional subjects.
  */
 function createKnowledgeItem(keyword) {
   const item = element("li", "knowledge-list__item");
@@ -1310,3 +1310,58 @@ function createKnowledgeItem(keyword) {
 }
 
 
+/** Hiển thị URL không khớp thay vì fallback. @returns {void} */
+
+function renderTopicNotFound() {
+  renderPageMessage(
+    document.getElementById("main-content"),
+    "Không tìm thấy chủ đề",
+    "Đường dẫn thiếu hoặc không khớp nhóm, tên chủ đề và email giảng viên.",
+    "../index.html",
+  );
+}
+/** Hiển thị lỗi tải. @param {string} message Thông báo. @returns {void} */
+
+function renderErrorMessage(message) {
+  renderPageMessage(
+    document.getElementById("main-content"),
+    "Không thể tải chủ đề",
+    message,
+    "../index.html",
+  );
+}
+
+/** Gắn trợ giúp đầu ra; hover và focus dùng cùng nội dung, không thay panel.
+ * @param {HTMLElement} target Node hoặc summary kiến thức.
+ * @param {string} outcome Đầu ra từ JSON.
+ * @returns {void}
+ */
+function attachOutcomeHelp(target, outcome) {
+  if (!outcome) return;
+  target.addEventListener("mouseenter", showHelp);
+  target.addEventListener("mouseleave", hideHelp);
+  target.addEventListener("focusin", showHelp);
+  target.addEventListener("focusout", hideHelp);
+  target.addEventListener("pointerdown", hideHelp);
+  target.addEventListener("keydown", dismissHelp);
+  /** Hiện khung gần node và giới hạn trong viewport. @returns {void} */
+  function showHelp() {
+    hideHelp();
+    const box = element("div", "knowledge-help", outcome);
+    box.id = "knowledge-outcome-help";
+    box.setAttribute("role", "tooltip");
+    target.setAttribute("aria-describedby", box.id);
+    document.body.append(box);
+    const rect = target.getBoundingClientRect();
+    const bounds = box.getBoundingClientRect();
+    box.style.left = Math.max(12, Math.min(rect.left, innerWidth - bounds.width - 12)) + "px";
+    box.style.top = Math.max(12, rect.top >= bounds.height + 20 ? rect.top - bounds.height - 8 : Math.min(rect.bottom + 8, innerHeight - bounds.height - 12)) + "px";
+  }
+  /** Dọn khung khi rời hoặc mở panel. @returns {void} */
+  function hideHelp() {
+    document.getElementById("knowledge-outcome-help")?.remove();
+    document.querySelector('[aria-describedby="knowledge-outcome-help"]')?.removeAttribute("aria-describedby");
+  }
+  /** Escape đóng trợ giúp mà không đổi dữ liệu. @param {KeyboardEvent} event Phím bấm. @returns {void} */
+  function dismissHelp(event) { if (event.key === "Escape") hideHelp(); }
+}
