@@ -131,7 +131,7 @@ async function initTopicDetailPage() {
     initDrawerEvents();
     renderCardsView(found.topic);
     // Mobile ưu tiên danh sách dễ đọc; vẫn chuyển sang sơ đồ được.
-    setView(window.innerWidth < 768 ? "cards" : "mindmap");
+    setView("mindmap");
     renderMindMap(true);
   } catch (err) {
     console.error("Lỗi khởi tạo chi tiết chủ đề:", err);
@@ -1256,7 +1256,7 @@ function renderCardsView(topic) {
   for (const [index, keyword] of topic.keywords.entries()) {
     fragment.appendChild(createPillarCard(keyword, index));
   }
-  container.replaceChildren(fragment);
+  container.append(element("p", "knowledge-list__hint", "Danh sách đặt kiến thức tiên quyết trước kiến thức phụ thuộc; các nhánh độc lập không bắt buộc học tuần tự."), fragment);
 }
 
 /** Tạo một nhánh keyword gốc trong chế độ danh sách.
@@ -1265,151 +1265,48 @@ function renderCardsView(topic) {
  * @returns {HTMLElement} Thẻ nhánh và toàn bộ tiên quyết của nó.
  */
 function createPillarCard(keyword, index) {
-  const card = element("div", "roadmap-pillar");
-  const label = element(
-    "div",
-    "roadmap-pillar__label",
-    "Nhánh " + (index + 1) + ": " + keyword.name,
-  );
-  const tree = element("div", "roadmap-tree");
-  tree.appendChild(createCardNodeRecursive(keyword, 0));
-  card.append(label, tree);
+  const card = document.createElement("details");
+  card.className = "knowledge-section";
+  card.open = index === 0;
+  const nodes = flattenKnowledge(keyword);
+  const summary = element("summary", "knowledge-section__summary");
+  summary.append(element("span", "knowledge-section__title", keyword.name),
+    element("span", "knowledge-section__count", nodes.length + " keyword"));
+  const list = element("ul", "knowledge-list");
+  for (const node of nodes) list.append(createKnowledgeItem(node));
+  card.append(summary, list);
   return card;
 }
 
-/** Dựng đệ quy keyword và các kiến thức tiên quyết.
- * @param {object} kw Keyword nguồn.
- * @param {number} depth Độ sâu trong cây.
- * @returns {HTMLDetailsElement} Nhánh danh sách đóng/mở bằng bàn phím.
+/** Chuy?n c?y th?nh danh s?ch h?u th? t?, gi? m?i l?n xu?t hi?n.
+ * @param {Keyword} keyword Node ngu?n, kh?ng b? thay ??i.
+ * @returns {Keyword[]} C?c con ??ng tr??c cha, gi? th? t? nh?nh ngu?n.
  */
-function createCardNodeRecursive(kw, depth) {
-  const details = document.createElement("details");
-  details.className = "roadmap-node";
-  details.open = true;
-
-  const isPillar = depth === 0;
-  const isLeaf = !kw.children || kw.children.length === 0;
-
-  if (isPillar) details.classList.add("roadmap-node--pillar");
-  else if (isLeaf) details.classList.add("roadmap-node--leaf");
-  else details.classList.add("roadmap-node--intermediate");
-
-  const summary = document.createElement("summary");
-  summary.className = "roadmap-node__summary";
-  attachOutcomeHelp(summary, kw.outcome);
-
-  const badge = document.createElement("span");
-  badge.className = "roadmap-node__badge badge";
-  if (isPillar) {
-    badge.classList.add("badge--primary");
-    badge.textContent = "Kiến thức cốt lõi";
-  } else if (isLeaf) {
-    badge.classList.add("badge--success");
-    badge.textContent = "Nền tảng tiên quyết";
-  } else {
-    badge.classList.add("badge--purple");
-    badge.textContent = "Kiến thức cơ sở";
-  }
-
-  const h = document.createElement("span");
-  h.className = "roadmap-node__name";
-  h.textContent = kw.name;
-
-  const icon = document.createElement("span");
-  icon.className = "roadmap-node__toggle-icon";
-  icon.setAttribute("aria-hidden", "true");
-
-  summary.appendChild(badge);
-  summary.appendChild(h);
-  summary.appendChild(icon);
-  details.appendChild(summary);
-
-  const content = document.createElement("div");
-  content.className = "roadmap-node__content";
-
-  const p = document.createElement("p");
-  p.className = "roadmap-node__outcome";
-  p.textContent = "Đầu ra kỳ vọng: " + (kw.outcome || "Chưa bổ sung.");
-  content.appendChild(p);
-
-  if (Array.isArray(kw.subjects) && kw.subjects.length > 0) {
-    const subDiv = document.createElement("div");
-    subDiv.className = "roadmap-node__subjects";
-    subDiv.append(
-      element("span", "roadmap-node__subjects-label", "Môn học gợi ý: "),
-      ...kw.subjects.map(createSubjectBadge),
-    );
-    content.appendChild(subDiv);
-  }
-
-  if (kw.children && kw.children.length > 0) {
-    const branch = document.createElement("div");
-    branch.className = "roadmap-branch";
-    const connector = element("div", "roadmap-branch__connector");
-    connector.append(element("span", "roadmap-branch__arrow", "↑"), " Tiên quyết cần học trước:");
-    branch.appendChild(connector);
-    for (const child of kw.children) {
-      branch.appendChild(createCardNodeRecursive(child, depth + 1));
-    }
-    content.appendChild(branch);
-  }
-
-  details.appendChild(content);
-  return details;
+function flattenKnowledge(keyword) {
+  const nodes = [];
+  // H?u th? t? ch? ??m b?o ti?n quy?t tr??c cha, kh?ng ?p th? t? gi?a c?c nh?nh.
+  for (const child of keyword.children || []) nodes.push(...flattenKnowledge(child));
+  nodes.push(keyword);
+  return nodes;
 }
 
-/** Hiển thị URL không khớp thay vì fallback. @returns {void} */
-
-function renderTopicNotFound() {
-  renderPageMessage(
-    document.getElementById("main-content"),
-    "Không tìm thấy chủ đề",
-    "Đường dẫn thiếu hoặc không khớp nhóm, tên chủ đề và email giảng viên.",
-    "../index.html",
-  );
-}
-/** Hiển thị lỗi tải. @param {string} message Thông báo. @returns {void} */
-
-function renderErrorMessage(message) {
-  renderPageMessage(
-    document.getElementById("main-content"),
-    "Không thể tải chủ đề",
-    message,
-    "../index.html",
-  );
-}
-
-/** Gắn trợ giúp đầu ra; hover và focus dùng cùng nội dung, không thay panel.
- * @param {HTMLElement} target Node hoặc summary kiến thức.
- * @param {string} outcome Đầu ra từ JSON.
- * @returns {void}
+/** T?o m?t m?c ki?n th?c ph?ng v?i quan h? ti?n quy?t tr?c ti?p.
+ * @param {Keyword} keyword N?i dung t? JSON.
+ * @returns {HTMLLIElement} M?c ??c ??y ?? ??u ra v? m?n h?c n?u c?.
  */
-function attachOutcomeHelp(target, outcome) {
-  if (!outcome) return;
-  target.addEventListener("mouseenter", showHelp);
-  target.addEventListener("mouseleave", hideHelp);
-  target.addEventListener("focusin", showHelp);
-  target.addEventListener("focusout", hideHelp);
-  target.addEventListener("pointerdown", hideHelp);
-  target.addEventListener("keydown", dismissHelp);
-  /** Hiện khung gần node và giới hạn trong viewport. @returns {void} */
-  function showHelp() {
-    hideHelp();
-    const box = element("div", "knowledge-help", outcome);
-    box.id = "knowledge-outcome-help";
-    box.setAttribute("role", "tooltip");
-    target.setAttribute("aria-describedby", box.id);
-    document.body.append(box);
-    const rect = target.getBoundingClientRect();
-    const bounds = box.getBoundingClientRect();
-    box.style.left = Math.max(12, Math.min(rect.left, innerWidth - bounds.width - 12)) + "px";
-    box.style.top = Math.max(12, rect.top >= bounds.height + 20 ? rect.top - bounds.height - 8 : Math.min(rect.bottom + 8, innerHeight - bounds.height - 12)) + "px";
+function createKnowledgeItem(keyword) {
+  const item = element("li", "knowledge-list__item");
+  item.append(element("h3", "knowledge-list__name", keyword.name),
+    element("p", "knowledge-list__outcome", "Đầu ra kỳ vọng: " + (keyword.outcome || "Chưa bổ sung.")));
+  if (keyword.children?.length) {
+    item.append(element("p", "knowledge-list__prerequisites", "Cần học trước: " + keyword.children.map(child => child.name).join("; ")));
   }
-  /** Dọn khung khi rời hoặc mở panel. @returns {void} */
-  function hideHelp() {
-    document.getElementById("knowledge-outcome-help")?.remove();
-    document.querySelector('[aria-describedby="knowledge-outcome-help"]')?.removeAttribute("aria-describedby");
+  if (keyword.subjects?.length) {
+    const subjects = element("div", "knowledge-list__subjects");
+    subjects.append("Môn học gợi ý: ", ...keyword.subjects.map(createSubjectBadge));
+    item.append(subjects);
   }
-  /** Escape đóng trợ giúp mà không đổi dữ liệu. @param {KeyboardEvent} event Phím bấm. @returns {void} */
-  function dismissHelp(event) { if (event.key === "Escape") hideHelp(); }
+  return item;
 }
+
+
