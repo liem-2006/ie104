@@ -255,16 +255,12 @@ button:disabled {
 }
 .site-footer__inner {
   display: flex;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 8px 24px;
-  padding-block: 20px;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  padding-block: 24px;
 }
-.site-footer a {
-  display: inline-flex;
-  align-items: center;
-  min-height: 44px;
-}
+.site-footer__brand { font-weight: 600; color: var(--color-text); }
 .btn {
   display: inline-flex;
   justify-content: center;
