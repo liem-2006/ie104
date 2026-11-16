@@ -27,13 +27,13 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 8px;
-  min-height: 44px;
+  align-items: flex-start;
 }
 #page-topics .topics-groups__button {
   min-height: 44px;
   padding: 8px 14px;
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
+  border-radius: 8px;
   color: var(--color-muted);
   background: var(--color-surface);
   font-size: 14px;
@@ -150,3 +150,6 @@
 }
 
 #page-topics .topics-results__heading { font-size: 16px; margin-bottom: 2px; }
+
+/* Nút nhóm có chiều cao tự nhiên, không giãn theo khối cha. */
+#page-topics .topics-groups__button { flex: 0 0 auto; align-self: flex-start; height: auto; line-height: 1.5; }

@@ -8,7 +8,7 @@ import {
   createTopicRow,
 } from "./data.js";
 const pageSize = 12;
-const state = { entries: [], groups: [], selected: new Set(), query: "", sort: "source", page: 1 };
+const state = { entries: [], groups: [], selected: new Set(), query: "", page: 1 };
 const status = document.getElementById("results-status");
 document.addEventListener("DOMContentLoaded", initTopics);
 /** Nạp dữ liệu và gắn sự kiện sau khi DOM sẵn sàng. @returns {Promise<void>} */
@@ -66,7 +66,6 @@ function getEmail(entry) {
 /** Gắn mỗi sự kiện một lần, dùng delegation cho nút sinh từ dữ liệu. @returns {void} */
 function bindFilters() {
   document.getElementById("topic-search").addEventListener("input", updateSearch);
-  document.getElementById("topic-sort").addEventListener("change", updateSort);
   document.getElementById("reset-filters").addEventListener("click", resetFilters);
   // Nút trong bảng rỗng cũng xóa bộ lọc; sau đó trả focus về ô tìm.
   document
@@ -99,23 +98,12 @@ function updateSearch(event) {
   state.page = 1;
   renderTopics();
 }
-/** Đổi thứ tự toàn bộ kết quả rồi quay về trang đầu.
- * @param {Event} event Thay đổi select.
- * @returns {void}
- */
-function updateSort(event) {
-  state.sort = event.target.value;
-  state.page = 1;
-  renderTopics();
-}
 /** Trả tìm kiếm, nhóm, thứ tự và trang về mặc định. @returns {void} */
 function resetFilters() {
   state.query = "";
-  state.sort = "source";
   state.page = 1;
   state.selected.clear();
   document.getElementById("topic-search").value = "";
-  document.getElementById("topic-sort").value = "source";
   // Nút reset sẽ ẩn sau render; trả focus về một điều khiển còn hiển thị.
   document.getElementById("topic-search").focus({ preventScroll: true });
   renderTopics();
@@ -137,7 +125,7 @@ function compareTitles(first, second) {
 /** Lọc và sắp xếp trước khi lấy dữ liệu của một trang. @returns {object[]} Toàn bộ kết quả đã sắp xếp. */
 function getFilteredTopics() {
   const entries = state.entries.filter(matchesFilters);
-  if (state.sort === "title") entries.sort(compareTitles);
+  entries.sort(compareTitles);
   return entries;
 }
 /** Điều phối danh sách, trạng thái lọc và thanh phân trang. @returns {void} */
@@ -184,7 +172,7 @@ function renderEmptyState(total) {
 }
 /** Kiểm tra bộ lọc có khác mặc định hay không. @returns {boolean} Có lựa chọn khác mặc định. */
 function hasCustomFilter() {
-  return Boolean(state.query) || state.selected.size > 0 || state.sort !== "source";
+  return Boolean(state.query) || state.selected.size > 0;
 }
 /** Đồng bộ nút nhóm và chỉ hiện reset khi có lựa chọn khác mặc định.
  * Khi bảng rỗng đang hiện, nút reset trong thanh thao tác bị ẩn vì

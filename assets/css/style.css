@@ -34,7 +34,7 @@
   --transition-fast: 150ms ease;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root[data-theme="dark"] {
     color-scheme: dark;
     --color-bg: #141a23;
     --color-surface: #1c2531;
@@ -197,10 +197,8 @@ button:disabled {
   width: 34px;
   height: 30px;
   object-fit: contain;
-  /* Logo gốc màu xanh cần nền trắng để rõ cả ở theme tối. */
-  background: #fff;
-  padding: 2px;
-  border-radius: 6px;
+  /* PNG đã có alpha; không đặt nền trắng lên logo. */
+  background: transparent;
 }
 .site-nav {
   order: 3;

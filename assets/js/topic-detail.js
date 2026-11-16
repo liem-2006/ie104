@@ -1,10 +1,11 @@
-import {
+﻿import {
   loadResearch,
   readTopicQuery,
   findTopic as findDataTopic,
   topicUrl,
   lecturerUrl,
   element,
+  searchText,
   renderPageMessage,
 } from "./data.js";
 /**
@@ -190,44 +191,66 @@ function renderQuickTopicSwitcher(data, currentTopic) {
 
   container.replaceChildren();
 
-  const label = document.createElement("label");
-  label.setAttribute("for", "topic-select-dropdown");
-  label.className = "topic-switcher__label";
-  label.textContent = "Chuyển chủ đề";
-
-  const select = document.createElement("select");
-  select.id = "topic-select-dropdown";
-  select.className = "topic-switcher__select";
-
-  const fragment = document.createDocumentFragment();
-  for (const entry of data.groups) {
-    const optgroup = document.createElement("optgroup");
-    optgroup.label = "[" + entry.group.name + "]";
-    for (const topic of entry.topics) {
-      const option = document.createElement("option");
-      option.value = topicUrl(entry.group, topic);
-      option.textContent = topic.name + " — " + topic.lecturer.name;
-      option.selected =
-        entry.group.id === state.currentGroup.id &&
-        topic.name === currentTopic.name &&
-        topic.lecturer.email === currentTopic.lecturer.email;
-      optgroup.appendChild(option);
+  const button = element("button", "btn btn--outline topic-switcher__trigger", "Chuyển chủ đề");
+  button.type = "button";
+  const dialog = element("dialog", "topic-picker");
+  dialog.setAttribute("aria-labelledby", "topic-picker-heading");
+  const top = element("div", "topic-picker__header");
+  const heading = element("h2", "", "Chọn chủ đề nghiên cứu");
+  heading.id = "topic-picker-heading";
+  const close = element("button", "btn btn--quiet", "Đóng");
+  close.type = "button";
+  top.append(heading, close);
+  const label = element("label", "", "Tìm chủ đề hoặc giảng viên");
+  label.htmlFor = "topic-picker-search";
+  const search = element("input");
+  search.id = "topic-picker-search";
+  search.type = "search";
+  const list = element("div", "topic-picker__list");
+  const status = element("p", "topic-picker__status");
+  status.setAttribute("role", "status");
+  dialog.append(top, label, search, status, list);
+  container.append(button, dialog);
+  button.addEventListener("click", openPicker);
+  close.addEventListener("click", closePicker);
+  dialog.addEventListener("close", restorePickerFocus);
+  dialog.addEventListener("keydown", handlePickerKey);
+  /** Escape đóng cả khi ô search có nội dung. @param {KeyboardEvent} event Phím bấm. @returns {void} */
+  function handlePickerKey(event) { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closePicker(); } }
+  search.addEventListener("input", renderChoices);
+  /** Mở hộp chọn và đặt focus vào tìm kiếm. @returns {void} */
+  function openPicker() { document.getElementById("knowledge-outcome-help")?.remove(); search.value = ""; renderChoices(); dialog.showModal(); search.focus(); }
+  /** Đóng hộp chọn; Escape cũng được dialog xử lý. @returns {void} */
+  function closePicker() { dialog.close(); }
+  /** Trả focus về nút gọi sau khi đóng. @returns {void} */
+  function restorePickerFocus() { button.focus(); }
+  /** Lọc toàn danh sách, sắp xếp tiếng Việt trong từng nhóm. @returns {void} */
+  function renderChoices() {
+    const fragment = document.createDocumentFragment();
+    const query = searchText(search.value);
+    let count = 0;
+    for (const entry of data.groups) {
+      const matches = entry.topics.filter(matchesSearch).slice().sort(compareNames);
+      if (!matches.length) continue;
+      const section = element("section", "topic-picker__group");
+      section.append(element("h3", "", entry.group.name));
+      for (const topic of matches) {
+        const link = element("a", "topic-picker__item");
+        link.href = topicUrl(entry.group, topic);
+        link.append(element("span", "topic-picker__name", topic.name), element("span", "topic-picker__lecturer", topic.lecturer.name));
+        if (entry.group.id === state.currentGroup.id && topic === currentTopic) link.setAttribute("aria-current", "page");
+        section.append(link);
+        count++;
+      }
+      fragment.append(section);
     }
-    fragment.appendChild(optgroup);
+    list.replaceChildren(fragment);
+    status.textContent = count ? count + " chủ đề" : "Không tìm thấy chủ đề phù hợp.";
+    /** So khớp tên đề tài và người hướng dẫn không dấu. @param {object} topic Chủ đề. @returns {boolean} Khớp từ khóa. */
+    function matchesSearch(topic) { return searchText(topic.name + " " + topic.lecturer.name).includes(query); }
   }
-  select.appendChild(fragment);
-  select.addEventListener("change", navigateToSelectedTopic);
-
-  container.appendChild(label);
-  container.appendChild(select);
-}
-
-/** Điều hướng bằng URL đầy đủ của option, reset trạng thái cây qua trang mới.
- * @param {Event} event Sự kiện thay đổi bộ chọn chủ đề.
- * @returns {void}
- */
-function navigateToSelectedTopic(event) {
-  if (event.target.value) window.location.assign(event.target.value);
+  /** So sánh tên tiếng Việt. @param {object} a Chủ đề thứ nhất. @param {object} b Chủ đề thứ hai. @returns {number} Thứ tự. */
+  function compareNames(a, b) { return a.name.localeCompare(b.name, "vi"); }
 }
 
 /* ==========================================================================
@@ -669,6 +692,7 @@ function createNodeDomElement(node) {
   textSpan.className = "mindmap-node__text";
   textSpan.textContent = node.name;
   el.appendChild(textSpan);
+  if (!node.isRoot) attachOutcomeHelp(el, node.outcome);
 
   // Nếu có con -> Thêm nút tròn chỉ thị và số lượng con (+ / -)
   const hasChildren = node.children && node.children.length > 0;
@@ -1272,6 +1296,7 @@ function createCardNodeRecursive(kw, depth) {
 
   const summary = document.createElement("summary");
   summary.className = "roadmap-node__summary";
+  attachOutcomeHelp(summary, kw.outcome);
 
   const badge = document.createElement("span");
   badge.className = "roadmap-node__badge badge";
@@ -1352,4 +1377,39 @@ function renderErrorMessage(message) {
     message,
     "../index.html",
   );
+}
+
+/** Gắn trợ giúp đầu ra; hover và focus dùng cùng nội dung, không thay panel.
+ * @param {HTMLElement} target Node hoặc summary kiến thức.
+ * @param {string} outcome Đầu ra từ JSON.
+ * @returns {void}
+ */
+function attachOutcomeHelp(target, outcome) {
+  if (!outcome) return;
+  target.addEventListener("mouseenter", showHelp);
+  target.addEventListener("mouseleave", hideHelp);
+  target.addEventListener("focusin", showHelp);
+  target.addEventListener("focusout", hideHelp);
+  target.addEventListener("pointerdown", hideHelp);
+  target.addEventListener("keydown", dismissHelp);
+  /** Hiện khung gần node và giới hạn trong viewport. @returns {void} */
+  function showHelp() {
+    hideHelp();
+    const box = element("div", "knowledge-help", outcome);
+    box.id = "knowledge-outcome-help";
+    box.setAttribute("role", "tooltip");
+    target.setAttribute("aria-describedby", box.id);
+    document.body.append(box);
+    const rect = target.getBoundingClientRect();
+    const bounds = box.getBoundingClientRect();
+    box.style.left = Math.max(12, Math.min(rect.left, innerWidth - bounds.width - 12)) + "px";
+    box.style.top = Math.max(12, rect.top >= bounds.height + 20 ? rect.top - bounds.height - 8 : Math.min(rect.bottom + 8, innerHeight - bounds.height - 12)) + "px";
+  }
+  /** Dọn khung khi rời hoặc mở panel. @returns {void} */
+  function hideHelp() {
+    document.getElementById("knowledge-outcome-help")?.remove();
+    document.querySelector('[aria-describedby="knowledge-outcome-help"]')?.removeAttribute("aria-describedby");
+  }
+  /** Escape đóng trợ giúp mà không đổi dữ liệu. @param {KeyboardEvent} event Phím bấm. @returns {void} */
+  function dismissHelp(event) { if (event.key === "Escape") hideHelp(); }
 }

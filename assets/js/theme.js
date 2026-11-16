@@ -2,14 +2,12 @@
 /** Khởi tạo lựa chọn theme và vòng đời DOM. @returns {void} */
 (function initTheme() {
   const storageKey = "ie104.theme";
-  const systemTheme = window.matchMedia("(prefers-color-scheme: dark)");
   let preference = readPreference();
   applyTheme();
   document.addEventListener("DOMContentLoaded", bindThemeButtons);
-  systemTheme.addEventListener("change", handleSystemChange);
   window.addEventListener("storage", handleStorageChange);
 
-  /** Đọc lựa chọn hợp lệ; storage bị chặn vẫn chạy theo hệ thống.
+  /** Đọc lựa chọn hợp lệ; storage bị chặn dùng giao diện sáng.
    * @returns {string|null} light/dark hoặc null khi chưa chọn.
    */
   function readPreference() {
@@ -22,7 +20,7 @@
   }
   /** Chọn theme và đồng bộ trạng thái nút. @returns {void} */
   function applyTheme() {
-    const theme = preference || (systemTheme.matches ? "dark" : "light");
+    const theme = preference || "light";
     document.documentElement.dataset.theme = theme;
     for (const button of document.querySelectorAll(".theme-toggle")) {
       button.hidden = false;
@@ -47,10 +45,6 @@
       /* Theme vẫn đổi trong trang khi storage bị chặn. */
     }
     applyTheme();
-  }
-  /** Theo hệ thống cho đến khi có lựa chọn riêng. @returns {void} */
-  function handleSystemChange() {
-    if (preference === null) applyTheme();
   }
   /** Đồng bộ lựa chọn từ tab khác. @param {StorageEvent} event Thay đổi storage. @returns {void} */
   function handleStorageChange(event) {
