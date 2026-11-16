@@ -1,3 +1,5 @@
+> **Cập nhật 17/11/2026:** bản local 9cc27d6 luôn A–Z (bỏ chọn sắp xếp), nút nhóm không giãn, đổi chủ đề bằng dialog tìm kiếm, node có trợ giúp outcome, logo không nền trắng; mặc định sáng và giữ theme đã lưu. Quyết định này thay các mô tả cũ liên quan. Xem bản ghi job2-sua-chua được dẫn bên dưới. Chưa duyệt merge.
+
 > **Bản ghép Job 2 đang chờ nhóm trưởng kiểm tra.** Đọc [lịch sử tích hợp và sửa chữa](job2-sua-chua-tv3.md) để phân biệt bài PR của thành viên với thay đổi sau tích hợp. Chưa merge.
 
 # Job 2 — TV3: kiểm tra chéo và nâng cấp khám phá
