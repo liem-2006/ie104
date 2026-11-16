@@ -65,15 +65,22 @@
             type="search"
             placeholder="Ví dụ: học sâu, IDS, Nguyễn Tấn Cầm"
             autocomplete="off"
+            aria-describedby="topic-search-hint"
           />
+          <p id="topic-search-hint" class="topics-search__hint">
+            Tìm không phân biệt hoa thường và dấu: “hoc sau” vẫn ra “học sâu”.
+          </p>
         </div>
+        <p class="topics-groups__label">
+          Lọc theo nhóm
+          <span class="topics-groups__hint">Chọn một hoặc nhiều để lọc nhanh</span>
+        </p>
         <div
           id="group-pills"
           class="topics-groups"
           role="group"
           aria-label="Lọc theo nhóm chủ đề"
         ></div>
-        <p class="topics-search__hint">Có thể chọn nhiều nhóm.</p>
       </section>
       <section aria-labelledby="results-heading">
         <div class="topics-results">
@@ -92,6 +99,12 @@
           </div>
         </div>
         <div id="topics-list" class="topics-list"></div>
+        <div id="topics-empty" class="topics-empty" hidden>
+          <p class="topics-empty__text">Không có chủ đề nào khớp bộ lọc hiện tại.</p>
+          <button type="button" class="btn btn--outline" data-empty-reset>
+            Xóa bộ lọc
+          </button>
+        </div>
         <nav
           id="topic-pagination"
           class="topics-pagination"

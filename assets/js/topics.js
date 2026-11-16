@@ -68,6 +68,11 @@ function bindFilters() {
   document.getElementById("topic-search").addEventListener("input", updateSearch);
   document.getElementById("topic-sort").addEventListener("change", updateSort);
   document.getElementById("reset-filters").addEventListener("click", resetFilters);
+  // Nút trong bảng rỗng cũng xóa bộ lọc; sau đó trả focus về ô tìm.
+  document
+    .getElementById("topics-empty")
+    .querySelector("[data-empty-reset]")
+    .addEventListener("click", resetFilters);
   document.getElementById("group-pills").addEventListener("click", toggleGroup);
   document.getElementById("topic-pagination").addEventListener("click", changePage);
 }
@@ -145,28 +150,55 @@ function renderTopics() {
   for (const entry of entries.slice(start, start + pageSize))
     fragment.append(createTopicRow(entry));
   document.getElementById("topics-list").replaceChildren(fragment);
-  status.textContent = !state.entries.length
-    ? "Chưa có dữ liệu chủ đề."
-    : !entries.length
-      ? "Không có kết quả phù hợp. Hãy thử xóa bộ lọc."
-      : start +
-        1 +
-        "–" +
-        Math.min(start + pageSize, entries.length) +
-        " trong " +
-        entries.length +
-        " chủ đề";
+  status.textContent = buildStatus(entries.length, start);
+  renderEmptyState(entries.length);
   renderFilterState();
   renderPagination(pageCount);
 }
-/** Đồng bộ nút nhóm và chỉ hiện reset khi có lựa chọn khác mặc định. @returns {void} */
+/** Diễn đạt số kết quả theo định dạng đã thống nhất của nhóm.
+ * @param {number} total Số chủ đề khớp bộ lọc.
+ * @param {number} start Chỉ số bắt đầu của trang hiện tại.
+ * @returns {string} Thông báo ngắn gọn.
+ */
+function buildStatus(total, start) {
+  if (!state.entries.length) return "Chưa có dữ liệu chủ đề.";
+  if (!total) return "Không có kết quả phù hợp. Hãy thử xóa bộ lọc.";
+  return (
+    start +
+    1 +
+    "–" +
+    Math.min(start + pageSize, total) +
+    " trong " +
+    total +
+    " chủ đề"
+  );
+}
+/** Hiện bảng rỗng khi có dữ liệu nhưng không chủ đề nào khớp bộ lọc.
+ * @param {number} total Số chủ đề khớp bộ lọc.
+ * @returns {void}
+ */
+function renderEmptyState(total) {
+  // Chưa có dữ liệu gốc thì không gọi là "không khớp bộ lọc".
+  const isEmpty = !total && state.entries.length > 0;
+  document.getElementById("topics-empty").hidden = !isEmpty;
+}
+/** Kiểm tra bộ lọc có khác mặc định hay không. @returns {boolean} Có lựa chọn khác mặc định. */
+function hasCustomFilter() {
+  return Boolean(state.query) || state.selected.size > 0 || state.sort !== "source";
+}
+/** Đồng bộ nút nhóm và chỉ hiện reset khi có lựa chọn khác mặc định.
+ * Khi bảng rỗng đang hiện, nút reset trong thanh thao tác bị ẩn vì
+ * bảng rỗng đã có sẵn một nút xóa bộ lọc ngay tại đó.
+ * @returns {void}
+ */
 function renderFilterState() {
   for (const button of document.querySelectorAll("#group-pills button")) {
     const id = button.dataset.group;
     button.setAttribute("aria-pressed", String(id ? state.selected.has(id) : !state.selected.size));
   }
+  const emptyVisible = !document.getElementById("topics-empty").hidden;
   document.getElementById("reset-filters").hidden =
-    !state.query && !state.selected.size && state.sort === "source";
+    emptyVisible || !hasCustomFilter();
 }
 /** Tạo bộ điều hướng chỉ khi kết quả có nhiều hơn một trang.
  * @param {number} pageCount Số trang của tập kết quả đã lọc.
