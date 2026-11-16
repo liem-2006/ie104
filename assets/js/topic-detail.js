@@ -1261,7 +1261,7 @@ function renderCardsView(topic) {
 
 /** Tạo một nhánh keyword gốc trong chế độ danh sách.
  * @param {Keyword} keyword Kiến thức gốc của chủ đề.
- * @param {number} index Vị trí để đánh số nhánh.
+ * @param {number} index Vị trí để mở nhánh đầu tiên.
  * @returns {HTMLElement} Thẻ nhánh và toàn bộ tiên quyết của nó.
  */
 function createPillarCard(keyword, index) {

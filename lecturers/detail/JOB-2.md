@@ -1,3 +1,5 @@
+> **Cập nhật 17/11/2026 — Material:** Sơ đồ mặc định cả mobile; Danh sách là accordion một cấp với nội dung phẳng, con trước cha. Giữ token xanh UIT, theme sáng mặc định và lựa chọn đã lưu. Header trang chủ chỉ logo/theme. Quy tắc này thay các mô tả cũ tương ứng. Bản local chờ duyệt; xem bản ghi Job 2 và kế hoạch tổng.
+
 > **Cập nhật 17/11/2026:** bản local 9cc27d6 luôn A–Z (bỏ chọn sắp xếp), nút nhóm không giãn, đổi chủ đề bằng dialog tìm kiếm, node có trợ giúp outcome, logo không nền trắng; mặc định sáng và giữ theme đã lưu. Quyết định này thay các mô tả cũ liên quan. Xem bản ghi job2-sua-chua được dẫn bên dưới. Chưa duyệt merge.
 
 > Lịch sử bản ghép: [Job 2 — sửa chữa TV2](../job2-sua-chua-tv2.md). Chờ nhóm trưởng kiểm tra, chưa merge.

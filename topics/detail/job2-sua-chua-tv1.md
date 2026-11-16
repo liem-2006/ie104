@@ -58,3 +58,16 @@ Kiểm thử mới Chrome headless: 20 ca responsive (Khám phá/Chi tiết × 5
 Ảnh mới: idea/minh-chung-giao-dien/job-2-integration/topic-picker-mobile.png và topics-az-mobile.png. Đã xem trực tiếp ảnh hộp chọn mobile. Chưa chạy lại Lighthouse/W3C hoặc kiểm tra thiết bị cảm ứng thật cho commit mới; số đo 16/11 chỉ là lịch sử.
 
 Quy ước hiện hành thay thế phần cũ: luôn A–Z, không còn lựa chọn source/title; mặc định light thay vì theo hệ điều hành; đổi chủ đề dùng dialog thay select native. Giữ schema và URL. Không lấy yêu cầu lịch sử cũ để khôi phục các điều khiển đã bỏ.
+
+
+## Đợt Material ngày 17/11/2026 — bản local chờ nhóm trưởng xem
+
+TV1: Sơ đồ mặc định trên mọi thiết bị; thay cây lồng nhau bằng accordion một cấp và danh sách hậu thứ tự. Giữ các node trùng tên, đầu ra, môn học và tiên quyết trực tiếp.
+
+| Trước | Sau | Lý do | File/commit | Kiểm thử |
+|---|---|---|---|---|
+| Giao diện trước Material | Token, trạng thái thao tác và bố cục đọc thống nhất | Dễ đọc, giảm khung lặp | `7c7f3ab`, `127ccbc`, `f9dca24`; CSS chung và phần roadmap | 50 bố cục, axe 5 trang, HTML 5 trang; chi tiết xem kế hoạch tổng |
+
+Đây là thay đổi của người tích hợp, không ghi thành đóng góp mới của thành viên. Không sửa lịch sử Job 1. Quy tắc mới thay thế mặc định Danh sách mobile và danh sách cây lồng nhau.
+
+Tự kiểm tra: chạy HTTP từ repo, mở phần được giao, thử sáng/tối, bàn phím và mobile; với roadmap mở cả hai tab, kiểm tra đầu ra và môn học. Chưa push/merge/deploy. Xem mục Material trong kế hoạch tổng để biết backup, ảnh và giới hạn kiểm thử.

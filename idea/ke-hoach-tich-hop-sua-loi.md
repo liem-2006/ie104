@@ -609,3 +609,54 @@ Kiểm thử mới Chrome headless: 20 ca responsive (Khám phá/Chi tiết × 5
 Quy ước hiện hành thay thế phần cũ: luôn A–Z, không còn lựa chọn source/title; mặc định light thay vì theo hệ điều hành; đổi chủ đề dùng dialog thay select native. Giữ schema và URL. Không lấy yêu cầu lịch sử cũ để khôi phục các điều khiển đã bỏ.
 
 Định hướng thiết kế đề xuất: tra cứu học thuật tối giản, ưu tiên chữ/nhịp khoảng cách và thao tác rõ. Tham khảo nguyên tắc typography và responsive spacing của GOV.UK (https://design-system.service.gov.uk/styles/type-scale/ và https://design-system.service.gov.uk/styles/spacing/), tự triển khai CSS/DOM; không nhập GOV.UK Frontend, font thương hiệu hoặc template. Đây là đề xuất thiết kế, không mở thêm phạm vi redesign trong commit này.
+
+
+## Material tiết chế và danh sách đọc phẳng — 17/11/2026
+
+### Backup và trạng thái
+
+- Bản trước sửa: `2317f0380221d2913de39f80b1946e030545c95f`; working tree sạch khi bắt đầu.
+- Backup local: `backup/job-2-before-material-20261117`. Git bundle ngoài repo: `../job-history/backups/job-2-before-material-20261117.bundle`; `git bundle verify` báo hợp lệ, chứa lịch sử đầy đủ.
+- Xem lại an toàn: `git worktree add ../ie104-before-material backup/job-2-before-material-20261117`. Hoặc clone bundle vào thư mục mới. Không reset/xóa bản đang làm.
+- Triển khai trên `review/job-2-combined`; chưa push, merge hoặc deploy.
+
+### Thay đổi thực tế
+
+| Vấn đề trước | Thay đổi | File | Commit |
+|---|---|---|---|
+| Header trang chủ trùng hai nút chính | Chỉ giữ logo và theme, cùng hàng | index.html | 7c7f3ab |
+| Trạng thái/độ nổi chưa thống nhất | Token dialog/shadow, nút, focus, disabled, reduced motion; thẻ giảng viên bỏ nhấc/bóng màu | assets/css/style.css; assets/css/lecturers.css | 7c7f3ab |
+| Mobile mặc định Danh sách | Sơ đồ mặc định cả mobile và khi tải chủ đề mới | assets/js/topic-detail.js | 127ccbc; f9dca24 |
+| Accordion lồng nhiều cấp, nhãn lặp | Một details cho mỗi keyword gốc; danh sách phẳng con trước cha, quan hệ trực tiếp bằng chữ | assets/js/topic-detail.js; assets/css/topic-detail.css | 127ccbc; f9dca24 |
+
+`flattenKnowledge` tạo danh sách hậu thứ tự; `createKnowledgeItem` chỉ render nội dung; `createPillarCard` dựng accordion một cấp. Không gộp node trùng tên, không đánh số bắt buộc. Mục đầu mở mặc định, các mục khác đóng, có thể mở nhiều mục. Môn học chỉ xuất hiện khi có. Quy tắc này thay mặc định Danh sách mobile và cấu trúc danh sách lồng cũ; giữ lịch sử cũ ở trên.
+
+### Kết quả mới đã chạy
+
+- JSON không có diff so với backup: 3 nhóm, 37 chủ đề, 234 keyword, 16 hồ sơ.
+- Đã mở 37 URL chủ đề: Sơ đồ mặc định; 234 mục Danh sách khớp thứ tự hậu duyệt từ JSON.
+- 50 tổ hợp (5 trang × 5 chiều rộng 320/375/768/1024/1440 × 2 theme): không tràn ngang theo phép đo DOM.
+- Axe WCAG 2A/AA, 2.1AA trên 5 trang: 0 vi phạm trong lượt kiểm tra. HTML Validate trên 5 nguồn: 0 lỗi với cấu hình recommended, tắt void-style/no-trailing-whitespace/long-title/no-inline-style như đợt trước. Không thay cho W3C chính thức.
+- Accordion mở/thu bằng Enter; không có details lồng. Fixture node tên dài/trùng tên giữ đủ 4 lần xuất hiện; fixture chủ đề không keyword không phát sinh lỗi. Không sửa JSON thật.
+- Thử chuyển hai tab, 12 mục trang khám phá đầu, URL email cũ và URL chủ đề sai: đúng trạng thái; không pageerror trong luồng đã chạy.
+- Ảnh tại `idea/minh-chung-giao-dien/material-20261117/`: trước/sau trang chủ 375/1440, sau trang chi tiết 375/1440, danh sách mobile/desktop. Đã xem trực tiếp ảnh trang chủ mobile và chi tiết mobile; phép đo overflow không thay thế đánh giá trực quan mọi tổ hợp.
+
+### Cách chạy và giới hạn
+
+Chạy HTTP từ repo: `python -m http.server 8876`, mở `http://127.0.0.1:8876/`. Nếu cổng đang chạy thì dùng server hiện có.
+
+Chưa xác minh đầy đủ trong đợt này: W3C/CSS validator chính thức, Firefox/thiết bị thật, tất cả pan/zoom/fullscreen và phục hồi focus, Back/Forward, đường dẫn /ie104/, lỗi fetch/storage trên mọi trang. CSS parser bổ sung không có sẵn trong môi trường; không đánh dấu CSS pass. Các chức năng được giữ nhưng các kết quả cũ chỉ là lịch sử.
+
+### Lighthouse mới
+
+Lighthouse 13.6.0, Chrome headless, HTTP local, cấu hình mobile mặc định, 3 lượt/trang; trung vị:
+
+| Trang | Performance | Accessibility | Best Practices | SEO |
+|---|---|---|---|---|
+| home | 100 | 100 | 100 | 100 |
+| topics | 93 | 100 | 100 | 100 |
+| topic-detail | 95 | 100 | 100 | 100 |
+| lecturers | 97 | 100 | 100 | 100 |
+| lecturer-detail | 95 | 100 | 100 | 100 |
+
+Số đo đầy đủ: `idea/minh-chung-giao-dien/material-20261117/lighthouse-summary.json`. Đây là số đo mới cho đợt Material, không phải số đo Job 1. Kiểm thử tự động không bảo đảm mọi tương tác/thiết bị thực đã được xác minh. Chưa push, merge hoặc deploy; bản local chờ nhóm trưởng xem.
