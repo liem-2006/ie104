@@ -530,3 +530,17 @@ input::placeholder {
   color: var(--color-muted);
   margin-top: 12px;
 }
+
+/* Material tiết chế: thành phần và trạng thái dùng chung. */
+:root { --radius-dialog: 16px; --shadow-overlay: 0 12px 32px #0003; }
+#page-home .site-header__inner { flex-wrap: nowrap; min-height: 72px; }
+#page-home .theme-toggle { margin-left: auto; }
+.btn, .theme-toggle, .site-nav__link, input, select, button { transition: background-color var(--transition-fast), color var(--transition-fast), border-color var(--transition-fast); }
+button, .btn, .theme-toggle, .site-nav__link { min-height: 44px; }
+input, select, .btn, .theme-toggle { border-radius: var(--radius-sm); }
+.btn:hover { filter: brightness(.95); }
+button:active:not(:disabled), .btn:active { filter: brightness(.9); }
+button:disabled { opacity: .55; cursor: default; }
+dialog { border-radius: var(--radius-dialog); box-shadow: var(--shadow-overlay); }
+:focus-visible { outline: 3px solid var(--color-focus); outline-offset: 3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; animation: none !important; } }

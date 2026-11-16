@@ -65,14 +65,14 @@ html[data-theme="dark"] #page-lecturers {
   background: var(--color-surface);
   border: 1.5px solid var(--card-border-color);
   border-radius: 12px;
-  box-shadow: var(--card-shadow);
-  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  box-shadow: none;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast);
 }
 
 #page-lecturers .lecturer-card:hover {
-  transform: translateY(-2px);
+  background: var(--color-surface-muted);
   border-color: var(--color-primary);
-  box-shadow: 0 6px 18px rgba(0, 86, 179, 0.14);
+  box-shadow: none;
 }
 
 #page-lecturers .lecturer-card__header {
