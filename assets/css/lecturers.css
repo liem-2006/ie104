@@ -1,18 +1,18 @@
 /* TV2 Job 2 — Danh bạ giảng viên: nâng cấp giao diện, phân trang và responsive. */
 
 #page-lecturers {
-  --card-border-color: #cbd5e1;
+  --card-border-color: var(--color-border);
   --card-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
 }
 
 html[data-theme="dark"] #page-lecturers {
-  --card-border-color: #334155;
+  --card-border-color: var(--color-border);
   --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
 }
 
 @media (prefers-color-scheme: dark) {
   html:not([data-theme="light"]) #page-lecturers {
-    --card-border-color: #334155;
+    --card-border-color: var(--color-border);
     --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
   }
 }

@@ -12,6 +12,7 @@ import {
   searchText,
   lecturerUrl,
   element,
+  avatar,
 } from "./data.js";
 
 /** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop) */
@@ -112,66 +113,6 @@ function relatedTopics(lecturer) {
   function matchesEmail(entry) {
     return normalizeEmail(entry.topic.lecturer.email) === normalizeEmail(lecturer.email);
   }
-}
-
-/**
- * Rút trích 2 chữ cái viết tắt đại diện cho avatar giảng viên (tiếng Việt).
- * Xử lý triệt để việc loại bỏ học hàm (PGS, TS...), tổ chức trong ngoặc (ĐHQT, ĐHQG...),
- * tránh lỗi ký tự ngoặc đơn hoặc mất chữ cái.
- * @param {string} rawName Tên gốc của giảng viên.
- * @returns {string} 2 chữ cái viết hoa đại diện.
- */
-export function getLecturerInitials(rawName) {
-  if (!rawName) return "GV";
-  // 1. Loại bỏ các phần chú thích đơn vị trong ngoặc ở cuối tên: (ĐHQT), (ĐHQG-HCM), (ĐH KTL)...
-  const withoutOrg = rawName.replace(/\s*\([^)]*\)\s*$/g, "").trim();
-  // 2. Loại bỏ các học hàm, học vị tiền tố
-  const withoutTitle = withoutOrg
-    .replace(/^(PGS\.?\s*TS\.?|GS\.?\s*TS\.?|PGS\.?|GS\.?|TS\.?|ThS\.?|Th\.S\.?|CN\.?)\s+/i, "")
-    .trim();
-  // 3. Tách các từ tên tiếng Việt
-  const words = withoutTitle.split(/\s+/).filter((w) => /[\p{L}]/u.test(w));
-  if (!words.length) return "GV";
-  // Lấy 2 từ cuối cùng của tên (Tên đệm + Tên chính)
-  const selected = words.slice(-2);
-  return selected
-    .map((w) => {
-      const match = w.match(/[\p{L}]/u);
-      return match ? match[0].toUpperCase() : "";
-    })
-    .join("");
-}
-
-/**
- * Tạo khung avatar kèm ảnh (nếu có) hoặc fallback chữ viết tắt chuẩn xác.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @param {string} className Tên lớp CSS khung avatar.
- * @returns {HTMLElement} Phần tử avatar.
- */
-export function createLecturerAvatar(lecturer, className) {
-  const initials = getLecturerInitials(lecturer.name);
-  const box = element("div", className, initials);
-  box.setAttribute("aria-hidden", "true");
-
-  if (lecturer.photo?.path) {
-    try {
-      const url = new URL(lecturer.photo.path, document.baseURI);
-      if (["http:", "https:"].includes(url.protocol)) {
-        const image = element("img");
-        image.src = url.href;
-        image.alt = lecturer.photo.alt || lecturer.name;
-        image.loading = "lazy";
-        image.addEventListener("error", () => {
-          box.textContent = initials;
-        }, { once: true });
-        box.replaceChildren(image);
-      }
-    } catch {
-      // Giữ nguyên initials nếu URL không hợp lệ
-    }
-  }
-
-  return box;
 }
 
 /**
@@ -307,12 +248,15 @@ function changePage(event) {
 
   // Cuộn nhẹ lên đầu danh sách để thuận tiện quan sát
   const listEl = document.getElementById("lecturers-list");
+  const status = document.getElementById("lecturers-status");
+  status.tabIndex = -1;
+  status.focus({ preventScroll: true });
   listEl?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /**
  * Tạo thẻ hiển thị thông tin giảng viên (card).
- * Đã lược bỏ trường email theo yêu cầu để tránh rối mắt, giữ bố cục tinh gọn.
+ * Hiển thị email phục vụ tra cứu.
  * @param {object} lecturer Dữ liệu giảng viên.
  * @returns {HTMLElement} Thẻ article hoàn chỉnh.
  */
@@ -321,12 +265,14 @@ function createLecturerCard(lecturer) {
   const header = element("div", "lecturer-card__header");
   const meta = element("div", "lecturer-card__meta");
 
-  // Tên giảng viên (đã bỏ trường email để giao diện tinh gọn, không rối mắt)
+  // Tên và email giảng viên
   const heading = element("h2", "lecturer-card__name", lecturer.name);
-  meta.append(heading);
+  const email = element("a", "lecturer-card__email", lecturer.email);
+  email.href = "mailto:" + normalizeEmail(lecturer.email);
+  meta.append(heading, email);
 
   // Avatar sử dụng bộ nhận diện viết tắt tiếng Việt chuẩn
-  header.append(createLecturerAvatar(lecturer, "lecturer-card__avatar"), meta);
+  header.append(avatar(lecturer, "lecturer-card__avatar"), meta);
 
   // Nhóm chủ đề nghiên cứu mà giảng viên phụ trách
   const related = relatedTopics(lecturer);

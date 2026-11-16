@@ -3,9 +3,9 @@ const projectRoot = new URL("../../", import.meta.url);
 const cache = new Map();
 /** Chuẩn hóa email. @param {string} value Email đầu vào. @returns {string} Email dùng đối chiếu. */
 export function normalizeEmail(value) {
-  return String(value || "")
-    .trim()
-    .toLowerCase();
+  const email = String(value || "").trim().toLowerCase();
+  // Giữ tương thích URL trước khi sửa lỗi chính tả trong dữ liệu.
+  return email === "hunglkt@uit.edu.vn" ? "hunglk@uit.edu.vn" : email;
 }
 /** Chuẩn hóa tiếng Việt để tìm kiếm. @param {string} value Văn bản. @returns {string} Chuỗi không dấu, chữ thường. */
 export function searchText(value) {
@@ -153,8 +153,7 @@ export function renderPageMessage(main, title, message, backUrl) {
 }
 /** Avatar với fallback khi thiếu hoặc lỗi ảnh. @param {object} lecturer Giảng viên. @param {string} className Lớp avatar. @returns {HTMLElement} Khung avatar. */
 export function avatar(lecturer, className) {
-  const words = lecturer.name.trim().split(/\s+/);
-  const initials = words.slice(-2).map(firstLetter).join("");
+  const initials = getLecturerInitials(lecturer.name);
   const box = element("div", className, initials);
   box.setAttribute("aria-hidden", "true");
   if (lecturer.photo?.path) {
@@ -171,10 +170,6 @@ export function avatar(lecturer, className) {
     }
   }
   return box;
-  /** Lấy chữ đầu. @param {string} word Từ. @returns {string} Chữ hoa. */
-  function firstLetter(word) {
-    return word.charAt(0).toUpperCase();
-  }
   /** Ảnh lỗi trở về chữ cái. @returns {void} */
   function restoreInitials() {
     box.textContent = initials;
@@ -213,4 +208,26 @@ export function createTopicRow(entry, headingLevel = 2) {
   meta.append(lecturer);
   row.append(heading, meta, badge);
   return row;
+}
+
+/** Lấy chữ viết tắt tên, bỏ học vị và chú thích đơn vị. @param {string} rawName Tên nguồn. @returns {string} Chữ đại diện. */
+export function getLecturerInitials(rawName) {
+  if (!rawName) return "GV";
+  // 1. Loại bỏ các phần chú thích đơn vị trong ngoặc ở cuối tên: (ĐHQT), (ĐHQG-HCM), (ĐH KTL)...
+  const withoutOrg = rawName.replace(/\s*\([^)]*\)\s*$/g, "").trim();
+  // 2. Loại bỏ các học hàm, học vị tiền tố
+  const withoutTitle = withoutOrg
+    .replace(/^(PGS\.?\s*TS\.?|GS\.?\s*TS\.?|PGS\.?|GS\.?|TS\.?|ThS\.?|Th\.S\.?|CN\.?)\s+/i, "")
+    .trim();
+  // 3. Tách các từ tên tiếng Việt
+  const words = withoutTitle.split(/\s+/).filter((w) => /[\p{L}]/u.test(w));
+  if (!words.length) return "GV";
+  // Lấy 2 từ cuối cùng của tên (Tên đệm + Tên chính)
+  const selected = words.slice(-2);
+  return selected
+    .map((w) => {
+      const match = w.match(/[\p{L}]/u);
+      return match ? match[0].toUpperCase() : "";
+    })
+    .join("");
 }

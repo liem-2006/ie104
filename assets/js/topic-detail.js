@@ -101,80 +101,10 @@ const state = {
   toggleFocusId: "",
   nodeBounds: null,
   canvasInitialized: false,
-  initialScrollDone: false,
-  userHasScrolled: false,
-  isBackForward: false,
   lastViewportWidth: 0,
 };
 
-window.__topicDetailDebug = {
-  state,
-  trackInitialScrollIntent,
-  scrollRoadmapIntoFirstScreen,
-  cleanupInitialScrollListeners,
-};
-
 document.addEventListener("DOMContentLoaded", initTopicDetailPage);
-
-/** Ghi nhận thao tác cuộn thủ công hoặc điều hướng lịch sử để không tự động cuộn đè.
- * @returns {void}
- */
-function trackInitialScrollIntent() {
-  const navEntry = performance.getEntriesByType?.("navigation")?.[0];
-  if (navEntry && navEntry.type === "back_forward") {
-    state.isBackForward = true;
-    cleanupInitialScrollListeners();
-    return;
-  }
-
-  window.addEventListener("wheel", onUserScrollIntent, { passive: true });
-  window.addEventListener("touchmove", onUserScrollIntent, { passive: true });
-  window.addEventListener("keydown", onUserKeydownIntent, { passive: true });
-  window.addEventListener(
-    "popstate",
-    () => {
-      state.isBackForward = true;
-      cleanupInitialScrollListeners();
-    },
-    { once: true },
-  );
-}
-
-/** Xử lý sự kiện cuộn bánh xe hoặc cử chỉ vuốt để đánh dấu ý định cuộn của người dùng.
- * @returns {void}
- */
-function onUserScrollIntent() {
-  state.userHasScrolled = true;
-  cleanupInitialScrollListeners();
-}
-
-/** Xử lý phím bấm: chỉ đánh dấu khi nhận các phím cuộn trang (Arrow, Page, Home, End, Space).
- * Không gỡ listener khi gặp phím khác (như Tab, Shift) để đảm bảo không bỏ sót ý định cuộn.
- * @param {KeyboardEvent} e Sự kiện phím.
- * @returns {void}
- */
-function onUserKeydownIntent(e) {
-  const scrollKeys = ["ArrowDown", "ArrowUp", "PageDown", "PageUp", "Home", "End"];
-  const isSpace = e.key === " " || e.key === "Spacebar";
-  const target = e.target;
-  const isEditable =
-    target &&
-    (target.tagName === "INPUT" || target.tagName === "TEXTAREA" || target.isContentEditable);
-
-  if (scrollKeys.includes(e.key) || (isSpace && !isEditable)) {
-    state.userHasScrolled = true;
-    cleanupInitialScrollListeners();
-  }
-}
-
-/** Dọn dẹp các listener theo dõi ý định cuộn ban đầu để tránh tích lũy.
- * @returns {void}
- */
-function cleanupInitialScrollListeners() {
-  window.removeEventListener("wheel", onUserScrollIntent);
-  window.removeEventListener("touchmove", onUserScrollIntent);
-  window.removeEventListener("keydown", onUserKeydownIntent);
-}
 
 /** Khởi tạo toàn bộ trang chi tiết
  * @returns {Promise<void>} Hoàn tất khởi tạo hoặc hiển thị lỗi.
@@ -182,7 +112,7 @@ function cleanupInitialScrollListeners() {
 
 async function initTopicDetailPage() {
   state.lastViewportWidth = window.innerWidth;
-  trackInitialScrollIntent();
+
   try {
     state.researchData = await loadResearch();
     const found = findDataTopic(state.researchData, readTopicQuery());
@@ -199,8 +129,8 @@ async function initTopicDetailPage() {
     initToolbarControls();
     initDrawerEvents();
     renderCardsView(found.topic);
-    // Mặc định mở chế độ Sơ đồ trên cả mobile và desktop theo yêu cầu mới
-    setView("mindmap");
+    // Mobile ưu tiên danh sách dễ đọc; vẫn chuyển sang sơ đồ được.
+    setView(window.innerWidth < 768 ? "cards" : "mindmap");
     renderMindMap(true);
   } catch (err) {
     console.error("Lỗi khởi tạo chi tiết chủ đề:", err);
@@ -443,36 +373,7 @@ function finishMapInteraction() {
   state.fitAfterRender = false;
   state.centerAfterRender = false;
   state.toggleFocusId = "";
-  if (!state.initialScrollDone) {
-    state.initialScrollDone = true;
-    scrollRoadmapIntoFirstScreen();
-  }
-}
 
-/** Đưa khung sơ đồ lộ trình vào chính giữa màn hình đầu tiên một lần duy nhất khi mở chủ đề.
- * @returns {void}
- */
-function scrollRoadmapIntoFirstScreen() {
-  cleanupInitialScrollListeners();
-  if (state.userHasScrolled || state.isBackForward) return;
-  const component = document.querySelector(".mindmap-component");
-  if (!component) return;
-  const header = document.querySelector(".site-header");
-  const headerPos = header ? getComputedStyle(header).position : "static";
-  const headerHeight =
-    header && (headerPos === "sticky" || headerPos === "fixed")
-      ? header.getBoundingClientRect().height
-      : 0;
-  const rect = component.getBoundingClientRect();
-  const availableHeight = Math.max(1, window.innerHeight - headerHeight);
-  // Tính vị trí cuộn sao cho khung .mindmap-component nằm chính giữa viewport khả dụng (tương đương block: "center");
-  // nếu màn hình quá thấp (rect.height > availableHeight), ưu tiên thấy trọn thanh công cụ và vùng canvas phía trên.
-  const targetTopInViewport =
-    rect.height <= availableHeight
-      ? headerHeight + (availableHeight - rect.height) / 2
-      : headerHeight + 8;
-  const targetScrollY = Math.max(0, window.scrollY + rect.top - targetTopInViewport);
-  window.scrollTo(0, Math.round(targetScrollY));
 }
 
 /** Gắn node vào DOM theo một lô để trình duyệt chỉ cập nhật container một lần.
