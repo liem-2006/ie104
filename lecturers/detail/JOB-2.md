@@ -1,3 +1,5 @@
+> Lịch sử bản ghép: [Job 2 — sửa chữa TV2](../job2-sua-chua-tv2.md). Chờ nhóm trưởng kiểm tra, chưa merge.
+
 # Job 2 — TV2: phần hồ sơ giảng viên
 
 > Git Job 2: clone fork cá nhân → fetch upstream → tạo nhánh task riêng từ upstream/integration/job-2 → push lên origin → PR về liem-2006/ie104:integration/job-2. Xem [hướng dẫn clone mới hoặc dùng repo có sẵn](../../CONTRIBUTING.md). Không viết trực tiếp trên nhánh chung.

@@ -517,3 +517,71 @@ Ghi công cụ/phiên bản/trình duyệt/ngày/URL/commit. Thử W3C và Firef
 |---|---|---|
 | 16/11/2026 | Chốt tích hợp cách ly, giữ email đúng, sửa tương thích URL và bắt buộc nhóm trưởng kiểm tra trước merge | Kế hoạch, chưa triển khai |
 | 16/11/2026 | Bổ sung ba file job2-sua-chua theo phân công Job 2; quy định truy vết PR, đóng góp, thay đổi, góp ý, kiểm thử, duyệt và merge; giữ nguyên lịch sử Job 1 | Đã cập nhật tài liệu kế hoạch; chưa tạo ba bản ghi hoặc sửa code |
+
+
+## Kết quả triển khai local Job 2 — 16/11/2026
+
+> **Đã tích hợp và sửa code local; CHƯA được nhóm trưởng duyệt, CHƯA push/merge/deploy.** Kết quả dưới đây thay trạng thái “chưa triển khai” của kế hoạch phía trên cho các mục thực tế được nêu; kế hoạch gốc giữ làm lịch sử. Bản ghép: review/job-2-combined.
+
+### Nguồn và commit
+
+Remote xác nhận ba PR vẫn mở, SHA không đổi so với bảng nguồn. #6/#7 nhắm integration/job-2, #8 vẫn nhắm main; chưa đổi base. Nhánh nền 741e5af.
+
+| Commit local | Nội dung |
+|---|---|
+| a94656e | Bảo toàn phần kế hoạch Markdown có sẵn |
+| c6d5364 | Áp dụng diff PR #7 của TV3 |
+| 7e44ce6 | Áp dụng diff PR #6 của TV2 |
+| 16bf421 | Áp dụng diff PR #8 của TV1 |
+| b5a7227 | Alias email chung, avatar/initials chung, email trên thẻ, token viền, focus phân trang và mobile roadmap |
+
+Chỉ hai thay đổi JSON so với nền: email của PGS. TS. Lê Kim Hùng trong danh bạ và chủ đề Bảo vệ mô hình học sâu, theo xác nhận nhóm trưởng. Giữ schema và nội dung khác. Commit nhập PR ghi nguồn trong thông điệp; tác giả đóng góp được dẫn theo PR ở các bản ghi dưới đây.
+
+### Lịch sử theo người nhận Job 2
+
+- [TV1 — chi tiết/roadmap](../topics/detail/job2-sua-chua-tv1.md): giữ Pointer Events và zoom; khôi phục mobile danh sách, bỏ tự cuộn và debug.
+- [TV2 — danh bạ/hồ sơ](../lecturers/job2-sua-chua-tv2.md): giữ phân trang; sửa email tương thích URL, avatar, focus, email thẻ và token.
+- [TV3 — khám phá](../topics/job2-sua-chua-tv3.md): giữ nguyên cải tiến PR, kiểm thử cùng bản ghép.
+
+Các JOB-2.md đã dẫn tới lịch sử mới; không ghi đè Job 1. Trong lúc sửa avatar, lần kiểm tra đầu phát hiện helper bị tách thiếu; đã khắc phục trước b5a7227 và chạy lại toàn bộ 16 hồ sơ/danh bạ đạt. Kết quả kiểm tra hỏng tạm thời không được tính thành nghiệm thu cuối.
+
+### Nghiệm thu mới trên code b5a7227
+
+Chrome headless qua HTTP localhost:8876 ngày 16/11/2026; công cụ QA đặt trong TEMP, không là dependency website.
+
+| Kiểm tra | Kết quả thực tế |
+|---|---|
+| Dữ liệu | 3 nhóm, 37 chủ đề, 234 keyword, 16 hồ sơ; diff JSON chỉ sửa email |
+| URL toàn bộ | 37 tiêu đề chủ đề và 16 tên hồ sơ khớp dữ liệu |
+| Email | URL chủ đề/hồ sơ cũ mở đúng; normalizeEmail trim/hoa và alias trả hunglk@uit.edu.vn |
+| Responsive | 50 ca năm trang × năm độ rộng × hai theme, không tràn ngang |
+| Mobile roadmap | 375×812: Danh sách mặc định, scrollY=0, không window debug |
+| Cây | 37 cây danh sách đủ keyword; mở toàn bộ sơ đồ desktop tổng 271 node, không phát hiện chồng nhau |
+| Phân trang | Khám phá 12/12/12/1; Enter trang 2 danh bạ đưa focus về lecturers-status |
+| Tìm kiếm | Không kết quả trả 0; hoc sau trả 5 chủ đề |
+| URL sai | Chủ đề thiếu query/hồ sơ email sai có heading Không tìm thấy |
+| Subpath | Năm trang /ie104/ tải đúng tiêu đề/dữ liệu |
+| Lỗi tải | Khám phá HTTP500/JSON sai/nhóm rỗng có thông báo phù hợp |
+| Axe | Năm trang đại diện, WCAG2A/AA và 2.1AA, không vi phạm phát hiện |
+| HTML | HTML-Validate recommended: năm nguồn 0 lỗi; tắt void-style, no-trailing-whitespace, long-title, no-inline-style; không tắt cấu trúc |
+| Runtime | Không pageerror trong các luồng bình thường đã kiểm tra; lỗi tải được UI xử lý |
+
+### Lighthouse mới
+
+Lighthouse 13.6.0 mobile ba lượt mỗi trang; không dùng điểm Job 1. [Dữ liệu số đo](minh-chung-giao-dien/job-2-integration/lighthouse-summary.json).
+
+| Trang | Performance ba lượt | Trung vị P | A / BP / SEO |
+|---|---|---:|---|
+| Trang vào | 100/100/100 | 100 | 100/100/100 |
+| Khám phá | 96/96/96 | 96 | 100/100/100 |
+| Roadmap | 94/95/94 | 94 | 100/100/100 |
+| Danh bạ | 97/97/97 | 97 | 100/100/100 |
+| Hồ sơ | 95/95/95 | 95 | 100/100/100 |
+
+### Giới hạn và bước duyệt
+
+Chưa xác minh toàn bộ checklist thủ công: pan/zoom bằng cảm ứng thật, fullscreen theo thiết bị, mọi trạng thái lỗi trên từng trang, fixture cây mới sâu bất thường, subjects thiếu, storage bị chặn và Back/Forward trên mọi luồng. W3C chính thức/Firefox/Safari/screen reader chưa có kết quả mới; CSS và JSDoc chưa có audit toàn bộ tự động trong đợt này. Không coi số Lighthouse/axe là thay thế kiểm tra người dùng. Bản local đủ để nhóm trưởng xem và góp ý; chưa ghi toàn bộ nghiệm thu hoàn thành.
+
+Tự chạy: VS Code mở folder repo, dùng Live Server tại index.html; hoặc khi phiên QA còn hoạt động mở http://127.0.0.1:8876/. Kiểm tra khám phá → chủ đề → hồ sơ → danh bạ, tìm/lọc/phân trang, theme, mobile và email cũ/mới. Live Server có thể dùng cổng khác.
+
+**Điểm dừng hiện tại:** chờ nhóm trưởng tự kiểm tra bản local. Chưa cho phép merge integration/job-2 hoặc main; không tự coi yêu cầu triển khai kế hoạch là duyệt merge. Góp ý tiếp theo phải thêm ngày, commit sửa và kết quả kiểm thử, không xóa lịch sử này.

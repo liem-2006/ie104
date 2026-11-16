@@ -1,3 +1,5 @@
+> **Bản ghép Job 2 đang chờ nhóm trưởng kiểm tra.** Đọc [lịch sử tích hợp và sửa chữa](job2-sua-chua-tv1.md) để phân biệt bài PR của thành viên với thay đổi sau tích hợp. Chưa merge.
+
 # Job 2 — TV1: kiểm tra chéo và nâng cấp chi tiết/roadmap
 
 > Git Job 2: clone fork cá nhân → fetch upstream → tạo nhánh task riêng từ upstream/integration/job-2 → push lên origin → PR về liem-2006/ie104:integration/job-2. Xem [hướng dẫn clone mới hoặc dùng repo có sẵn](../../CONTRIBUTING.md). Không viết trực tiếp trên nhánh chung.
