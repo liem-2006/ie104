@@ -1,5 +1,6 @@
 ﻿import {
   loadResearch,
+  normalizeEmail,
   readTopicQuery,
   findTopic as findDataTopic,
   topicUrl,
@@ -196,12 +197,12 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   const dialog = element("dialog", "topic-picker");
   dialog.setAttribute("aria-labelledby", "topic-picker-heading");
   const top = element("div", "topic-picker__header");
-  const heading = element("h2", "", "Chọn chủ đề nghiên cứu");
+  const heading = element("h2", "", "Chủ đề của giảng viên");
   heading.id = "topic-picker-heading";
   const close = element("button", "btn btn--quiet", "Đóng");
   close.type = "button";
   top.append(heading, close);
-  const label = element("label", "", "Tìm chủ đề hoặc giảng viên");
+  const label = element("label", "", "Tìm trong chủ đề của giảng viên");
   label.htmlFor = "topic-picker-search";
   const search = element("input");
   search.id = "topic-picker-search";
@@ -209,7 +210,27 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   const list = element("div", "topic-picker__list");
   const status = element("p", "topic-picker__status");
   status.setAttribute("role", "status");
-  dialog.append(top, label, search, status, list);
+  const lecturerName = element("p", "topic-picker__lecturer", currentTopic.lecturer.name);
+  dialog.append(top, lecturerName, label, search, status, list);
+  let outsidePointerId = null;
+  dialog.addEventListener("pointerdown", rememberOutsideStart);
+  dialog.addEventListener("pointerup", closeFromBackdrop);
+  dialog.addEventListener("pointercancel", cancelOutsideStart);
+  /** Kiểm tra tọa độ ngoài hộp, không nhầm padding/thanh cuộn với backdrop. @param {PointerEvent} event Sự kiện con trỏ. @returns {boolean} Nằm ngoài hộp. */
+  function isOutside(event) {
+    const rect = dialog.getBoundingClientRect();
+    return event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+  }
+  /** Ghi nhận thao tác bắt đầu trên backdrop. @param {PointerEvent} event Sự kiện bắt đầu. @returns {void} */
+  function rememberOutsideStart(event) { outsidePointerId = event.button === 0 && isOutside(event) ? event.pointerId : null; }
+  /** Chỉ đóng khi cùng con trỏ bắt đầu/kết thúc ngoài hộp. @param {PointerEvent} event Sự kiện kết thúc. @returns {void} */
+  function closeFromBackdrop(event) {
+    const shouldClose = outsidePointerId === event.pointerId && isOutside(event);
+    outsidePointerId = null;
+    if (shouldClose) closePicker();
+  }
+  /** Hủy thao tác backdrop khi trình duyệt chuyển sang cuộn/chạm khác. @returns {void} */
+  function cancelOutsideStart() { outsidePointerId = null; }
   container.append(button, dialog);
   button.addEventListener("click", openPicker);
   close.addEventListener("click", closePicker);
@@ -219,26 +240,29 @@ function renderQuickTopicSwitcher(data, currentTopic) {
   function handlePickerKey(event) { if (event.key === "Escape") { event.preventDefault(); event.stopPropagation(); closePicker(); } }
   search.addEventListener("input", renderChoices);
   /** Mở hộp chọn và đặt focus vào tìm kiếm. @returns {void} */
-  function openPicker() { document.getElementById("knowledge-outcome-help")?.remove(); search.value = ""; renderChoices(); dialog.showModal(); search.focus(); }
+  function openPicker() { document.getElementById("knowledge-outcome-help")?.remove(); search.value = ""; renderChoices(); outsidePointerId = null; dialog.showModal(); list.scrollTop = 0; search.focus(); }
   /** Đóng hộp chọn; Escape cũng được dialog xử lý. @returns {void} */
   function closePicker() { dialog.close(); }
   /** Trả focus về nút gọi sau khi đóng. @returns {void} */
   function restorePickerFocus() { button.focus(); }
-  /** Lọc toàn danh sách, sắp xếp tiếng Việt trong từng nhóm. @returns {void} */
+  /** Lọc chủ đề của giảng viên, sắp xếp tiếng Việt trong từng nhóm. @returns {void} */
   function renderChoices() {
     const fragment = document.createDocumentFragment();
     const query = searchText(search.value);
     let count = 0;
     for (const entry of data.groups) {
-      const matches = entry.topics.filter(matchesSearch).slice().sort(compareNames);
+      const matches = entry.topics.filter(matchesLecturer).filter(matchesSearch).slice().sort(compareNames);
       if (!matches.length) continue;
       const section = element("section", "topic-picker__group");
       section.append(element("h3", "", entry.group.name));
       for (const topic of matches) {
         const link = element("a", "topic-picker__item");
         link.href = topicUrl(entry.group, topic);
-        link.append(element("span", "topic-picker__name", topic.name), element("span", "topic-picker__lecturer", topic.lecturer.name));
-        if (entry.group.id === state.currentGroup.id && topic === currentTopic) link.setAttribute("aria-current", "page");
+        link.append(element("span", "topic-picker__name", topic.name));
+        if (entry.group.id === state.currentGroup.id && topic === currentTopic) {
+          link.setAttribute("aria-current", "page");
+          link.append(element("span", "topic-picker__current", "Đang xem"));
+        }
         section.append(link);
         count++;
       }
@@ -246,9 +270,11 @@ function renderQuickTopicSwitcher(data, currentTopic) {
     }
     list.replaceChildren(fragment);
     status.textContent = count ? count + " chủ đề" : "Không tìm thấy chủ đề phù hợp.";
-    /** So khớp tên đề tài và người hướng dẫn không dấu. @param {object} topic Chủ đề. @returns {boolean} Khớp từ khóa. */
-    function matchesSearch(topic) { return searchText(topic.name + " " + topic.lecturer.name).includes(query); }
+    /** So khớp tên đề tài không dấu. @param {object} topic Chủ đề. @returns {boolean} Khớp từ khóa. */
+    function matchesSearch(topic) { return searchText(topic.name).includes(query); }
   }
+  /** Giới hạn cùng giảng viên trên mọi nhóm, hỗ trợ email alias. @param {object} topic Chủ đề cần đối chiếu. @returns {boolean} Cùng giảng viên hiện tại. */
+  function matchesLecturer(topic) { return normalizeEmail(topic.lecturer.email) === normalizeEmail(currentTopic.lecturer.email); }
   /** So sánh tên tiếng Việt. @param {object} a Chủ đề thứ nhất. @param {object} b Chủ đề thứ hai. @returns {number} Thứ tự. */
   function compareNames(a, b) { return a.name.localeCompare(b.name, "vi"); }
 }
