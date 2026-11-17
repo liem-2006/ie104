@@ -107,3 +107,15 @@ Trang chủ do nhóm trưởng quản lý đã có hero biên tập và minh h�
 Ảnh: idea/minh-chung-giao-dien/ui-review-20261117/ (từ gốc repo). Tự kiểm tra bằng HTTP local, cả hai theme và desktop/mobile; thử lại luồng gốc. Chưa push/merge/deploy. Không coi tự đánh giá thẩm mỹ là kết quả nghiên cứu người dùng.
 
 **Kết quả nhóm trưởng kiểm tra độc lập:** 50 tổ hợp responsive không tràn; axe 5 trang × sáng/tối không có vi phạm sau khi đợi transition ổn định; HTML Validate 5 nguồn không lỗi theo cấu hình hiện hành; không pageerror. Chưa Lighthouse mới/Firefox/thiết bị thật.
+
+
+## Nâng cấp UI/UX hậu tích hợp (REC-01/04/12/13/14 & vòng hoàn thiện) — 18/11/2026
+
+Thực hiện hậu tích hợp trên nhánh `review/job-2-combined` (`CODE_SHA`: `6f0d454`, backup trước sửa `backup/job-2-before-ui-upgrade-20261118` tại `f98c978`), không ghi thành đóng góp PR gốc của TV2/TV3.
+
+| Trước (`f98c978`) | Sau (`6f0d454`) | Lý do | File | Kiểm thử |
+|---|---|---|---|---|
+| `.lecturer-card::before` là phần tử lưới chiếm 1 dòng ngang đẩy text lệch cột; danh sách sắp theo thứ tự xuất hiện; không có empty-state & focus reset chuẩn | `.lecturer-card::before` đặt `position: absolute` top-left; sắp xếp A–Z tiếng Việt theo tên gọi (`Anh`..`Phước`); giữ `<form>` + `.btn--outline` `"Tìm"` (`wcag/h32`); thêm `#lecturer-search-hint`, `#lecturers-results-heading`, `#lecturers-empty` trả focus về `#lecturer-search`; chỉnh `.lecturer-card__email` `44px` với `margin-block: -2px -6px` | Khắc phục lỗi đẩy lưới và tuân thủ A–Z, tương phản, vùng chạm | `lecturers/index.html`, `assets/css/lecturers.css`, `assets/js/lecturers.js` | Ảnh `11`; A–Z trang 1 `9` GV; `touch_targets: []`; HTML `validator.nu` `0` lỗi |
+| `15/16` hồ sơ tối giản mở đầu bằng khối trống `Giới thiệu`; thiếu tag nhóm trên thẻ đầu; `lecturer-detail.css` còn `13` `!important` & `:root` cục bộ; ẩn tóm tắt đề tài khi `<= 3` chủ đề | Đưa `Chủ đề nghiên cứu` + tóm tắt phạm vi lên đầu (chuyển ghi chú tối giản xuống `.profile-minimal-note` cuối thẻ) cho `15/16` hồ sơ; hiển thị `.profile-tags` cho `16/16` hồ sơ; breadcrumb hiện tên GV; xóa sạch `13` `!important` & `:root` cục bộ; chuẩn hóa breakpoint `767px` | Tối ưu nội dung thật cho sinh viên và sạch kỹ thuật CSS IE104 | `lecturers/detail/index.html`, `assets/css/lecturer-detail.css`, `assets/js/lecturer-detail.js` | Ảnh `12`, `13`; alias `hunglkt -> PGS. TS. Lê Kim Hùng`; `0` `!important`, `0` `:root`; `lecturers.js` `27/27` & `lecturer-detail.js` `22/22` hàm đủ JSDoc |
+
+**Minh chứng & Giới hạn:** `idea/minh-chung-giao-dien/ui-upgrade-20261118/` (`11`, `12`, `13`). Kiểm thử trên Chrome Headless CDP + `axe-core` (`0` vi phạm) + `validator.nu` (`0` lỗi); chưa chạy Lighthouse CLI (thiếu Node) hay thiết bị thật. Chưa push/merge.

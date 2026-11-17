@@ -118,3 +118,16 @@ Nhóm trưởng sửa tiếp nhận xét còn lại sau khi sub-agent bị giớ
 Bổ sung `setInitialMapView` chỉ điều phối transform sẵn có. Giữ thuật toán bố trí, cấu trúc node, pan/zoom, panel, dữ liệu, URL và thiết kế sub-agent. Đánh đổi được giải thích trong Cách xem lộ trình: mobile không thấy toàn cây ngay; kéo hoặc chọn Căn vừa để xem rộng hơn.
 
 Axe mobile không vi phạm trong nhóm WCAG2A/AA,21AA; HTML Validate trang chi tiết 0 lỗi theo cấu hình hiện hành. Minh chứng `idea/minh-chung-giao-dien/ui-review-20261117/peer-fix-roadmap-mobile.png`. Chưa xác minh thiết bị thật/Firefox; không đo Lighthouse mới. Chưa push/merge/deploy. Đây là thay đổi nhóm trưởng, không ghi thành đóng góp của TV1.
+
+
+## Nâng cấp UI/UX hậu tích hợp (REC-02/03/04/05/07/09/10/11/14/15 & vòng hoàn thiện) — 18/11/2026
+
+Đây là cập nhật hậu tích hợp trên nhánh `review/job-2-combined` (`CODE_SHA`: `6f0d454`, backup trước sửa `backup/job-2-before-ui-upgrade-20261118` tại `f98c978`), không ghi thành đóng góp gốc của TV1/TV2.
+
+| Trước (`f98c978`) | Sau (`6f0d454`) | Lý do | File | Kiểm thử |
+|---|---|---|---|---|
+| Root & Drawer badge đồng loạt tím `#8b5cf6`; nhãn `Môn học gợi ý tại UIT`; thiếu `#breadcrumb-current` | Root và badge đầu trang đồng bộ màu miền thật (`sec`/`data`/`nlp`), Drawer và thẻ dùng 3 cấp kiến thức trung tính (`Kiến thức cốt lõi`/`Kiến thức cơ sở`/`Nền tảng tiên quyết`), nhãn `Môn học gợi ý tham khảo`, breadcrumb hiện tên đề tài | Tách biệt ngữ nghĩa màu ngành và cấp kiến thức, tránh hiểu nhầm môn bắt buộc | `topics/detail/index.html`, `assets/css/topic-detail.css`, `assets/js/topic-detail.js`, `assets/css/style.css` | Ảnh `07`, `08`, `14`; axe Sáng/Tối + Drawer `0` vi phạm |
+| Mobile `375×812` ẩn mất node gốc và mũi tên `marker-start`; node/toggle < 44px sau `scale`; `focusExpandedBranch` đẩy con ra ngoài mép phải; toolbar 3 hàng; `#mindmap-hint` còn hiện ở `Danh sách` | Lộ mép phải root + mũi tên cùng 5 trụ cột; kích thước unscaled `>= 58px` ở `<= 767px` đạt vùng chạm `>= 44px` (`0` overlap); tách `.mindmap-node__card` và nút `+N`/`−` (ẩn trên root); thêm `Kéo 2D`, CSS pseudo-fullscreen, toolbar mobile 2 hàng, `focusExpandedBranch` neo trọn nhánh con, ẩn `#mindmap-hint` trong `Danh sách` | Sửa đứt gãy thị giác mobile, tương tác pan/zoom 2D, A11y và vùng chạm | `topics/detail/index.html`, `assets/css/topic-detail.css`, `assets/js/topic-detail.js` | `qa_report.json`: `37/37` cây (`271` nodes) `0` overlap, `touch_targets: []`, `expandVisible.clippedRightOrLeft: 0`, `hintHiddenInCards: true`, ảnh `09`, `14` |
+| GV có 1 đề tài vẫn mở modal `Chuyển chủ đề`; danh sách dùng từ `"keyword"`; thiếu disclaimer | Trạng thái tĩnh `"Giảng viên có 1 chủ đề trong danh mục"` (7/16 GV); đổi `"mục kiến thức"`; thêm disclaimer; chuẩn hóa `document.title` `\| UIT Discovery` | Bỏ thao tác thừa, minh bạch nguồn tham khảo | `topics/detail/index.html`, `assets/css/topic-detail.css`, `assets/js/topic-detail.js` | Ảnh `10`, `14`; `90/90` hàm JS đủ JSDoc `@param`/`@returns`; HTML `validator.nu` `0` lỗi (`1` info-warning `<dialog>`) |
+
+**Minh chứng & Giới hạn:** `idea/minh-chung-giao-dien/ui-upgrade-20261118/` (`07`, `08`, `09`, `10`, `14`). Kiểm thử trên Chrome Headless CDP + `axe-core` + `validator.nu`; chưa chạy Lighthouse CLI (thiếu Node), Firefox hay thiết bị cảm ứng thật. Chưa push/merge.

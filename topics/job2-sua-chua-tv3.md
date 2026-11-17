@@ -112,3 +112,15 @@ Trang chủ do nhóm trưởng quản lý đã có hero biên tập và minh h�
 Agent thứ hai phát hiện thẻ minh họa chồng nhau tại 768px; nhóm trưởng xác minh bằng bounding box và sửa CSS Grid tự giãn ở <=1023px. Kiểm tra 320/375/768/820/1023/1024/1440px: không chồng thẻ, không tràn ngang; axe tablet không vi phạm. Backup trước sửa: backup/job-2-before-peer-fixes-20261117 tại cad69a3.
 
 Agent còn nhận xét sơ đồ mobile căn vừa khiến chữ nhỏ; đây là đánh đổi hiện hữu, chưa sửa trong lượt này và cần đánh giá tiếp. Cả hai agent bị giới hạn lượt sử dụng trước khi hoàn tất phản biện qua lại; không tuyên bố đã có đồng thuận hai agent. Nhóm trưởng tự xác minh/sửa lỗi tablet, không sửa dữ liệu hoặc chức năng. Chưa push/merge/deploy.
+
+
+## Nâng cấp UI/UX hậu tích hợp (REC-04/06/08/14 & vòng hoàn thiện) — 18/11/2026
+
+Thực hiện hậu tích hợp trên nhánh `review/job-2-combined` (`CODE_SHA`: `6f0d454`, backup trước sửa `backup/job-2-before-ui-upgrade-20261118` tại `f98c978`), không ghi thành đóng góp PR gốc của TV3/TV1.
+
+| Trước (`f98c978`) | Sau (`6f0d454`) | Lý do | File | Kiểm thử |
+|---|---|---|---|---|
+| Nút nhóm không có số lượng đề tài và dấu hiệu phân biệt chọn nhiều OR; `#reset-filters` đứng rời rạc; danh sách chủ đề thiếu tóm tắt phạm vi | Thêm bộ đếm thật (`Tất cả (37)`, `An toàn thông tin (14)`, `Dữ liệu & dự báo (11)`, `AI ngôn ngữ (12)`); chấm màu nhóm + dấu `✓` khi kích hoạt lọc OR; chuyển `#reset-filters` vào `.topics-groups__header`; thêm `.topic-row__summary` (`Kiến thức chính · N mục kiến thức · M môn gợi ý`) | Giúp sinh viên định lượng nhanh nhóm nghiên cứu và phạm vi đề tài trước khi bấm vào chi tiết | `topics/index.html`, `assets/css/topics.css`, `assets/js/topics.js`, `assets/js/data.js` | Ảnh `05`, `06`; `"hoc sau" -> 5`, `"mã độc" -> 2`, `"nguyen tan cam" -> 3` |
+| Placeholder bị cắt nhẹ trên `375px`; vùng chạm link tiêu đề `.topic-row__title a` `24px`; góc hover hàng đầu/cuối vuông; còn selector chết trong `topics.css` | Rút ngắn placeholder `"Ví dụ: học sâu, mã độc, Cầm"` (`fitsAt320: true`); nâng `.topic-row__title a` lên `44px` với khoảng hở focus an toàn; bo góc `15px` cho `:first-child`/`:last-child` + `:focus-within`; xóa selector chết & đảm bảo `22/22` hàm JS có JSDoc | Đảm bảo khả năng chạm, hiển thị mobile không cắt chữ và giữ tiêu đề đầu trong màn hình `375×812` | `topics/index.html`, `assets/css/topics.css`, `assets/css/style.css`, `assets/js/topics.js` | `first_topic_mobile_375`: `{top: 675, bottom: 711}` (`<= 812px`); `touch_targets: []`; HTML `validator.nu` `0` lỗi; `axe-core` `0` vi phạm |
+
+**Minh chứng & Giới hạn:** `idea/minh-chung-giao-dien/ui-upgrade-20261118/` (`05`, `06`). Kiểm thử trên Chrome Headless CDP + `axe-core` + `validator.nu`; chưa chạy Lighthouse CLI (thiếu Node) hay thiết bị thật. Chưa push/merge.
