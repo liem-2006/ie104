@@ -105,3 +105,10 @@ Trang chủ do nhóm trưởng quản lý đã có hero biên tập và minh h�
 Ảnh: idea/minh-chung-giao-dien/ui-review-20261117/ (từ gốc repo). Tự kiểm tra bằng HTTP local, cả hai theme và desktop/mobile; thử lại luồng gốc. Chưa push/merge/deploy. Không coi tự đánh giá thẩm mỹ là kết quả nghiên cứu người dùng.
 
 **Kết quả nhóm trưởng kiểm tra độc lập:** 50 tổ hợp responsive không tràn; axe 5 trang × sáng/tối không có vi phạm sau khi đợi transition ổn định; HTML Validate 5 nguồn không lỗi theo cấu hình hiện hành; không pageerror. Chưa Lighthouse mới/Firefox/thiết bị thật.
+
+
+### Phản biện UI/UX độc lập — 17/11/2026
+
+Agent thứ hai phát hiện thẻ minh họa chồng nhau tại 768px; nhóm trưởng xác minh bằng bounding box và sửa CSS Grid tự giãn ở <=1023px. Kiểm tra 320/375/768/820/1023/1024/1440px: không chồng thẻ, không tràn ngang; axe tablet không vi phạm. Backup trước sửa: backup/job-2-before-peer-fixes-20261117 tại cad69a3.
+
+Agent còn nhận xét sơ đồ mobile căn vừa khiến chữ nhỏ; đây là đánh đổi hiện hữu, chưa sửa trong lượt này và cần đánh giá tiếp. Cả hai agent bị giới hạn lượt sử dụng trước khi hoàn tất phản biện qua lại; không tuyên bố đã có đồng thuận hai agent. Nhóm trưởng tự xác minh/sửa lỗi tablet, không sửa dữ liệu hoặc chức năng. Chưa push/merge/deploy.

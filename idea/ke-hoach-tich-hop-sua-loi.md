@@ -715,3 +715,10 @@ Chạy HTTP từ repo bằng `python -m http.server 8876`, hoặc dùng server �
 
 - Kiểm tra luồng sau thiết kế: hộp chứa 10 chủ đề của giảng viên mẫu và đóng backdrop đúng; danh sách mẫu đủ 6 keyword; chuyển Sơ đồ/Danh sách đúng; khám phá 12 mục; theme tối giữ qua reload. JS/JSON không có diff so với backup.
 - Bản local review/job-2-combined, commit giao diện `8f3e61a`; mốc backup `1775493`. Git bundle: `../job-history/backups/job-2-before-ui-review-20261117.bundle`, verify thành công.
+
+
+### Phản biện UI/UX độc lập — 17/11/2026
+
+Agent thứ hai phát hiện thẻ minh họa chồng nhau tại 768px; nhóm trưởng xác minh bằng bounding box và sửa CSS Grid tự giãn ở <=1023px. Kiểm tra 320/375/768/820/1023/1024/1440px: không chồng thẻ, không tràn ngang; axe tablet không vi phạm. Backup trước sửa: backup/job-2-before-peer-fixes-20261117 tại cad69a3.
+
+Agent còn nhận xét sơ đồ mobile căn vừa khiến chữ nhỏ; đây là đánh đổi hiện hữu, chưa sửa trong lượt này và cần đánh giá tiếp. Cả hai agent bị giới hạn lượt sử dụng trước khi hoàn tất phản biện qua lại; không tuyên bố đã có đồng thuận hai agent. Nhóm trưởng tự xác minh/sửa lỗi tablet, không sửa dữ liệu hoặc chức năng. Chưa push/merge/deploy.
