@@ -338,3 +338,10 @@ html[data-theme="dark"] #page-lecturer-detail {
     padding: 16px;
   }
 }
+
+/* UI review: profile identity precedes research detail. */
+#page-lecturer-detail .profile-card { border-width: 1px; border-radius: 20px; box-shadow: var(--shadow-soft); }
+#page-lecturer-detail .profile-header__avatar { background: var(--color-accent-soft); border-color: var(--color-border); }
+#page-lecturer-detail .profile-header__name { letter-spacing: -.7px; }
+#page-lecturer-detail .profile-section__title { display: flex; align-items: center; gap: 10px; }
+#page-lecturer-detail .profile-section__title::before { content: ""; width: 4px; height: 20px; border-radius: 2px; background: var(--color-primary); flex-shrink: 0; }

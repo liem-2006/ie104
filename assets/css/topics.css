@@ -153,3 +153,13 @@
 
 /* Nút nhóm có chiều cao tự nhiên, không giãn theo khối cha. */
 #page-topics .topics-groups__button { flex: 0 0 auto; align-self: flex-start; height: auto; line-height: 1.5; }
+
+/* UI review: Search controls form one readable surface, results remain a list. */
+#page-topics .topics-search { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-soft); }
+#page-topics .topics-summary { display: inline-block; margin-top: 16px; font-size: 13px; color: var(--color-muted); }
+#page-topics .topics-list { border-radius: 16px; box-shadow: var(--shadow-soft); }
+#page-topics .topic-row { transition: background-color var(--transition-fast); }
+#page-topics .topic-row:hover { background: var(--color-accent-soft); }
+#page-topics .topic-row__title { line-height: 1.5; }
+#page-topics .topics-groups__button[aria-pressed="true"] { box-shadow: 0 3px 8px rgb(22 95 155 / 12%); }
+@media (max-width: 767px) { #page-topics .topics-search { padding: 16px; } #page-topics .topics-groups { min-height: 0; } }
