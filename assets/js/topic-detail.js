@@ -408,7 +408,7 @@ function buildMapFrame() {
 function finishMapInteraction() {
   if (state.activeView === "mindmap") {
     if (state.fitAfterRender) {
-      fitToScreen();
+      setInitialMapView();
     } else if (state.centerAfterRender) {
       centerMapKeepScale();
     }
@@ -912,6 +912,24 @@ function createSubjectBadge(subject) {
 
 function createPrerequisite(node) {
   return element("li", "", node.name + (node.outcome ? ": " + node.outcome : ""));
+}
+
+/** Chọn góc nhìn đọc được khi tự bố trí trên mobile; desktop giữ căn vừa.
+ * @returns {void} Cập nhật transform qua API hiện hành, không dựng lại node.
+ */
+function setInitialMapView() {
+  const viewport = document.getElementById("mindmap-viewport");
+  if (!viewport || viewport.clientWidth >= 768) {
+    fitToScreen();
+    return;
+  }
+  // Ưu tiên keyword đầu tiên; nút Căn vừa vẫn cung cấp toàn cảnh theo yêu cầu.
+  const node = state.rootNode?.children[0] || state.rootNode;
+  if (!node || !node.width || !node.height) return;
+  state.scale = Math.min(1, (viewport.clientWidth - 32) / node.width);
+  state.panX = (viewport.clientWidth - node.width * state.scale) / 2 - node.x * state.scale;
+  state.panY = viewport.clientHeight / 2 - node.y * state.scale;
+  applyTransform();
 }
 
 /** Tự động căn vừa khung nhìn (thay đổi cả scale và pan, chừa đệm 40px mỗi cạnh).
