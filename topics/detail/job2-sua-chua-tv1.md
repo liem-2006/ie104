@@ -105,3 +105,16 @@ Trang chủ do nhóm trưởng quản lý đã có hero biên tập và minh h�
 Ảnh: idea/minh-chung-giao-dien/ui-review-20261117/ (từ gốc repo). Tự kiểm tra bằng HTTP local, cả hai theme và desktop/mobile; thử lại luồng gốc. Chưa push/merge/deploy. Không coi tự đánh giá thẩm mỹ là kết quả nghiên cứu người dùng.
 
 **Kết quả nhóm trưởng kiểm tra độc lập:** 50 tổ hợp responsive không tràn; axe 5 trang × sáng/tối không có vi phạm sau khi đợi transition ổn định; HTML Validate 5 nguồn không lỗi theo cấu hình hiện hành; không pageerror. Chưa Lighthouse mới/Firefox/thiết bị thật.
+
+
+### Hoàn thiện từ phản biện: sơ đồ mobile dễ đọc — 17/11/2026
+
+Nhóm trưởng sửa tiếp nhận xét còn lại sau khi sub-agent bị giới hạn sử dụng. Backup: `backup/job-2-before-mobile-map-20261117` tại `f6baab5`. Commit code `24e9db1`.
+
+| Trước | Sau | Lý do | File | Kiểm thử |
+|---|---|---|---|---|
+| Tự căn toàn cây, mẫu 375px scale 0.405 làm chữ nhỏ | Tự đặt góc nhìn vào keyword đầu ở tỷ lệ tối đa 1 trên khung <768px; nút Căn vừa giữ toàn cảnh | Đọc và chạm node dễ hơn | assets/js/topic-detail.js; topics/detail/index.html | 37 chủ đề tại 375px scale 1, không tràn ngang/pageerror; Căn vừa vẫn ra scale tổng quan; chuyển tab đúng; desktop giữ căn vừa |
+
+Bổ sung `setInitialMapView` chỉ điều phối transform sẵn có. Giữ thuật toán bố trí, cấu trúc node, pan/zoom, panel, dữ liệu, URL và thiết kế sub-agent. Đánh đổi được giải thích trong Cách xem lộ trình: mobile không thấy toàn cây ngay; kéo hoặc chọn Căn vừa để xem rộng hơn.
+
+Axe mobile không vi phạm trong nhóm WCAG2A/AA,21AA; HTML Validate trang chi tiết 0 lỗi theo cấu hình hiện hành. Minh chứng `idea/minh-chung-giao-dien/ui-review-20261117/peer-fix-roadmap-mobile.png`. Chưa xác minh thiết bị thật/Firefox; không đo Lighthouse mới. Chưa push/merge/deploy. Đây là thay đổi nhóm trưởng, không ghi thành đóng góp của TV1.

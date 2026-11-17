@@ -722,3 +722,16 @@ Chạy HTTP từ repo bằng `python -m http.server 8876`, hoặc dùng server �
 Agent thứ hai phát hiện thẻ minh họa chồng nhau tại 768px; nhóm trưởng xác minh bằng bounding box và sửa CSS Grid tự giãn ở <=1023px. Kiểm tra 320/375/768/820/1023/1024/1440px: không chồng thẻ, không tràn ngang; axe tablet không vi phạm. Backup trước sửa: backup/job-2-before-peer-fixes-20261117 tại cad69a3.
 
 Agent còn nhận xét sơ đồ mobile căn vừa khiến chữ nhỏ; đây là đánh đổi hiện hữu, chưa sửa trong lượt này và cần đánh giá tiếp. Cả hai agent bị giới hạn lượt sử dụng trước khi hoàn tất phản biện qua lại; không tuyên bố đã có đồng thuận hai agent. Nhóm trưởng tự xác minh/sửa lỗi tablet, không sửa dữ liệu hoặc chức năng. Chưa push/merge/deploy.
+
+
+### Hoàn thiện từ phản biện: sơ đồ mobile dễ đọc — 17/11/2026
+
+Nhóm trưởng sửa tiếp nhận xét còn lại sau khi sub-agent bị giới hạn sử dụng. Backup: `backup/job-2-before-mobile-map-20261117` tại `f6baab5`. Commit code `24e9db1`.
+
+| Trước | Sau | Lý do | File | Kiểm thử |
+|---|---|---|---|---|
+| Tự căn toàn cây, mẫu 375px scale 0.405 làm chữ nhỏ | Tự đặt góc nhìn vào keyword đầu ở tỷ lệ tối đa 1 trên khung <768px; nút Căn vừa giữ toàn cảnh | Đọc và chạm node dễ hơn | assets/js/topic-detail.js; topics/detail/index.html | 37 chủ đề tại 375px scale 1, không tràn ngang/pageerror; Căn vừa vẫn ra scale tổng quan; chuyển tab đúng; desktop giữ căn vừa |
+
+Bổ sung `setInitialMapView` chỉ điều phối transform sẵn có. Giữ thuật toán bố trí, cấu trúc node, pan/zoom, panel, dữ liệu, URL và thiết kế sub-agent. Đánh đổi được giải thích trong Cách xem lộ trình: mobile không thấy toàn cây ngay; kéo hoặc chọn Căn vừa để xem rộng hơn.
+
+Axe mobile không vi phạm trong nhóm WCAG2A/AA,21AA; HTML Validate trang chi tiết 0 lỗi theo cấu hình hiện hành. Minh chứng `idea/minh-chung-giao-dien/ui-review-20261117/peer-fix-roadmap-mobile.png`. Chưa xác minh thiết bị thật/Firefox; không đo Lighthouse mới. Chưa push/merge/deploy. Đây là thay đổi nhóm trưởng, không ghi thành đóng góp của TV1.

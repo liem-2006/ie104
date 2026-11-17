@@ -1,3 +1,5 @@
+> **Góc nhìn mobile sau phản biện:** Sơ đồ vẫn mặc định; khi khung <768px, bắt đầu tại keyword đầu với tỷ lệ dễ đọc. Nút Căn vừa vẫn xem toàn cây. Giữ API transform/thuật toán bố trí; xem bản ghi sửa chữa TV1 ngày 17/11/2026.
+
 > **Nhóm trưởng cập nhật sau Job 2 (17/11/2026):** Hộp chuyển chủ đề chỉ chứa đề tài cùng giảng viên, đóng được bằng nền tối và giữ nút Đóng khi cuộn. Footer năm trang chuyển sang thông tin dự án/trường. Đọc [lịch sử sửa chữa](job2-sua-chua-tv1.md) để biết phần giữ lại, phần nhóm trưởng sửa và cách kiểm tra. Bản local chờ duyệt.
 
 > **Cập nhật 17/11/2026 — Material:** Sơ đồ mặc định cả mobile; Danh sách là accordion một cấp với nội dung phẳng, con trước cha. Giữ token xanh UIT, theme sáng mặc định và lựa chọn đã lưu. Header trang chủ chỉ logo/theme. Quy tắc này thay các mô tả cũ tương ứng. Bản local chờ duyệt; xem bản ghi Job 2 và kế hoạch tổng.
