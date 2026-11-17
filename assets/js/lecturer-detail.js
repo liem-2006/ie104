@@ -1,7 +1,7 @@
 /**
- * @file Hiển thị hồ sơ giảng viên theo email (TV2 Job 2 nâng cấp từ TV3).
- * Xử lý avatar fallback chuẩn tiếng Việt, phân trang danh sách chủ đề
- * khi có nhiều hơn 10 chủ đề, và tối ưu khả năng truy cập WAI-ARIA.
+ * @file Hiển thị hồ sơ giảng viên theo email (TV2 Chặng 2B).
+ * Hỗ trợ alias email, ưu tiên hiển thị chủ đề nghiên cứu thật cho hồ sơ tối giản,
+ * đồng bộ thẻ nhóm lĩnh vực với danh bạ và phân trang danh sách chủ đề > 10 mục.
  */
 
 import {
@@ -16,26 +16,25 @@ import {
   createTopicRow,
 } from "./data.js";
 
-/** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên */
+/** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên. */
 const TOPIC_PAGE_SIZE = 10;
 
-/** Trang hiện tại của danh sách chủ đề nghiên cứu */
+/** Trang hiện tại của danh sách chủ đề nghiên cứu. */
 let topicCurrentPage = 1;
 
 document.addEventListener("DOMContentLoaded", initProfile);
 
 /**
  * Nạp hồ sơ giảng viên theo email từ query parameter và render giao diện.
- * @returns {Promise<void>}
+ * @returns {Promise<void>} Promise hoàn tất việc nạp và hiển thị hồ sơ.
  */
 async function initProfile() {
   const main = document.getElementById("main-content");
   try {
     const [research, lecturers] = await Promise.all([loadResearch(), loadLecturers()]);
     const emailParam = new URLSearchParams(location.search).get("email");
-    let email = normalizeEmail(emailParam);
-
-    const lecturer = lecturers.find(matchesEmail);
+    const email = normalizeEmail(emailParam);
+    const lecturer = lecturers.find((person) => matchesLecturerEmail(person, email));
 
     if (!email || !lecturer) {
       renderPageMessage(
@@ -47,29 +46,11 @@ async function initProfile() {
       return;
     }
 
-    // Lấy các chủ đề liên quan được hướng dẫn bởi giảng viên này
+    const groups = research.groups.map(getGroup);
     const allTopics = flattenTopics(research);
-    const related = allTopics.filter(matchesTopic);
+    const related = allTopics.filter((entry) => matchesTopicEmail(entry, email));
 
-    renderProfile(lecturer, related);
-
-    /**
-     * So khớp email giảng viên trong danh bạ.
-     * @param {object} person Giảng viên.
-     * @returns {boolean} True nếu trùng email.
-     */
-    function matchesEmail(person) {
-      return normalizeEmail(person.email) === email;
-    }
-
-    /**
-     * So khớp email người hướng dẫn trong chủ đề.
-     * @param {object} entry Bản ghi chủ đề.
-     * @returns {boolean} True nếu trùng email.
-     */
-    function matchesTopic(entry) {
-      return normalizeEmail(entry.topic.lecturer.email) === email;
-    }
+    renderProfile(lecturer, related, groups);
   } catch {
     renderPageMessage(
       main,
@@ -78,16 +59,69 @@ async function initProfile() {
       "../index.html",
     );
   } finally {
+    // Luôn giải phóng trạng thái tải và thông báo loading kể cả khi lỗi hoặc không tìm thấy.
     main.removeAttribute("aria-busy");
     document.getElementById("profile-load-status")?.remove();
   }
 }
 
 /**
+ * So khớp email giảng viên trong danh bạ với email đã chuẩn hóa.
+ * @param {object} person - Bản ghi giảng viên trong danh bạ.
+ * @param {string} targetEmail - Email đã chuẩn hóa từ URL.
+ * @returns {boolean} True nếu trùng email.
+ */
+function matchesLecturerEmail(person, targetEmail) {
+  return normalizeEmail(person.email) === targetEmail;
+}
+
+/**
+ * So khớp email giảng viên hướng dẫn trong bản ghi chủ đề.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm.
+ * @param {string} targetEmail - Email đã chuẩn hóa của giảng viên.
+ * @returns {boolean} True nếu trùng email.
+ */
+function matchesTopicEmail(entry, targetEmail) {
+  return normalizeEmail(entry.topic.lecturer.email) === targetEmail;
+}
+
+/**
+ * Lấy metadata nhóm từ mục nhóm nguồn.
+ * @param {object} entry - Mục nhóm trong dữ liệu nghiên cứu.
+ * @returns {object} Metadata nhóm gồm id và name.
+ */
+function getGroup(entry) {
+  return entry.group;
+}
+
+/**
+ * Lấy mã ID nhóm từ bản ghi chủ đề.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm.
+ * @returns {string} Mã nhóm nghiên cứu.
+ */
+function getGroupId(entry) {
+  return entry.group.id;
+}
+
+/**
+ * Kiểm tra giảng viên có dữ liệu giới thiệu thực tế (tiểu sử, hướng nghiên cứu hoặc nguồn) hay không.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @returns {boolean} True nếu giảng viên có thông tin hồ sơ chi tiết thực tế.
+ */
+function hasProfileDetails(lecturer) {
+  const profile = lecturer?.profile;
+  return Boolean(
+    profile?.bio ||
+      (Array.isArray(profile?.researchAreas) && profile.researchAreas.length) ||
+      profile?.sourceUrl,
+  );
+}
+
+/**
  * Tạo một khối section kèm tiêu đề h2 ngữ nghĩa.
- * @param {string} title Tiêu đề section.
- * @param {string} [id=""] ID tùy chọn cho section.
- * @returns {HTMLElement} Phần tử section.
+ * @param {string} title - Tiêu đề mục.
+ * @param {string} [id=""] - Thuộc tính ID tùy chọn cho section.
+ * @returns {HTMLElement} Phần tử section đã gắn tiêu đề h2.
  */
 function section(title, id = "") {
   const block = element("section", "profile-section");
@@ -97,37 +131,75 @@ function section(title, id = "") {
 }
 
 /**
- * Ghép các thành phần hồ sơ và hiển thị lên trang.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @param {object[]} related Các chủ đề giảng viên hướng dẫn.
- * @returns {void}
+ * Ghép các thành phần hồ sơ theo mức độ đầy đủ dữ liệu thực và hiển thị lên trang.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @param {object[]} related - Danh sách chủ đề giảng viên hướng dẫn.
+ * @param {object[]} groups - Danh sách nhóm nghiên cứu theo thứ tự nguồn.
+ * @returns {void} Không trả về giá trị.
  */
-function renderProfile(lecturer, related) {
+function renderProfile(lecturer, related, groups) {
   document.title = lecturer.name + " | UIT Discovery";
   const title = document.getElementById("profile-title");
   title.textContent = lecturer.name;
 
+  const breadcrumbCurrent = document.getElementById("profile-breadcrumb-current");
+  if (breadcrumbCurrent) {
+    breadcrumbCurrent.textContent = lecturer.name;
+  }
+
   const card = element("article", "profile-card");
-  card.append(createProfileHeader(lecturer, title), createBiography(lecturer));
+  card.append(createProfileHeader(lecturer, title, related, groups));
 
   const links = createResearchLinks(lecturer.researchProfiles || []);
   const metrics = renderMetrics(lecturer.metrics || []);
-  if (links) card.append(links);
-  if (metrics) card.append(metrics);
-
   topicCurrentPage = 1;
-  card.append(createRelatedTopics(related));
+  const topicsSection = createRelatedTopics(related);
+
+  if (hasProfileDetails(lecturer)) {
+    // Hồ sơ có dữ liệu giới thiệu thực: giữ luồng Giới thiệu -> Hồ sơ NC -> Chỉ số -> Chủ đề.
+    card.append(createBiography(lecturer));
+    if (links) card.append(links);
+    if (metrics) card.append(metrics);
+    card.append(topicsSection);
+  } else {
+    // Hồ sơ tối giản (15/16 GV): ưu tiên Chủ đề nghiên cứu ngay sau header, đặt ghi chú ở cuối.
+    card.append(topicsSection);
+    if (links) card.append(links);
+    if (metrics) card.append(metrics);
+    card.append(createMinimalProfileNote());
+  }
 
   document.getElementById("profile-content").replaceChildren(card);
 }
 
 /**
- * Tạo phần đầu trang hồ sơ (Header) với h1, avatar, đơn vị và email liên hệ.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @param {HTMLHeadingElement} title Phần tử heading chính h1.
- * @returns {HTMLElement} Phần đầu hồ sơ.
+ * Tạo các thẻ lĩnh vực nghiên cứu suy dẫn từ các chủ đề mà giảng viên hướng dẫn.
+ * @param {object[]} related - Danh sách chủ đề liên quan của giảng viên.
+ * @param {object[]} groups - Danh sách nhóm nghiên cứu theo thứ tự nguồn.
+ * @returns {HTMLElement|null} Khối chứa thẻ nhóm hoặc null nếu không có nhóm liên quan.
  */
-function createProfileHeader(lecturer, title) {
+function createProfileTags(related, groups) {
+  const groupIds = new Set(related.map(getGroupId));
+  const tags = element("div", "profile-tags");
+
+  for (const group of groups) {
+    if (groupIds.has(group.id)) {
+      tags.append(element("span", "lecturer-tag lecturer-tag--" + group.id, group.name));
+    }
+  }
+
+  return tags.children.length ? tags : null;
+}
+
+/**
+ * Tạo phần đầu trang hồ sơ gồm avatar, h1 tên, đơn vị, email và thẻ nhóm nghiên cứu.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @param {HTMLHeadingElement} title - Phần tử heading chính h1.
+ * @param {object[]} related - Danh sách chủ đề liên quan.
+ * @param {object[]} groups - Danh sách nhóm nghiên cứu.
+ * @returns {HTMLElement} Phần tử header hồ sơ.
+ */
+function createProfileHeader(lecturer, title, related, groups) {
   const header = element("header", "profile-header");
   const info = element("div", "profile-header__info");
   info.append(title);
@@ -140,26 +212,26 @@ function createProfileHeader(lecturer, title) {
   mail.href = "mailto:" + normalizeEmail(lecturer.email);
   info.append(mail);
 
-  // Avatar sử dụng hàm xử lý viết tắt chuẩn tiếng Việt
+  const tags = createProfileTags(related, groups);
+  if (tags) {
+    info.append(tags);
+  }
+
   header.append(avatar(lecturer, "profile-header__avatar"), info);
   return header;
 }
 
 /**
- * Tạo phần giới thiệu bản thân và các hướng nghiên cứu.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @returns {HTMLElement} Khối giới thiệu.
+ * Tạo khối giới thiệu tiểu sử, hướng nghiên cứu và nguồn xác minh cho hồ sơ có dữ liệu thực.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @returns {HTMLElement} Khối section Giới thiệu.
  */
 function createBiography(lecturer) {
   const block = section("Giới thiệu");
-  block.append(
-    element(
-      "p",
-      "profile-section__text",
-      lecturer.profile?.bio ||
-        "Thông tin hồ sơ đang được bổ sung. Bạn có thể xem các chủ đề bên dưới và liên hệ giảng viên qua email.",
-    ),
-  );
+
+  if (lecturer.profile?.bio) {
+    block.append(element("p", "profile-section__text", lecturer.profile.bio));
+  }
 
   if (lecturer.profile?.researchAreas?.length) {
     block.append(element("h3", "profile-section__subtitle", "Hướng nghiên cứu"));
@@ -184,9 +256,21 @@ function createBiography(lecturer) {
 }
 
 /**
- * Tạo khối danh sách liên kết hồ sơ nghiên cứu (Google Scholar, ORCID...).
- * @param {object[]} profiles Danh sách liên kết hồ sơ.
- * @returns {HTMLElement|null} Khối liên kết hoặc null nếu không có.
+ * Tạo ghi chú ngắn ở cuối thẻ cho các hồ sơ chưa có dữ liệu tiểu sử và chỉ số học thuật.
+ * @returns {HTMLParagraphElement} Phần tử ghi chú gọn.
+ */
+function createMinimalProfileNote() {
+  return element(
+    "p",
+    "profile-minimal-note",
+    "Thông tin tiểu sử và chỉ số học thuật chưa có trong nguồn dữ liệu hiện tại. Bạn có thể xem các chủ đề hướng dẫn ở trên hoặc liên hệ giảng viên qua email.",
+  );
+}
+
+/**
+ * Tạo khối danh sách liên kết hồ sơ nghiên cứu ngoài (Google Scholar, ORCID...).
+ * @param {object[]} profiles - Danh sách liên kết hồ sơ ngoài.
+ * @returns {HTMLElement|null} Khối liên kết hoặc null nếu không có liên kết hợp lệ.
  */
 function createResearchLinks(profiles) {
   const block = section("Hồ sơ nghiên cứu");
@@ -201,9 +285,9 @@ function createResearchLinks(profiles) {
 }
 
 /**
- * Tạo khối hiển thị chủ đề nghiên cứu kèm phân trang khi có nhiều hơn 10 chủ đề.
- * @param {object[]} related Danh sách toàn bộ chủ đề của giảng viên.
- * @returns {HTMLElement} Section chứa danh sách chủ đề và phân trang.
+ * Tạo khối hiển thị danh sách chủ đề nghiên cứu kèm phân trang khi có hơn 10 chủ đề.
+ * @param {object[]} related - Danh sách toàn bộ chủ đề của giảng viên.
+ * @returns {HTMLElement} Section chứa danh sách chủ đề và thanh phân trang.
  */
 function createRelatedTopics(related) {
   const block = section("Chủ đề nghiên cứu", "profile-topics-section");
@@ -216,94 +300,104 @@ function createRelatedTopics(related) {
   const total = related.length;
   const pageCount = Math.ceil(total / TOPIC_PAGE_SIZE);
 
-  // Dòng tóm tắt số lượng chủ đề
   const summaryEl = element("p", "profile-topics-summary");
-  block.append(summaryEl);
-
-  // Danh sách chủ đề (ul)
   const listEl = element("ul", "related-topics-list");
-  block.append(listEl);
-
-  // Thanh phân trang (chỉ hiển thị khi total > 10)
   const navEl = element("nav", "profile-pagination");
   navEl.setAttribute("aria-label", "Phân trang chủ đề nghiên cứu");
-  block.append(navEl);
+  block.append(summaryEl, listEl, navEl);
 
-  /**
-   * Cập nhật danh sách chủ đề theo trang hiện tại.
-   * @returns {void}
-   */
-  function updateTopicPage() {
-    if (total > TOPIC_PAGE_SIZE) {
-      const start = (topicCurrentPage - 1) * TOPIC_PAGE_SIZE;
-      const end = Math.min(start + TOPIC_PAGE_SIZE, total);
-      summaryEl.textContent = `Hiển thị ${start + 1}–${end} trong tổng số ${total} chủ đề (Trang ${topicCurrentPage}/${pageCount})`;
-      summaryEl.hidden = false;
+  navEl.addEventListener("click", (event) =>
+    handleTopicPaginationClick(event, listEl, summaryEl, navEl, related, block, pageCount),
+  );
 
-      const pageItems = related.slice(start, end);
-      listEl.replaceChildren(
-        ...pageItems.map((entry) => {
-          const item = element("li", "related-topic-item");
-          item.append(createProfileTopicRow(entry));
-          return item;
-        }),
-      );
-
-      renderTopicPagination(navEl, pageCount, handleTopicPageChange);
-    } else {
-      summaryEl.textContent = `Tổng cộng ${total} chủ đề nghiên cứu`;
-      summaryEl.hidden = total <= 3;
-      listEl.replaceChildren(
-        ...related.map((entry) => {
-          const item = element("li", "related-topic-item");
-          item.append(createProfileTopicRow(entry));
-          return item;
-        }),
-      );
-      navEl.hidden = true;
-    }
-  }
-
-  /**
-   * Xử lý chuyển trang chủ đề.
-   * @param {number} newPage Trang mới.
-   * @returns {void}
-   */
-  function handleTopicPageChange(newPage) {
-    topicCurrentPage = newPage;
-    updateTopicPage();
-    const heading = block.querySelector("h2");
-    heading.tabIndex = -1;
-    heading.focus({ preventScroll: true });
-    block.scrollIntoView({ behavior: "smooth", block: "start" });
-  }
-
-  updateTopicPage();
+  renderTopicPage(listEl, summaryEl, navEl, related, pageCount);
   return block;
 }
 
 /**
- * Tạo hàng chủ đề nghiên cứu cho trang hồ sơ giảng viên:
- * Lược bỏ trường "Hướng dẫn: [Tên giảng viên]" (do đang ở trong hồ sơ của chính giảng viên đó),
- * giữ tên đề tài và nhãn nhóm nằm gọn gàng bên phải, không đặt thẻ tag bên dưới tên đề tài.
- * @param {object} entry Bản ghi chủ đề và nhóm nguồn.
- * @returns {HTMLElement} Phần tử hàng chủ đề đã được tối ưu.
+ * Render danh sách chủ đề và thanh phân trang tương ứng với trang hiện tại.
+ * @param {HTMLElement} listEl - Phần tử ul chứa danh sách chủ đề.
+ * @param {HTMLElement} summaryEl - Phần tử p hiển thị tổng số chủ đề.
+ * @param {HTMLElement} navEl - Phần tử nav phân trang.
+ * @param {object[]} related - Toàn bộ chủ đề của giảng viên.
+ * @param {number} pageCount - Tổng số trang.
+ * @returns {void} Không trả về giá trị.
+ */
+function renderTopicPage(listEl, summaryEl, navEl, related, pageCount) {
+  const total = related.length;
+  summaryEl.hidden = false;
+
+  if (total > TOPIC_PAGE_SIZE) {
+    const start = (topicCurrentPage - 1) * TOPIC_PAGE_SIZE;
+    const end = Math.min(start + TOPIC_PAGE_SIZE, total);
+    summaryEl.textContent = `Hiển thị ${start + 1}–${end} trong tổng số ${total} chủ đề (Trang ${topicCurrentPage}/${pageCount})`;
+    listEl.replaceChildren(...related.slice(start, end).map(createRelatedTopicItem));
+    renderTopicPagination(navEl, pageCount);
+    return;
+  }
+
+  // Luôn hiển thị dòng tổng số chủ đề cho mọi hồ sơ có từ 1 chủ đề trở lên.
+  summaryEl.textContent = `Tổng cộng ${total} chủ đề nghiên cứu`;
+  listEl.replaceChildren(...related.map(createRelatedTopicItem));
+  navEl.hidden = true;
+  navEl.replaceChildren();
+}
+
+/**
+ * Xử lý sự kiện click trên thanh phân trang chủ đề nghiên cứu.
+ * @param {MouseEvent} event - Sự kiện click vào nút trang.
+ * @param {HTMLElement} listEl - Phần tử ul danh sách chủ đề.
+ * @param {HTMLElement} summaryEl - Phần tử p tóm tắt số lượng.
+ * @param {HTMLElement} navEl - Phần tử nav phân trang.
+ * @param {object[]} related - Danh sách chủ đề của giảng viên.
+ * @param {HTMLElement} block - Section chủ đề nghiên cứu để focus/scroll tới đầu mục.
+ * @param {number} pageCount - Tổng số trang.
+ * @returns {void} Không trả về giá trị.
+ */
+function handleTopicPaginationClick(event, listEl, summaryEl, navEl, related, block, pageCount) {
+  const btn = event.target.closest("button[data-page]");
+  if (!btn || btn.disabled) return;
+
+  topicCurrentPage = Number(btn.dataset.page);
+  renderTopicPage(listEl, summaryEl, navEl, related, pageCount);
+
+  const heading = block.querySelector("h2");
+  if (heading) {
+    heading.tabIndex = -1;
+    heading.focus({ preventScroll: true });
+  }
+  block.scrollIntoView({ behavior: "smooth", block: "start" });
+}
+
+/**
+ * Tạo phần tử li bọc một hàng chủ đề nghiên cứu.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm nguồn.
+ * @returns {HTMLLIElement} Phần tử li chứa hàng chủ đề.
+ */
+function createRelatedTopicItem(entry) {
+  const item = element("li", "related-topic-item");
+  item.append(createProfileTopicRow(entry));
+  return item;
+}
+
+/**
+ * Tạo hàng chủ đề nghiên cứu cho trang hồ sơ bằng component chung (lược bỏ dòng "Hướng dẫn:").
+ * @param {object} entry - Bản ghi chủ đề và nhóm nguồn.
+ * @returns {HTMLElement} Phần tử hàng chủ đề giữ nguyên tên đề tài, tóm tắt trụ cột và badge nhóm.
  */
 function createProfileTopicRow(entry) {
   const row = createTopicRow(entry, 3);
-  const meta = row.querySelector(".topic-row__meta");
-  meta?.remove();
+  row.querySelector(".topic-row__meta")?.remove();
   return row;
 }
 
 /**
- * Render thanh điều hướng phân trang cho danh sách chủ đề.
- * @param {HTMLElement} nav Container thanh phân trang.
- * @param {number} pageCount Tổng số trang.
- * @param {Function} onChange Callback khi chuyển trang.
- * @returns {void}
+ * Render các nút điều hướng phân trang cho danh sách chủ đề.
+ * @param {HTMLElement} nav - Phần tử nav chứa các nút phân trang.
+ * @param {number} pageCount - Tổng số trang.
+ * @returns {void} Không trả về giá trị.
  */
-function renderTopicPagination(nav, pageCount, onChange) {
+function renderTopicPagination(nav, pageCount) {
   if (pageCount <= 1) {
     nav.hidden = true;
     nav.replaceChildren();
@@ -312,49 +406,58 @@ function renderTopicPagination(nav, pageCount, onChange) {
 
   nav.hidden = false;
   const fragment = document.createDocumentFragment();
+  fragment.append(createTopicPageBtn("Trước", topicCurrentPage - 1, topicCurrentPage === 1));
 
-  // Nút "Trước"
-  const prevBtn = createTopicPageBtn("Trước", topicCurrentPage - 1, topicCurrentPage === 1);
-  fragment.append(prevBtn);
-
-  // Các nút số trang
   for (let num = 1; num <= pageCount; num++) {
     fragment.append(createTopicPageBtn(String(num), num, false));
   }
 
-  // Nút "Sau"
-  const nextBtn = createTopicPageBtn("Sau", topicCurrentPage + 1, topicCurrentPage === pageCount);
-  fragment.append(nextBtn);
-
+  fragment.append(createTopicPageBtn("Sau", topicCurrentPage + 1, topicCurrentPage === pageCount));
   nav.replaceChildren(fragment);
-
-  // Gắn sự kiện click
-  nav.onclick = (e) => {
-    const btn = e.target.closest("button[data-page]");
-    if (!btn || btn.disabled) return;
-    onChange(Number(btn.dataset.page));
-  };
-
-  function createTopicPageBtn(label, targetPage, disabled) {
-    const btn = element("button", "profile-pagination__button", label);
-    btn.type = "button";
-    btn.dataset.page = String(targetPage);
-    btn.disabled = disabled;
-    if (/^\d+$/.test(label)) {
-      btn.setAttribute("aria-label", "Trang " + targetPage);
-      if (targetPage === topicCurrentPage) {
-        btn.setAttribute("aria-current", "page");
-      }
-    }
-    return btn;
-  }
 }
 
 /**
- * Render khối số liệu chỉ số nghiên cứu (Citations, h-index, i10-index).
- * Giữ nguyên giá trị 0 có thật, không giả mạo số liệu khi thiếu.
- * @param {object[]} records Danh sách bản ghi chỉ số.
- * @returns {HTMLElement|null} Khối hiển thị chỉ số hoặc null nếu không có.
+ * Tạo một nút trang cho thanh phân trang chủ đề nghiên cứu.
+ * @param {string} label - Nhãn nút hiển thị.
+ * @param {number} targetPage - Số trang đích.
+ * @param {boolean} disabled - Trạng thái vô hiệu hóa nút.
+ * @returns {HTMLButtonElement} Phần tử button phân trang.
+ */
+function createTopicPageBtn(label, targetPage, disabled) {
+  const btn = element("button", "profile-pagination__button", label);
+  btn.type = "button";
+  btn.dataset.page = String(targetPage);
+  btn.disabled = disabled;
+
+  if (/^\d+$/.test(label)) {
+    btn.setAttribute("aria-label", "Trang " + targetPage);
+    if (targetPage === topicCurrentPage) {
+      btn.setAttribute("aria-current", "page");
+    }
+  }
+
+  return btn;
+}
+
+/**
+ * Tạo một thẻ hiển thị từng chỉ số nghiên cứu (Trích dẫn, h-index, i10-index).
+ * @param {string} label - Nhãn tên chỉ số.
+ * @param {number} value - Giá trị số nguyên hợp lệ (bao gồm cả 0 thật).
+ * @returns {HTMLDivElement} Phần tử metric-card.
+ */
+function createMetricCard(label, value) {
+  const metric = element("div", "metric-card");
+  metric.append(
+    element("p", "metric-card__value", value),
+    element("p", "metric-card__label", label),
+  );
+  return metric;
+}
+
+/**
+ * Render khối số liệu chỉ số nghiên cứu; giữ nguyên giá trị 0 có thật và không bịa khi thiếu.
+ * @param {object[]} records - Danh sách bản ghi chỉ số từ JSON.
+ * @returns {HTMLElement|null} Khối hiển thị chỉ số hoặc null nếu không có bản ghi hợp lệ.
  */
 function renderMetrics(records) {
   const block = section("Chỉ số nghiên cứu");
@@ -371,12 +474,7 @@ function renderMetrics(records) {
       ["i10Index", "i10-index"],
     ]) {
       if (typeof record[key] === "number" && Number.isFinite(record[key]) && record[key] >= 0) {
-        const metric = element("div", "metric-card");
-        metric.append(
-          element("p", "metric-card__value", record[key]),
-          element("p", "metric-card__label", label),
-        );
-        grid.append(metric);
+        grid.append(createMetricCard(label, record[key]));
       }
     }
 

@@ -189,6 +189,66 @@ function resolvePhotoUrl(value) {
   }
 }
 
+/**
+ * Đệ quy đếm tổng số mục kiến thức trong cây keyword và số môn học gợi ý duy nhất.
+ * @param {object[]} keywords Danh sách nút kiến thức của một nhánh hoặc toàn chủ đề.
+ * @param {Set<string>} [subjects] Tập hợp dùng để tích lũy tên môn học duy nhất qua đệ quy.
+ * @returns {{nodeCount: number, subjectCount: number}} Tổng số mục kiến thức và số môn gợi ý duy nhất.
+ */
+export function countTopicNodes(keywords, subjects = new Set()) {
+  if (!Array.isArray(keywords) || !keywords.length) {
+    return { nodeCount: 0, subjectCount: subjects.size };
+  }
+
+  let nodeCount = 0;
+  for (const keyword of keywords) {
+    if (!keyword || typeof keyword !== "object") continue;
+    nodeCount++;
+
+    // Gom tên môn học hợp lệ vào Set để tự động khử trùng lặp giữa các nhánh.
+    if (Array.isArray(keyword.subjects)) {
+      for (const subject of keyword.subjects) {
+        const name = String(subject || "").trim();
+        if (name) subjects.add(name);
+      }
+    }
+
+    // Đệ quy xuống các kiến thức tiên quyết cấp sâu hơn và chia sẻ cùng Set môn học.
+    if (Array.isArray(keyword.children) && keyword.children.length) {
+      nodeCount += countTopicNodes(keyword.children, subjects).nodeCount;
+    }
+  }
+
+  return { nodeCount, subjectCount: subjects.size };
+}
+
+/**
+ * Tạo chuỗi tóm tắt các trụ cột kiến thức chính và quy mô lộ trình từ dữ liệu thật của chủ đề.
+ * @param {object} topic Đối tượng chủ đề từ JSON nghiên cứu.
+ * @returns {string} Chuỗi tóm tắt gọn hoặc chuỗi rỗng nếu chủ đề chưa có dữ liệu keyword.
+ */
+export function summarizeTopicScope(topic) {
+  const keywords = Array.isArray(topic?.keywords) ? topic.keywords : [];
+  if (!keywords.length) return "";
+
+  // Chỉ lấy tên các trụ cột kiến thức ở tầng gốc để giữ tóm tắt ngắn gọn và trực quan.
+  const rootNames = keywords.map((item) => String(item?.name || "").trim()).filter(Boolean);
+  const { nodeCount, subjectCount } = countTopicNodes(keywords);
+  const parts = [];
+
+  if (rootNames.length) {
+    parts.push("Kiến thức chính: " + rootNames.join(" · "));
+  }
+  parts.push(nodeCount + " mục kiến thức");
+
+  // Chỉ hiển thị số môn gợi ý khi chủ đề thực sự có môn học liên kết (> 0).
+  if (subjectCount > 0) {
+    parts.push(subjectCount + " môn gợi ý");
+  }
+
+  return parts.join(" · ");
+}
+
 /** Tạo hàng chủ đề dùng chung cho khám phá và hồ sơ giảng viên.
  * @param {{group: object, topic: object}} entry Chủ đề và nhóm nguồn.
  * @param {number} [headingLevel=2] Cấp heading của tên đề tài (2 hoặc 3).
@@ -202,11 +262,18 @@ export function createTopicRow(entry, headingLevel = 2) {
   const link = element("a", "", topic.name);
   link.href = topicUrl(group, topic);
   heading.append(link);
+
+  // Tóm tắt trụ cột đặt bằng phần tử riêng (.topic-row__summary) để không bị xóa cùng .topic-row__meta.
+  const summaryText = summarizeTopicScope(topic);
+  const summary = summaryText ? element("p", "topic-row__summary", summaryText) : null;
+
   const meta = element("p", "topic-row__meta", "Hướng dẫn: ");
   const lecturer = element("a", "", topic.lecturer.name);
   lecturer.href = lecturerUrl(topic.lecturer.email);
   meta.append(lecturer);
-  row.append(heading, meta, badge);
+
+  if (summary) row.append(heading, summary, meta, badge);
+  else row.append(heading, meta, badge);
   return row;
 }
 

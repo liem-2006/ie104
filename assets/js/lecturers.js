@@ -1,7 +1,7 @@
 /**
- * @file Quản lý hiển thị danh bạ giảng viên (TV2 Job 2 nâng cấp từ TV3).
- * Hỗ trợ tìm kiếm, lọc theo nhóm, phân trang tối đa 3 hàng (9 thẻ/trang)
- * và tối ưu nhận diện avatar viết tắt tiếng Việt chuẩn xác.
+ * @file Quản lý hiển thị danh bạ giảng viên (TV2 Chặng 2B).
+ * Hỗ trợ tìm kiếm không dấu theo tên/email, lọc theo nhóm chủ đề,
+ * sắp xếp A–Z theo tên riêng tiếng Việt, trạng thái rỗng và phân trang 9 thẻ/trang.
  */
 
 import {
@@ -15,7 +15,7 @@ import {
   avatar,
 } from "./data.js";
 
-/** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop) */
+/** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop). */
 const PAGE_SIZE = 9;
 
 let lecturers = [];
@@ -26,35 +26,19 @@ let currentPage = 1;
 document.addEventListener("DOMContentLoaded", initLecturers);
 
 /**
- * Khởi tạo dữ liệu và sự kiện cho trang danh bạ giảng viên.
- * @returns {Promise<void>}
+ * Khởi tạo dữ liệu, sắp xếp A–Z và gắn sự kiện cho trang danh bạ giảng viên.
+ * @returns {Promise<void>} Promise hoàn tất khởi tạo trang.
  */
 async function initLecturers() {
   try {
     const [research, people] = await Promise.all([loadResearch(), loadLecturers()]);
-    lecturers = people;
+    // Sắp xếp danh bạ theo tên riêng tiếng Việt A–Z trước khi lọc và phân trang.
+    lecturers = [...people].sort(compareLecturersByName);
     topics = flattenTopics(research);
     groups = research.groups.map(getGroup);
 
-    // Điền các nhóm nghiên cứu vào dropdown filter
-    const select = document.getElementById("lecturer-group");
-    for (const group of groups) {
-      const option = element("option", "", group.name);
-      option.value = group.id;
-      select.append(option);
-    }
-
-    // Gắn sự kiện cho form lọc và tìm kiếm
-    const form = document.getElementById("lecturer-filter");
-    form.addEventListener("submit", preventSubmit);
-    form.addEventListener("input", handleFilterInput);
-    form.addEventListener("change", handleFilterInput);
-    form.addEventListener("reset", resetSearch);
-
-    // Gắn sự kiện phân trang
-    const pagination = document.getElementById("lecturers-pagination");
-    pagination?.addEventListener("click", changePage);
-
+    populateGroupOptions(document.getElementById("lecturer-group"), groups);
+    bindFilterEvents();
     renderLecturers(true);
   } catch {
     document.getElementById("lecturers-status").textContent =
@@ -63,26 +47,61 @@ async function initLecturers() {
 }
 
 /**
- * Lấy metadata nhóm từ nhóm nguồn.
- * @param {object} entry Nhóm nguồn.
- * @returns {object} Thông tin nhóm.
+ * Điền các nhóm nghiên cứu vào thẻ select lọc nhóm.
+ * @param {HTMLSelectElement|null} selectEl - Phần tử select nhóm chủ đề.
+ * @param {object[]} groupList - Danh sách nhóm nghiên cứu từ JSON.
+ * @returns {void} Không trả về giá trị.
+ */
+function populateGroupOptions(selectEl, groupList) {
+  if (!selectEl) return;
+  for (const group of groupList) {
+    const option = element("option", "", group.name);
+    option.value = group.id;
+    selectEl.append(option);
+  }
+}
+
+/**
+ * Gắn các sự kiện tương tác cho form lọc, nút đặt lại ở trạng thái rỗng và phân trang.
+ * @returns {void} Không trả về giá trị.
+ */
+function bindFilterEvents() {
+  const form = document.getElementById("lecturer-filter");
+  form?.addEventListener("submit", preventSubmit);
+  form?.addEventListener("input", handleFilterInput);
+  form?.addEventListener("change", handleFilterInput);
+  form?.addEventListener("reset", handleFormReset);
+
+  const emptyResetButton = document
+    .getElementById("lecturers-empty")
+    ?.querySelector("[data-empty-reset]");
+  emptyResetButton?.addEventListener("click", handleEmptyReset);
+
+  const pagination = document.getElementById("lecturers-pagination");
+  pagination?.addEventListener("click", changePage);
+}
+
+/**
+ * Lấy metadata nhóm từ mục nhóm nguồn.
+ * @param {object} entry - Bản ghi nhóm từ dữ liệu nghiên cứu.
+ * @returns {object} Thông tin nhóm gồm id và name.
  */
 function getGroup(entry) {
   return entry.group;
 }
 
 /**
- * Xử lý khi người dùng nhập tìm kiếm hoặc đổi filter nhóm (reset về trang 1).
- * @returns {void}
+ * Xử lý khi người dùng nhập từ khóa hoặc đổi nhóm lọc (đưa về trang 1).
+ * @returns {void} Không trả về giá trị.
  */
 function handleFilterInput() {
   renderLecturers(true);
 }
 
 /**
- * Ngăn chặn submit form làm tải lại trang.
- * @param {SubmitEvent} event Sự kiện submit.
- * @returns {void}
+ * Ngăn chặn submit form mặc định làm tải lại trang và giữ lọc tức thời.
+ * @param {SubmitEvent} event - Sự kiện submit của form tìm kiếm.
+ * @returns {void} Không trả về giá trị.
  */
 function preventSubmit(event) {
   event.preventDefault();
@@ -90,35 +109,179 @@ function preventSubmit(event) {
 }
 
 /**
- * Đặt lại tìm kiếm và làm mới danh sách về trang 1.
- * @returns {void}
+ * Xử lý sự kiện reset gốc của form và cập nhật lại giao diện sau khi giá trị đã xóa.
+ * @returns {void} Không trả về giá trị.
  */
-function resetSearch() {
-  requestAnimationFrame(() => renderLecturers(true));
+function handleFormReset() {
+  // Đợi trình duyệt hoàn tất thao tác reset native của các control trước khi render.
+  requestAnimationFrame(applyResetState);
 }
 
 /**
- * Lấy danh sách các chủ đề nghiên cứu liên quan đến giảng viên qua email.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @returns {object[]} Các chủ đề giảng viên hướng dẫn.
+ * Xử lý nút "Xóa bộ lọc" trong khối trạng thái rỗng.
+ * @returns {void} Không trả về giá trị.
+ */
+function handleEmptyReset() {
+  const searchInput = document.getElementById("lecturer-search");
+  const groupSelect = document.getElementById("lecturer-group");
+  if (searchInput) searchInput.value = "";
+  if (groupSelect) groupSelect.value = "";
+  applyResetState();
+}
+
+/**
+ * Đặt lại bộ lọc về trang 1, render lại danh bạ và trả focus về ô tìm kiếm.
+ * @returns {void} Không trả về giá trị.
+ */
+function applyResetState() {
+  renderLecturers(true);
+  document.getElementById("lecturer-search")?.focus({ preventScroll: true });
+}
+
+/**
+ * Loại bỏ học hàm/học vị ở đầu và chú thích đơn vị trong ngoặc ở cuối tên giảng viên.
+ * @param {string} rawName - Tên đầy đủ gốc trong dữ liệu JSON.
+ * @returns {string} Chuỗi họ tên đã làm sạch để tách tên riêng.
+ */
+function extractSortableName(rawName) {
+  const withoutOrg = String(rawName || "").replace(/\s*\([^)]*\)\s*$/g, "").trim();
+  return withoutOrg
+    .replace(/^(PGS\.?\s*TS\.?|GS\.?\s*TS\.?|PGS\.?|GS\.?|TS\.?|ThS\.?|Th\.S\.?|CN\.?)\s+/i, "")
+    .trim();
+}
+
+/**
+ * So sánh hai giảng viên theo tên riêng tiếng Việt (A–Z); trùng tên chính thì so họ tên đầy đủ.
+ * @param {object} first - Giảng viên thứ nhất.
+ * @param {object} second - Giảng viên thứ hai.
+ * @returns {number} Giá trị âm, 0 hoặc dương theo thứ tự bảng chữ cái tiếng Việt.
+ */
+function compareLecturersByName(first, second) {
+  const firstFull = extractSortableName(first?.name);
+  const secondFull = extractSortableName(second?.name);
+  const firstParts = firstFull.split(/\s+/).filter(Boolean);
+  const secondParts = secondFull.split(/\s+/).filter(Boolean);
+  const firstGiven = firstParts[firstParts.length - 1] || firstFull;
+  const secondGiven = secondParts[secondParts.length - 1] || secondFull;
+
+  // So sánh từ cuối tên riêng theo chuẩn tiếng Việt.
+  const givenCompare = firstGiven.localeCompare(secondGiven, "vi");
+  if (givenCompare !== 0) return givenCompare;
+
+  // Nếu trùng tên riêng thì đối chiếu toàn bộ họ tên đầy đủ đã bỏ học hàm/đơn vị.
+  return firstFull.localeCompare(secondFull, "vi");
+}
+
+/**
+ * Kiểm tra email giảng viên trong chủ đề có khớp với giảng viên cần tra cứu hay không.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm.
+ * @param {string} targetEmail - Email giảng viên đã chuẩn hóa.
+ * @returns {boolean} True nếu chủ đề thuộc giảng viên này.
+ */
+function matchesLecturerTopic(entry, targetEmail) {
+  return normalizeEmail(entry.topic.lecturer.email) === targetEmail;
+}
+
+/**
+ * Lấy danh sách các chủ đề nghiên cứu liên quan đến giảng viên qua email đã chuẩn hóa.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @returns {object[]} Danh sách chủ đề giảng viên hướng dẫn.
  */
 function relatedTopics(lecturer) {
-  return topics.filter(matchesEmail);
-
-  /**
-   * So khớp email chuẩn hóa.
-   * @param {object} entry Chủ đề nghiên cứu.
-   * @returns {boolean} True nếu trùng email.
-   */
-  function matchesEmail(entry) {
-    return normalizeEmail(entry.topic.lecturer.email) === normalizeEmail(lecturer.email);
-  }
+  const targetEmail = normalizeEmail(lecturer.email);
+  return topics.filter((entry) => matchesLecturerTopic(entry, targetEmail));
 }
 
 /**
- * Lọc và render danh bạ giảng viên kết hợp phân trang (tối đa 9 giảng viên/trang).
- * @param {boolean} [resetPage=false] Có đặt lại về trang đầu hay không.
- * @returns {void}
+ * Kiểm tra chủ đề có thuộc mã nhóm đang chọn hay không.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm.
+ * @param {string} groupId - Mã nhóm cần lọc.
+ * @returns {boolean} True nếu chủ đề thuộc nhóm đang lọc.
+ */
+function isTopicInGroup(entry, groupId) {
+  return entry.group.id === groupId;
+}
+
+/**
+ * Kiểm tra một giảng viên có thỏa mãn điều kiện từ khóa tìm kiếm và nhóm chủ đề hay không.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @param {string} query - Chuỗi tìm kiếm đã chuẩn hóa không dấu, chữ thường.
+ * @param {string} groupId - Mã nhóm đang lọc (rỗng nếu chọn tất cả).
+ * @returns {boolean} True nếu giảng viên thỏa mãn bộ lọc.
+ */
+function matchesLecturerFilter(lecturer, query, groupId) {
+  const textMatches = searchText(lecturer.name + " " + lecturer.email).includes(query);
+  const groupMatches = !groupId || relatedTopics(lecturer).some((entry) => isTopicInGroup(entry, groupId));
+  return textMatches && groupMatches;
+}
+
+/**
+ * Lọc và sắp xếp danh sách giảng viên theo bộ lọc hiện tại trước khi phân trang.
+ * @param {string} query - Chuỗi tìm kiếm đã chuẩn hóa.
+ * @param {string} groupId - Mã nhóm đang lọc.
+ * @returns {object[]} Mảng giảng viên khớp bộ lọc đã được sắp xếp A–Z.
+ */
+function getFilteredLecturers(query, groupId) {
+  return lecturers
+    .filter((lecturer) => matchesLecturerFilter(lecturer, query, groupId))
+    .sort(compareLecturersByName);
+}
+
+/**
+ * Kiểm tra người dùng có đang áp dụng bộ lọc tìm kiếm hoặc nhóm hay không.
+ * @param {string} query - Chuỗi tìm kiếm đã chuẩn hóa.
+ * @param {string} groupId - Mã nhóm đang chọn.
+ * @returns {boolean} True nếu có bộ lọc khác mặc định.
+ */
+function hasCustomFilter(query, groupId) {
+  return Boolean(query) || Boolean(groupId);
+}
+
+/**
+ * Tạo chuỗi thông báo số lượng giảng viên đang hiển thị.
+ * @param {number} total - Tổng số giảng viên khớp bộ lọc.
+ * @param {number} start - Chỉ số phần tử đầu trang hiện tại.
+ * @param {number} pageCount - Tổng số trang.
+ * @returns {string} Chuỗi trạng thái hiển thị cho người dùng và screen reader.
+ */
+function buildLecturersStatus(total, start, pageCount) {
+  if (!lecturers.length) return "Chưa có dữ liệu giảng viên.";
+  if (!total) return "Không có giảng viên phù hợp với bộ lọc.";
+  const pageInfo = pageCount > 1 ? ` · Trang ${currentPage}/${pageCount}` : "";
+  return `Hiển thị ${start + 1}–${Math.min(start + PAGE_SIZE, total)} trong ${total} giảng viên${pageInfo}`;
+}
+
+/**
+ * Bật hoặc tắt khối thông báo trạng thái rỗng khi không có giảng viên khớp bộ lọc.
+ * @param {number} total - Tổng số giảng viên khớp bộ lọc.
+ * @returns {boolean} True nếu đang hiển thị trạng thái rỗng.
+ */
+function renderEmptyState(total) {
+  const emptyBox = document.getElementById("lecturers-empty");
+  if (!emptyBox) return false;
+  // Chỉ coi là không khớp bộ lọc khi dữ liệu gốc đã tải thành công (> 0).
+  const isEmpty = !total && lecturers.length > 0;
+  emptyBox.hidden = !isEmpty;
+  return isEmpty;
+}
+
+/**
+ * Đồng bộ trạng thái ẩn/hiện của nút "Xóa bộ lọc" trên thanh tìm kiếm.
+ * @param {boolean} hasFilter - Người dùng có đang lọc hay không.
+ * @param {boolean} isEmptyVisible - Khối empty state có đang hiển thị hay không.
+ * @returns {void} Không trả về giá trị.
+ */
+function renderFilterState(hasFilter, isEmptyVisible) {
+  const resetButton = document.getElementById("lecturers-reset");
+  if (!resetButton) return;
+  // Ẩn nút reset trên form khi chưa lọc gì hoặc khi empty state đã có nút reset tại chỗ.
+  resetButton.hidden = isEmptyVisible || !hasFilter;
+}
+
+/**
+ * Lọc, phân trang (9 thẻ/trang) và render toàn bộ giao diện danh bạ giảng viên.
+ * @param {boolean} [resetPage=false] - Có đặt lại về trang đầu tiên hay không.
+ * @returns {void} Không trả về giá trị.
  */
 function renderLecturers(resetPage = false) {
   if (resetPage) {
@@ -126,12 +289,9 @@ function renderLecturers(resetPage = false) {
   }
 
   const query = searchText(document.getElementById("lecturer-search").value);
-  const group = document.getElementById("lecturer-group").value;
+  const groupId = document.getElementById("lecturer-group").value;
+  const matches = getFilteredLecturers(query, groupId);
 
-  // Lọc theo từ khóa tìm kiếm (hỗ trợ cả tìm theo tên và email) và nhóm đề tài
-  const matches = lecturers.filter(matchesFilter);
-
-  // Tính toán phân trang
   const total = matches.length;
   const pageCount = Math.ceil(total / PAGE_SIZE) || 1;
   if (currentPage > pageCount) {
@@ -141,48 +301,22 @@ function renderLecturers(resetPage = false) {
   const start = (currentPage - 1) * PAGE_SIZE;
   const pagedItems = matches.slice(start, start + PAGE_SIZE);
 
-  // Render các thẻ giảng viên thuộc trang hiện tại
   document.getElementById("lecturers-list").replaceChildren(...pagedItems.map(createLecturerCard));
+  document.getElementById("lecturers-status").textContent = buildLecturersStatus(
+    total,
+    start,
+    pageCount,
+  );
 
-  // Cập nhật thông báo trạng thái
-  const statusEl = document.getElementById("lecturers-status");
-  if (!lecturers.length) {
-    statusEl.textContent = "Chưa có dữ liệu giảng viên.";
-  } else if (!total) {
-    statusEl.textContent = "Không có giảng viên phù hợp với bộ lọc.";
-  } else {
-    const pageInfo = pageCount > 1 ? ` · Trang ${currentPage}/${pageCount}` : "";
-    statusEl.textContent = `Hiển thị ${start + 1}–${Math.min(start + PAGE_SIZE, total)} trong ${total} giảng viên${pageInfo}`;
-  }
-
-  // Render bộ nút phân trang
+  const isEmptyVisible = renderEmptyState(total);
+  renderFilterState(hasCustomFilter(query, groupId), isEmptyVisible);
   renderPagination(pageCount);
-
-  /**
-   * Bộ lọc tên, email và nhóm chủ đề liên quan.
-   * @param {object} lecturer Giảng viên.
-   * @returns {boolean} True nếu thỏa mãn điều kiện lọc.
-   */
-  function matchesFilter(lecturer) {
-    const textMatches = searchText(lecturer.name + " " + lecturer.email).includes(query);
-    const groupMatches = !group || relatedTopics(lecturer).some(inGroup);
-    return textMatches && groupMatches;
-  }
-
-  /**
-   * Kiểm tra chủ đề thuộc nhóm đang lọc.
-   * @param {object} entry Chủ đề.
-   * @returns {boolean} True nếu trùng mã nhóm.
-   */
-  function inGroup(entry) {
-    return entry.group.id === group;
-  }
 }
 
 /**
- * Render thanh điều hướng phân trang nếu có nhiều hơn 1 trang.
- * @param {number} pageCount Tổng số trang.
- * @returns {void}
+ * Render thanh điều hướng phân trang nếu tổng số trang lớn hơn 1.
+ * @param {number} pageCount - Tổng số trang kết quả.
+ * @returns {void} Không trả về giá trị.
  */
 function renderPagination(pageCount) {
   const nav = document.getElementById("lecturers-pagination");
@@ -196,27 +330,22 @@ function renderPagination(pageCount) {
 
   nav.hidden = false;
   const fragment = document.createDocumentFragment();
-
-  // Nút "Trước"
   fragment.append(createPageButton("Trước", currentPage - 1, currentPage === 1));
 
-  // Các nút số trang
   for (let number = 1; number <= pageCount; number++) {
     fragment.append(createPageButton(String(number), number, false));
   }
 
-  // Nút "Sau"
   fragment.append(createPageButton("Sau", currentPage + 1, currentPage === pageCount));
-
   nav.replaceChildren(fragment);
 }
 
 /**
  * Tạo một nút bấm trong thanh phân trang chuẩn WAI-ARIA.
- * @param {string} label Nhãn hiển thị của nút.
- * @param {number} targetPage Số trang đích.
- * @param {boolean} disabled Trạng thái vô hiệu hóa.
- * @returns {HTMLButtonElement} Phần tử nút bấm.
+ * @param {string} label - Nhãn hiển thị của nút.
+ * @param {number} targetPage - Số trang đích khi nhấn nút.
+ * @param {boolean} disabled - Trạng thái vô hiệu hóa nút.
+ * @returns {HTMLButtonElement} Phần tử nút phân trang.
  */
 function createPageButton(label, targetPage, disabled) {
   const button = element("button", "lecturers-pagination__button", label);
@@ -235,9 +364,9 @@ function createPageButton(label, targetPage, disabled) {
 }
 
 /**
- * Xử lý chuyển trang khi click vào nút phân trang.
- * @param {MouseEvent} event Sự kiện click.
- * @returns {void}
+ * Xử lý chuyển trang khi người dùng bấm vào thanh phân trang và đặt focus về heading danh sách.
+ * @param {MouseEvent} event - Sự kiện click trên thanh phân trang.
+ * @returns {void} Không trả về giá trị.
  */
 function changePage(event) {
   const button = event.target.closest("button[data-page]");
@@ -246,36 +375,19 @@ function changePage(event) {
   currentPage = Number(button.dataset.page);
   renderLecturers(false);
 
-  // Cuộn nhẹ lên đầu danh sách để thuận tiện quan sát
+  // Focus vào heading ẩn thay vì live region để tránh screen reader đọc lặp nội dung trạng thái.
+  const heading = document.getElementById("lecturers-results-heading");
   const listEl = document.getElementById("lecturers-list");
-  const status = document.getElementById("lecturers-status");
-  status.tabIndex = -1;
-  status.focus({ preventScroll: true });
+  heading?.focus({ preventScroll: true });
   listEl?.scrollIntoView({ behavior: "smooth", block: "start" });
 }
 
 /**
- * Tạo thẻ hiển thị thông tin giảng viên (card).
- * Hiển thị email phục vụ tra cứu.
- * @param {object} lecturer Dữ liệu giảng viên.
- * @returns {HTMLElement} Thẻ article hoàn chỉnh.
+ * Tạo thẻ hiển thị nhóm lĩnh vực nghiên cứu thực tế cho một giảng viên.
+ * @param {object[]} related - Các chủ đề nghiên cứu giảng viên đang hướng dẫn.
+ * @returns {HTMLElement} Khối div chứa các thẻ nhóm nghiên cứu.
  */
-function createLecturerCard(lecturer) {
-  const card = element("article", "lecturer-card");
-  const header = element("div", "lecturer-card__header");
-  const meta = element("div", "lecturer-card__meta");
-
-  // Tên và email giảng viên
-  const heading = element("h2", "lecturer-card__name", lecturer.name);
-  const email = element("a", "lecturer-card__email", lecturer.email);
-  email.href = "mailto:" + normalizeEmail(lecturer.email);
-  meta.append(heading, email);
-
-  // Avatar sử dụng bộ nhận diện viết tắt tiếng Việt chuẩn
-  header.append(avatar(lecturer, "lecturer-card__avatar"), meta);
-
-  // Nhóm chủ đề nghiên cứu mà giảng viên phụ trách
-  const related = relatedTopics(lecturer);
+function createLecturerTags(related) {
   const ids = new Set(related.map(getGroupId));
   const tags = element("div", "lecturer-card__tags");
   for (const group of groups) {
@@ -283,13 +395,34 @@ function createLecturerCard(lecturer) {
       tags.append(element("span", "lecturer-tag lecturer-tag--" + group.id, group.name));
     }
   }
+  return tags;
+}
 
-  // Nút liên kết tới trang hồ sơ chi tiết
+/**
+ * Tạo thẻ thông tin giảng viên (card) gồm avatar, tên, email, nhóm chủ đề và link hồ sơ.
+ * @param {object} lecturer - Dữ liệu giảng viên.
+ * @returns {HTMLElement} Thẻ article hoàn chỉnh.
+ */
+function createLecturerCard(lecturer) {
+  const card = element("article", "lecturer-card");
+  const header = element("div", "lecturer-card__header");
+  const meta = element("div", "lecturer-card__meta");
+
+  // Tên và email giảng viên giữ nguyên để phục vụ tra cứu nhanh trên thẻ.
+  const heading = element("h2", "lecturer-card__name", lecturer.name);
+  const email = element("a", "lecturer-card__email", lecturer.email);
+  email.href = "mailto:" + normalizeEmail(lecturer.email);
+  meta.append(heading, email);
+
+  header.append(avatar(lecturer, "lecturer-card__avatar"), meta);
+
+  const related = relatedTopics(lecturer);
+  const tags = createLecturerTags(related);
+
   const link = element("a", "lecturer-card__profile-link", "Xem hồ sơ →");
   link.href = lecturerUrl(lecturer.email);
   link.setAttribute("aria-label", "Xem hồ sơ chi tiết của " + lecturer.name);
 
-  // Chân thẻ gồm số lượng chủ đề và nút xem hồ sơ
   const footer = element("div", "lecturer-card__footer");
   footer.append(element("p", "lecturer-card__topic-count", related.length + " chủ đề nghiên cứu"), link);
 
@@ -299,8 +432,8 @@ function createLecturerCard(lecturer) {
 
 /**
  * Lấy mã ID nhóm từ bản ghi chủ đề.
- * @param {object} entry Bản ghi chủ đề.
- * @returns {string} ID nhóm.
+ * @param {object} entry - Bản ghi chủ đề kèm nhóm.
+ * @returns {string} Mã nhóm nghiên cứu.
  */
 function getGroupId(entry) {
   return entry.group.id;

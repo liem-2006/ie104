@@ -1,45 +1,45 @@
-/* TV2 Job 2 — Danh bạ giảng viên: nâng cấp giao diện, phân trang và responsive. */
-
-#page-lecturers {
-  --card-border-color: var(--color-border);
-  --card-shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
-}
-
-html[data-theme="dark"] #page-lecturers {
-  --card-border-color: var(--color-border);
-  --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-}
-
-@media (prefers-color-scheme: dark) {
-  html:not([data-theme="light"]) #page-lecturers {
-    --card-border-color: var(--color-border);
-    --card-shadow: 0 2px 8px rgba(0, 0, 0, 0.35);
-  }
-}
+/* TV2 — Danh bạ giảng viên: chuẩn hóa token từ style.css, tối ưu thẻ, trạng thái rỗng và responsive. */
 
 #page-lecturers .lecturers-filter {
   display: grid;
   gap: 16px;
   align-items: end;
   margin-bottom: 24px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-soft);
+}
+
+#page-lecturers .lecturers-filter label {
+  line-height: 1.5;
 }
 
 #page-lecturers .lecturers-filter input,
 #page-lecturers .lecturers-filter select {
-  border: 1.5px solid var(--card-border-color);
+  border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
   background: var(--color-surface);
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition: border-color var(--transition-fast);
 }
 
 #page-lecturers .lecturers-filter input:focus,
 #page-lecturers .lecturers-filter select:focus {
-  border-color: var(--color-primary);
-  outline: 2px solid var(--color-focus);
+  border-color: var(--color-focus);
 }
 
-#page-lecturers .lecturers-filter > .btn {
-  justify-self: start;
+#page-lecturers .lecturers-filter__hint {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+#page-lecturers .lecturers-filter__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
 #page-lecturers .lecturers-status {
@@ -56,23 +56,57 @@ html[data-theme="dark"] #page-lecturers {
   gap: 20px;
 }
 
+#page-lecturers .lecturers-grid:empty {
+  display: none;
+}
+
+#page-lecturers .lecturers-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 32px 16px;
+  text-align: center;
+}
+
+#page-lecturers .lecturers-empty__text {
+  margin: 0;
+  color: var(--color-muted);
+  font-size: 15px;
+}
+
+#page-lecturers .lecturers-empty .btn {
+  min-width: 140px;
+}
+
 #page-lecturers .lecturer-card {
+  position: relative;
   min-width: 0;
   display: flex;
   flex-direction: column;
   gap: 16px;
   padding: 22px;
   background: var(--color-surface);
-  border: 1.5px solid var(--card-border-color);
-  border-radius: 12px;
-  box-shadow: none;
+  border: 1px solid var(--color-border);
+  border-radius: 16px;
+  box-shadow: var(--shadow-soft);
   transition: background-color var(--transition-fast), border-color var(--transition-fast);
+}
+
+#page-lecturers .lecturer-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 22px;
+  width: 36px;
+  height: 3px;
+  background: var(--color-primary);
+  border-radius: 0 0 3px 3px;
 }
 
 #page-lecturers .lecturer-card:hover {
   background: var(--color-surface-muted);
   border-color: var(--color-primary);
-  box-shadow: none;
 }
 
 #page-lecturers .lecturer-card__header {
@@ -90,7 +124,7 @@ html[data-theme="dark"] #page-lecturers {
   flex: 0 0 48px;
   border-radius: 50%;
   background: var(--color-surface-muted);
-  border: 1.5px solid var(--card-border-color);
+  border: 1.5px solid var(--color-border);
   color: var(--color-primary);
   font-size: 15px;
   font-weight: 700;
@@ -111,11 +145,31 @@ html[data-theme="dark"] #page-lecturers {
 }
 
 #page-lecturers .lecturer-card__name {
-  font-size: 17px;
+  font-size: 18px;
   margin: 0;
   line-height: 1.35;
   color: var(--color-text);
   font-weight: 600;
+}
+
+#page-lecturers .lecturer-card__email {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  max-width: 100%;
+  margin-block: -2px -6px;
+  font-size: 14px;
+  color: var(--color-link);
+  text-decoration: none;
+  overflow-wrap: anywhere;
+}
+
+#page-lecturers .lecturer-card__email:hover {
+  text-decoration: underline;
+}
+
+#page-lecturers .lecturer-card__email:focus-visible {
+  outline-offset: -2px;
 }
 
 #page-lecturers .lecturer-card__tags {
@@ -151,7 +205,7 @@ html[data-theme="dark"] #page-lecturers {
   font-weight: 600;
   color: var(--color-primary);
   text-decoration: none;
-  transition: color 0.15s ease, transform 0.15s ease;
+  transition: color var(--transition-fast), transform var(--transition-fast);
 }
 
 #page-lecturers .lecturer-card__profile-link:hover {
@@ -185,7 +239,8 @@ html[data-theme="dark"] #page-lecturers {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: background-color var(--transition-fast), border-color var(--transition-fast),
+    color var(--transition-fast);
 }
 
 #page-lecturers .lecturers-pagination__button:hover:not(:disabled) {
@@ -208,18 +263,25 @@ html[data-theme="dark"] #page-lecturers {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
-#page-lecturers .lecturers-filter__actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+@media (max-width: 767px) {
+  #page-lecturers .lecturers-filter {
+    padding: 16px;
+  }
 }
 
 @media (min-width: 768px) {
-  #page-lecturers .lecturers-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
   #page-lecturers .lecturers-filter {
     grid-template-columns: minmax(0, 1fr) 240px auto;
+    align-items: start;
+  }
+
+  #page-lecturers .lecturers-filter__actions {
+    /* Cân hàng nút ngang hàng với input/select sau nhãn 1 dòng (21px + 6px gap). */
+    margin-top: 27px;
+  }
+
+  #page-lecturers .lecturers-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -228,10 +290,3 @@ html[data-theme="dark"] #page-lecturers {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
-
-/* UI review: restrained identity accents and consistent search surface. */
-#page-lecturers .lecturers-filter { padding: 24px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--color-surface); box-shadow: var(--shadow-soft); }
-#page-lecturers .lecturer-card { border-width: 1px; border-radius: 16px; box-shadow: var(--shadow-soft); position: relative; }
-#page-lecturers .lecturer-card::before { content: ""; width: 32px; height: 3px; background: var(--color-primary); border-radius: 2px; }
-#page-lecturers .lecturer-card:hover { background: var(--color-surface); border-color: var(--color-primary); }
-@media (max-width: 767px) { #page-lecturers .lecturers-filter { padding: 16px; } }

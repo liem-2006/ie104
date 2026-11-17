@@ -1,94 +1,201 @@
-/* TV1 — khám phá: tìm/lọc toàn bộ dữ liệu, danh sách 12 đề tài/trang. */
+/* Trang Khám phá Chủ đề (#page-topics): tìm/lọc toàn bộ dữ liệu và danh sách 12 đề tài/trang. */
 #page-topics .page-header {
   margin-bottom: 20px;
 }
+
 #page-topics .topics-summary {
-  font-size: 14px;
-  color: var(--color-muted);
-  margin-top: 10px;
+  display: inline-block;
   min-height: 23px;
+  margin-top: 10px;
+  font-size: 13px;
+  color: var(--color-muted);
 }
+
 #page-topics .topics-search {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
+  padding: 20px 24px;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow-soft);
 }
-#page-topics .topics-groups__label {
+
+#page-topics .topics-search__hint {
+  margin: 0;
+  font-size: 12px;
+  color: var(--color-muted);
+}
+
+#page-topics .topics-groups__header {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px 12px;
   margin-top: 14px;
+}
+
+#page-topics .topics-groups__label {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px 8px;
+  flex: 1 1 160px;
+  min-width: 0;
+  margin: 0;
   font-size: 14px;
   font-weight: 600;
 }
+
 #page-topics .topics-groups__hint {
-  margin-left: 8px;
   font-size: 12px;
   font-weight: 400;
   color: var(--color-muted);
 }
+
 #page-topics .topics-groups {
   display: flex;
   flex-wrap: wrap;
+  align-items: flex-start;
   gap: 8px;
   margin-top: 8px;
-  align-items: flex-start;
 }
+
 #page-topics .topics-groups__button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  flex: 0 0 auto;
+  align-self: flex-start;
   min-height: 44px;
+  height: auto;
   padding: 8px 14px;
   border: 1px solid var(--color-border);
-  border-radius: 8px;
-  color: var(--color-muted);
+  border-radius: var(--radius-sm);
   background: var(--color-surface);
+  color: var(--color-muted);
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.5;
 }
-#page-topics .topics-groups__button[aria-pressed="true"] {
-  background: var(--color-primary);
-  color: var(--color-on-primary);
-  border-color: var(--color-primary);
-}
+
 #page-topics .topics-groups__button:hover {
   border-color: var(--color-link);
 }
-#page-topics .topics-search__hint {
-  font-size: 12px;
-  color: var(--color-muted);
+
+/* Nút "Tất cả" dùng màu chính khi kích hoạt; 3 chip lọc OR dùng chấm màu miền và đổi sang dấu ✓ khi chọn. */
+#page-topics .topics-groups__button[data-group=""][aria-pressed="true"] {
+  background: var(--color-primary);
+  color: var(--color-on-primary);
+  border-color: var(--color-primary);
+  box-shadow: 0 3px 8px rgb(22 95 155 / 12%);
 }
-#page-topics .form-group .topics-search__hint {
-  margin: 0;
+
+#page-topics .topics-groups__button[data-group]:not([data-group=""])::before {
+  content: "";
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
+  margin-inline: 2px;
+  border-radius: 50%;
 }
+
+#page-topics .topics-groups__button[data-group="sec"]::before {
+  background: var(--color-domain-sec-accent);
+}
+
+#page-topics .topics-groups__button[data-group="data"]::before {
+  background: var(--color-domain-data-accent);
+}
+
+#page-topics .topics-groups__button[data-group="nlp"]::before {
+  background: var(--color-domain-nlp-accent);
+}
+
+#page-topics .topics-groups__button[data-group]:not([data-group=""])[aria-pressed="true"] {
+  box-shadow: 0 3px 8px rgb(22 95 155 / 12%);
+}
+
+#page-topics .topics-groups__button[data-group]:not([data-group=""])[aria-pressed="true"]::before {
+  content: "✓";
+  width: 12px;
+  height: auto;
+  margin-inline: 0;
+  border-radius: 0;
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  text-align: center;
+}
+
+#page-topics .topics-groups__button[data-group="sec"][aria-pressed="true"] {
+  background: var(--color-domain-sec-bg);
+  color: var(--color-domain-sec-accent);
+  border-color: var(--color-domain-sec-accent);
+}
+
+#page-topics .topics-groups__button[data-group="data"][aria-pressed="true"] {
+  background: var(--color-domain-data-bg);
+  color: var(--color-domain-data-accent);
+  border-color: var(--color-domain-data-accent);
+}
+
+#page-topics .topics-groups__button[data-group="nlp"][aria-pressed="true"] {
+  background: var(--color-domain-nlp-bg);
+  color: var(--color-domain-nlp-accent);
+  border-color: var(--color-domain-nlp-accent);
+}
+
 #page-topics .topics-results {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px 16px;
   margin-bottom: 12px;
 }
+
+#page-topics .topics-results__heading {
+  font-size: 16px;
+  margin-bottom: 2px;
+}
+
 #page-topics #results-status {
   font-size: 14px;
   color: var(--color-muted);
   min-height: 23px;
 }
-#page-topics .topics-results__actions {
-  display: flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 8px;
-}
-#page-topics .topics-results__actions label {
-  font-weight: 400;
-  color: var(--color-muted);
-}
-#page-topics .topics-results__actions select {
-  width: auto;
-  font-size: 14px;
-}
+
 #page-topics .topics-list {
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-card);
+  border-radius: var(--radius-dialog);
+  box-shadow: var(--shadow-soft);
 }
+
 #page-topics .topics-list:empty {
   display: none;
 }
+
+#page-topics .topic-row {
+  transition: background-color var(--transition-fast);
+}
+
+#page-topics .topic-row:first-child {
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+}
+
+#page-topics .topic-row:last-child {
+  border-bottom-left-radius: 15px;
+  border-bottom-right-radius: 15px;
+}
+
+#page-topics .topic-row:hover,
+#page-topics .topic-row:focus-within {
+  background: var(--color-accent-soft);
+}
+
+#page-topics .topic-row__title {
+  line-height: 1.5;
+}
+
 #page-topics .topics-empty {
   display: flex;
   flex-direction: column;
@@ -97,13 +204,16 @@
   padding: 32px 16px;
   text-align: center;
 }
+
 #page-topics .topics-empty__text {
   color: var(--color-muted);
   font-size: 15px;
 }
+
 #page-topics .topics-empty .btn {
   min-width: 140px;
 }
+
 #page-topics .topics-pagination {
   display: flex;
   justify-content: center;
@@ -111,6 +221,7 @@
   gap: 6px;
   margin-top: 24px;
 }
+
 #page-topics .topics-pagination__button {
   min-width: 44px;
   min-height: 44px;
@@ -121,45 +232,60 @@
   color: var(--color-link);
   font-size: 14px;
 }
+
 #page-topics .topics-pagination__button[aria-current="page"] {
   background: var(--color-primary);
   color: var(--color-on-primary);
   border-color: var(--color-primary);
 }
+
 #page-topics .topics-guide {
   border-top: 1px solid var(--color-border);
   margin-top: 32px;
   padding-top: 8px;
 }
+
 @media (max-width: 767px) {
+  #page-topics .page {
+    padding-top: 20px;
+  }
+
+  #page-topics .page-header {
+    margin-bottom: 14px;
+  }
+
+  #page-topics .topics-search {
+    padding: 14px;
+    margin-bottom: 14px;
+  }
+
+  #page-topics .topics-groups__header {
+    margin-top: 12px;
+  }
+
+  #page-topics .topics-groups__label {
+    column-gap: 6px;
+  }
+
   #page-topics .topics-groups {
-    min-height: 96px;
+    gap: 6px;
   }
-  #page-topics .topics-results__actions {
-    flex-basis: 100%;
+
+  #page-topics .topics-groups__button {
+    padding: 8px 10px;
+    gap: 5px;
+    font-size: 13px;
   }
-  #page-topics .topics-results__actions select {
-    flex: 1;
+
+  #page-topics .topics-results {
+    margin-bottom: 8px;
   }
+
   #page-topics .topic-row {
     padding: 16px;
   }
+
   #page-topics .topic-row__title {
     font-size: 18px;
   }
 }
-
-#page-topics .topics-results__heading { font-size: 16px; margin-bottom: 2px; }
-
-/* Nút nhóm có chiều cao tự nhiên, không giãn theo khối cha. */
-#page-topics .topics-groups__button { flex: 0 0 auto; align-self: flex-start; height: auto; line-height: 1.5; }
-
-/* UI review: Search controls form one readable surface, results remain a list. */
-#page-topics .topics-search { background: var(--color-surface); border: 1px solid var(--color-border); border-radius: 16px; padding: 24px; box-shadow: var(--shadow-soft); }
-#page-topics .topics-summary { display: inline-block; margin-top: 16px; font-size: 13px; color: var(--color-muted); }
-#page-topics .topics-list { border-radius: 16px; box-shadow: var(--shadow-soft); }
-#page-topics .topic-row { transition: background-color var(--transition-fast); }
-#page-topics .topic-row:hover { background: var(--color-accent-soft); }
-#page-topics .topic-row__title { line-height: 1.5; }
-#page-topics .topics-groups__button[aria-pressed="true"] { box-shadow: 0 3px 8px rgb(22 95 155 / 12%); }
-@media (max-width: 767px) { #page-topics .topics-search { padding: 16px; } #page-topics .topics-groups { min-height: 0; } }

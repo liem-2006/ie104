@@ -57,7 +57,7 @@
       </p>
       <nav class="breadcrumb" aria-label="Đường dẫn">
         <a href="../index.html">Khám phá chủ đề</a><span aria-hidden="true"> / </span
-        ><span>Chi tiết</span>
+        ><span id="breadcrumb-current">Chi tiết</span>
       </nav>
       <header class="topic-header">
         <div class="topic-header__main">
@@ -76,12 +76,19 @@
         <header class="roadmap-header">
           <h2 id="roadmap-heading">Kiến thức nền</h2>
           <p>Nhánh con là kiến thức cần học trước nhánh cha; mũi tên hướng từ con về cha.</p>
+          <p class="roadmap-header__disclaimer">
+            Lộ trình và môn học gợi ý là tài liệu tham khảo do nhóm biên soạn nhằm chuẩn bị nền
+            tảng, không phải yêu cầu bắt buộc của giảng viên.
+          </p>
           <details class="reading-guide">
             <summary>Cách xem lộ trình</summary>
             <p>
-              Mở dấu + để xem kiến thức tiên quyết. Chọn một node để đọc đầu ra và môn học gợi ý.
-              Trên màn hình nhỏ, sơ đồ bắt đầu từ một kiến thức để dễ đọc. Chọn “Căn vừa” để xem toàn cảnh. Kéo vùng trống để di chuyển, dùng nút phóng/thu hoặc Ctrl + cuộn để zoom. Bạn có thể
-              chuyển sang danh sách để đọc tuần tự.
+              Mở dấu + để xem kiến thức tiên quyết; chọn một node để đọc đầu ra và môn học gợi ý.
+              Trên màn hình nhỏ, có thể bật nút “Kéo 2D” để kéo tự do cả hai chiều trong khung sơ đồ
+              (khi tắt, vuốt dọc sẽ cuộn trang bình thường), hoặc chọn “Toàn màn hình” / “Căn vừa”
+              để xem toàn cảnh. Kéo vùng trống để di chuyển, dùng nút phóng/thu hoặc Ctrl + cuộn để
+              zoom; trên bàn phím có thể dùng phím mũi tên để di chuyển, +/− để phóng/thu và 0 để
+              căn vừa. Bạn có thể chuyển sang danh sách để đọc tuần tự.
             </p>
           </details>
         </header>
@@ -149,6 +156,14 @@
               ><button
                 type="button"
                 class="mindmap-tool-btn mindmap-tool-btn--with-label"
+                id="btn-pan-mode"
+                aria-pressed="false"
+                title="Bật/tắt kéo 2 chiều trực tiếp trên sơ đồ"
+              >
+                <span class="mindmap-tool-btn__label">Kéo 2D</span></button
+              ><button
+                type="button"
+                class="mindmap-tool-btn mindmap-tool-btn--with-label"
                 id="btn-fullscreen"
                 aria-label="Toàn màn hình"
                 title="Toàn màn hình"
@@ -186,8 +201,9 @@
             <div id="roadmap-pillars-grid" class="roadmap-pillars-grid"></div>
           </div>
           <p id="mindmap-hint" class="mindmap-hint">
-            Chọn node để xem kiến thức. Dùng +/− để mở hoặc thu nhánh.
+            Chọn node để xem kiến thức. Dùng +/− để mở hoặc thu nhánh. Mũi tên hướng từ tiên quyết về đích.
           </p>
+          <p id="mindmap-live-status" class="sr-only" role="status" aria-live="polite"></p>
           <dialog class="mindmap-drawer" id="mindmap-drawer" aria-labelledby="drawer-title" hidden>
             <div class="mindmap-drawer__header">
               <span class="badge" id="drawer-badge">Kiến thức</span
@@ -202,12 +218,12 @@
             </div>
             <h3 class="mindmap-drawer__title" id="drawer-title">Tên kiến thức</h3>
             <div class="mindmap-drawer__body">
-              <section class="mindmap-drawer__section">
+              <section class="mindmap-drawer__section" id="drawer-outcome-section">
                 <h4 class="mindmap-drawer__label">Đầu ra kỳ vọng</h4>
                 <p id="drawer-outcome" class="mindmap-drawer__text"></p>
               </section>
               <section class="mindmap-drawer__section" id="drawer-subjects-section">
-                <h4 class="mindmap-drawer__label">Môn học gợi ý tại UIT</h4>
+                <h4 class="mindmap-drawer__label">Môn học gợi ý tham khảo</h4>
                 <div id="drawer-subjects" class="mindmap-drawer__subjects"></div>
               </section>
               <section class="mindmap-drawer__section" id="drawer-prereqs-section">

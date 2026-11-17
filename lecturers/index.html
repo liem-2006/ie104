@@ -61,7 +61,11 @@
             type="search"
             placeholder="Ví dụ: Nguyễn Tấn Cầm"
             autocomplete="off"
+            aria-describedby="lecturer-search-hint"
           />
+          <p id="lecturer-search-hint" class="lecturers-filter__hint">
+            Tìm theo tên hoặc email, không phân biệt hoa thường và dấu (ví dụ: “cam” hoặc “uit”).
+          </p>
         </div>
         <div class="form-group">
           <label for="lecturer-group">Nhóm chủ đề</label
@@ -70,10 +74,13 @@
           </select>
         </div>
         <div class="lecturers-filter__actions">
-          <button class="btn" type="submit">Tìm</button
-          ><button class="btn btn--quiet" type="reset">Xóa bộ lọc</button>
+          <button class="btn btn--outline" type="submit">Tìm</button
+          ><button id="lecturers-reset" class="btn btn--quiet" type="reset" hidden>
+            Xóa bộ lọc
+          </button>
         </div>
       </form>
+      <h2 id="lecturers-results-heading" class="sr-only" tabindex="-1">Danh sách giảng viên</h2>
       <p id="lecturers-status" class="lecturers-status" role="status" aria-live="polite">
         Đang tải giảng viên…
       </p>
@@ -82,6 +89,10 @@
         id="lecturers-list"
         aria-label="Danh sách giảng viên"
       ></section>
+      <div id="lecturers-empty" class="lecturers-empty" hidden>
+        <p class="lecturers-empty__text">Không có giảng viên nào khớp bộ lọc hiện tại.</p>
+        <button type="button" class="btn btn--outline" data-empty-reset>Xóa bộ lọc</button>
+      </div>
       <nav
         id="lecturers-pagination"
         class="lecturers-pagination"

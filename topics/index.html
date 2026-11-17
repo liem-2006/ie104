@@ -63,18 +63,23 @@
           ><input
             id="topic-search"
             type="search"
-            placeholder="Ví dụ: học sâu, IDS, Nguyễn Tấn Cầm"
+            placeholder="Ví dụ: học sâu, mã độc, Cầm"
             autocomplete="off"
             aria-describedby="topic-search-hint"
           />
           <p id="topic-search-hint" class="topics-search__hint">
-            Tìm không phân biệt hoa thường và dấu: “hoc sau” vẫn ra “học sâu”.
+            Tìm theo tên đề tài hoặc tên giảng viên, không phân biệt hoa thường và dấu: “hoc sau” vẫn ra “học sâu”.
           </p>
         </div>
-        <p class="topics-groups__label">
-          Lọc theo nhóm
-          <span class="topics-groups__hint">Chọn một hoặc nhiều để lọc nhanh</span>
-        </p>
+        <div class="topics-groups__header">
+          <p class="topics-groups__label">
+            Lọc theo nhóm
+            <span class="topics-groups__hint">Chọn một hoặc nhiều để lọc nhanh</span>
+          </p>
+          <button id="reset-filters" class="btn btn--quiet" type="button" hidden>
+            Xóa bộ lọc
+          </button>
+        </div>
         <div
           id="group-pills"
           class="topics-groups"
@@ -84,15 +89,8 @@
       </section>
       <section aria-labelledby="results-heading">
         <div class="topics-results">
-          <div>
-            <h2 id="results-heading" class="topics-results__heading" tabindex="-1">Chủ đề</h2>
-            <p id="results-status" role="status" aria-live="polite">Đang tải chủ đề…</p>
-          </div>
-          <div class="topics-results__actions">
-            <button id="reset-filters" class="btn btn--quiet" type="button" hidden>
-              Xóa bộ lọc
-            </button>
-          </div>
+          <h2 id="results-heading" class="topics-results__heading" tabindex="-1">Chủ đề</h2>
+          <p id="results-status" role="status" aria-live="polite">Đang tải chủ đề…</p>
         </div>
         <div id="topics-list" class="topics-list"></div>
         <div id="topics-empty" class="topics-empty" hidden>
