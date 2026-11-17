@@ -88,3 +88,20 @@ Phần chung do nhóm trưởng sửa: footer trên cả năm trang và CSS chun
 Minh chứng trước/sau: thư mục `idea/minh-chung-giao-dien/picker-footer-20261117/` trong repo, gồm before-picker/after-picker-mobile/after-picker-desktop và before-home/after-home.
 
 Tự kiểm tra: chạy HTTP tại repo, mở phần được giao, kiểm tra hai theme, thu nhỏ cửa sổ và footer. TV1 mở hộp, cuộn xuống cuối, thử đóng bằng nền tối/Escape/nút, tìm không dấu và xác nhận chỉ hiện đề tài cùng giảng viên. Giới hạn: Chrome headless và mô phỏng touch; chưa Firefox/thiết bị thật/W3C chính thức. Không dùng kết quả lịch sử thay cho nghiệm thu mới.
+
+
+## Nhóm trưởng cùng agent UI/UX thiết kế lại — 17/11/2026
+
+Đây là sửa đổi hậu tích hợp trên thành quả Job 2, không ghi thành đóng góp gốc của thành viên. Bản trước: 1775493; backup/job-2-before-ui-review-20261117.
+
+**Giữ lại:** Sơ đồ mặc định; mọi tương tác pan/zoom/panel, danh sách phẳng và bộ chọn cùng giảng viên.
+
+| Trước | Sau | Lý do | File | Commit/kiểm thử |
+|---|---|---|---|---|
+| Bề mặt và phân cấp chưa thống nhất | Header đề tài và vùng roadmap có bề mặt/độ nổi thống nhất; toolbar, accordion và picker dùng accent chung. | Làm rõ nhóm thông tin, tăng tính nhất quán | assets/css/topic-detail.css; assets/css/style.css | Chờ nhóm trưởng commit và nghiệm thu độc lập |
+
+Trang chủ do nhóm trưởng quản lý đã có hero biên tập và minh họa HTML/CSS gốc; không đổi logic phần của thành viên. Các token mới dùng chung, không tự tạo palette khác. Tham khảo mục Đánh giá UI/UX trong kế hoạch tổng để biết phương pháp, mức ảnh hưởng và giới hạn.
+
+Ảnh: idea/minh-chung-giao-dien/ui-review-20261117/ (từ gốc repo). Tự kiểm tra bằng HTTP local, cả hai theme và desktop/mobile; thử lại luồng gốc. Chưa push/merge/deploy. Không coi tự đánh giá thẩm mỹ là kết quả nghiên cứu người dùng.
+
+**Kết quả nhóm trưởng kiểm tra độc lập:** 50 tổ hợp responsive không tràn; axe 5 trang × sáng/tối không có vi phạm sau khi đợi transition ổn định; HTML Validate 5 nguồn không lỗi theo cấu hình hiện hành; không pageerror. Chưa Lighthouse mới/Firefox/thiết bị thật.

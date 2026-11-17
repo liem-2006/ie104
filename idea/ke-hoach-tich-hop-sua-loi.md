@@ -684,3 +684,34 @@ Ngày 17/11/2026; bản trước sửa `f6fc28f`, working tree sạch. Backup lo
 ### Bàn giao và giới hạn
 
 Chạy HTTP từ repo bằng `python -m http.server 8876`, hoặc dùng server đang chạy tại http://127.0.0.1:8876/. Kiểm tra chủ đề → chuyển chủ đề → cuộn/tìm/đóng và footer các trang. Chưa kiểm tra Firefox, thiết bị thật, W3C chính thức; không chạy lại Lighthouse vì đợt này giới hạn hộp chọn/footer. Không coi số Lighthouse Material là số đo mới. Tất cả thay đổi local trên review/job-2-combined, chưa push/merge/deploy.
+
+
+## Đánh giá UI/UX và thiết kế lại — agent hỗ trợ nhóm trưởng, 17/11/2026
+
+**Phương pháp:** rà code sở hữu và ảnh render Chrome ở desktop/mobile; đối chiếu phân cấp thị giác, bố cục, tính nhất quán, khả năng đọc và phản hồi thao tác. Đây là heuristic review, chưa phải nghiên cứu với sinh viên thật; không tự chấm điểm thẩm mỹ bằng số.
+
+| Tiêu chí | Quan sát trước sửa | Mức ảnh hưởng | Quyết định thiết kế |
+|---|---|---|---|
+| Điểm nhìn đầu trang | Trang vào gồm văn bản nhỏ và vùng trống lớn, ít khác biệt với trang tra cứu | Trung bình | Hero chữ lớn, nhấn xanh UIT, hai CTA rõ; minh họa khái niệm bằng HTML/CSS tự viết |
+| Phân nhóm chức năng | Tìm/lọc và kết quả có phân cách yếu, nhiều thành phần cùng trọng lượng | Trung bình | Gom controls vào một bề mặt, tiêu đề có dấu nhấn, giữ kết quả dạng hàng |
+| Nhận diện xuyên trang | Thẻ giảng viên, profile và workspace kiến thức có sắc độ/độ nổi thiếu nhất quán | Trung bình | Token accent-soft/shadow-soft chung, border và radius thống nhất, header đề tài có surface riêng |
+| Nội dung trên mobile | Minh họa mới có nguy cơ chồng card do định vị tuyệt đối | Cao nếu xuất hiện | Đã xem ảnh 375px và sửa hai card dưới thành hai ô cùng hàng, không che chữ |
+| Tính chính xác sản phẩm | Số liệu có thể dễ bị dùng như trang trí | Nguyên tắc | Không thêm thống kê giả, nội dung nghiên cứu hay ảnh ngoài; minh họa trang chủ aria-hidden, mô tả khái niệm không phải roadmap thật |
+
+**Bản nền/backup:** 1775493, nhánh backup/job-2-before-ui-review-20261117 và bundle đã được nhóm trưởng xác minh trước sửa. Thay đổi do nhóm trưởng cùng agent thực hiện; không quy thành đóng góp gốc của thành viên.
+
+**File:** index.html; assets/css/style.css, topics.css, topic-detail.css, lecturers.css, lecturer-detail.css. Không sửa JavaScript hoặc JSON. Commit code: `8f3e61a`; kết quả kiểm thử độc lập ghi dưới đây.
+
+**Minh chứng:** idea/minh-chung-giao-dien/ui-review-20261117/ có before-home-desktop.png, after-home-desktop/mobile/dark.png và ảnh desktop các phần. Đã xem trực tiếp home desktop/mobile; phép đo overflow sơ bộ home/topics 375px không tràn. Không ghi đây là toàn bộ kiểm thử responsive/accessibility.
+
+**Giới hạn và quy tắc:** nhận xét mỹ thuật có yếu tố phán đoán; cần nhóm trưởng xem bản chạy. Giữ vanilla, system font, xanh UIT, light default/dark manual, chức năng và URL. Minh họa chỉ trang chủ; các trang nghiệp vụ ưu tiên tra cứu. Các quy tắc ít trang trí trước đây được thay trong phạm vi đợt này theo yêu cầu mới. Chưa push/merge/deploy.
+
+### Nghiệm thu độc lập từ nhóm trưởng cho bản UI/UX
+
+- 50 tổ hợp năm trang × năm chiều rộng × hai theme: không tràn ngang.
+- Axe năm trang × hai theme: 0 vi phạm sau khi chờ 500ms để chuyển màu hoàn tất; lượt đo ngay trong transition có báo contrast tạm thời, không dùng làm kết quả trạng thái ổn định.
+- HTML Validate năm nguồn: 0 lỗi trong cấu hình kiểm tra hiện hành. Không pageerror ở luồng được chạy.
+- Chưa đo Lighthouse mới, chưa Firefox hoặc thiết bị thật; không dùng số đo Material cũ thay cho đợt UI/UX này.
+
+- Kiểm tra luồng sau thiết kế: hộp chứa 10 chủ đề của giảng viên mẫu và đóng backdrop đúng; danh sách mẫu đủ 6 keyword; chuyển Sơ đồ/Danh sách đúng; khám phá 12 mục; theme tối giữ qua reload. JS/JSON không có diff so với backup.
+- Bản local review/job-2-combined, commit giao diện `8f3e61a`; mốc backup `1775493`. Git bundle: `../job-history/backups/job-2-before-ui-review-20261117.bundle`, verify thành công.

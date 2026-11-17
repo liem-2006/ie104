@@ -8,6 +8,8 @@ Nhóm trưởng quản lý token, component, trang vào và module chung; các d
 
 ## Quyết định đang áp dụng
 
+- **Cập nhật UI/UX 17/11/2026 (nhóm trưởng duyệt phạm vi thiết kế lại):** nhận diện xanh UIT, Material tiết chế được phát triển thành giao diện học thuật có điểm nhấn: hero biên tập, minh họa khái niệm tự dựng bằng CSS, phân cấp bề mặt và typography. Chức năng/schema/URL giữ nguyên. Quyết định này thay giới hạn “ít trang trí” của 12/11; xem đánh giá và nghiệm thu mới trong kế hoạch tổng. Bản local chờ nhóm trưởng xem trước khi push/merge.
+
 - **Giao diện ngày 12/11/2026:** tra cứu học thuật; container 1.200px, nền trung tính và xanh UIT, ít trang trí. Khám phá một danh sách rộng, phân trang 12 chủ đề sau tìm/lọc/sắp xếp; bỏ sidebar và modal chọn nhóm. Roadmap fit theo node thực. Quyết định này thay yêu cầu giữ bố cục/gradient TV1 ban đầu.
 - JOB-1.md tại thư mục đích đã có phần Yêu cầu giao diện hiện hành ở đầu; bản giao việc ban đầu nằm trong phần Lịch sử. TV1 giữ quyền quản lý token và component chung.
 
