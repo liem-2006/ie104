@@ -24,7 +24,8 @@ const status = document.getElementById("results-status");
 document.addEventListener("DOMContentLoaded", initTopics);
 
 /**
- * Khởi tạo trang khám phá sau khi DOM sẵn sàng: nạp JSON, áp dụng ?group=, dựng bộ lọc và hiển thị danh sách.
+ * Khởi tạo trang khám phá sau khi DOM sẵn sàng: nạp JSON, khôi phục ?group=&q=&page= từ URL,
+ * dựng bộ lọc và hiển thị danh sách (C8/UX-06: đồng bộ URL với trạng thái lọc/phân trang).
  * @returns {Promise<void>} Không trả về giá trị; cập nhật DOM theo trạng thái tải dữ liệu.
  */
 async function initTopics() {
@@ -33,7 +34,7 @@ async function initTopics() {
     // Trải phẳng toàn bộ chủ đề kèm thông tin nhóm để lọc và sắp xếp đồng nhất.
     state.entries = flattenTopics(data);
     state.groups = data.groups.map(getGroup);
-    applyInitialGroupFilter();
+    restoreUrlState();
     renderGroups();
     renderStats();
     bindFilters();
@@ -54,37 +55,63 @@ function getGroup(entry) {
 }
 
 /**
- * Đọc tham số ?group= từ URL và bật sẵn nhóm tương ứng nếu tồn tại trong dữ liệu.
+ * C8 (UX-06): khôi phục trạng thái trang (nhóm, từ khóa, phân trang) từ chuỗi query
+ * ?group=&q=&page= để reload/Back/Forward và link trực tiếp giữ đúng vị trí.
+ * Chỉ áp dụng dữ liệu hợp lệ (mã nhóm tồn tại trong JSON, số trang >= 1) để tránh trạng thái giả.
  * @returns {void}
  */
-function applyInitialGroupFilter() {
-  const initialGroup = new URLSearchParams(location.search).get("group");
-  // Chỉ áp dụng mã nhóm hợp lệ để tránh trạng thái không khớp giả khi URL sai.
-  if (initialGroup && state.groups.some((group) => group.id === initialGroup)) {
-    state.selected.add(initialGroup);
+function restoreUrlState() {
+  const params = new URLSearchParams(location.search);
+
+  // Nhóm: tham số dạng danh sách phân tách dấu phẩy (tuỳ chọn nhiều nhóm), chỉ nhận mã hợp lệ.
+  const groupParam = params.get("group");
+  if (groupParam) {
+    for (const id of groupParam.split(",")) {
+      const groupId = id.trim();
+      if (groupId && state.groups.some((group) => group.id === groupId)) {
+        state.selected.add(groupId);
+      }
+    }
+  }
+
+  // Từ khóa: khôi phục giá trị gốc vào ô tìm kiếm, state.query dùng bản chuẩn hóa không dấu.
+  const queryParam = params.get("q");
+  if (queryParam) {
+    document.getElementById("topic-search").value = queryParam;
+    state.query = searchText(queryParam);
+  }
+
+  const pageParam = Number.parseInt(params.get("page") || "", 10);
+  if (Number.isInteger(pageParam) && pageParam >= 1) {
+    state.page = pageParam; // renderTopics sẽ kẹp lại về khoảng hợp lệ sau khi lọc.
   }
 }
 
 /**
- * Xóa tham số ?group= khỏi thanh địa chỉ nếu đang tồn tại mà không tải lại trang.
+ * C8 (UX-06): ghi trạng thái lọc/phân trang hiện tại vào query ?group=&q=&page= bằng
+ * history.replaceState (không tạo mục lịch sử mới). Gọi ở cuối renderTopics() để URL luôn
+ * khớp giao diện; thay thế cơ chế xóa riêng lẻ trước đó (một cơ chế duy nhất, không rời rạc).
  * @returns {void}
  */
-function clearGroupQueryParam() {
-  if (new URLSearchParams(location.search).has("group")) {
-    history.replaceState(null, "", location.pathname);
-  }
-}
+function syncUrl() {
+  const params = new URLSearchParams();
 
-/**
- * Khoá UX-04: nếu mã ?group= đang ở URL không còn nằm trong tập nhóm đã chọn (vừa bị bỏ),
- * thì xóa ?group= để reload không tự động kéo lại bộ lọc người dùng đã gỡ.
- * Chỉ XÓA, không thêm ?group= mới (việc đồng bộ toàn bộ URL thuộc phạm vi C8).
- * @returns {void}
- */
-function clearStaleGroupParam() {
-  const inUrl = new URLSearchParams(location.search).get("group");
-  if (inUrl && !state.selected.has(inUrl)) {
-    clearGroupQueryParam();
+  // Nhóm: viết theo thứ tự dữ liệu nguồn để URL ổn định; bỏ qua khi không chọn nhóm nào.
+  const selectedIds = state.groups
+    .filter((group) => state.selected.has(group.id))
+    .map((group) => group.id);
+  if (selectedIds.length) params.set("group", selectedIds.join(","));
+
+  // Chỉ ghi giá trị khác mặc định để URL ngắn gọn khi không có bộ lọc.
+  const queryValue = document.getElementById("topic-search").value;
+  if (queryValue) params.set("q", queryValue);
+  if (state.page > 1) params.set("page", String(state.page));
+
+  const search = params.toString() ? "?" + params.toString() : "";
+  const target = location.pathname + search;
+  // Chỉ thay đổi khi URL thật sự khác hiện tại để tránh ghi thừa.
+  if (target !== location.pathname + location.search) {
+    history.replaceState(null, "", target);
   }
 }
 
@@ -237,18 +264,16 @@ function toggleGroupsExpanded() {
  */
 function toggleGroup(button) {
   const id = button.dataset.group;
-  // Bấm "Tất cả" sẽ bỏ hết nhóm đang chọn và xóa tham số ?group= khỏi URL nếu có.
+  // Bấm "Tất cả" sẽ bỏ hết nhóm đang chọn; đồng bộ URL do syncUrl() ở cuối renderTopics().
   if (!id) {
     state.selected.clear();
-    clearGroupQueryParam();
   } else if (state.selected.has(id)) {
     state.selected.delete(id);
   } else {
     state.selected.add(id);
   }
-  // Khoá UX-04: sau khi bỏ chọn, nếu mã nhóm trong URL không còn được chọn thì xóa ?group=
-  // để reload không kéo lại bộ lọc người dùng vừa gỡ.
-  clearStaleGroupParam();
+  // C8 (UX-06): URL (group/q/page) được syncUrl() ở cuối renderTopics() làm sạch tự động —
+  // không cần xóa riêng lẻ, tránh hai cơ chế query rời rạc.
   state.page = 1;
   // Khi đang thu gọn nhiều nhóm, dựng lại danh sách nút để ẩn/hiện đúng các nhóm ngoài top 6.
   if (state.groups.length > MAX_COLLAPSED_GROUPS && !state.groupsExpanded) {
@@ -281,7 +306,8 @@ function resetFilters() {
   state.query = "";
   state.page = 1;
   state.selected.clear();
-  clearGroupQueryParam();
+  // C8 (UX-06): không cần xóa riêng ?group= — renderTopics() -> syncUrl() sẽ dọn toàn bộ query
+  // khi trạng thái về mặc định (group rỗng, q rỗng, page 1).
   document.getElementById("topic-search").value = "";
   // Thu gọn lại các nhóm phụ vừa bỏ chọn khi danh sách vượt ngưỡng hiển thị mặc định.
   if (state.groups.length > MAX_COLLAPSED_GROUPS && !state.groupsExpanded) {
@@ -343,6 +369,8 @@ function renderTopics() {
   renderEmptyState(entries.length);
   renderFilterState();
   createPaginationNav(document.getElementById("topic-pagination"), state.page, pageCount, "topics-pagination__button");
+  // C8 (UX-06): đồng bộ ?group=&q=&page= với trạng thái vừa render (một cơ chế duy nhất).
+  syncUrl();
 }
 
 /**

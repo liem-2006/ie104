@@ -43,14 +43,13 @@ async function initLecturers() {
     const groupSelect = document.getElementById("lecturer-group");
     populateGroupOptions(groupSelect, groups);
 
-    // Nếu URL mang ?group=<id> hợp lệ thì chọn sẵn nhóm trước lần render đầu.
-    const initialGroup = resolveInitialGroup(groups);
-    if (groupSelect && initialGroup) {
-      groupSelect.value = initialGroup;
-    }
+    // C8 (UX-06): khôi phục nhóm + từ khóa + phân trang từ ?group=&q=&page= (chỉ nhận giá trị hợp lệ).
+    restoreUrlState();
 
     bindFilterEvents();
-    renderLecturers(true);
+    // renderLecturers(false): giữ currentPage do restoreUrlState() đặt từ URL; renderLecturers tự
+    // kẹp lại về 1 nếu tập kết quả không đủ trang, nên an toàn khi URL có page= quá lớn.
+    renderLecturers(false);
   } catch {
     document.getElementById("lecturers-status").textContent =
       "Không thể tải danh bạ. Hãy tải lại trang để thử lại.";
@@ -58,28 +57,53 @@ async function initLecturers() {
 }
 
 /**
- * Đọc tham số ?group trên URL nếu khớp với một nhóm hợp lệ trong dữ liệu.
- * @param {object[]} groupList - Danh sách nhóm nghiên cứu đã nạp.
- * @returns {string} Mã nhóm hợp lệ hoặc chuỗi rỗng nếu không có hoặc không khớp.
+ * C8 (UX-06): khôi phục trạng thái (nhóm, từ khóa, phân trang) từ query ?group=&q=&page=
+ * để reload/Back/Forward và link trực tiếp giữ đúng vị trí. Chỉ áp dụng giá trị hợp lệ
+ * (mã nhóm tồn tại trong dữ liệu, số trang >= 1) để tránh trạng thái giả.
+ * @returns {void} Không trả về giá trị.
  */
-function resolveInitialGroup(groupList) {
-  const groupParam = new URLSearchParams(location.search).get("group");
-  if (!groupParam) return "";
-  return groupList.some((group) => group.id === groupParam) ? groupParam : "";
+function restoreUrlState() {
+  const params = new URLSearchParams(location.search);
+
+  // Nhóm: chỉ chọn sẵn nếu mã khớp một nhóm hợp lệ (select đơn nên chỉ nhận 1 mã).
+  const groupParam = params.get("group");
+  if (groupParam && groups.some((group) => group.id === groupParam)) {
+    document.getElementById("lecturer-group").value = groupParam;
+  }
+
+  // Từ khóa: đặt lại ô tìm kiếm; renderLecturers() sẽ chuẩn hóa không dấu khi lọc.
+  const queryParam = params.get("q");
+  if (queryParam) {
+    document.getElementById("lecturer-search").value = queryParam;
+  }
+
+  const pageParam = Number.parseInt(params.get("page") || "", 10);
+  if (Number.isInteger(pageParam) && pageParam >= 1) {
+    currentPage = pageParam; // renderLecturers sẽ kẹp lại về khoảng hợp lệ nếu tập kết quả nhỏ hơn.
+  }
 }
 
 /**
- * Khoá UX-04 (danh bạ): nếu mã ?group= trong URL không còn khớp ô select nhóm (đã đổi về
- * "Tất cả" hoặc một nhóm khác, hoặc giá trị URL hợp lệ) thì xóa ?group= để reload không kéo
- * lại nhóm cũ. Chỉ xóa, không thêm tham số mới (đồng bộ toàn bộ URL thuộc phạm vi C8).
+ * C8 (UX-06): ghi trạng thái lọc/phân trang hiện tại vào query ?group=&q=&page= bằng
+ * history.replaceState (không tạo mục lịch sử mới). Gọi ở cuối renderLecturers() để URL luôn
+ * khớp giao diện; thay thế cơ chế xóa riêng lẻ của khoá UX-04 (một cơ chế duy nhất).
  * @returns {void} Không trả về giá trị.
  */
-function clearStaleGroupParam() {
-  const select = document.getElementById("lecturer-group");
-  const current = select ? select.value : "";
-  const inUrl = new URLSearchParams(location.search).get("group");
-  if (inUrl && inUrl !== current) {
-    history.replaceState(null, "", location.pathname);
+function syncUrl() {
+  const params = new URLSearchParams();
+
+  // Nhóm và từ khóa: chỉ ghi khi khác mặc định để URL ngắn gọn.
+  const groupValue = document.getElementById("lecturer-group").value;
+  if (groupValue) params.set("group", groupValue);
+  const queryValue = document.getElementById("lecturer-search").value.trim();
+  if (queryValue) params.set("q", queryValue);
+  if (currentPage > 1) params.set("page", String(currentPage));
+
+  const search = params.toString() ? "?" + params.toString() : "";
+  const target = location.pathname + search;
+  // Chỉ thay đổi khi URL khác hiện tại để tránh ghi thừa.
+  if (target !== location.pathname + location.search) {
+    history.replaceState(null, "", target);
   }
 }
 
@@ -151,8 +175,8 @@ function getGroup(entry) {
  * @returns {void} Không trả về giá trị.
  */
 function handleFilterInput() {
-  // Khoá UX-04: nếu select nhóm vừa đổi khác với ?group= trong URL thì xóa tham số cũ.
-  clearStaleGroupParam();
+  // C8 (UX-06): renderLecturers() -> syncUrl() sẽ làm sạch/thêm ?group=&q=&page= nhất quán
+  // (thay cho việc xóa riêng lẻ tham số nhóm trước đó).
   renderLecturers(true);
 }
 
@@ -190,9 +214,8 @@ function handleEmptyReset() {
  * @returns {void} Không trả về giá trị.
  */
 function applyResetState() {
-  if (location.search) {
-    history.replaceState(null, "", location.pathname);
-  }
+  // C8 (UX-06): renderLecturers() -> syncUrl() sẽ xóa toàn bộ query khi về mặc định
+  // (group trống, q trống, page 1) — không cần history.replaceState riêng.
   renderLecturers(true);
   document.getElementById("lecturer-search")?.focus({ preventScroll: true });
 }
@@ -375,6 +398,8 @@ function renderLecturers(resetPage = false) {
     pageCount,
     "lecturers-pagination__button",
   );
+  // C8 (UX-06): đồng bộ ?group=&q=&page= với trạng thái vừa render (một cơ chế duy nhất).
+  syncUrl();
 }
 
 /**
