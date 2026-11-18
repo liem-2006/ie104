@@ -269,6 +269,35 @@
   #page-lecturers .lecturers-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+
+  /* Cột rộng hơn: dựng card theo chiều ngang (giảm dead space) — header trái, tags phải,
+     footer trải ngang đáy; giữ card dọc khi màn < 768px. */
+  #page-lecturers .lecturer-card {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-areas:
+      "header tags"
+      "footer footer";
+    column-gap: 16px;
+    row-gap: 10px;
+  }
+
+  #page-lecturers .lecturer-card__header {
+    grid-area: header;
+    align-self: center;
+  }
+
+  #page-lecturers .lecturer-card__tags {
+    grid-area: tags;
+    align-self: center;
+    min-height: 0;
+  }
+
+  #page-lecturers .lecturer-card__footer {
+    grid-area: footer;
+    margin-top: 0;
+    padding-top: 12px;
+  }
 }
 
 @media (min-width: 1024px) {

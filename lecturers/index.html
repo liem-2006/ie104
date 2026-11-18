@@ -73,7 +73,8 @@
           </select>
         </div>
         <div class="lecturers-filter__actions">
-          <button class="btn btn--outline" type="submit">Tìm</button
+          <!-- Lọc đã chạy live theo ô tìm/select nên nút "Tìm" bị ẩn (giữ control submit trong form cho W3C hợp lệ). -->
+          <button class="btn btn--outline" type="submit" hidden>Tìm</button
           ><button id="lecturers-reset" class="btn btn--quiet" type="reset" hidden>
             Xóa bộ lọc
           </button>

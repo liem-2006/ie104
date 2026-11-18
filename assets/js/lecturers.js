@@ -69,15 +69,34 @@ function resolveInitialGroup(groupList) {
 }
 
 /**
- * Điền các nhóm nghiên cứu vào thẻ select lọc nhóm.
+ * Đếm số giảng viên (khác nhau) có ít nhất một chủ đề thuộc mỗi nhóm nghiên cứu.
+ * @param {object[]} groupList - Danh sách nhóm nghiên cứu từ JSON.
+ * @returns {Map<string, number>} Ánh xạ mã nhóm -> số giảng viên hướng dẫn trong nhóm.
+ */
+function countLecturersByGroup(groupList) {
+  const counts = new Map(groupList.map((group) => [group.id, 0]));
+  for (const lecturer of lecturers) {
+    // Khử trùng lặp theo giảng viên: một GV hướng dẫn 2 chủ đề cùng nhóm chỉ đếm 1.
+    const groupIds = new Set(relatedTopics(lecturer).map(getGroupId));
+    for (const id of groupIds) {
+      if (counts.has(id)) counts.set(id, counts.get(id) + 1);
+    }
+  }
+  return counts;
+}
+
+/**
+ * Điền các nhóm nghiên cứu kèm số lượng giảng viên vào thẻ select lọc nhóm.
  * @param {HTMLSelectElement|null} selectEl - Phần tử select nhóm chủ đề.
  * @param {object[]} groupList - Danh sách nhóm nghiên cứu từ JSON.
  * @returns {void} Không trả về giá trị.
  */
 function populateGroupOptions(selectEl, groupList) {
   if (!selectEl) return;
+  const counts = countLecturersByGroup(groupList);
   for (const group of groupList) {
-    const option = element("option", "", group.name);
+    // Kèm count trong nhãn (vd "An toàn thông tin (8)") để người dùng thấy nhóm nào còn ai.
+    const option = element("option", "", group.name + " (" + (counts.get(group.id) || 0) + ")");
     option.value = group.id;
     selectEl.append(option);
   }
@@ -140,15 +159,13 @@ function handleFormReset() {
 }
 
 /**
- * Xử lý nút "Xóa bộ lọc" trong khối trạng thái rỗng.
+ * Xử lý nút "Xóa bộ lọc" trong khối trạng thái rỗng: đi qua luồng reset native của form
+ * để nút reset trên form và trạng thái giao diện luôn đồng bộ (không tự set value từng ô).
  * @returns {void} Không trả về giá trị.
  */
 function handleEmptyReset() {
-  const searchInput = document.getElementById("lecturer-search");
-  const groupSelect = document.getElementById("lecturer-group");
-  if (searchInput) searchInput.value = "";
-  if (groupSelect) groupSelect.value = "";
-  applyResetState();
+  // form.reset() phát sự kiện "reset" (handleFormReset đã bind) => render + xóa URL ở một nơi duy nhất.
+  document.getElementById("lecturer-filter")?.reset();
 }
 
 /**
