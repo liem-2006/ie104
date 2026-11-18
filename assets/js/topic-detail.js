@@ -141,9 +141,13 @@ async function initTopicDetailPage() {
     initToolbarControls();
     initDrawerEvents();
     renderCardsView(found.topic);
-    // Mặc định hiển thị Sơ đồ trên cả mobile và desktop; vẫn chuyển sang Danh sách được.
-    setView("mindmap");
-    renderMindMap(true);
+    // Mobile (<768px) mặc định Danh sách (dễ đọc, không cắt node); desktop mặc định Sơ đồ.
+    // Sơ đồ vẫn render "lười" khi bấm nút "Sơ đồ" (showMap) nên bỏ renderMindMap ở đây khi là mobile.
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
+    setView(isMobile ? "cards" : "mindmap");
+    if (!isMobile) {
+      renderMindMap(true);
+    }
   } catch {
     // Chỉ hiện thông báo cho người dùng, không để console đỏ (tiêu chí "console sạch").
     renderErrorMessage("Không thể tải dữ liệu chủ đề. Hãy tải lại trang để thử lại.");
@@ -1459,12 +1463,27 @@ function setView(view) {
   document.getElementById("cards-viewport").hidden = isMindmap;
   document.getElementById("mindmap-controls").hidden = !isMindmap;
   document.getElementById("mindmap-hint").hidden = !isMindmap;
+  if (isMindmap) applyMindmapHint();
 
   for (const name of ["mindmap", "cards"]) {
     const button = document.getElementById("btn-view-" + name);
     button.classList.toggle("mindmap-view-btn--active", view === name);
     button.setAttribute("aria-pressed", String(view === name));
   }
+}
+
+/**
+ * Cập nhật dòng gợi ý thao tác sơ đồ theo kích thước màn hình (khoá UX-05).
+ * Trên mobile, bổ sung affordance "Kéo 2D" để người dùng không tưởng sơ đồ bị cắt là lỗi render.
+ * @returns {void}
+ */
+function applyMindmapHint() {
+  const hint = document.getElementById("mindmap-hint");
+  if (!hint) return;
+  const isMobile = window.matchMedia("(max-width: 767px)").matches;
+  hint.textContent = isMobile
+    ? "Chọn tên mục để xem chi tiết · Dùng +/− mở/thu nhánh, hoặc bật \"Kéo 2D\" để chạm kéo · Bấm \"Danh sách\" để xem tuần tự."
+    : "Chọn tên mục để xem chi tiết · Dùng +/− để mở hoặc thu nhánh.";
 }
 
 /**
