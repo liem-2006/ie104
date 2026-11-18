@@ -42,32 +42,78 @@
     </header>
     <main id="main-content" class="container home">
       <section class="home__hero" aria-labelledby="home-title">
-        <p id="home-stats" class="home__meta" role="status">
-          Danh mục đề tài và lộ trình kiến thức nền
-        </p>
-        <h1 id="home-title">
-          Từ một câu hỏi.<br />Đến một hướng <span class="home__highlight">nghiên cứu.</span>
-        </h1>
-        <p class="home__intro">
-          Tra cứu chủ đề nghiên cứu, lộ trình kiến thức nền và giảng viên hướng dẫn tại UIT.
-        </p>
-        <div class="home__actions">
-          <a class="btn" href="topics/index.html">Khám phá chủ đề</a>
-          <a class="btn btn--outline" href="lecturers/index.html">Tìm giảng viên</a>
+        <div class="home__copy">
+          <p class="eyebrow">UIT DISCOVERY · KHỞI ĐẦU NGHIÊN CỨU</p>
+          <h1 id="home-title">
+            Từ một câu hỏi.<br />Đến một hướng <span class="home__highlight">nghiên cứu.</span>
+          </h1>
+          <p class="home__intro">
+            Khám phá đề tài, hiểu kiến thức cần chuẩn bị và tìm người hướng dẫn cho hành trình
+            nghiên cứu của bạn.
+          </p>
+          <div class="home__actions">
+            <a class="btn" href="topics/index.html"
+              >Khám phá chủ đề <span aria-hidden="true">↗</span></a
+            >
+            <a class="btn btn--outline" href="lecturers/index.html">Tìm giảng viên</a>
+          </div>
+          <p class="home__note">
+            Bắt đầu từ điều bạn tò mò. Tìm hiểu theo nhịp của riêng bạn.
+          </p>
+        </div>
+        <div class="home__visual" aria-hidden="true">
+          <div class="home__orbit home__orbit--outer"></div>
+          <div class="home__orbit home__orbit--inner"></div>
+          <div class="home__visual-label">MỘT Ý TƯỞNG · NHIỀU KHẢ NĂNG</div>
+          <div class="home__concept home__concept--main">
+            <span class="home__concept-kicker">ĐIỂM KHỞI ĐẦU</span>
+            <strong>Điều bạn<br />muốn khám phá</strong>
+            <span class="home__concept-mark">✦</span>
+          </div>
+          <div class="home__concept home__concept--knowledge">
+            <span class="home__concept-number">01</span>
+            <strong>Kiến thức nền</strong>
+            <span>Hiểu mình cần học gì</span>
+          </div>
+          <div class="home__concept home__concept--mentor">
+            <span class="home__concept-number">02</span>
+            <strong>Người hướng dẫn</strong>
+            <span>Tìm kết nối phù hợp</span>
+          </div>
+          <div class="home__visual-caption">Kết nối ý tưởng với kiến thức.</div>
         </div>
       </section>
-      <section class="home__domains" aria-labelledby="home-domains-heading">
-        <div class="home__domains-header">
-          <h2 id="home-domains-heading">Nhóm chủ đề nghiên cứu</h2>
-          <p id="home-domains-count" class="home__domains-count"></p>
+      <section class="home__steps" aria-labelledby="home-steps">
+        <div class="home__section-heading">
+          <div class="home__section-titles">
+            <p class="eyebrow">HÀNH TRÌNH CỦA BẠN</p>
+            <h2 id="home-steps">Một khởi đầu rõ ràng hơn.</h2>
+          </div>
+          <p id="home-stats" class="home__stats" role="status" hidden></p>
         </div>
-        <p id="home-domains-status" class="home__domains-status" role="status">
-          Đang tải nhóm chủ đề…
-        </p>
-        <ul id="home-domains-list" class="home__domains-grid" hidden></ul>
-        <div id="home-domains-actions" class="home__domains-actions" hidden>
-          <button id="home-domains-toggle" type="button" class="btn btn--outline"></button>
-        </div>
+        <ol class="home__step-list">
+          <li>
+            <span class="home__step-number" aria-hidden="true">01</span>
+            <div class="home__step-body">
+              <h3>Chọn điều bạn quan tâm</h3>
+              <p>Khám phá các nhóm nghiên cứu và tìm chủ đề phù hợp với sở thích.</p>
+            </div>
+          </li>
+          <li>
+            <span class="home__step-number" aria-hidden="true">02</span>
+            <div class="home__step-body">
+              <h3>Hiểu kiến thức cần có</h3>
+              <p>Xem lộ trình kiến thức nền và đầu ra kỳ vọng trước khi bắt đầu.</p>
+            </div>
+          </li>
+          <li>
+            <span class="home__step-number" aria-hidden="true">03</span>
+            <div class="home__step-body">
+              <h3>Tìm người đồng hành</h3>
+              <p>Tìm hiểu giảng viên và những chủ đề họ hướng dẫn để chuẩn bị trao đổi.</p>
+            </div>
+          </li>
+        </ol>
       </section>
       <p class="home__disclaimer">
         Lưu ý: Danh mục đề tài tổng hợp từ dữ liệu công bố; phân nhóm và lộ trình kiến thức nền do
