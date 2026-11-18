@@ -6,24 +6,34 @@ import {
   normalizeEmail,
   element,
   createTopicRow,
+  getVisiblePages,
 } from "./data.js";
 
 const pageSize = 12;
-const state = { entries: [], groups: [], selected: new Set(), query: "", page: 1 };
+const MAX_COLLAPSED_GROUPS = 6;
+const state = {
+  entries: [],
+  groups: [],
+  selected: new Set(),
+  query: "",
+  page: 1,
+  groupsExpanded: false,
+};
 const status = document.getElementById("results-status");
 
 document.addEventListener("DOMContentLoaded", initTopics);
 
 /**
- * Khởi tạo trang khám phá sau khi DOM sẵn sàng: nạp JSON, dựng bộ lọc và hiển thị danh sách đầu tiên.
+ * Khởi tạo trang khám phá sau khi DOM sẵn sàng: nạp JSON, áp dụng ?group=, dựng bộ lọc và hiển thị danh sách.
  * @returns {Promise<void>} Không trả về giá trị; cập nhật DOM theo trạng thái tải dữ liệu.
  */
 async function initTopics() {
   try {
     const data = await loadResearch();
-    // Trải phẳng toàn bộ 37 chủ đề kèm thông tin nhóm để lọc và sắp xếp đồng nhất.
+    // Trải phẳng toàn bộ chủ đề kèm thông tin nhóm để lọc và sắp xếp đồng nhất.
     state.entries = flattenTopics(data);
     state.groups = data.groups.map(getGroup);
+    applyInitialGroupFilter();
     renderGroups();
     renderStats();
     bindFilters();
@@ -36,11 +46,33 @@ async function initTopics() {
 
 /**
  * Trích xuất metadata của một nhóm nghiên cứu từ bản ghi JSON nguồn.
- * @param {object} entry - Đối tượng nhóm nguồn trong research-data.json.
+ * @param {object} entry - Đối tượng nhóm nguồn trong dữ liệu nghiên cứu.
  * @returns {object} Đối tượng metadata chứa id và tên nhóm.
  */
 function getGroup(entry) {
   return entry.group;
+}
+
+/**
+ * Đọc tham số ?group= từ URL và bật sẵn nhóm tương ứng nếu tồn tại trong dữ liệu.
+ * @returns {void}
+ */
+function applyInitialGroupFilter() {
+  const initialGroup = new URLSearchParams(location.search).get("group");
+  // Chỉ áp dụng mã nhóm hợp lệ để tránh trạng thái không khớp giả khi URL sai.
+  if (initialGroup && state.groups.some((group) => group.id === initialGroup)) {
+    state.selected.add(initialGroup);
+  }
+}
+
+/**
+ * Xóa tham số ?group= khỏi thanh địa chỉ nếu đang tồn tại mà không tải lại trang.
+ * @returns {void}
+ */
+function clearGroupQueryParam() {
+  if (new URLSearchParams(location.search).has("group")) {
+    history.replaceState(null, "", location.pathname);
+  }
 }
 
 /**
@@ -59,24 +91,57 @@ function countTopicsByGroup(entries) {
 }
 
 /**
- * Dựng hàng nút lọc nhóm kèm số lượng chủ đề thật; không chọn nhóm nào nghĩa là xem tất cả.
+ * Xác định tập nút nhóm cần hiển thị theo ngưỡng thu gọn và các nhóm đang được chọn.
+ * @returns {{visible: Array<object>, hiddenCount: number}} Danh sách nhóm hiển thị và số nhóm còn ẩn.
+ */
+function getVisibleGroups() {
+  if (state.groups.length <= MAX_COLLAPSED_GROUPS || state.groupsExpanded) {
+    return { visible: state.groups, hiddenCount: 0 };
+  }
+  // Giữ 6 nhóm đầu và các nhóm đang được chọn ở vị trí thứ 7 trở đi khi danh sách thu gọn.
+  const visible = state.groups.filter(
+    (group, index) => index < MAX_COLLAPSED_GROUPS || state.selected.has(group.id),
+  );
+  return { visible, hiddenCount: state.groups.length - visible.length };
+}
+
+/**
+ * Tạo nút mở rộng hoặc thu gọn danh sách nhóm khi số nhóm vượt quá ngưỡng hiển thị mặc định.
+ * @param {number} hiddenCount - Số lượng nhóm hiện đang được ẩn.
+ * @returns {HTMLButtonElement} Phần tử nút có thuộc tính aria-expanded.
+ */
+function createGroupsToggleButton(hiddenCount) {
+  const label = state.groupsExpanded ? "Thu gọn nhóm" : "+" + hiddenCount + " nhóm khác";
+  const button = element("button", "topics-groups__button topics-groups__more", label);
+  button.type = "button";
+  button.setAttribute("aria-expanded", String(state.groupsExpanded));
+  return button;
+}
+
+/**
+ * Dựng hàng nút lọc nhóm kèm số lượng chủ đề thật; tự động co gọn khi có nhiều nhóm.
  * @returns {void}
  */
 function renderGroups() {
   const counts = countTopicsByGroup(state.entries);
+  const { visible, hiddenCount } = getVisibleGroups();
   const fragment = document.createDocumentFragment();
   // Nút mặc định "Tất cả (N)" giúp xóa nhanh lựa chọn nhóm đang bật.
   fragment.append(createGroupButton("", "Tất cả (" + state.entries.length + ")"));
-  for (const group of state.groups) {
+  for (const group of visible) {
     const count = counts.get(group.id) || 0;
     fragment.append(createGroupButton(group.id, group.name + " (" + count + ")"));
+  }
+  // Chỉ thêm nút mở rộng/thu gọn khi tổng nhóm vượt ngưỡng và còn nhóm ẩn hoặc đang mở rộng.
+  if (state.groups.length > MAX_COLLAPSED_GROUPS && (state.groupsExpanded || hiddenCount > 0)) {
+    fragment.append(createGroupsToggleButton(hiddenCount));
   }
   document.getElementById("group-pills").replaceChildren(fragment);
 }
 
 /**
  * Tạo một nút lọc nhóm với thuộc tính data-group dùng cho trạng thái chọn OR.
- * @param {string} id - Mã nhóm (sec/data/nlp) hoặc chuỗi rỗng cho nút Tất cả.
+ * @param {string} id - Mã nhóm hoặc chuỗi rỗng cho nút Tất cả.
  * @param {string} name - Nhãn hiển thị trên nút kèm số lượng chủ đề.
  * @returns {HTMLButtonElement} Phần tử button đã cấu hình sẵn.
  */
@@ -123,24 +188,61 @@ function bindFilters() {
     .getElementById("topics-empty")
     .querySelector("[data-empty-reset]")
     .addEventListener("click", resetFilters);
-  document.getElementById("group-pills").addEventListener("click", toggleGroup);
+  document.getElementById("group-pills").addEventListener("click", handleGroupAction);
   document.getElementById("topic-pagination").addEventListener("click", changePage);
 }
 
 /**
- * Bật/tắt lựa chọn nhóm theo quy tắc OR và đưa phân trang về trang đầu.
+ * Phân luồng sự kiện click trong vùng lọc nhóm: mở rộng/thu gọn danh sách hoặc chọn nhóm.
  * @param {MouseEvent} event - Sự kiện click trên vùng chứa nút nhóm.
  * @returns {void}
  */
-function toggleGroup(event) {
+function handleGroupAction(event) {
+  if (event.target.closest(".topics-groups__more")) {
+    toggleGroupsExpanded();
+    return;
+  }
   const button = event.target.closest("button[data-group]");
-  if (!button) return;
+  if (button) toggleGroup(button);
+}
+
+/**
+ * Đảo trạng thái mở rộng/thu gọn nhóm và giữ focus trên nút điều khiển tương ứng.
+ * @returns {void}
+ */
+function toggleGroupsExpanded() {
+  state.groupsExpanded = !state.groupsExpanded;
+  renderGroups();
+  renderFilterState();
+  document.querySelector("#group-pills .topics-groups__more")?.focus({ preventScroll: true });
+}
+
+/**
+ * Bật/tắt lựa chọn nhóm theo quy tắc OR và đưa phân trang về trang đầu.
+ * @param {HTMLButtonElement} button - Nút nhóm vừa được bấm.
+ * @returns {void}
+ */
+function toggleGroup(button) {
   const id = button.dataset.group;
-  // Bấm "Tất cả" sẽ bỏ hết nhóm đang chọn; bấm từng nhóm sẽ bật/tắt độc lập (OR).
-  if (!id) state.selected.clear();
-  else if (state.selected.has(id)) state.selected.delete(id);
-  else state.selected.add(id);
+  // Bấm "Tất cả" sẽ bỏ hết nhóm đang chọn và xóa tham số ?group= khỏi URL nếu có.
+  if (!id) {
+    state.selected.clear();
+    clearGroupQueryParam();
+  } else if (state.selected.has(id)) {
+    state.selected.delete(id);
+  } else {
+    state.selected.add(id);
+  }
   state.page = 1;
+  // Khi đang thu gọn nhiều nhóm, dựng lại danh sách nút để ẩn/hiện đúng các nhóm ngoài top 6.
+  if (state.groups.length > MAX_COLLAPSED_GROUPS && !state.groupsExpanded) {
+    renderGroups();
+    const targetId = id || "";
+    const buttons = [...document.querySelectorAll("#group-pills button[data-group]")];
+    const target = buttons.find((item) => item.dataset.group === targetId);
+    const fallback = buttons.find((item) => item.dataset.group === "");
+    (target || fallback)?.focus({ preventScroll: true });
+  }
   renderTopics();
 }
 
@@ -156,14 +258,19 @@ function updateSearch(event) {
 }
 
 /**
- * Khôi phục toàn bộ bộ lọc về mặc định và trả focus về ô tìm kiếm đang hiển thị.
+ * Khôi phục toàn bộ bộ lọc về mặc định, xóa query ?group= nếu có và trả focus về ô tìm kiếm.
  * @returns {void}
  */
 function resetFilters() {
   state.query = "";
   state.page = 1;
   state.selected.clear();
+  clearGroupQueryParam();
   document.getElementById("topic-search").value = "";
+  // Thu gọn lại các nhóm phụ vừa bỏ chọn khi danh sách vượt ngưỡng hiển thị mặc định.
+  if (state.groups.length > MAX_COLLAPSED_GROUPS && !state.groupsExpanded) {
+    renderGroups();
+  }
   // Nút Xóa bộ lọc sẽ ẩn sau renderTopics(); trả focus về ô tìm kiếm để không mất vị trí bàn phím.
   document.getElementById("topic-search").focus({ preventScroll: true });
   renderTopics();
@@ -266,7 +373,7 @@ function hasCustomFilter() {
  * @returns {void}
  */
 function renderFilterState() {
-  for (const button of document.querySelectorAll("#group-pills button")) {
+  for (const button of document.querySelectorAll("#group-pills button[data-group]")) {
     const id = button.dataset.group;
     button.setAttribute("aria-pressed", String(id ? state.selected.has(id) : !state.selected.size));
   }
@@ -277,7 +384,7 @@ function renderFilterState() {
 }
 
 /**
- * Tạo thanh phân trang và tự động ẩn khi tổng kết quả tối đa một trang (<= 12 chủ đề).
+ * Tạo thanh phân trang cửa sổ rút gọn và tự động ẩn khi tổng kết quả tối đa một trang.
  * @param {number} pageCount - Tổng số trang của tập kết quả hiện tại.
  * @returns {void}
  */
@@ -287,8 +394,16 @@ function renderPagination(pageCount) {
   const fragment = document.createDocumentFragment();
   if (pageCount > 1) {
     fragment.append(createPageButton("Trước", state.page - 1, state.page === 1));
-    for (let number = 1; number <= pageCount; number++)
-      fragment.append(createPageButton(String(number), number, false));
+    // Dùng cửa sổ trang rút gọn kèm dấu "…" để thanh phân trang không tràn hàng với dữ liệu lớn.
+    for (const item of getVisiblePages(state.page, pageCount)) {
+      if (item === "…") {
+        const ellipsis = element("span", "pagination-ellipsis", "…");
+        ellipsis.setAttribute("aria-hidden", "true");
+        fragment.append(ellipsis);
+      } else {
+        fragment.append(createPageButton(String(item), item, false));
+      }
+    }
     fragment.append(createPageButton("Sau", state.page + 1, state.page === pageCount));
   }
   nav.replaceChildren(fragment);

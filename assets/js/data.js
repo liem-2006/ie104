@@ -1,6 +1,11 @@
 /** @file Hợp đồng dữ liệu và URL dùng chung cho tất cả các trang. */
 const projectRoot = new URL("../../", import.meta.url);
 const cache = new Map();
+/** Bảng ánh xạ ổn định mã nhóm -> sắc độ hiển thị ("1".."6") trong phiên tải dữ liệu. */
+const groupToneMap = new Map();
+/** Bảng sắc độ mặc định nhằm giữ màu quen thuộc cho 3 nhóm phổ biến nếu xuất hiện trong JSON. */
+const defaultGroupTones = { sec: "1", data: "2", nlp: "3" };
+
 /** Chuẩn hóa email. @param {string} value Email đầu vào. @returns {string} Email dùng đối chiếu. */
 export function normalizeEmail(value) {
   const email = String(value || "").trim().toLowerCase();
@@ -38,11 +43,53 @@ export async function loadJson(file) {
     throw error;
   }
 }
+
+/**
+ * Đăng ký bảng ánh xạ sắc độ ổn định ("1".."6") cho mọi nhóm nghiên cứu từ JSON.
+ * @param {object[]} groups Danh sách nhóm nguồn trong dữ liệu nghiên cứu.
+ * @returns {void}
+ */
+function registerGroupTones(groups) {
+  groupToneMap.clear();
+  groups.forEach((entry, index) => {
+    const id = String(entry?.group?.id || "").trim();
+    if (!id || groupToneMap.has(id)) return;
+    // Giữ màu quen thuộc cho sec/data/nlp; mọi mã nhóm khác gán tuần hoàn từ "1" đến "6".
+    const tone = defaultGroupTones[id] || String((index % 6) + 1);
+    groupToneMap.set(id, tone);
+  });
+}
+
+/**
+ * Tra cứu mã sắc độ hiển thị ("1".."6") nhất quán cho một mã nhóm nghiên cứu trên mọi trang.
+ * @param {string} groupId Mã nhóm cần lấy sắc độ.
+ * @param {number} [fallbackIndex=-1] Chỉ số dự phòng khi nhóm chưa có trong bảng đăng ký.
+ * @returns {string} Chuỗi mã sắc độ từ "1" đến "6".
+ */
+export function resolveGroupTone(groupId, fallbackIndex = -1) {
+  const id = String(groupId || "").trim();
+  // 1. Ưu tiên ánh xạ đã đăng ký từ loadResearch() để đồng bộ cả 5 trang.
+  if (id && groupToneMap.has(id)) return groupToneMap.get(id);
+  // 2. Giữ tương thích sắc độ mặc định cho sec/data/nlp khi tra cứu độc lập.
+  if (id && Object.hasOwn(defaultGroupTones, id)) return defaultGroupTones[id];
+  // 3. Nếu có vị trí chỉ mục hợp lệ thì gán tuần hoàn 1..6.
+  if (typeof fallbackIndex === "number" && Number.isFinite(fallbackIndex) && fallbackIndex >= 0) {
+    return String((Math.floor(fallbackIndex) % 6) + 1);
+  }
+  // 4. Băm ổn định chuỗi ID về "1".."6" cho các mã nhóm tùy biến.
+  let hash = 0;
+  for (let i = 0; i < id.length; i++) {
+    hash = (hash * 31 + id.charCodeAt(i)) >>> 0;
+  }
+  return String((hash % 6) + 1);
+}
+
 /** Kiểm tra dữ liệu nghiên cứu tối thiểu. @returns {Promise<object>} Dữ liệu nghiên cứu. */
 export async function loadResearch() {
   const data = await loadJson("research-data.json");
   if (!Array.isArray(data.groups) || data.groups.some(invalidGroup))
     throw new Error("Dữ liệu nghiên cứu không hợp lệ.");
+  registerGroupTones(data.groups);
   return data;
   /** Kiểm tra group. @param {object} item Group nguồn. @returns {boolean} Có lỗi cấu trúc. */
 
@@ -76,6 +123,51 @@ export function flattenTopics(data) {
     }
   }
 }
+
+/**
+ * Tạo URL điều hướng tới trang Khám phá chủ đề, có thể lọc sẵn theo mã nhóm.
+ * @param {string} [groupId=""] Mã nhóm cần lọc sẵn; rỗng để mở toàn bộ danh mục.
+ * @returns {string} URL đầy đủ tương thích subpath.
+ */
+export function topicsGroupUrl(groupId = "") {
+  const url = new URL("topics/index.html", projectRoot);
+  const id = String(groupId || "").trim();
+  // Chỉ thêm query ?group= khi có mã nhóm cụ thể.
+  if (id) url.search = new URLSearchParams({ group: id });
+  return url.href;
+}
+
+/**
+ * Tính danh sách các trang hiển thị kèm dấu lược ("…") cho phân trang dài.
+ * @param {number} currentPage Số trang hiện tại (tính từ 1).
+ * @param {number} pageCount Tổng số trang.
+ * @returns {Array<number|string>} Mảng tối đa 7 phần tử gồm số trang và "…".
+ */
+export function getVisiblePages(currentPage, pageCount) {
+  const total = Math.floor(Number(pageCount));
+  if (!Number.isFinite(total) || total < 1) return [];
+
+  // Khi tổng số trang từ 7 trở xuống thì hiển thị đầy đủ tất cả số trang.
+  if (total <= 7) {
+    return Array.from({ length: total }, (_, index) => index + 1);
+  }
+
+  const page = Math.max(1, Math.min(Math.floor(Number(currentPage)) || 1, total));
+
+  // Trang hiện tại gần đầu: giữ 5 trang đầu, dấu lược và trang cuối.
+  if (page <= 4) {
+    return [1, 2, 3, 4, 5, "…", total];
+  }
+
+  // Trang hiện tại gần cuối: giữ trang đầu, dấu lược và 5 trang cuối.
+  if (page >= total - 3) {
+    return [1, "…", total - 4, total - 3, total - 2, total - 1, total];
+  }
+
+  // Trang hiện tại ở giữa: giữ trang đầu, cuối và 3 trang lân cận.
+  return [1, "…", page - 1, page, page + 1, "…", total];
+}
+
 /** Tạo link chủ đề dùng chung. @param {object} group Nhóm. @param {object} topic Chủ đề. @returns {string} URL tương thích subpath. */
 export function topicUrl(group, topic) {
   const url = new URL("topics/detail/index.html", projectRoot);
@@ -251,7 +343,8 @@ export function summarizeTopicScope(topic) {
 export function createTopicRow(entry, headingLevel = 2) {
   const { group, topic } = entry;
   const row = element("article", "topic-row");
-  const badge = element("span", "badge badge--" + group.id + " topic-row__group", group.name);
+  const badge = element("span", "badge topic-row__group", group.name);
+  badge.dataset.domainTone = resolveGroupTone(group.id);
   const heading = element(headingLevel === 3 ? "h3" : "h2", "topic-row__title");
   const link = element("a", "", topic.name);
   link.href = topicUrl(group, topic);

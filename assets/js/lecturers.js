@@ -13,6 +13,8 @@ import {
   lecturerUrl,
   element,
   avatar,
+  resolveGroupTone,
+  getVisiblePages,
 } from "./data.js";
 
 /** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop). */
@@ -26,7 +28,7 @@ let currentPage = 1;
 document.addEventListener("DOMContentLoaded", initLecturers);
 
 /**
- * Khởi tạo dữ liệu, sắp xếp A–Z và gắn sự kiện cho trang danh bạ giảng viên.
+ * Khởi tạo dữ liệu, sắp xếp A–Z, áp dụng nhóm từ URL (nếu có) và gắn sự kiện trang danh bạ.
  * @returns {Promise<void>} Promise hoàn tất khởi tạo trang.
  */
 async function initLecturers() {
@@ -37,13 +39,32 @@ async function initLecturers() {
     topics = flattenTopics(research);
     groups = research.groups.map(getGroup);
 
-    populateGroupOptions(document.getElementById("lecturer-group"), groups);
+    const groupSelect = document.getElementById("lecturer-group");
+    populateGroupOptions(groupSelect, groups);
+
+    // Nếu URL mang ?group=<id> hợp lệ thì chọn sẵn nhóm trước lần render đầu.
+    const initialGroup = resolveInitialGroup(groups);
+    if (groupSelect && initialGroup) {
+      groupSelect.value = initialGroup;
+    }
+
     bindFilterEvents();
     renderLecturers(true);
   } catch {
     document.getElementById("lecturers-status").textContent =
       "Không thể tải danh bạ. Hãy tải lại trang để thử lại.";
   }
+}
+
+/**
+ * Đọc tham số ?group trên URL nếu khớp với một nhóm hợp lệ trong dữ liệu.
+ * @param {object[]} groupList - Danh sách nhóm nghiên cứu đã nạp.
+ * @returns {string} Mã nhóm hợp lệ hoặc chuỗi rỗng nếu không có hoặc không khớp.
+ */
+function resolveInitialGroup(groupList) {
+  const groupParam = new URLSearchParams(location.search).get("group");
+  if (!groupParam) return "";
+  return groupList.some((group) => group.id === groupParam) ? groupParam : "";
 }
 
 /**
@@ -130,10 +151,13 @@ function handleEmptyReset() {
 }
 
 /**
- * Đặt lại bộ lọc về trang 1, render lại danh bạ và trả focus về ô tìm kiếm.
+ * Đặt lại bộ lọc về trang 1, xóa query URL nếu có, render lại danh bạ và trả focus về ô tìm kiếm.
  * @returns {void} Không trả về giá trị.
  */
 function applyResetState() {
+  if (location.search) {
+    history.replaceState(null, "", location.pathname);
+  }
   renderLecturers(true);
   document.getElementById("lecturer-search")?.focus({ preventScroll: true });
 }
@@ -314,7 +338,17 @@ function renderLecturers(resetPage = false) {
 }
 
 /**
- * Render thanh điều hướng phân trang nếu tổng số trang lớn hơn 1.
+ * Tạo dấu ba chấm phân cách các cụm trang khi danh sách có nhiều trang.
+ * @returns {HTMLSpanElement} Phần tử span hiển thị dấu ba chấm ẩn với screen reader.
+ */
+function createPaginationEllipsis() {
+  const ellipsis = element("span", "pagination-ellipsis", "…");
+  ellipsis.setAttribute("aria-hidden", "true");
+  return ellipsis;
+}
+
+/**
+ * Render thanh điều hướng phân trang thu gọn nếu tổng số trang lớn hơn 1.
  * @param {number} pageCount - Tổng số trang kết quả.
  * @returns {void} Không trả về giá trị.
  */
@@ -332,8 +366,13 @@ function renderPagination(pageCount) {
   const fragment = document.createDocumentFragment();
   fragment.append(createPageButton("Trước", currentPage - 1, currentPage === 1));
 
-  for (let number = 1; number <= pageCount; number++) {
-    fragment.append(createPageButton(String(number), number, false));
+  // Thu gọn dãy số trang bằng getVisiblePages để thanh phân trang luôn gọn khi dữ liệu lớn.
+  for (const item of getVisiblePages(currentPage, pageCount)) {
+    if (item === "…") {
+      fragment.append(createPaginationEllipsis());
+    } else {
+      fragment.append(createPageButton(String(item), item, false));
+    }
   }
 
   fragment.append(createPageButton("Sau", currentPage + 1, currentPage === pageCount));
@@ -390,10 +429,12 @@ function changePage(event) {
 function createLecturerTags(related) {
   const ids = new Set(related.map(getGroupId));
   const tags = element("div", "lecturer-card__tags");
-  for (const group of groups) {
-    if (ids.has(group.id)) {
-      tags.append(element("span", "lecturer-tag lecturer-tag--" + group.id, group.name));
-    }
+  for (const [index, group] of groups.entries()) {
+    if (!ids.has(group.id)) continue;
+    const tag = element("span", "lecturer-tag", group.name);
+    // Ánh xạ sắc độ linh hoạt theo mã nhóm hoặc vị trí nguồn cho bất kỳ tập nhóm nào.
+    tag.dataset.domainTone = resolveGroupTone(group.id, index);
+    tags.append(tag);
   }
   return tags;
 }

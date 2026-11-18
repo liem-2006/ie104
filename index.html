@@ -12,6 +12,7 @@
     <link rel="icon" href="assets/images/uit-logo.png" />
     <link rel="stylesheet" href="assets/css/reset.css" />
     <link rel="stylesheet" href="assets/css/style.css" />
+    <script type="module" src="assets/js/home.js"></script>
   </head>
   <body id="page-home">
     <a class="skip-link" href="#main-content">Đến nội dung chính</a>
@@ -41,8 +42,8 @@
     </header>
     <main id="main-content" class="container home">
       <section class="home__hero" aria-labelledby="home-title">
-        <p class="home__meta">
-          Khoa Khoa học và Kỹ thuật Thông tin · 3 nhóm · 37 chủ đề · 16 giảng viên
+        <p id="home-stats" class="home__meta" role="status">
+          Danh mục đề tài và lộ trình kiến thức nền
         </p>
         <h1 id="home-title">
           Từ một câu hỏi.<br />Đến một hướng <span class="home__highlight">nghiên cứu.</span>
@@ -56,63 +57,20 @@
         </div>
       </section>
       <section class="home__domains" aria-labelledby="home-domains-heading">
-        <h2 id="home-domains-heading">Ba nhóm chủ đề</h2>
-        <ul class="home__domains-grid">
-          <li>
-            <article class="home__domain-card">
-              <div class="home__domain-head">
-                <h3 class="home__domain-title">An toàn thông tin</h3>
-                <span class="badge badge--sec">14 chủ đề</span>
-              </div>
-              <p class="home__domain-desc">
-                Kiểm thử xâm nhập, phân tích mã độc, IDS/IPS, bảo mật Blockchain/Web3 và hệ thống AI.
-              </p>
-              <a
-                class="home__domain-link"
-                href="topics/index.html"
-                aria-label="Xem chủ đề nhóm An toàn thông tin"
-                >Xem chủ đề <span aria-hidden="true">→</span></a
-              >
-            </article>
-          </li>
-          <li>
-            <article class="home__domain-card">
-              <div class="home__domain-head">
-                <h3 class="home__domain-title">AI ngôn ngữ</h3>
-                <span class="badge badge--nlp">12 chủ đề</span>
-              </div>
-              <p class="home__domain-desc">
-                Xử lý ngôn ngữ tự nhiên, LLM, AI tạo sinh, hệ đa tác tử và tổng hợp tri thức.
-              </p>
-              <a
-                class="home__domain-link"
-                href="topics/index.html"
-                aria-label="Xem chủ đề nhóm AI ngôn ngữ"
-                >Xem chủ đề <span aria-hidden="true">→</span></a
-              >
-            </article>
-          </li>
-          <li>
-            <article class="home__domain-card">
-              <div class="home__domain-head">
-                <h3 class="home__domain-title">Dữ liệu &amp; dự báo</h3>
-                <span class="badge badge--data">11 chủ đề</span>
-              </div>
-              <p class="home__domain-desc">
-                Cơ sở dữ liệu nâng cao, dữ liệu lớn, chuỗi thời gian và các mô hình dự báo.
-              </p>
-              <a
-                class="home__domain-link"
-                href="topics/index.html"
-                aria-label="Xem chủ đề nhóm Dữ liệu và dự báo"
-                >Xem chủ đề <span aria-hidden="true">→</span></a
-              >
-            </article>
-          </li>
-        </ul>
+        <div class="home__domains-header">
+          <h2 id="home-domains-heading">Nhóm chủ đề nghiên cứu</h2>
+          <p id="home-domains-count" class="home__domains-count"></p>
+        </div>
+        <p id="home-domains-status" class="home__domains-status" role="status">
+          Đang tải nhóm chủ đề…
+        </p>
+        <ul id="home-domains-list" class="home__domains-grid" hidden></ul>
+        <div id="home-domains-actions" class="home__domains-actions" hidden>
+          <button id="home-domains-toggle" type="button" class="btn btn--outline"></button>
+        </div>
       </section>
       <p class="home__disclaimer">
-        Lưu ý: Danh sách tham khảo từ dữ liệu Khoa KH&amp;KTTT; phân nhóm và lộ trình kiến thức do
+        Lưu ý: Danh mục đề tài tổng hợp từ dữ liệu công bố; phân nhóm và lộ trình kiến thức nền do
         nhóm biên soạn để hỗ trợ tự định hướng.
       </p>
     </main>

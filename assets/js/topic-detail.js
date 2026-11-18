@@ -8,6 +8,7 @@
   element,
   searchText,
   renderPageMessage,
+  resolveGroupTone,
 } from "./data.js";
 /**
  * @file topic-detail.js
@@ -154,9 +155,9 @@ async function initTopicDetailPage() {
 }
 
 /**
- * Hiển thị tiêu đề, màu nhóm ngành, breadcrumb và liên kết giảng viên đúng chủ đề.
+ * Hiển thị tiêu đề, sắc độ nhóm ngành, breadcrumb và liên kết giảng viên đúng chủ đề.
  * @param {object} topic Chủ đề nguồn.
- * @param {object} group Nhóm chủ đề chứa màu miền.
+ * @param {object} group Nhóm chủ đề chứa mã định danh và tên nhóm.
  * @returns {void}
  */
 function renderHeaderInfo(topic, group) {
@@ -165,16 +166,23 @@ function renderHeaderInfo(topic, group) {
   const elBreadcrumb = document.getElementById("breadcrumb-current");
   if (elBreadcrumb) elBreadcrumb.textContent = topic.name;
 
-  // Đồng bộ màu badge nhóm ngành và gán data-group cho vùng sơ đồ tô màu node gốc
+  // Tra cứu vị trí nhóm trong dữ liệu nguồn để ánh xạ sắc độ nhất quán cho mọi nhóm
+  const groupIndex = Array.isArray(state.researchData?.groups)
+    ? state.researchData.groups.findIndex((item) => item.group?.id === group.id)
+    : -1;
+  const domainTone = resolveGroupTone(group.id, groupIndex);
+
+  // Gán data-domain-tone cho badge nhóm ngành và vùng sơ đồ tô màu node gốc
   const elGroupBadge = document.getElementById("topic-group-badge");
   if (elGroupBadge) {
     elGroupBadge.textContent = group.name;
-    elGroupBadge.className = "badge badge--" + group.id;
+    elGroupBadge.className = "badge";
+    elGroupBadge.dataset.domainTone = domainTone;
   }
 
   const elViewport = document.getElementById("mindmap-viewport");
   if (elViewport) {
-    elViewport.dataset.group = group.id;
+    elViewport.dataset.domainTone = domainTone;
   }
 
   const elTitle = document.getElementById("topic-title");
@@ -275,13 +283,15 @@ function renderQuickTopicSwitcher(data, currentTopic) {
    * @returns {boolean} True nếu cùng giảng viên hướng dẫn.
    */
   function matchesLecturer(topic) {
-    return normalizeEmail(topic.lecturer.email) === normalizeEmail(currentTopic.lecturer.email);
+    const currentEmail = normalizeEmail(currentTopic.lecturer?.email);
+    return Boolean(currentEmail) && normalizeEmail(topic.lecturer?.email) === currentEmail;
   }
 
   // Đếm tổng số chủ đề của giảng viên hiện tại trên toàn bộ các nhóm
   let totalCount = 0;
   for (const entry of data.groups) {
-    totalCount += entry.topics.filter(matchesLecturer).length;
+    const topics = Array.isArray(entry.topics) ? entry.topics : [];
+    totalCount += topics.filter(matchesLecturer).length;
   }
 
   // Nếu giảng viên chỉ có 1 chủ đề, ẩn hoàn toàn vùng chuyển chủ đề để header dàn đủ 1 cột
@@ -472,7 +482,7 @@ function buildMindMapTree(topic) {
   function convertKeyword(kw, depth, parentNode) {
     const node = {
       id: `node_${nodeIdCounter++}`,
-      name: kw.name,
+      name: kw.name || "",
       depth: depth,
       isRoot: false,
       outcome: kw.outcome || "",
@@ -482,14 +492,17 @@ function buildMindMapTree(topic) {
       children: [],
     };
 
-    for (const child of kw.children || []) {
+    const childKeywords = Array.isArray(kw.children) ? kw.children : [];
+    for (const child of childKeywords) {
       node.children.push(convertKeyword(child, depth + 1, node));
     }
 
     return node;
   }
 
-  for (const keyword of topic.keywords || []) {
+  // Bảo vệ khi chủ đề chưa có mảng keywords hoặc keywords rỗng []
+  const keywords = Array.isArray(topic.keywords) ? topic.keywords : [];
+  for (const keyword of keywords) {
     state.rootNode.children.push(convertKeyword(keyword, 1, state.rootNode));
   }
 }
@@ -1038,7 +1051,7 @@ function renderDrawerContent(node) {
 }
 
 /**
- * Gán nhãn cấp độ trung tính trong Drawer, tách biệt hoàn toàn với màu 3 nhóm ngành.
+ * Gán nhãn cấp độ trung tính trong Drawer, tách biệt hoàn toàn với sắc độ các nhóm ngành.
  * @param {MapNode} node Node kiến thức đang xem.
  * @returns {void}
  */
@@ -1180,8 +1193,26 @@ function setInitialMapView() {
   const root = state.rootNode;
   const firstChild = root?.children?.[0];
   const bounds = state.nodeBounds;
-  if (!root || !firstChild || !bounds || !firstChild.width || !firstChild.height) {
+  if (!root || !bounds) {
     fitToScreen();
+    return;
+  }
+
+  // Nếu chủ đề chỉ có node gốc (keywords rỗng), căn giữa trọn vẹn node gốc với lề gọn cho mobile
+  if (!firstChild || !firstChild.width || !firstChild.height) {
+    const pad = 16;
+    state.scale = Math.max(
+      CONFIG.MIN_ZOOM,
+      Math.min(
+        (viewport.clientWidth - pad * 2) / bounds.width,
+        (viewport.clientHeight - pad * 2) / bounds.height,
+        1,
+      ),
+    );
+    state.panX = (viewport.clientWidth - bounds.width * state.scale) / 2 - bounds.left * state.scale;
+    state.panY =
+      (viewport.clientHeight - bounds.height * state.scale) / 2 - bounds.top * state.scale;
+    applyTransform();
     return;
   }
 
@@ -1874,7 +1905,17 @@ function renderCardsView(topic) {
   if (!container) return;
 
   container.replaceChildren();
-  if (!topic.keywords || topic.keywords.length === 0) return;
+  // Khi chủ đề chưa có mảng keywords hoặc rỗng, hiển thị thông báo rõ ràng thay vì để trống
+  if (!Array.isArray(topic.keywords) || topic.keywords.length === 0) {
+    container.append(
+      element(
+        "p",
+        "knowledge-list__hint",
+        "Chủ đề này chưa có mục kiến thức nền trong dữ liệu hiện tại.",
+      ),
+    );
+    return;
+  }
 
   const fragment = document.createDocumentFragment();
   for (const [index, keyword] of topic.keywords.entries()) {

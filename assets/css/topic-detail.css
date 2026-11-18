@@ -295,19 +295,35 @@
   font-weight: 600;
 }
 
-#page-topic-detail .mindmap-viewport[data-group="sec"] .mindmap-node--root {
-  background: var(--color-domain-sec-bg);
-  border-color: var(--color-domain-sec-accent);
+/* Sắc độ node gốc theo nhóm ngành (6 tông tuần hoàn từ style.css) */
+#page-topic-detail .mindmap-viewport[data-domain-tone="1"] .mindmap-node--root {
+  background: var(--color-domain-1-bg);
+  border-color: var(--color-domain-1-accent);
 }
 
-#page-topic-detail .mindmap-viewport[data-group="data"] .mindmap-node--root {
-  background: var(--color-domain-data-bg);
-  border-color: var(--color-domain-data-accent);
+#page-topic-detail .mindmap-viewport[data-domain-tone="2"] .mindmap-node--root {
+  background: var(--color-domain-2-bg);
+  border-color: var(--color-domain-2-accent);
 }
 
-#page-topic-detail .mindmap-viewport[data-group="nlp"] .mindmap-node--root {
-  background: var(--color-domain-nlp-bg);
-  border-color: var(--color-domain-nlp-accent);
+#page-topic-detail .mindmap-viewport[data-domain-tone="3"] .mindmap-node--root {
+  background: var(--color-domain-3-bg);
+  border-color: var(--color-domain-3-accent);
+}
+
+#page-topic-detail .mindmap-viewport[data-domain-tone="4"] .mindmap-node--root {
+  background: var(--color-domain-4-bg);
+  border-color: var(--color-domain-4-accent);
+}
+
+#page-topic-detail .mindmap-viewport[data-domain-tone="5"] .mindmap-node--root {
+  background: var(--color-domain-5-bg);
+  border-color: var(--color-domain-5-accent);
+}
+
+#page-topic-detail .mindmap-viewport[data-domain-tone="6"] .mindmap-node--root {
+  background: var(--color-domain-6-bg);
+  border-color: var(--color-domain-6-accent);
 }
 
 /* Hệ phân cấp trung tính cho các tầng kiến thức trong sơ đồ */

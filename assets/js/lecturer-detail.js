@@ -14,6 +14,8 @@ import {
   externalLink,
   renderPageMessage,
   createTopicRow,
+  resolveGroupTone,
+  getVisiblePages,
 } from "./data.js";
 
 /** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên. */
@@ -162,7 +164,7 @@ function renderProfile(lecturer, related, groups) {
     if (metrics) card.append(metrics);
     card.append(topicsSection);
   } else {
-    // Hồ sơ tối giản (15/16 GV): ưu tiên Chủ đề nghiên cứu ngay sau header, đặt ghi chú ở cuối.
+    // Hồ sơ chưa có dữ liệu giới thiệu chi tiết: ưu tiên Chủ đề nghiên cứu ngay sau header, đặt ghi chú ở cuối.
     card.append(topicsSection);
     if (links) card.append(links);
     if (metrics) card.append(metrics);
@@ -182,10 +184,12 @@ function createProfileTags(related, groups) {
   const groupIds = new Set(related.map(getGroupId));
   const tags = element("div", "profile-tags");
 
-  for (const group of groups) {
-    if (groupIds.has(group.id)) {
-      tags.append(element("span", "lecturer-tag lecturer-tag--" + group.id, group.name));
-    }
+  for (const [index, group] of groups.entries()) {
+    if (!groupIds.has(group.id)) continue;
+    const tag = element("span", "lecturer-tag", group.name);
+    // Ánh xạ sắc độ linh hoạt theo mã nhóm hoặc vị trí nguồn cho bất kỳ tập nhóm nào.
+    tag.dataset.domainTone = resolveGroupTone(group.id, index);
+    tags.append(tag);
   }
 
   return tags.children.length ? tags : null;
@@ -392,7 +396,17 @@ function createProfileTopicRow(entry) {
 }
 
 /**
- * Render các nút điều hướng phân trang cho danh sách chủ đề.
+ * Tạo dấu ba chấm phân cách giữa các cụm trang trong phân trang chủ đề.
+ * @returns {HTMLSpanElement} Phần tử span hiển thị dấu ba chấm ẩn với screen reader.
+ */
+function createTopicPaginationEllipsis() {
+  const ellipsis = element("span", "pagination-ellipsis", "…");
+  ellipsis.setAttribute("aria-hidden", "true");
+  return ellipsis;
+}
+
+/**
+ * Render các nút điều hướng phân trang thu gọn cho danh sách chủ đề.
  * @param {HTMLElement} nav - Phần tử nav chứa các nút phân trang.
  * @param {number} pageCount - Tổng số trang.
  * @returns {void} Không trả về giá trị.
@@ -408,8 +422,13 @@ function renderTopicPagination(nav, pageCount) {
   const fragment = document.createDocumentFragment();
   fragment.append(createTopicPageBtn("Trước", topicCurrentPage - 1, topicCurrentPage === 1));
 
-  for (let num = 1; num <= pageCount; num++) {
-    fragment.append(createTopicPageBtn(String(num), num, false));
+  // Thu gọn dãy số trang bằng getVisiblePages để thanh phân trang luôn gọn khi có nhiều đề tài.
+  for (const item of getVisiblePages(topicCurrentPage, pageCount)) {
+    if (item === "…") {
+      fragment.append(createTopicPaginationEllipsis());
+    } else {
+      fragment.append(createTopicPageBtn(String(item), item, false));
+    }
   }
 
   fragment.append(createTopicPageBtn("Sau", topicCurrentPage + 1, topicCurrentPage === pageCount));

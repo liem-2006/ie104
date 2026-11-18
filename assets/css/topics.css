@@ -104,6 +104,12 @@
   line-height: 1;
 }
 
+#page-topics .topics-groups__more {
+  border-style: dashed;
+  background: transparent;
+  color: var(--color-link);
+}
+
 #page-topics .topics-results {
   display: flex;
   flex-wrap: wrap;

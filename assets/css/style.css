@@ -12,12 +12,18 @@
   --color-focus: #165f9b;
   --color-surface-muted: #f1f5f9;
   --color-accent-soft: #eaf2ff;
-  --color-domain-sec-bg: #eaf2fa;
-  --color-domain-sec-accent: #235b85;
-  --color-domain-data-bg: #e7f4ef;
-  --color-domain-data-accent: #23654e;
-  --color-domain-nlp-bg: #f0ecf8;
-  --color-domain-nlp-accent: #65468c;
+  --color-domain-1-bg: #eaf2fa;
+  --color-domain-1-accent: #235b85;
+  --color-domain-2-bg: #e7f4ef;
+  --color-domain-2-accent: #23654e;
+  --color-domain-3-bg: #f0ecf8;
+  --color-domain-3-accent: #65468c;
+  --color-domain-4-bg: #f8f1e5;
+  --color-domain-4-accent: #7c4d12;
+  --color-domain-5-bg: #f8ebf0;
+  --color-domain-5-accent: #7d3554;
+  --color-domain-6-bg: #e8f4f8;
+  --color-domain-6-accent: #1f5f75;
   --font-body: system-ui, -apple-system, "Segoe UI", Arial, sans-serif;
   --font-heading: var(--font-body);
   --space-1: 4px;
@@ -53,12 +59,18 @@
     --color-focus: #a9d6ff;
     --color-surface-muted: #212c3b;
     --color-accent-soft: #21364e;
-    --color-domain-sec-bg: #20354a;
-    --color-domain-sec-accent: #acd4f7;
-    --color-domain-data-bg: #203a36;
-    --color-domain-data-accent: #a1dfcf;
-    --color-domain-nlp-bg: #342e48;
-    --color-domain-nlp-accent: #d5c6f5;
+    --color-domain-1-bg: #20354a;
+    --color-domain-1-accent: #acd4f7;
+    --color-domain-2-bg: #203a36;
+    --color-domain-2-accent: #a1dfcf;
+    --color-domain-3-bg: #342e48;
+    --color-domain-3-accent: #d5c6f5;
+    --color-domain-4-bg: #3b3020;
+    --color-domain-4-accent: #f3d19c;
+    --color-domain-5-bg: #3c2633;
+    --color-domain-5-accent: #f2bfd4;
+    --color-domain-6-bg: #1e3742;
+    --color-domain-6-accent: #a3ddef;
     --shadow-soft: none;
     --shadow-overlay: 0 12px 36px rgb(0 0 0 / 45%);
   }
@@ -86,12 +98,18 @@
   --color-focus: #a9d6ff;
   --color-surface-muted: #212c3b;
   --color-accent-soft: #21364e;
-  --color-domain-sec-bg: #20354a;
-  --color-domain-sec-accent: #acd4f7;
-  --color-domain-data-bg: #203a36;
-  --color-domain-data-accent: #a1dfcf;
-  --color-domain-nlp-bg: #342e48;
-  --color-domain-nlp-accent: #d5c6f5;
+  --color-domain-1-bg: #20354a;
+  --color-domain-1-accent: #acd4f7;
+  --color-domain-2-bg: #203a36;
+  --color-domain-2-accent: #a1dfcf;
+  --color-domain-3-bg: #342e48;
+  --color-domain-3-accent: #d5c6f5;
+  --color-domain-4-bg: #3b3020;
+  --color-domain-4-accent: #f3d19c;
+  --color-domain-5-bg: #3c2633;
+  --color-domain-5-accent: #f2bfd4;
+  --color-domain-6-bg: #1e3742;
+  --color-domain-6-accent: #a3ddef;
   --shadow-soft: none;
   --shadow-overlay: 0 12px 36px rgb(0 0 0 / 45%);
 }
@@ -438,28 +456,57 @@ select:focus {
   line-height: 1.5;
 }
 
-.badge--sec,
-.lecturer-tag--sec {
-  background: var(--color-domain-sec-bg);
-  color: var(--color-domain-sec-accent);
+.badge[data-domain-tone="1"],
+.lecturer-tag[data-domain-tone="1"] {
+  background: var(--color-domain-1-bg);
+  color: var(--color-domain-1-accent);
 }
 
-.badge--data,
-.lecturer-tag--data {
-  background: var(--color-domain-data-bg);
-  color: var(--color-domain-data-accent);
+.badge[data-domain-tone="2"],
+.lecturer-tag[data-domain-tone="2"] {
+  background: var(--color-domain-2-bg);
+  color: var(--color-domain-2-accent);
 }
 
-.badge--nlp,
-.lecturer-tag--nlp {
-  background: var(--color-domain-nlp-bg);
-  color: var(--color-domain-nlp-accent);
+.badge[data-domain-tone="3"],
+.lecturer-tag[data-domain-tone="3"] {
+  background: var(--color-domain-3-bg);
+  color: var(--color-domain-3-accent);
+}
+
+.badge[data-domain-tone="4"],
+.lecturer-tag[data-domain-tone="4"] {
+  background: var(--color-domain-4-bg);
+  color: var(--color-domain-4-accent);
+}
+
+.badge[data-domain-tone="5"],
+.lecturer-tag[data-domain-tone="5"] {
+  background: var(--color-domain-5-bg);
+  color: var(--color-domain-5-accent);
+}
+
+.badge[data-domain-tone="6"],
+.lecturer-tag[data-domain-tone="6"] {
+  background: var(--color-domain-6-bg);
+  color: var(--color-domain-6-accent);
 }
 
 .badge--subject {
   background: var(--color-surface-muted);
   color: var(--color-text);
   border: 1px solid var(--color-border);
+}
+
+.pagination-ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  min-height: 44px;
+  color: var(--color-muted);
+  font-size: 14px;
+  user-select: none;
 }
 
 .status-panel {
@@ -677,7 +724,7 @@ select:focus {
   }
 }
 
-/* Trang chủ (#page-home): header tối giản, hero 1 cột gọn, 3 nhóm chủ đề và ghi chú tham khảo. */
+/* Trang chủ (#page-home): header tối giản, hero 1 cột gọn, lưới nhóm chủ đề thích ứng dữ liệu và ghi chú tham khảo. */
 #page-home .site-header__inner {
   flex-wrap: nowrap;
   min-height: 72px;
@@ -738,18 +785,42 @@ select:focus {
   border-top: 1px solid var(--color-border);
 }
 
+#page-home .home__domains-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
 #page-home .home__domains h2 {
   font-size: 20px;
   margin: 0;
 }
 
+#page-home .home__domains-count {
+  font-size: 13.5px;
+  color: var(--color-muted);
+  margin: 0;
+}
+
+#page-home .home__domains-status {
+  font-size: 14px;
+  color: var(--color-muted);
+  margin-top: 16px;
+}
+
 #page-home .home__domains-grid {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
   gap: 16px;
   list-style: none;
   padding: 0;
   margin-top: 20px;
+}
+
+#page-home .home__domains-actions {
+  margin-top: 16px;
 }
 
 #page-home .home__domain-card {
@@ -833,7 +904,6 @@ select:focus {
   }
 
   #page-home .home__domains-grid {
-    grid-template-columns: minmax(0, 1fr);
     gap: 12px;
   }
 
