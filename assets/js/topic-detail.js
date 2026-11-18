@@ -144,8 +144,8 @@ async function initTopicDetailPage() {
     // Mặc định hiển thị Sơ đồ trên cả mobile và desktop; vẫn chuyển sang Danh sách được.
     setView("mindmap");
     renderMindMap(true);
-  } catch (err) {
-    console.error("Lỗi khởi tạo chi tiết chủ đề:", err);
+  } catch {
+    // Chỉ hiện thông báo cho người dùng, không để console đỏ (tiêu chí "console sạch").
     renderErrorMessage("Không thể tải dữ liệu chủ đề. Hãy tải lại trang để thử lại.");
   } finally {
     // Công bố nội dung sau một lần cập nhật, tránh xê dịch các placeholder khi JSON tới.

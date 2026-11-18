@@ -371,6 +371,15 @@ export function createTopicRow(entry, headingLevel = 2, showMeta = true) {
 }
 
 /** Lấy chữ viết tắt tên, bỏ học vị và chú thích đơn vị. @param {string} rawName Tên nguồn. @returns {string} Chữ đại diện. */
+/**
+ * Trả về hành vi cuộn phù hợp tùy chọn "giảm chuyển động" (prefers-reduced-motion).
+ * Người dùng bật giảm chuyển động sẽ được cuộn tức thời ("auto") thay vì trượt mượt.
+ * @returns {"auto"|"smooth"} Hành vi scrollIntoView nên dùng.
+ */
+export function getScrollBehavior() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth";
+}
+
 export function getLecturerInitials(rawName) {
   if (!rawName) return "GV";
   // 1. Loại bỏ các phần chú thích đơn vị trong ngoặc ở cuối tên: (ĐHQT), (ĐHQG-HCM), (ĐH KTL)...

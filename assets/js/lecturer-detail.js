@@ -16,6 +16,7 @@ import {
   createTopicRow,
   createPaginationNav,
   createGroupTags,
+  getScrollBehavior,
 } from "./data.js";
 
 /** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên. */
@@ -362,7 +363,8 @@ function handleTopicPaginationClick(event, listEl, summaryEl, navEl, related, bl
     heading.tabIndex = -1;
     heading.focus({ preventScroll: true });
   }
-  block.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Tôn trọng prefers-reduced-motion: cuộn tức thời nếu người dùng bật giảm chuyển động.
+  block.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
 }
 
 /**

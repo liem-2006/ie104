@@ -15,6 +15,7 @@ import {
   avatar,
   createPaginationNav,
   createGroupTags,
+  getScrollBehavior,
 } from "./data.js";
 
 /** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop). */
@@ -358,7 +359,8 @@ function changePage(event) {
   const heading = document.getElementById("lecturers-results-heading");
   const listEl = document.getElementById("lecturers-list");
   heading?.focus({ preventScroll: true });
-  listEl?.scrollIntoView({ behavior: "smooth", block: "start" });
+  // Tôn trọng prefers-reduced-motion: cuộn tức thời nếu người dùng bật giảm chuyển động.
+  listEl?.scrollIntoView({ behavior: getScrollBehavior(), block: "start" });
 }
 
 /**

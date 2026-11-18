@@ -802,18 +802,18 @@
     height: clamp(260px, 50dvh, 430px);
   }
 
-  /* Nâng chiều cao/nút chạm unscaled trên mobile để sau scale ~0.8 vẫn đạt >= 44px */
+  /* Nâng chiều cao/nút chạm unscaled trên mobile để sau scale tối thiểu 0.62 vẫn đạt >= 44px (72 x 0.62 ~ 45px) */
   #page-topic-detail .mindmap-node__card {
     display: flex;
     align-items: center;
-    min-height: 58px;
+    min-height: 72px;
     padding: 10px 12px;
   }
 
   #page-topic-detail .mindmap-node__toggle {
-    min-width: 58px;
-    min-height: 58px;
-    height: 58px;
+    min-width: 72px;
+    min-height: 72px;
+    height: 72px;
     margin-right: 8px;
   }
 
