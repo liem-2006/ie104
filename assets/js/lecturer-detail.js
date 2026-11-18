@@ -17,6 +17,7 @@ import {
   createPaginationNav,
   createGroupTags,
   getScrollBehavior,
+  countTopicNodes,
 } from "./data.js";
 
 /** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên. */
@@ -152,6 +153,9 @@ function renderProfile(lecturer, related, groups) {
 
   const card = element("article", "profile-card");
   card.append(createProfileHeader(lecturer, title, related, groups));
+  // Quick-facts (M1/UI-05): 3 số liệu suy từ JSON thật (chủ đề / kiến thức / môn) làm điểm
+  // neo thông tin cho cả hồ sơ đầy đủ lẫn hồ sơ tối giản (không thêm dữ liệu mới).
+  card.append(createQuickFacts(related));
 
   const links = createResearchLinks(lecturer.researchProfiles || []);
   const metrics = renderMetrics(lecturer.metrics || []);
@@ -216,6 +220,43 @@ function createProfileHeader(lecturer, title, related, groups) {
 
   header.append(avatar(lecturer, "profile-header__avatar"), info);
   return header;
+}
+
+/**
+ * Tạo khối quick-facts gồm 3 ô số liệu suy từ dữ liệu thật: số chủ đề hướng dẫn, tổng mục
+ * kiến thức nền và số môn học gợi ý duy nhất (khử trùng lặp giữa các chủ đề bằng Set chung).
+ * @param {object[]} related - Danh sách chủ đề giảng viên hướng dẫn (kèm nhóm nguồn).
+ * @returns {HTMLElement} Khối section quick-facts; trả về null khi không có chủ đề để không rỗng.
+ */
+function createQuickFacts(related) {
+  if (!related.length) return null;
+
+  // Đếm mục kiến thức và gom môn gợi ý duy nhất qua toàn bộ chủ đề bằng Set chung (khử trùng).
+  const courses = new Set();
+  let nodeCount = 0;
+  for (const entry of related) {
+    const counts = countTopicNodes(entry.topic.keywords, courses);
+    nodeCount += counts.nodeCount;
+  }
+  const facts = [
+    { value: related.length, label: "chủ đề hướng dẫn" },
+    { value: nodeCount, label: "mục kiến thức nền" },
+    { value: courses.size, label: "môn học gợi ý" },
+  ];
+
+  const block = section("Tóm tắt hồ sơ");
+  const grid = element("div", "metrics-grid profile-quick-facts");
+  grid.setAttribute("role", "list");
+  grid.setAttribute("aria-label", "Tóm tắt hồ sơ giảng viên");
+  for (const fact of facts) {
+    const item = element("div", "metric-card", "");
+    item.setAttribute("role", "listitem");
+    item.append(element("p", "metric-card__value", String(fact.value)));
+    item.append(element("p", "metric-card__label", fact.label));
+    grid.append(item);
+  }
+  block.append(grid);
+  return block;
 }
 
 /**

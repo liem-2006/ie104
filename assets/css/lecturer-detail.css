@@ -222,6 +222,17 @@
   font-weight: 500;
 }
 
+/* Quick-facts (M1/UI-05): 3 số liệu ngang bằng nhau, điểm neo thông tin đầu hồ sơ. */
+#page-lecturer-detail .profile-quick-facts {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+#page-lecturer-detail .profile-quick-facts .metric-card {
+  min-width: 0;
+}
+
 #page-lecturer-detail .related-topics-list {
   list-style: none;
   padding: 0;
@@ -353,6 +364,11 @@
     height: 48px;
     flex-basis: 48px;
     font-size: 16px;
+  }
+
+  /* Quick-facts: xếp dọc trên mobile hẹp để chữ số không tràn. */
+  #page-lecturer-detail .profile-quick-facts {
+    grid-template-columns: minmax(0, 1fr);
   }
 
   #page-lecturer-detail .topic-row {
