@@ -1,4 +1,4 @@
-/* TV2 — Hồ sơ giảng viên: chuẩn hóa token từ style.css, dùng specificity tự nhiên, tối ưu layout và accessibility. */
+/* TV2 — Hồ sơ giảng viên: bố cục phẳng tối giản, chuẩn token style.css và responsive. */
 
 #page-lecturer-detail .profile-page {
   position: relative;
@@ -21,19 +21,19 @@
 }
 
 #page-lecturer-detail .profile-card {
-  background: var(--color-surface);
-  border: 1px solid var(--color-border);
-  border-radius: 20px;
-  padding: 32px;
-  box-shadow: var(--shadow-soft);
-  margin-top: 16px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  margin-top: 8px;
 }
 
 #page-lecturer-detail .profile-header {
   display: flex;
   align-items: center;
-  gap: 24px;
-  padding-bottom: 28px;
+  gap: 18px;
+  padding-bottom: 24px;
   border-bottom: 1px solid var(--color-border);
 }
 
@@ -41,19 +41,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 76px;
-  height: 76px;
-  flex: 0 0 76px;
+  width: 56px;
+  height: 56px;
+  flex: 0 0 56px;
   border-radius: 50%;
   background: var(--color-accent-soft);
-  border: 2px solid var(--color-border);
+  border: 1px solid var(--color-border);
   color: var(--color-primary);
-  font-size: 26px;
+  font-size: 20px;
   font-weight: 700;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.4px;
   overflow: hidden;
   user-select: none;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  box-shadow: none;
 }
 
 #page-lecturer-detail .profile-header__avatar img {
@@ -68,16 +68,16 @@
 }
 
 #page-lecturer-detail .profile-header__info h1 {
-  font-size: 26px;
+  font-size: 24px;
   margin: 0;
   color: var(--color-text);
   line-height: 1.3;
-  letter-spacing: -0.7px;
+  letter-spacing: -0.6px;
 }
 
 #page-lecturer-detail .profile-header__affiliation {
   color: var(--color-muted);
-  margin-top: 8px;
+  margin-top: 6px;
   margin-bottom: 0;
   max-width: 75ch;
   font-size: 15px;
@@ -89,7 +89,7 @@
   align-items: center;
   min-height: 44px;
   max-width: 100%;
-  margin-top: 4px;
+  margin-top: 2px;
   color: var(--color-link);
   font-size: 15px;
   font-weight: 500;
@@ -104,29 +104,22 @@
 }
 
 #page-lecturer-detail .profile-section {
-  margin-top: 32px;
-}
-
-#page-lecturer-detail .profile-header + .profile-section {
   margin-top: 28px;
 }
 
+#page-lecturer-detail .profile-header + .profile-section {
+  margin-top: 24px;
+}
+
+#page-lecturer-detail .profile-section + .profile-section {
+  padding-top: 28px;
+  border-top: 1px solid var(--color-border);
+}
+
 #page-lecturer-detail .profile-section__title {
-  display: flex;
-  align-items: center;
-  gap: 10px;
   margin-bottom: 14px;
   font-size: 20px;
   color: var(--color-text);
-}
-
-#page-lecturer-detail .profile-section__title::before {
-  content: "";
-  width: 4px;
-  height: 20px;
-  border-radius: 2px;
-  background: var(--color-primary);
-  flex-shrink: 0;
 }
 
 #page-lecturer-detail .profile-section__text {
@@ -183,14 +176,14 @@
 }
 
 #page-lecturer-detail .profile-minimal-note {
-  margin: 28px 0 0;
-  padding: 12px 16px;
-  border-radius: var(--radius-sm);
-  background: var(--color-surface-muted);
+  margin: 24px 0 0;
+  padding: 16px 0 0;
+  border-top: 1px solid var(--color-border);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-muted);
-  font-size: 13.5px;
+  font-size: 13px;
   line-height: 1.55;
-  max-width: 80ch;
 }
 
 #page-lecturer-detail .profile-topics-summary {
@@ -203,20 +196,19 @@
 #page-lecturer-detail .metrics-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px 36px;
+  gap: 16px 24px;
 }
 
 #page-lecturer-detail .metric-card {
-  padding: 16px 20px;
+  padding: 14px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
-  border-radius: 10px;
+  border-radius: var(--radius-sm);
   min-width: 120px;
-  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04);
 }
 
 #page-lecturer-detail .metric-card__value {
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--color-primary);
   margin: 0;
@@ -235,10 +227,9 @@
   padding: 0;
   margin: 0;
   border: 1px solid var(--color-border);
-  border-radius: 12px;
+  border-radius: var(--radius-card);
   background: var(--color-surface);
   overflow: visible;
-  box-shadow: 0 1px 4px rgba(15, 23, 42, 0.04);
 }
 
 #page-lecturer-detail .related-topic-item + .related-topic-item {
@@ -251,18 +242,18 @@
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
   gap: 6px 20px;
-  padding: 18px 24px;
+  padding: 16px 20px;
   transition: background-color var(--transition-fast);
 }
 
 #page-lecturer-detail .related-topic-item:first-child .topic-row {
-  border-top-left-radius: 11px;
-  border-top-right-radius: 11px;
+  border-top-left-radius: 9px;
+  border-top-right-radius: 9px;
 }
 
 #page-lecturer-detail .related-topic-item:last-child .topic-row {
-  border-bottom-left-radius: 11px;
-  border-bottom-right-radius: 11px;
+  border-bottom-left-radius: 9px;
+  border-bottom-right-radius: 9px;
 }
 
 #page-lecturer-detail .topic-row:hover {
@@ -310,7 +301,7 @@
   flex-wrap: wrap;
   gap: 8px;
   margin-top: 24px;
-  padding: 12px 0;
+  padding: 8px 0;
 }
 
 #page-lecturer-detail .profile-pagination__button {
@@ -348,32 +339,26 @@
   color: var(--color-on-primary);
   border-color: var(--color-primary);
   cursor: default;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
 
 @media (max-width: 767px) {
-  #page-lecturer-detail .profile-card {
-    padding: 20px 16px;
-    border-radius: 16px;
-  }
-
   #page-lecturer-detail .profile-header {
     flex-direction: column;
     align-items: flex-start;
-    gap: 16px;
+    gap: 14px;
   }
 
   #page-lecturer-detail .profile-header__avatar {
-    width: 60px;
-    height: 60px;
-    flex-basis: 60px;
-    font-size: 20px;
+    width: 48px;
+    height: 48px;
+    flex-basis: 48px;
+    font-size: 16px;
   }
 
   #page-lecturer-detail .topic-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 8px;
-    padding: 16px;
+    padding: 14px 16px;
   }
 
   #page-lecturer-detail .topic-row__title,

@@ -223,25 +223,19 @@ export function countTopicNodes(keywords, subjects = new Set()) {
 }
 
 /**
- * Tạo chuỗi tóm tắt các trụ cột kiến thức chính và quy mô lộ trình từ dữ liệu thật của chủ đề.
+ * Tạo chuỗi tóm tắt quy mô kiến thức và số môn gợi ý từ dữ liệu thật của chủ đề.
  * @param {object} topic Đối tượng chủ đề từ JSON nghiên cứu.
- * @returns {string} Chuỗi tóm tắt gọn hoặc chuỗi rỗng nếu chủ đề chưa có dữ liệu keyword.
+ * @returns {string} Chuỗi quy mô ngắn gọn hoặc chuỗi rỗng nếu chủ đề chưa có dữ liệu keyword.
  */
 export function summarizeTopicScope(topic) {
   const keywords = Array.isArray(topic?.keywords) ? topic.keywords : [];
   if (!keywords.length) return "";
 
-  // Chỉ lấy tên các trụ cột kiến thức ở tầng gốc để giữ tóm tắt ngắn gọn và trực quan.
-  const rootNames = keywords.map((item) => String(item?.name || "").trim()).filter(Boolean);
+  // Đếm tổng số mục kiến thức và số môn gợi ý duy nhất trong cây keyword.
   const { nodeCount, subjectCount } = countTopicNodes(keywords);
-  const parts = [];
+  const parts = [nodeCount + " mục kiến thức"];
 
-  if (rootNames.length) {
-    parts.push("Kiến thức chính: " + rootNames.join(" · "));
-  }
-  parts.push(nodeCount + " mục kiến thức");
-
-  // Chỉ hiển thị số môn gợi ý khi chủ đề thực sự có môn học liên kết (> 0).
+  // Chỉ nối số môn gợi ý khi chủ đề thực sự có môn học liên kết (> 0).
   if (subjectCount > 0) {
     parts.push(subjectCount + " môn gợi ý");
   }
@@ -263,7 +257,7 @@ export function createTopicRow(entry, headingLevel = 2) {
   link.href = topicUrl(group, topic);
   heading.append(link);
 
-  // Tóm tắt trụ cột đặt bằng phần tử riêng (.topic-row__summary) để không bị xóa cùng .topic-row__meta.
+  // Tóm tắt quy mô đặt bằng phần tử riêng (.topic-row__summary) để không bị xóa cùng .topic-row__meta.
   const summaryText = summarizeTopicScope(topic);
   const summary = summaryText ? element("p", "topic-row__summary", summaryText) : null;
 

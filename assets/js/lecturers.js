@@ -424,7 +424,7 @@ function createLecturerCard(lecturer) {
   link.setAttribute("aria-label", "Xem hồ sơ chi tiết của " + lecturer.name);
 
   const footer = element("div", "lecturer-card__footer");
-  footer.append(element("p", "lecturer-card__topic-count", related.length + " chủ đề nghiên cứu"), link);
+  footer.append(element("p", "lecturer-card__topic-count", related.length + " chủ đề"), link);
 
   card.append(header, tags, footer);
   return card;

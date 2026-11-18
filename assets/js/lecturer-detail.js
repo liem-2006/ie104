@@ -256,14 +256,14 @@ function createBiography(lecturer) {
 }
 
 /**
- * Tạo ghi chú ngắn ở cuối thẻ cho các hồ sơ chưa có dữ liệu tiểu sử và chỉ số học thuật.
+ * Tạo ghi chú ngắn ở cuối trang cho các hồ sơ chưa có dữ liệu tiểu sử và chỉ số học thuật.
  * @returns {HTMLParagraphElement} Phần tử ghi chú gọn.
  */
 function createMinimalProfileNote() {
   return element(
     "p",
     "profile-minimal-note",
-    "Thông tin tiểu sử và chỉ số học thuật chưa có trong nguồn dữ liệu hiện tại. Bạn có thể xem các chủ đề hướng dẫn ở trên hoặc liên hệ giảng viên qua email.",
+    "Chưa có thêm tiểu sử hoặc chỉ số học thuật trong dữ liệu hiện tại.",
   );
 }
 
@@ -337,7 +337,7 @@ function renderTopicPage(listEl, summaryEl, navEl, related, pageCount) {
   }
 
   // Luôn hiển thị dòng tổng số chủ đề cho mọi hồ sơ có từ 1 chủ đề trở lên.
-  summaryEl.textContent = `Tổng cộng ${total} chủ đề nghiên cứu`;
+  summaryEl.textContent = `${total} chủ đề hướng dẫn`;
   listEl.replaceChildren(...related.map(createRelatedTopicItem));
   navEl.hidden = true;
   navEl.replaceChildren();

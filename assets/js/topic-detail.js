@@ -258,7 +258,7 @@ function attachDialogBackdropClose(dialog, onClose) {
 }
 
 /**
- * Dựng bộ chuyển chủ đề cùng giảng viên; ẩn hộp chọn khi giảng viên chỉ có 1 đề tài.
+ * Dựng bộ chuyển chủ đề cùng giảng viên; ẩn hoàn toàn khi giảng viên chỉ có 1 đề tài.
  * @param {object} data Dữ liệu nghiên cứu gồm danh sách nhóm.
  * @param {object} currentTopic Chủ đề hiện tại để đối chiếu giảng viên và đánh dấu đang xem.
  * @returns {void}
@@ -284,18 +284,17 @@ function renderQuickTopicSwitcher(data, currentTopic) {
     totalCount += entry.topics.filter(matchesLecturer).length;
   }
 
-  // Nếu giảng viên chỉ có 1 chủ đề, hiển thị nhãn tĩnh thay cho nút mở modal thừa
+  // Nếu giảng viên chỉ có 1 chủ đề, ẩn hoàn toàn vùng chuyển chủ đề để header dàn đủ 1 cột
   if (totalCount <= 1) {
-    container.append(
-      element("p", "topic-switcher__single", "Giảng viên có 1 chủ đề trong danh mục"),
-    );
+    container.hidden = true;
     return;
   }
 
+  container.hidden = false;
   const button = element(
     "button",
     "btn btn--outline topic-switcher__trigger",
-    "Đề tài khác của GV (" + totalCount + ")",
+    "Đề tài khác (" + totalCount + ")",
   );
   button.type = "button";
 
