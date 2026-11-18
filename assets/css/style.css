@@ -988,6 +988,27 @@ select:focus {
   max-width: 76ch;
 }
 
+@media (max-width: 767px) {
+  /* Trang chủ mobile: ẩn vòng orbit trang trí (decorative, aria-hidden) và thu padding khối
+     khái niệm + khoảng cách section để hero + thống kê + 3 bước lọt viewport đầu (mockup M3). */
+  #page-home .home__orbit {
+    display: none;
+  }
+
+  #page-home .home__visual {
+    padding: 16px;
+  }
+
+  #page-home .home__concept--main {
+    padding: 14px 18px;
+  }
+
+  #page-home .home__steps {
+    margin-top: 24px;
+    padding-top: 20px;
+  }
+}
+
 @media (min-width: 360px) {
   #page-home .home__visual {
     grid-template-columns: repeat(2, minmax(0, 1fr));
