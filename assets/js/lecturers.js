@@ -69,6 +69,21 @@ function resolveInitialGroup(groupList) {
 }
 
 /**
+ * Khoá UX-04 (danh bạ): nếu mã ?group= trong URL không còn khớp ô select nhóm (đã đổi về
+ * "Tất cả" hoặc một nhóm khác, hoặc giá trị URL hợp lệ) thì xóa ?group= để reload không kéo
+ * lại nhóm cũ. Chỉ xóa, không thêm tham số mới (đồng bộ toàn bộ URL thuộc phạm vi C8).
+ * @returns {void} Không trả về giá trị.
+ */
+function clearStaleGroupParam() {
+  const select = document.getElementById("lecturer-group");
+  const current = select ? select.value : "";
+  const inUrl = new URLSearchParams(location.search).get("group");
+  if (inUrl && inUrl !== current) {
+    history.replaceState(null, "", location.pathname);
+  }
+}
+
+/**
  * Đếm số giảng viên (khác nhau) có ít nhất một chủ đề thuộc mỗi nhóm nghiên cứu.
  * @param {object[]} groupList - Danh sách nhóm nghiên cứu từ JSON.
  * @returns {Map<string, number>} Ánh xạ mã nhóm -> số giảng viên hướng dẫn trong nhóm.
@@ -136,6 +151,8 @@ function getGroup(entry) {
  * @returns {void} Không trả về giá trị.
  */
 function handleFilterInput() {
+  // Khoá UX-04: nếu select nhóm vừa đổi khác với ?group= trong URL thì xóa tham số cũ.
+  clearStaleGroupParam();
   renderLecturers(true);
 }
 

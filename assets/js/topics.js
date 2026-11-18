@@ -76,6 +76,19 @@ function clearGroupQueryParam() {
 }
 
 /**
+ * Khoá UX-04: nếu mã ?group= đang ở URL không còn nằm trong tập nhóm đã chọn (vừa bị bỏ),
+ * thì xóa ?group= để reload không tự động kéo lại bộ lọc người dùng đã gỡ.
+ * Chỉ XÓA, không thêm ?group= mới (việc đồng bộ toàn bộ URL thuộc phạm vi C8).
+ * @returns {void}
+ */
+function clearStaleGroupParam() {
+  const inUrl = new URLSearchParams(location.search).get("group");
+  if (inUrl && !state.selected.has(inUrl)) {
+    clearGroupQueryParam();
+  }
+}
+
+/**
  * Đếm số lượng chủ đề thực tế của từng nhóm từ danh sách chủ đề đã nạp.
  * @param {Array<object>} entries - Danh sách bản ghi chủ đề kèm nhóm nguồn.
  * @returns {Map<string, number>} Bản đồ ánh xạ mã nhóm tới số lượng chủ đề thật.
@@ -233,6 +246,9 @@ function toggleGroup(button) {
   } else {
     state.selected.add(id);
   }
+  // Khoá UX-04: sau khi bỏ chọn, nếu mã nhóm trong URL không còn được chọn thì xóa ?group=
+  // để reload không kéo lại bộ lọc người dùng vừa gỡ.
+  clearStaleGroupParam();
   state.page = 1;
   // Khi đang thu gọn nhiều nhóm, dựng lại danh sách nút để ẩn/hiện đúng các nhóm ngoài top 6.
   if (state.groups.length > MAX_COLLAPSED_GROUPS && !state.groupsExpanded) {
