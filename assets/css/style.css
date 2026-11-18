@@ -263,12 +263,6 @@ dialog {
   letter-spacing: -0.8px;
 }
 
-.page-header__desc {
-  color: var(--color-muted);
-  margin-top: 8px;
-  max-width: 65ch;
-}
-
 .site-header {
   background: var(--color-surface);
   border-bottom: 1px solid var(--color-border);
@@ -559,14 +553,9 @@ select:focus {
   font-weight: 600;
 }
 
-.reading-guide ol,
 .reading-guide p {
   margin-block: 8px 16px;
   max-width: 75ch;
-}
-
-.reading-guide ol {
-  padding-left: 22px;
 }
 
 .breadcrumb {

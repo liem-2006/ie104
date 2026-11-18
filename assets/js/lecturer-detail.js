@@ -14,8 +14,8 @@ import {
   externalLink,
   renderPageMessage,
   createTopicRow,
-  resolveGroupTone,
-  getVisiblePages,
+  createPaginationNav,
+  createGroupTags,
 } from "./data.js";
 
 /** Số lượng chủ đề tối đa trên một trang trong hồ sơ giảng viên. */
@@ -182,16 +182,8 @@ function renderProfile(lecturer, related, groups) {
  */
 function createProfileTags(related, groups) {
   const groupIds = new Set(related.map(getGroupId));
-  const tags = element("div", "profile-tags");
-
-  for (const [index, group] of groups.entries()) {
-    if (!groupIds.has(group.id)) continue;
-    const tag = element("span", "lecturer-tag", group.name);
-    // Ánh xạ sắc độ linh hoạt theo mã nhóm hoặc vị trí nguồn cho bất kỳ tập nhóm nào.
-    tag.dataset.domainTone = resolveGroupTone(group.id, index);
-    tags.append(tag);
-  }
-
+  const tags = createGroupTags(groups, groupIds, "profile-tags");
+  // Giữ nguyên hành vi cũ: trả null khi giảng viên chưa có nhóm nào khớp để header không rỗng.
   return tags.children.length ? tags : null;
 }
 
@@ -336,7 +328,7 @@ function renderTopicPage(listEl, summaryEl, navEl, related, pageCount) {
     const end = Math.min(start + TOPIC_PAGE_SIZE, total);
     summaryEl.textContent = `Hiển thị ${start + 1}–${end} trong tổng số ${total} chủ đề (Trang ${topicCurrentPage}/${pageCount})`;
     listEl.replaceChildren(...related.slice(start, end).map(createRelatedTopicItem));
-    renderTopicPagination(navEl, pageCount);
+    createPaginationNav(navEl, topicCurrentPage, pageCount, "profile-pagination__button");
     return;
   }
 
@@ -390,72 +382,7 @@ function createRelatedTopicItem(entry) {
  * @returns {HTMLElement} Phần tử hàng chủ đề giữ nguyên tên đề tài, tóm tắt trụ cột và badge nhóm.
  */
 function createProfileTopicRow(entry) {
-  const row = createTopicRow(entry, 3);
-  row.querySelector(".topic-row__meta")?.remove();
-  return row;
-}
-
-/**
- * Tạo dấu ba chấm phân cách giữa các cụm trang trong phân trang chủ đề.
- * @returns {HTMLSpanElement} Phần tử span hiển thị dấu ba chấm ẩn với screen reader.
- */
-function createTopicPaginationEllipsis() {
-  const ellipsis = element("span", "pagination-ellipsis", "…");
-  ellipsis.setAttribute("aria-hidden", "true");
-  return ellipsis;
-}
-
-/**
- * Render các nút điều hướng phân trang thu gọn cho danh sách chủ đề.
- * @param {HTMLElement} nav - Phần tử nav chứa các nút phân trang.
- * @param {number} pageCount - Tổng số trang.
- * @returns {void} Không trả về giá trị.
- */
-function renderTopicPagination(nav, pageCount) {
-  if (pageCount <= 1) {
-    nav.hidden = true;
-    nav.replaceChildren();
-    return;
-  }
-
-  nav.hidden = false;
-  const fragment = document.createDocumentFragment();
-  fragment.append(createTopicPageBtn("Trước", topicCurrentPage - 1, topicCurrentPage === 1));
-
-  // Thu gọn dãy số trang bằng getVisiblePages để thanh phân trang luôn gọn khi có nhiều đề tài.
-  for (const item of getVisiblePages(topicCurrentPage, pageCount)) {
-    if (item === "…") {
-      fragment.append(createTopicPaginationEllipsis());
-    } else {
-      fragment.append(createTopicPageBtn(String(item), item, false));
-    }
-  }
-
-  fragment.append(createTopicPageBtn("Sau", topicCurrentPage + 1, topicCurrentPage === pageCount));
-  nav.replaceChildren(fragment);
-}
-
-/**
- * Tạo một nút trang cho thanh phân trang chủ đề nghiên cứu.
- * @param {string} label - Nhãn nút hiển thị.
- * @param {number} targetPage - Số trang đích.
- * @param {boolean} disabled - Trạng thái vô hiệu hóa nút.
- * @returns {HTMLButtonElement} Phần tử button phân trang.
- */
-function createTopicPageBtn(label, targetPage, disabled) {
-  const btn = element("button", "profile-pagination__button", label);
-  btn.type = "button";
-  btn.dataset.page = String(targetPage);
-  btn.disabled = disabled;
-
-  if (/^\d+$/.test(label)) {
-    btn.setAttribute("aria-label", "Trang " + targetPage);
-    if (targetPage === topicCurrentPage) {
-      btn.setAttribute("aria-current", "page");
-    }
-  }
-
-  return btn;
+  return createTopicRow(entry, 3, false);
 }
 
 /**

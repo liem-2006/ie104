@@ -13,8 +13,8 @@ import {
   lecturerUrl,
   element,
   avatar,
-  resolveGroupTone,
-  getVisiblePages,
+  createPaginationNav,
+  createGroupTags,
 } from "./data.js";
 
 /** Số lượng giảng viên tối đa trên 1 trang (3 hàng x 3 cột trên desktop). */
@@ -334,72 +334,12 @@ function renderLecturers(resetPage = false) {
 
   const isEmptyVisible = renderEmptyState(total);
   renderFilterState(hasCustomFilter(query, groupId), isEmptyVisible);
-  renderPagination(pageCount);
-}
-
-/**
- * Tạo dấu ba chấm phân cách các cụm trang khi danh sách có nhiều trang.
- * @returns {HTMLSpanElement} Phần tử span hiển thị dấu ba chấm ẩn với screen reader.
- */
-function createPaginationEllipsis() {
-  const ellipsis = element("span", "pagination-ellipsis", "…");
-  ellipsis.setAttribute("aria-hidden", "true");
-  return ellipsis;
-}
-
-/**
- * Render thanh điều hướng phân trang thu gọn nếu tổng số trang lớn hơn 1.
- * @param {number} pageCount - Tổng số trang kết quả.
- * @returns {void} Không trả về giá trị.
- */
-function renderPagination(pageCount) {
-  const nav = document.getElementById("lecturers-pagination");
-  if (!nav) return;
-
-  if (pageCount <= 1) {
-    nav.hidden = true;
-    nav.replaceChildren();
-    return;
-  }
-
-  nav.hidden = false;
-  const fragment = document.createDocumentFragment();
-  fragment.append(createPageButton("Trước", currentPage - 1, currentPage === 1));
-
-  // Thu gọn dãy số trang bằng getVisiblePages để thanh phân trang luôn gọn khi dữ liệu lớn.
-  for (const item of getVisiblePages(currentPage, pageCount)) {
-    if (item === "…") {
-      fragment.append(createPaginationEllipsis());
-    } else {
-      fragment.append(createPageButton(String(item), item, false));
-    }
-  }
-
-  fragment.append(createPageButton("Sau", currentPage + 1, currentPage === pageCount));
-  nav.replaceChildren(fragment);
-}
-
-/**
- * Tạo một nút bấm trong thanh phân trang chuẩn WAI-ARIA.
- * @param {string} label - Nhãn hiển thị của nút.
- * @param {number} targetPage - Số trang đích khi nhấn nút.
- * @param {boolean} disabled - Trạng thái vô hiệu hóa nút.
- * @returns {HTMLButtonElement} Phần tử nút phân trang.
- */
-function createPageButton(label, targetPage, disabled) {
-  const button = element("button", "lecturers-pagination__button", label);
-  button.type = "button";
-  button.dataset.page = String(targetPage);
-  button.disabled = disabled;
-
-  if (/^\d+$/.test(label)) {
-    button.setAttribute("aria-label", "Trang " + targetPage);
-    if (targetPage === currentPage) {
-      button.setAttribute("aria-current", "page");
-    }
-  }
-
-  return button;
+  createPaginationNav(
+    document.getElementById("lecturers-pagination"),
+    currentPage,
+    pageCount,
+    "lecturers-pagination__button",
+  );
 }
 
 /**
@@ -422,24 +362,6 @@ function changePage(event) {
 }
 
 /**
- * Tạo thẻ hiển thị nhóm lĩnh vực nghiên cứu thực tế cho một giảng viên.
- * @param {object[]} related - Các chủ đề nghiên cứu giảng viên đang hướng dẫn.
- * @returns {HTMLElement} Khối div chứa các thẻ nhóm nghiên cứu.
- */
-function createLecturerTags(related) {
-  const ids = new Set(related.map(getGroupId));
-  const tags = element("div", "lecturer-card__tags");
-  for (const [index, group] of groups.entries()) {
-    if (!ids.has(group.id)) continue;
-    const tag = element("span", "lecturer-tag", group.name);
-    // Ánh xạ sắc độ linh hoạt theo mã nhóm hoặc vị trí nguồn cho bất kỳ tập nhóm nào.
-    tag.dataset.domainTone = resolveGroupTone(group.id, index);
-    tags.append(tag);
-  }
-  return tags;
-}
-
-/**
  * Tạo thẻ thông tin giảng viên (card) gồm avatar, tên, email, nhóm chủ đề và link hồ sơ.
  * @param {object} lecturer - Dữ liệu giảng viên.
  * @returns {HTMLElement} Thẻ article hoàn chỉnh.
@@ -458,7 +380,8 @@ function createLecturerCard(lecturer) {
   header.append(avatar(lecturer, "lecturer-card__avatar"), meta);
 
   const related = relatedTopics(lecturer);
-  const tags = createLecturerTags(related);
+  const ids = new Set(related.map(getGroupId));
+  const tags = createGroupTags(groups, ids, "lecturer-card__tags");
 
   const link = element("a", "lecturer-card__profile-link", "Xem hồ sơ →");
   link.href = lecturerUrl(lecturer.email);

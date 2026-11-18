@@ -6,7 +6,7 @@ import {
   normalizeEmail,
   element,
   createTopicRow,
-  getVisiblePages,
+  createPaginationNav,
 } from "./data.js";
 
 const pageSize = 12;
@@ -326,7 +326,7 @@ function renderTopics() {
   status.textContent = buildStatus(entries.length, start);
   renderEmptyState(entries.length);
   renderFilterState();
-  renderPagination(pageCount);
+  createPaginationNav(document.getElementById("topic-pagination"), state.page, pageCount, "topics-pagination__button");
 }
 
 /**
@@ -381,52 +381,6 @@ function renderFilterState() {
   const emptyVisible = !document.getElementById("topics-empty").hidden;
   document.getElementById("reset-filters").hidden =
     emptyVisible || !hasCustomFilter();
-}
-
-/**
- * Tạo thanh phân trang cửa sổ rút gọn và tự động ẩn khi tổng kết quả tối đa một trang.
- * @param {number} pageCount - Tổng số trang của tập kết quả hiện tại.
- * @returns {void}
- */
-function renderPagination(pageCount) {
-  const nav = document.getElementById("topic-pagination");
-  nav.hidden = pageCount <= 1;
-  const fragment = document.createDocumentFragment();
-  if (pageCount > 1) {
-    fragment.append(createPageButton("Trước", state.page - 1, state.page === 1));
-    // Dùng cửa sổ trang rút gọn kèm dấu "…" để thanh phân trang không tràn hàng với dữ liệu lớn.
-    for (const item of getVisiblePages(state.page, pageCount)) {
-      if (item === "…") {
-        const ellipsis = element("span", "pagination-ellipsis", "…");
-        ellipsis.setAttribute("aria-hidden", "true");
-        fragment.append(ellipsis);
-      } else {
-        fragment.append(createPageButton(String(item), item, false));
-      }
-    }
-    fragment.append(createPageButton("Sau", state.page + 1, state.page === pageCount));
-  }
-  nav.replaceChildren(fragment);
-}
-
-/**
- * Tạo một nút điều hướng phân trang kèm nhãn truy cập và đánh dấu trang hiện tại.
- * @param {string} label - Văn bản hiển thị trên nút ("Trước", số trang, hoặc "Sau").
- * @param {number} number - Số trang mục tiêu khi kích hoạt nút.
- * @param {boolean} disabled - Trạng thái vô hiệu hóa khi đang ở trang đầu hoặc cuối.
- * @returns {HTMLButtonElement} Phần tử nút phân trang hoàn chỉnh.
- */
-function createPageButton(label, number, disabled) {
-  const button = element("button", "topics-pagination__button", label);
-  button.type = "button";
-  button.dataset.page = String(number);
-  button.disabled = disabled;
-  // Gắn aria-label tường minh cho các nút số trang và aria-current cho trang đang mở.
-  if (/^\d+$/.test(label)) {
-    button.setAttribute("aria-label", "Trang " + number);
-    if (number === state.page) button.setAttribute("aria-current", "page");
-  }
-  return button;
 }
 
 /**

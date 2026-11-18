@@ -338,9 +338,10 @@ export function summarizeTopicScope(topic) {
 /** Tạo hàng chủ đề dùng chung cho khám phá và hồ sơ giảng viên.
  * @param {{group: object, topic: object}} entry Chủ đề và nhóm nguồn.
  * @param {number} [headingLevel=2] Cấp heading của tên đề tài (2 hoặc 3).
+ * @param {boolean} [showMeta=true] Có hiển thị dòng "Hướng dẫn:" (meta) hay không.
  * @returns {HTMLElement} Article có link chủ đề và link giảng viên độc lập.
  */
-export function createTopicRow(entry, headingLevel = 2) {
+export function createTopicRow(entry, headingLevel = 2, showMeta = true) {
   const { group, topic } = entry;
   const row = element("article", "topic-row");
   const badge = element("span", "badge topic-row__group", group.name);
@@ -354,13 +355,18 @@ export function createTopicRow(entry, headingLevel = 2) {
   const summaryText = summarizeTopicScope(topic);
   const summary = summaryText ? element("p", "topic-row__summary", summaryText) : null;
 
-  const meta = element("p", "topic-row__meta", "Hướng dẫn: ");
-  const lecturer = element("a", "", topic.lecturer.name);
-  lecturer.href = lecturerUrl(topic.lecturer.email);
-  meta.append(lecturer);
+  // Chỉ dựng dòng "Hướng dẫn:" khi showMeta bật (trang khám phá cần, hồ sơ lược bỏ).
+  const meta = showMeta ? element("p", "topic-row__meta", "Hướng dẫn: ") : null;
+  if (meta) {
+    const lecturer = element("a", "", topic.lecturer.name);
+    lecturer.href = lecturerUrl(topic.lecturer.email);
+    meta.append(lecturer);
+  }
 
-  if (summary) row.append(heading, summary, meta, badge);
-  else row.append(heading, meta, badge);
+  if (summary && meta) row.append(heading, summary, meta, badge);
+  else if (summary) row.append(heading, summary, badge);
+  else if (meta) row.append(heading, meta, badge);
+  else row.append(heading, badge);
   return row;
 }
 
@@ -384,4 +390,102 @@ export function getLecturerInitials(rawName) {
       return match ? match[0].toUpperCase() : "";
     })
     .join("");
+}
+
+/**
+ * Tạo một nút bấm trong thanh phân trang chuẩn WAI-ARIA, dùng chung cho mọi trang.
+ * Nút số trang (chữ số nguyên) được gắn aria-label tường minh và aria-current="page"
+ * khi trùng trang hiện tại; nút "Trước"/"Sau" không có thuộc tính truy cập bổ sung.
+ * @param {string} label - Nhãn hiển thị của nút ("Trước", số trang, hoặc "Sau").
+ * @param {number} targetPage - Số trang đích khi nhấn nút.
+ * @param {boolean} disabled - Trạng thái vô hiệu hóa nút.
+ * @param {string} buttonClass - Lớp CSS của nút theo từng trang (vd "topics-pagination__button").
+ * @param {number} currentPage - Số trang hiện tại để đánh dấu aria-current.
+ * @returns {HTMLButtonElement} Phần tử nút phân trang hoàn chỉnh.
+ */
+export function createPaginationButton(label, targetPage, disabled, buttonClass, currentPage) {
+  const button = element("button", buttonClass, label);
+  button.type = "button";
+  button.dataset.page = String(targetPage);
+  button.disabled = disabled;
+
+  // Chỉ gắn thuộc tính truy cập cho nút số trang; giữ nút điều hướng "Trước"/"Sau" tối giản.
+  if (/^\d+$/.test(label)) {
+    button.setAttribute("aria-label", "Trang " + targetPage);
+    if (targetPage === currentPage) {
+      button.setAttribute("aria-current", "page");
+    }
+  }
+
+  return button;
+}
+
+/**
+ * Tạo dấu ba chấm phân cách các cụm trang khi thanh phân trang bị rút gọn.
+ * @returns {HTMLSpanElement} Phần tử span ẩn với screen reader.
+ */
+export function createPaginationEllipsis() {
+  const ellipsis = element("span", "pagination-ellipsis", "…");
+  ellipsis.setAttribute("aria-hidden", "true");
+  return ellipsis;
+}
+
+/**
+ * Render thanh điều hướng phân trang cửa sổ rút gọn cho một nav có sẵn trong trang.
+ * Nếu tổng số trang <= 1 thì ẩn nav và làm trống; ngược lại dựng "Trước", các số trang
+ * qua getVisiblePages (kèm dấu "…") và "Sau".
+ * @param {HTMLElement|null} navEl - Phần tử nav chứa thanh phân trang.
+ * @param {number} currentPage - Số trang hiện tại (tính từ 1).
+ * @param {number} pageCount - Tổng số trang.
+ * @param {string} buttonClass - Lớp CSS của nút theo từng trang.
+ * @returns {void}
+ */
+export function createPaginationNav(navEl, currentPage, pageCount, buttonClass) {
+  if (!navEl) return;
+
+  // Tổng số trang tối đa một: ẩn thanh điều hướng và làm trống nội dung cũ.
+  if (pageCount <= 1) {
+    navEl.hidden = true;
+    navEl.replaceChildren();
+    return;
+  }
+
+  navEl.hidden = false;
+  const fragment = document.createDocumentFragment();
+  fragment.append(createPaginationButton("Trước", currentPage - 1, currentPage === 1, buttonClass, currentPage));
+
+  // Thu gọn dãy số trang bằng getVisiblePages để thanh phân trang luôn gọn khi dữ liệu lớn.
+  for (const item of getVisiblePages(currentPage, pageCount)) {
+    if (item === "…") {
+      fragment.append(createPaginationEllipsis());
+    } else {
+      fragment.append(createPaginationButton(String(item), item, false, buttonClass, currentPage));
+    }
+  }
+
+  fragment.append(
+    createPaginationButton("Sau", currentPage + 1, currentPage === pageCount, buttonClass, currentPage),
+  );
+  navEl.replaceChildren(fragment);
+}
+
+/**
+ * Tạo khối thẻ nhóm lĩnh vực nghiên cứu (span "lecturer-tag") từ tập mã nhóm đã biết.
+ * Người gọi tự quyết định append hay giữ lại: container có thể rỗng hoặc được trả về
+ * như một element hợp lệ (kèm hành vi null theo ngữ cảnh do người dùng hàm quyết định).
+ * @param {Array<{id: string, name: string}>} groups - Danh sách nhóm {id, name}.
+ * @param {Set<string>} ids - Tập mã nhóm cần hiển thị thẻ.
+ * @param {string} containerClass - Lớp CSS của container thẻ.
+ * @returns {HTMLElement} Khối div chứa các thẻ (có thể rỗng).
+ */
+export function createGroupTags(groups, ids, containerClass) {
+  const container = element("div", containerClass);
+  for (const [index, group] of groups.entries()) {
+    if (!ids.has(group.id)) continue;
+    const tag = element("span", "lecturer-tag", group.name);
+    // Ánh xạ sắc độ linh hoạt theo mã nhóm hoặc vị trí nguồn cho bất kỳ tập nhóm nào.
+    tag.dataset.domainTone = resolveGroupTone(group.id, index);
+    container.append(tag);
+  }
+  return container;
 }
