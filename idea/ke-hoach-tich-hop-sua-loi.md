@@ -811,3 +811,36 @@ Theo phản hồi sở thích giao diện của người dùng (giữ nguyên to
   - `qa_report.json`: `responsive_50: []`, `axe_violations: []`, `touch_targets: []`, `console_errors: []`, `all_37_trees` (`271` node `0` overlap), `home_layout_geometry` trên `desktop_1440`/`tablet_768`/`mobile_375`/`mobile_320` đều `visualOverlaps: 0`, `orbitInsideVisual: true`, `overflow: false`; `scale_synthetic_test.home_8_groups` đạt `"8 nhóm chủ đề · 96 đề tài · 25 giảng viên"`, `orbitClipped: false`, `overflow: false`, `stepCount: 3`, và mọi kiểm thử trên `4` trang con giữ nguyên kết quả.
   - Subagent `ui-ux-perfection-reviewer` xác nhận **`APPROVED`** (`0` Blocker/High/Polish).
   - Cập nhật `14` PNG trong `idea/minh-chung-giao-dien/ui-upgrade-20261118/` và báo cáo `../Đồ án tham khảo/SO_SANH_GIAO_DIEN_TRUOC_SAU_UIT_DISCOVERY.md`. Giới hạn môi trường giữ nguyên (thiếu Node/Lighthouse CLI, Firefox/Safari và thiết bị thật); chưa push, merge hay deploy.
+
+## Vòng 2 — Dọn kỹ thuật + nâng cấp UI theo mockup (`C1`..`C9`) — 19/11/2026
+
+Thực hiện theo quy trình điều phối (vòng 2) trên nhánh local `task/ui-round2-20261118`: (i) gom các hàm lặp về `data.js`, (ii) sửa nhóm a11y/console, (iii) áp các mockup M1/M2/M3 + khoá UX-04/UX-05/UX-06, tất cả **không đổi `data/research-data.json` / `data/lecturers.json`** và giữ style học thuật UIT.
+
+- **Backup trước vòng 2:** `backup/job-2-before-round2-20261118` tại `3376f98`.
+- **Phạm vi file của vòng (C1–C8):** `assets/js/{data,topics,lecturers,topic-detail,lecturer-detail}.js`, `assets/css/{style,lecturers,lecturer-detail,topic-detail}.css`, `index.html`, `lecturers/index.html` (không chạm `data/`).
+
+| Mục | Commit | Nội dung |
+|---|---|---|
+| C1 refactor | `cbf5ce4` | Gom `createPaginationNav` / `createGroupTags` / `showMeta` về `data.js`, xóa CSS chết trong `style.css`. |
+| C2 a11y/console | `7f108a0` | `getScrollBehavior()` tôn trọng `prefers-reduced-motion`, mở rộng hit-target mindmap, bỏ `console.error`, `role="status"` tĩnh. |
+| C3 danh bạ | `f456e4a` | Card GV ngang, ẩn nút "Tìm", kèm count nhóm trong option, empty-reset trả focus nhất quán. |
+| C4 UX-04 | `5727539` | `clearStaleGroupParam()`: bỏ chọn nhóm → xóa `?group=` còn sót để reload không kéo lại lọc. |
+| C5 M2/UX-05 | `324d3e5` | Roadmap mobile mặc định view Danh sách (accordion) + CTA "Mở Sơ đồ", hint "Kéo 2D". |
+| C6 M3/UI-02 | `3855d04` | Trang chủ thêm `site-nav` + thu gọn khung minh họa ở mobile. |
+| C7 M1/UI-05 | `ca2471a` | Hồ sơ GV thêm `createQuickFacts` (chủ đề / kiến thức / môn) dùng `countTopicNodes` + Set khử trùng. |
+| C8 UX-06 | `8387703` | Đồng bộ `?group=&q=&page=` bằng một cơ chế duy nhất `restoreUrlState()`/`syncUrl()` (thay cơ chế xóa rời rạc của C4). |
+| C9 docs | (bản ghi này) | Cập nhật lịch sử + minh chứng. |
+
+### Minh chứng kiểm chứng trong trình duyệt (preview, không tạo PNG mới)
+
+Vòng này xác minh trực tiếp trên bản chạy (localhost:8899, Chrome), đọc DOM/URL thực tế:
+- **Quick-facts (C7):** hồ sơ tối giản `duypt@` → `10 chủ đề · 53 kiến thức · 23 môn`; hồ sơ đầy đủ `camnt@` → `3 · 14 · 10`; số do `countTopicNodes` + `Set` tính từ JSON (môn gợi ý khử trùng lặp giữa các chủ đề, nên `23` khác `32` ở mockup M1 — mockup ghi `32` là trị tổng theo từng chủ đề, không khử trùng).
+- **URL sync (C8):** chọn nhóm → `?group=sec`; +từ khóa → `?group=sec&q=AI`; bấm "Xóa bộ lọc" → URL sạch `""`; reload `?group=sec` khôi phục đúng `aria-pressed=true`; `?page=2` giữ đúng `Trang 2/2`. `lecturers` tương tự (`?group=sec`, `?group=sec&q=an`, reset → `""`, `?page=2` → `Trang 2/2`).
+- **Console:** `0` lỗi trên cả 5 trang đã chạy kiểm tra (đáp ứng C2 bỏ `console.error`).
+- `git diff data/` từ `3376f98` đến HEAD: **trống** (`data/` không đổi).
+
+### Giới hạn của vòng này (ghi nhận trung thực)
+
+- Chưa chạy lại `validator.nu`, `axe-core` hay bộ `qa_report.json` full (`50` responsive / `37` cây) cho vòng 2; chỉ xác minh các điểm đổi trực tiếp trong trình duyệt như trên. Các chỉ số Lighthouse/axe nêu ở các mục trước vẫn là kết quả của vòng 1 và giữ nguyên giá trị đối với phần không đổi.
+- Chưa có screenshot PNG mới lưu vào `idea/minh-chung-giao-dien/` cho vòng 2 (minh chứng là kiểm tra DOM/URL live).
+- Chưa push, merge hay deploy. Đây là thay đổi của vòng 2 trên nhánh `task/ui-round2-20261118`.
