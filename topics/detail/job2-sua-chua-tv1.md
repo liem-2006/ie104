@@ -136,3 +136,8 @@ Axe mobile không vi phạm trong nhóm WCAG2A/AA,21AA; HTML Validate trang chi 
 - Làm phẳng `.topic-header` (viền đáy `1px`, bỏ bóng đổ), ẩn hoàn toàn `#topic-switcher-container` khi GV chỉ có 1 đề tài (`7/16` GV, thay cho `.topic-switcher__single`), nút chuyển đa đề tài rút thành `"Đề tài khác (N)"`.
 - Giữ 3 sắc độ miền trên `#topic-group-badge` và `.mindmap-node--root`; đồng bộ viền `solid` cho node lá và badge cấp độ trung tính; thu gọn `.mindmap-toolbar` về nền sạch; dời lưu ý tham khảo xuống `.roadmap-footnote` cuối khối và rút gọn `#mindmap-hint`.
 - Kết quả sau sửa: `37/37` cây (`271` nodes) `0` chồng lấn, `touch_targets: []` (`>= 44px` trên mobile), `axe_violations: []`, `responsive_50: []`, `hintHiddenInCards: true`, `expandVisible.clippedRightOrLeft: 0`, `90/90` hàm JS đủ JSDoc, HTML `validator.nu` `0` lỗi (`1` info-warning `<dialog>`). Minh chứng ảnh `07`, `08`, `09`, `10`, `14` đã cập nhật trong `idea/minh-chung-giao-dien/ui-upgrade-20261118/`.
+
+### Vòng động hóa dữ liệu không fix cứng (`00ab17a`) — 18/11/2026
+- Gắn sắc độ miền động `resolveGroupTone(group.id, groupIndex)` qua `data-domain-tone="1".."6"` trên `#topic-group-badge` và `#mindmap-viewport` trong `topic-detail.js` / `topic-detail.css` (bỏ ràng buộc `data-group="sec|data|nlp"`).
+- Xử lý an toàn chủ đề `keywords: []`: `buildMindMapTree` + `setInitialMapView` căn giữa node gốc gọn trên mobile/desktop (`0` lỗi/tràn), `renderCardsView` hiển thị thông báo rõ trong `#roadmap-pillars-grid`.
+- Kết quả sau sửa: `37/37` cây (`271` nodes `0` overlap) + test tổng hợp nhóm `"cv"` `keywords: []` (`data-domain-tone="4"`, `rootNodes: 1`), `90/90` hàm JS đủ JSDoc, `0` lỗi HTML `validator.nu` (`1` info-warning `<dialog>`). Minh chứng ảnh `07`, `08`, `09`, `10`, `14` đã cập nhật.
