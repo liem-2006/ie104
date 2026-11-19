@@ -1,5 +1,7 @@
 > **Hiện hành — 19/11/2026:** Mọi chủ đề mở mặc định Sơ đồ và tự căn vừa toàn bộ node đang hiển thị sau khi đo bố cục, kể cả mobile; thay góc nhìn cũ chỉ hé gốc/nhánh đầu. Không tự mở mọi nhánh con. Chuyển qua lại Danh sách giữ pan/zoom đã chọn; nút Căn vừa vẫn chủ động căn lại. Danh sách mặc định đóng toàn bộ nhánh.
 
+> Chặng tiếp theo: [Job 3 — hiểu đồ án để vấn đáp](JOB-3.md). Nhiệm vụ Job 2 dưới đây là lịch sử; đọc bản ghi sửa chữa hiện hành trước khi ôn. Job 3 không yêu cầu tiếp tục sửa UI.
+
 > **Nhóm trưởng cập nhật sau Job 2 (17/11/2026):** Hộp chuyển chủ đề chỉ chứa đề tài cùng giảng viên, đóng được bằng nền tối và giữ nút Đóng khi cuộn. Footer năm trang chuyển sang thông tin dự án/trường. Đọc [lịch sử sửa chữa](job2-sua-chua-tv1.md) để biết phần giữ lại, phần nhóm trưởng sửa và cách kiểm tra. Bản local chờ duyệt.
 
 > **Cập nhật 17/11/2026 — Material:** Sơ đồ mặc định cả mobile; Danh sách là accordion một cấp với nội dung phẳng, con trước cha. Giữ token xanh UIT, theme sáng mặc định và lựa chọn đã lưu. Header trang chủ chỉ logo/theme. Quy tắc này thay các mô tả cũ tương ứng. Bản local chờ duyệt; xem bản ghi Job 2 và kế hoạch tổng.

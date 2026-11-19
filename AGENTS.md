@@ -1,5 +1,9 @@
 # IE104 - Internet và Công nghệ Web (UIT) - Workspace Rules
 
+## Ưu tiên hiện hành Job 3
+
+Đọc JOB-3.md cạnh code: nhiệm vụ là ôn vấn đáp, không tự nâng cấp code. Bản học trên integration/job-3 và main. Tổng quan job-history/job-3.md chỉ local, không đưa vào repo. Job 2 dưới đây giữ làm lịch sử; nguyên tắc Vanilla/BEM/JSDoc và quyền duyệt của nhóm trưởng vẫn áp dụng.
+
 ## Ưu tiên nhiệm vụ Job 2
 
 Đọc JOB-2.md cạnh code và CONTRIBUTING.md. Nhánh nền/đích PR Job 2 là integration/job-2; nhóm trưởng tích hợp xong mới mở PR tổng vào main. Job 2 thay phân công Job 1: TV1 roadmap, TV2 giảng viên, TV3 khám phá. Nhóm trưởng quản lý nền chung; không tự sửa style.css/reset.css/data.js/theme.js/JSON/root index.html. Style học thuật và logic hiện hành vẫn là chuẩn. Áp dụng IE104 cho code và kiến thức IE106 đã học cho giao diện; không tự suy diễn rubric IE106. Không ghi kiểm thử dự kiến thành đã hoàn thành.

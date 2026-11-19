@@ -1,5 +1,10 @@
 # Job 2 — Ghi nhận tích hợp và sửa chữa TV1
 
+> **Đọc trước Job 3 — bản hiện hành 19/11/2026:** [Job 3](JOB-3.md) · [Kỹ thuật trang chi tiết](../../idea/phan-tich-ky-thuat-theo-trang.md#4-chi-tiết-và-roadmap--tv1).
+>
+> Job 1 phần này do TV2 làm; Job 2 TV1 nhận sửa chéo. Nhóm trưởng tích hợp và sửa tiếp: mặc định Sơ đồ mọi kích thước, tự căn vừa lần đầu, giữ pan/zoom khi đổi tab; Danh sách phẳng theo nhánh và mặc định đóng hết; tooltip outcome; sửa pointer capture/con trỏ vùng trống; hộp chuyển chủ đề chỉ của giảng viên hiện tại, đóng nền ngoài/Escape và trả focus. Email hiện text; header/footer/theme dùng chung. Đợt Lab không đổi thuật toán cây; chỉ đơn giản hóa module dữ liệu dùng chung. Sửa nền logo dark trong style.css áp dụng cho trang này. Đây là phần nhóm trưởng điều phối, không quy thành việc TV1 tự làm. Các mốc bên dưới là lịch sử; yêu cầu mobile mặc định Danh sách đã được thay thế.
+
+
 > **Bản local chờ nhóm trưởng kiểm tra, chưa duyệt/merge/push/deploy.** TV1 là người nhận Job 2; phần gốc Job 1 thuộc TV2. Đọc [nhiệm vụ](JOB-2.md) và [kế hoạch tổng](../../idea/ke-hoach-tich-hop-sua-loi.md).
 
 ## Nguồn và đóng góp

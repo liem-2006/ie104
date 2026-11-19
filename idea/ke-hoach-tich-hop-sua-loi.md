@@ -947,3 +947,29 @@ Sol 6.1 triển khai, Astra 6 rà diff so với backup và kiểm thử. Đây l
 - Bước tiếp theo nếu bị ngắt: nghiệm thu trực quan/axe/Lighthouse; không cần viết lại code đã hoàn tất. Mọi thay đổi mới sau kiểm tra phải ghi checkpoint và kiểm thử phần bị ảnh hưởng.
 
 **Nghiệm thu bổ sung sau tiếp tục:** đối chiếu từng blob của toàn bộ file thuộc nhánh ứng viên với file đang chạy: 0 khác biệt (kể cả bảng kiến thức vốn untracked ở nhánh đang mở). PASS 37 URL chủ đề tạo/đọc/tìm trả đúng object, liên kết giảng viên đủ, alias hoa/khoảng trắng và URL sai/thiếu. HTTP 200 cho 5 trang, 2 JSON và 5 asset JS/CSS liên quan. Bộ verify.cjs đã lưu thêm các kiểm tra này. Đã thử lại Computer Use: browser host không khả dụng; điều khiển Chrome native báo có user input trong cùng cửa sổ nên dừng để không gián đoạn người dùng. Không có ảnh hoặc nghiệm thu browser mới. Phần code/tài liệu hoàn tất; điểm tiếp tục duy nhất là nghiệm thu trực quan/accessibility/hiệu năng đã liệt kê, không phải triển khai lại. Chưa push/merge/deploy.
+
+### Sửa tái phát nền trắng logo ở theme tối — 19/11/2026
+
+Nguyên nhân ở CSS, không phải ảnh: hai selector theme tối (hệ thống và data-theme) thêm background var(--color-text), padding, bo góc và kích thước khác. PNG hiện tại có alpha (54×42; 1.896 pixel alpha <255). Đã bỏ cả hai override; dùng duy nhất .site-header__logo-img với background transparent, kích thước 34×30 ở mọi theme. Giữ file logo gốc. Backup CSS trước sửa tại job-history/backups/logo-dark-background-20261119/ ngoài repo. Đã rà toàn bộ CSS: không còn selector theme riêng cho logo; diff --check đạt. Chưa có ảnh browser mới. Quy tắc cần giữ: không thêm ô nền sáng phía sau logo trong suốt khi nâng cấp theme. Đây là sửa local sau ứng viên Lab 2566f89, chưa nằm trong commit đó; chưa push/merge. Tự kiểm Ctrl+F5 rồi đổi sáng/tối trên năm trang.
+
+## Chuẩn bị Job 3 — ôn vấn đáp, 19/11/2026
+
+Đầu vào là bản code local hiện hành và toàn bộ lịch sử, không khẳng định GitHub đã cập nhật. Đầu ra: `job-history/job-3.md` ngoài repo, chỉ local để nhóm trưởng gửi riêng; `idea/phan-tich-ky-thuat-theo-trang.md` phân tích năm trang + module chung. README, idea/README và bốn JOB-2.md có lối dẫn; ba bản ghi TV có tóm tắt hiện hành ở đầu, giữ lịch sử cũ. Task chi tiết JOB-3.md nằm cạnh code tại topics/, topics/detail/, lecturers/ và lecturers/detail/; được đưa lên Git cùng tài liệu kỹ thuật. Không đặt bản tổng quan trong repo và không tạo link GitHub tới file local.
+
+| Phần | Thay đổi cần truyền đạt | Trách nhiệm ôn |
+|---|---|---|
+| Trang chủ/nền chung | Hero + thống kê từ JSON, header responsive, footer mô tả dự án, theme lưu lựa chọn, PNG trong suốt và bỏ CSS nền sáng dark; dùng vòng for cho thống kê | Nhóm trưởng; cả nhóm nắm module chung |
+| Khám phá | A–Z, nhóm OR/tìm AND, 12 mục sau lọc, URL/reset/focus, hướng dẫn rỗng và module chung | TV3 Job 2/3 |
+| Chi tiết | Sơ đồ mặc định/fit lần đầu, danh sách phẳng đóng hết, cây/panel/tooltip, chuyển chủ đề theo giảng viên, pointer fix | TV1 Job 2/3 |
+| Danh bạ/hồ sơ | 9/10 phân trang, alias, ảnh fallback, email text, quick facts, time/dl/dt/dd, vòng lặp/fragment | TV2 Job 2/3 |
+
+Các sửa hậu tích hợp thuộc nhóm trưởng điều phối agent; không đổi tên tác giả đóng góp gốc. Code không thay trong công việc tài liệu Job 3. Chưa push/merge; chuẩn bị cho lần công bố sau. Cần đọc bản tổng quan local `job-history/job-3.md` và task trong repo theo nhánh/SHA nhóm trưởng công bố, không tự chọn main cũ. Nghiệm thu còn giới hạn browser/axe/Lighthouse như checkpoint trước; không ghi “ổn hết mọi thứ”.
+
+
+**Sửa quy trình theo góp ý nhóm trưởng:** đã đối chiếu job-history/job-1.md và job-2.md. Bản tổng quan chuyển khỏi repo thành job-history/job-3.md; tạo task chi tiết cạnh code; sửa các link README/JOB-2/lịch sử để không trỏ tới file local không có trên GitHub. Nội dung công việc ôn vấn đáp giữ nguyên; chưa push/merge.
+
+## Công bố Job 3 theo yêu cầu nhóm trưởng
+
+Nhóm trưởng cho phép đưa bản hiện hành lên integration/job-3 và cập nhật main. Kiểm tra remote trước xuất bản: main 265b389, integration/job-2 741e5af; SHA PR #6/#7/#8 vẫn khớp nguồn đã ghi. Không merge chồng lại hoặc tự đóng PR cũ. Bản công bố gồm code đã tích hợp, sửa logo dark, lịch sử và task Job 3; không có job-history hoặc bản tổng quan local trong repo. README/CONTRIBUTING/AGENTS ưu tiên Job 3; hướng dẫn Job 2 giữ lịch sử.
+
+Giới hạn nghiệm thu vẫn giữ nguyên: kiểm tra logic/cú pháp/cấu trúc đạt; chưa xác nhận đầy đủ browser/axe/Lighthouse mới. Cho phép xuất bản không đồng nghĩa mọi tiêu chí nghiệm thu đã pass. Trạng thái đẩy/commit thực tế được xác minh bằng remote sau thao tác; xem nhánh integration/job-3/main trên GitHub. Không deploy riêng trong lượt này.

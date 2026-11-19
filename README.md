@@ -1,5 +1,9 @@
 # IE104 — UIT Discovery
 
+## Bắt đầu Job 3 — ôn vấn đáp đồ án
+
+Đọc bản tổng quan **job-history/job-3.md** do nhóm trưởng gửi riêng (chỉ local) trước: context ngắn, thứ tự đọc, phân công và đầu ra ôn tập. Task trong repo: [TV1](topics/detail/JOB-3.md), [TV2](lecturers/JOB-3.md), [TV3](topics/JOB-3.md). Sau đó đọc [kỹ thuật theo từng trang](idea/phan-tich-ky-thuat-theo-trang.md). Job 3 không yêu cầu thêm tính năng hoặc PR code. Bản học Job 3 được công bố trên `integration/job-3` và `main`; xem commit của nhánh trên GitHub để xác định phiên bản. Các hướng dẫn Job 2 dưới đây được giữ làm lịch sử quy trình phát triển, không phải lệnh bắt đầu sửa giao diện cho Job 3.
+
 ## Job 2 — kiểm tra chéo và nâng cấp giao diện
 
 PR #4 đã merge. Nhánh [integration/job-2](https://github.com/liem-2006/ie104/tree/integration/job-2) là nền và nơi nhận PR Job 2; thành viên có thể bắt đầu từ nhánh này. Đọc bản ghi sửa chữa phần mình nhận trước khi sửa.

@@ -1,5 +1,9 @@
 # Ngữ cảnh hiện hành — đọc trước tài liệu chi tiết
 
+## Ưu tiên đọc hiện hành: Job 3 — 19/11/2026
+
+Bản tổng quan Job 3 do nhóm trưởng gửi riêng (job-history/job-3.md, chỉ local) là điểm bắt đầu để ôn vấn đáp; [phân tích kỹ thuật theo trang](phan-tich-ky-thuat-theo-trang.md) nối bài học với code thực tế. Task trong repo: [TV1](../topics/detail/JOB-3.md), [TV2](../lecturers/JOB-3.md), [TV3](../topics/JOB-3.md). Không yêu cầu sửa tính năng/PR mới. Job 2 bên dưới là lịch sử phát triển. Sửa logo mới nhất: PNG đã có alpha; bỏ nền/padding dark trong CSS chung, thay quyết định “đệm sáng logo” cũ. Code chọn lọc Lab đã triển khai, kiểm thử logic đạt; browser/axe/Lighthouse mới chưa hoàn tất. Bản học được công bố trên integration/job-3 và main; phần trạng thái local bên dưới là lịch sử trước khi xuất bản.
+
 ## Ưu tiên hiện hành: Job 2 (12/11/2026)
 
 Job 2 thay phân công Job 1: TV1 sửa roadmap của TV2, TV2 sửa giảng viên của TV3, TV3 sửa khám phá của TV1. Đọc [quy trình](../CONTRIBUTING.md). PR #4 đã merge; tạo nhánh task từ upstream/integration/job-2 và gửi PR về integration/job-2, không gửi thẳng main.

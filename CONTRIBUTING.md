@@ -1,5 +1,11 @@
 # Quy trình đóng góp
 
+## Job 3 — quy trình hiện hành
+
+Bản Job 3 được công bố trên `integration/job-3` và cập nhật vào `main`; Job 3 là đọc hiểu, demo và hỏi chéo để chuẩn bị vấn đáp, không giao thêm tính năng/PR code. Task: [TV1](topics/detail/JOB-3.md), [TV2](lecturers/JOB-3.md), [TV3](topics/JOB-3.md). Bản tổng quan `job-history/job-3.md` chỉ lưu local và do nhóm trưởng gửi riêng.
+
+Thành viên đang có checkout: giữ/commit công việc cá nhân trước, chạy `git fetch upstream`, rồi `git switch -c study/job-3 upstream/integration/job-3` (nếu nhánh học đã tồn tại thì chuyển sang nhánh đó và chỉ fast-forward khi sạch). Checkout mới có thể clone repo và dùng main, hoặc tạo nhánh học từ upstream/integration/job-3 sau khi cấu hình remote. Không reset mất bài cũ; không tiếp tục nhánh PR Job 2 để ôn bản mới. Đọc README và tài liệu kỹ thuật trước khi demo. Khi phát hiện lỗi, báo nhóm trưởng; chỉ sửa/gửi PR khi có task cụ thể. Các phần Job 2 phía dưới là lịch sử, không phải quy trình hiện hành Job 3.
+
 ## Job 2 — quy trình hiện hành
 
 PR #4 đã merge vào main. Nhánh integration/job-2 được tạo từ bản nền đó để nhận toàn bộ PR Job 2. Thành viên lấy upstream/integration/job-2 làm nền; không dùng nhánh Job 1 cũ. Đọc bản ghi sửa chữa phần mình nhận và quy chuẩn IE104; dùng kiến thức IE106 để đánh giá tính dễ dùng.

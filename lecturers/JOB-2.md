@@ -1,5 +1,7 @@
 > **Nhóm trưởng cập nhật sau Job 2 (17/11/2026):** Hộp chuyển chủ đề chỉ chứa đề tài cùng giảng viên, đóng được bằng nền tối và giữ nút Đóng khi cuộn. Footer năm trang chuyển sang thông tin dự án/trường. Đọc [lịch sử sửa chữa](job2-sua-chua-tv2.md) để biết phần giữ lại, phần nhóm trưởng sửa và cách kiểm tra. Bản local chờ duyệt.
 
+> Chặng tiếp theo: [Job 3 — hiểu đồ án để vấn đáp](JOB-3.md). Nhiệm vụ Job 2 dưới đây là lịch sử; đọc bản ghi sửa chữa hiện hành trước khi ôn. Job 3 không yêu cầu tiếp tục sửa UI.
+
 > **Cập nhật 17/11/2026 — Material:** Sơ đồ mặc định cả mobile; Danh sách là accordion một cấp với nội dung phẳng, con trước cha. Giữ token xanh UIT, theme sáng mặc định và lựa chọn đã lưu. Header trang chủ chỉ logo/theme. Quy tắc này thay các mô tả cũ tương ứng. Bản local chờ duyệt; xem bản ghi Job 2 và kế hoạch tổng.
 
 > **Cập nhật 17/11/2026:** bản local 9cc27d6 luôn A–Z (bỏ chọn sắp xếp), nút nhóm không giãn, đổi chủ đề bằng dialog tìm kiếm, node có trợ giúp outcome, logo không nền trắng; mặc định sáng và giữ theme đã lưu. Quyết định này thay các mô tả cũ liên quan. Xem bản ghi job2-sua-chua được dẫn bên dưới. Chưa duyệt merge.

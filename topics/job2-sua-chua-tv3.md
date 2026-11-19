@@ -1,5 +1,10 @@
 # Job 2 — Ghi nhận tích hợp và sửa chữa TV3
 
+> **Đọc trước Job 3 — bản hiện hành 19/11/2026:** [Job 3](JOB-3.md) · [Kỹ thuật khám phá](../idea/phan-tich-ky-thuat-theo-trang.md#3-khám-phá-chủ-đề--tv3).
+>
+> Job 1 phần này do TV1 làm; Job 2 TV3 nhận sửa chéo. Giữ hướng dẫn tìm không dấu/rỗng/reset của thành viên. Nhóm trưởng thống nhất dữ liệu động, A–Z mặc định (bỏ select sắp xếp), 12 mục/trang sau lọc, chip nhóm, link đủ group/topic/email; URL giữ query ngoài tính năng/hash và chỉ nhận page hợp lệ. Đợt Lab giữ nguyên code khám phá, chỉ đơn giản hóa module dữ liệu/phân trang chung. Footer, responsive header, theme và logo dark sửa chung. Các mốc cũ bên dưới là lịch sử, không phải mọi thay đổi đều do TV3 thực hiện. Job 3 tập trung hiểu và giải thích code, không yêu cầu thêm tính năng.
+
+
 > **Bản local chờ nhóm trưởng kiểm tra, chưa duyệt/merge/push/deploy.** TV3 là người nhận Job 2; phần gốc Job 1 thuộc TV1. Đọc [nhiệm vụ](JOB-2.md) và [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md).
 
 ## Nguồn và đóng góp
@@ -149,3 +154,7 @@ Giữ tìm không dấu, lọc OR, A–Z và 12 mục/trang. Tự thử reset/fi
 Nhóm trưởng điều phối Astra 6/Sol 6.1. Giữ nguyên code khám phá và đóng góp TV3; chỉ module dữ liệu chung được viết rõ hơn bằng vòng for/push theo nguyên tắc Lab 6. flattenTopics giữ tham chiếu/thứ tự; registerGroupTones giữ index/màu; getVisiblePages giữ quy tắc dấu lược. Tìm/lọc/A–Z/12 mục/URL không thay đổi. Kiểm thử tương đương dữ liệu, màu, dãy trang và regression URL PASS trong Node VM; chưa kiểm thử UI mới. Bảng trước/sau, backup và commit theo checkpoint kế hoạch tổng. Tự kiểm: 12/12/12/1, tìm không dấu, reset và link hồ sơ. Không gán chỉnh sửa module chung thành đóng góp mới của TV3.
 
 Mốc code đợt Lab: 88e91e8; nhánh local review/ie104-lab-alignment-20261119. Chưa push/merge; mốc nền và giới hạn kiểm thử ở kế hoạch tổng.
+
+### Nhóm trưởng sửa nền logo tái phát — 19/11/2026
+
+CSS chung từng thêm nền sáng riêng ở hai nhánh dark theme dù PNG đã trong suốt. Đã bỏ hai override trong assets/css/style.css; logo dùng cùng kích thước/nền transparent ở mọi theme. Không đổi phần tìm/lọc hay logo gốc. Không thêm lại background sáng/padding riêng cho logo. Backup và giới hạn kiểm thử ở mục cùng tên trong kế hoạch tổng; sửa còn local sau commit Lab 2566f89. Kiểm tra: rà CSS và diff đạt; chưa ảnh browser mới, tự thử Ctrl+F5 và đổi theme trên các trang.

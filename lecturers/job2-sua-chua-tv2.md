@@ -1,5 +1,10 @@
 # Job 2 — Ghi nhận tích hợp và sửa chữa TV2
 
+> **Đọc trước Job 3 — bản hiện hành 19/11/2026:** [Job 3](JOB-3.md) · [Kỹ thuật danh bạ/hồ sơ](../idea/phan-tich-ky-thuat-theo-trang.md#5-danh-bạ-giảng-viên--tv2).
+>
+> Job 1 phần này do TV3 làm; Job 2 TV2 nhận sửa chéo. Nhóm trưởng giữ phân trang 9 người/10 chủ đề, thống nhất alias email, avatar/nguồn ảnh, focus và module dùng chung; email hiện text. Hồ sơ có quick facts từ dữ liệu thật; thiếu thông tin không thay bằng 0. Đợt Lab bổ sung time và dl/dt/dd, CSS giữ bố cục, dựng danh sách bằng vòng lặp/fragment. Footer và nền logo dark được sửa chung trên cả danh bạ/hồ sơ. Các sửa sau tích hợp do nhóm trưởng điều phối, không gán thành đóng góp gốc TV2. Kết quả logic đạt không thay nghiệm thu browser/axe/Lighthouse còn chờ.
+
+
 > **Bản local chờ nhóm trưởng kiểm tra, chưa duyệt/merge/push/deploy.** TV2 là người nhận Job 2; phần gốc Job 1 thuộc TV3. Đọc [nhiệm vụ](JOB-2.md) và [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md).
 
 ## Nguồn và đóng góp

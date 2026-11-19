@@ -75,13 +75,6 @@
     --shadow-overlay: 0 12px 36px rgb(0 0 0 / 45%);
   }
 
-  :root:not([data-theme="light"]) .site-header__logo-img {
-    width: 38px;
-    height: 34px;
-    padding: 3px 4px;
-    border-radius: 6px;
-    background: var(--color-text);
-  }
 }
 
 /* Giao diện tối chủ động qua thuộc tính data-theme trên phần tử gốc. */
@@ -114,13 +107,6 @@
   --shadow-overlay: 0 12px 36px rgb(0 0 0 / 45%);
 }
 
-:root[data-theme="dark"] .site-header__logo-img {
-  width: 38px;
-  height: 34px;
-  padding: 3px 4px;
-  border-radius: 6px;
-  background: var(--color-text);
-}
 
 html {
   scroll-padding-top: 24px;
@@ -293,7 +279,7 @@ dialog {
   width: 34px;
   height: 30px;
   object-fit: contain;
-  /* PNG đã có alpha; giữ nền trong suốt ở chế độ sáng. */
+  /* PNG có alpha: giữ nền trong suốt ở cả hai theme, không thêm ô nền sáng. */
   background: transparent;
 }
 
