@@ -77,8 +77,10 @@ function restoreUrlState() {
     document.getElementById("lecturer-search").value = queryParam;
   }
 
-  const pageParam = Number.parseInt(params.get("page") || "", 10);
-  if (Number.isInteger(pageParam) && pageParam >= 1) {
+  // Chỉ nhận toàn bộ chuỗi số nguyên dương, không nhận tiền tố hoặc số thập phân.
+  const pageValue = params.get("page") || "";
+  const pageParam = /^[1-9]\d*$/.test(pageValue) ? Number(pageValue) : NaN;
+  if (Number.isSafeInteger(pageParam) && pageParam >= 1) {
     currentPage = pageParam; // renderLecturers sẽ kẹp lại về khoảng hợp lệ nếu tập kết quả nhỏ hơn.
   }
 }
@@ -90,7 +92,11 @@ function restoreUrlState() {
  * @returns {void} Không trả về giá trị.
  */
 function syncUrl() {
-  const params = new URLSearchParams();
+  // Chỉ thay khóa thuộc bộ lọc; giữ tham số của tính năng khác.
+  const params = new URLSearchParams(location.search);
+  params.delete("group");
+  params.delete("q");
+  params.delete("page");
 
   // Nhóm và từ khóa: chỉ ghi khi khác mặc định để URL ngắn gọn.
   const groupValue = document.getElementById("lecturer-group").value;
@@ -100,10 +106,10 @@ function syncUrl() {
   if (currentPage > 1) params.set("page", String(currentPage));
 
   const search = params.toString() ? "?" + params.toString() : "";
-  const target = location.pathname + search;
+  const target = location.pathname + search + location.hash;
   // Chỉ thay đổi khi URL khác hiện tại để tránh ghi thừa.
-  if (target !== location.pathname + location.search) {
-    history.replaceState(null, "", target);
+  if (target !== location.pathname + location.search + location.hash) {
+    history.replaceState(history.state, "", target);
   }
 }
 
@@ -434,8 +440,7 @@ function createLecturerCard(lecturer) {
 
   // Tên và email giảng viên giữ nguyên để phục vụ tra cứu nhanh trên thẻ.
   const heading = element("h2", "lecturer-card__name", lecturer.name);
-  const email = element("a", "lecturer-card__email", lecturer.email);
-  email.href = "mailto:" + normalizeEmail(lecturer.email);
+  const email = element("span", "lecturer-card__email", lecturer.email);
   meta.append(heading, email);
 
   header.append(avatar(lecturer, "lecturer-card__avatar"), meta);

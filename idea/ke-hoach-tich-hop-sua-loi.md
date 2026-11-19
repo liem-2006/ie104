@@ -844,3 +844,47 @@ Vòng này xác minh trực tiếp trên bản chạy (localhost:8899, Chrome), 
 - Chưa chạy lại `validator.nu`, `axe-core` hay bộ `qa_report.json` full (`50` responsive / `37` cây) cho vòng 2; chỉ xác minh các điểm đổi trực tiếp trong trình duyệt như trên. Các chỉ số Lighthouse/axe nêu ở các mục trước vẫn là kết quả của vòng 1 và giữ nguyên giá trị đối với phần không đổi.
 - Chưa có screenshot PNG mới lưu vào `idea/minh-chung-giao-dien/` cho vòng 2 (minh chứng là kiểm tra DOM/URL live).
 - Chưa push, merge hay deploy. Đây là thay đổi của vòng 2 trên nhánh `task/ui-round2-20261118`.
+
+### Sửa tương tác sau đánh giá vòng 2 — 19/11/2026
+
+Theo yêu cầu nhóm trưởng: Sol 6.1 triển khai, Astra 6 phản biện source, agent chính tích hợp và kiểm tra. Backup local `backup/round2-before-interaction-fixes-20261119` trỏ tới `3102ed2`; mở lại bằng nhánh/worktree riêng, không reset mất công việc. Thay đổi hiện tại chưa commit/push/merge/deploy.
+
+| Trước | Sau | Lý do / file |
+|---|---|---|
+| Lớp stage nhận tương tác cả vùng trống; con trỏ node có thể ghi đè trạng thái đang kéo | Stage cho thao tác xuyên tới viewport; node thực vẫn nhận click; cursor đang kéo áp dụng cả phần tử con | Phản hồi kéo nhất quán; `assets/css/topic-detail.css`. Giữ nguyên thuật toán pan/zoom và Pointer Events. |
+| Nhánh Danh sách đầu tiên tự mở | Tất cả nhánh mặc định đóng, người dùng tự mở bằng summary | Giảm nội dung mở sẵn; `assets/js/topic-detail.js`. Thay quy tắc cũ “mở mục đầu”. |
+| Email là liên kết mailto | Email là văn bản thường; liên kết hồ sơ vẫn giữ | Không có chức năng email trong đợt này; HTML chi tiết và JS/CSS giảng viên. |
+| Padding mobile 16px bị rule min-width 360px ghi đè 24px | Padding 24px chỉ áp dụng từ tablet; mobile giữ 16px | `assets/css/style.css`; không ép mọi nội dung vào viewport đầu. |
+| URL filter dựng lại toàn query, bỏ hash; page chấp nhận tiền tố số | Chỉ sửa group/q/page, giữ tham số khác/hash/history.state; page phải là số nguyên dương an toàn | `assets/js/topics.js`, `lecturers.js`. |
+| Quick-facts rỗng trả null rồi append trực tiếp; JSDoc lệch hàm | Guard trước khi append; chú thích đặt lại đúng hàm | `lecturer-detail.js`, `data.js`; bảo vệ trường hợp dữ liệu mở rộng. |
+| README mô tả theme theo OS và danh sách đệ quy | Mô tả đúng sáng mặc định, danh sách phẳng thu gọn và email dạng text | `README.md`. |
+
+C9 hiện ưu tiên chức năng ổn định và tài liệu đúng thực tế theo yêu cầu mới; không dùng kết quả Lighthouse/ảnh cũ để xác nhận bản mới.
+
+**Kết quả kiểm tra đợt sửa:**
+- Cả 7 module JavaScript qua kiểm tra cú pháp bằng Node; HTTP trang chi tiết trả 200.
+- Kiểm thử hàm URL thực qua Node VM ở cả khám phá và danh bạ: giữ tham số ngoài tính năng (kể cả lặp), hash và history.state; reset xóa đúng group/q/page; bộ lọc mới ghi đúng URL. Từ chối page dạng `2junk`, `2.5`, `2e1`, số vượt phạm vi an toàn; nhận `2` hợp lệ.
+- Kiểm thử `createPillarCard` và `flattenKnowledge` với DOM giả lập: tất cả nhánh tạo ra mặc định đóng, vẫn dựng nội dung từ cây.
+- Hai JSON parse được, diff dữ liệu trống: giữ 3 nhóm, 37 chủ đề, 234 mục kiến thức và 16 giảng viên. Không còn mailto trong source giao diện; email hiển thị text, chuẩn hóa email/alias nội bộ vẫn giữ.
+- Astra 6 rà soát source không thấy lỗi chặn: node thực vẫn nhận pointer, vùng trống xuyên về viewport; trạng thái kéo được dọn khi mất capture/blur/thả chuột, không cho pointer thứ hai chiếm lượt kéo đang hoạt động.
+- Giới hạn: DOM/History giả lập không thay thế trình duyệt thật. Chưa xác nhận bằng trải nghiệm trực quan việc con trỏ hết mất tại vùng trống; chưa chạy mới W3C/axe/Lighthouse hay kiểm tra thiết bị thật. Không tuyên bố các phần này đã đạt.
+
+**Tự kiểm tra bản local:** mở `http://127.0.0.1:8876/`, Ctrl+F5; kéo sơ đồ qua vùng trống và node, thả chuột ngoài khung rồi kéo lại; chuyển Danh sách (ban đầu tất cả đóng), mở từng nhánh bằng Enter/Space; xem email ở chi tiết/danh bạ/hồ sơ chỉ là text. Thử URL filter có hash, reload và reset. Trạng thái bàn giao: local chờ nhóm trưởng kiểm tra, chưa commit/push/merge/deploy.
+
+### Bổ sung theo ảnh phản hồi — header trang chủ và tab mặc định, 19/11/2026
+
+Sol 6.2 triển khai, Astra 6 điều hướng và rà soát. Giữ mọi thay đổi trước đó; patch dự phòng working tree lưu ngoài repo tại `job-history/backups/before-header-default-fix-20261119.patch`.
+
+- **Header trang chủ:** bỏ override riêng ép `flex-wrap: nowrap` và margin nút theme; dùng cùng header responsive với các trang con. Nguyên nhân: rule riêng trang chủ thắng rule mobile, trong khi nav vẫn chiếm `flex-basis: 100%`, khiến các phần tử bị ép chung một hàng. Mobile cho điều hướng xuống hàng; tablet/desktop theo breakpoint chung.
+- **Roadmap:** mở/tải lại/chuyển chủ đề đều mặc định Sơ đồ trên mọi kích thước, dựng và căn cây khi hiển thị. Thay quyết định vòng 2 “mobile mặc định Danh sách” theo yêu cầu mới. Tab Danh sách vẫn giữ tất cả nhánh đóng mặc định; chỉ mở khi tương tác.
+- Không đổi JSON, URL, theme hay logic tìm/lọc. README cập nhật mặc định mới. Các mục lịch sử cũ giữ nguyên để truy vết, không còn là yêu cầu hiện hành về tab mặc định.
+
+**Kiểm tra:** Astra 6 rà source xác nhận header trang chủ dùng chung responsive với trang con; `showMap()` gọi `setView("mindmap")` rồi `renderMindMap(true)` vô điều kiện khi tải chủ đề. Chạy lại 7 kiểm tra cú pháp JS và bộ regression URL, 3 nhánh đóng mặc định, JSON parse, email text đều đạt; `git diff --check` không lỗi whitespace; server trả HTTP 200. Chưa xác minh bằng ảnh/trình duyệt mới. Tự thử ở 320/375/767/768px và desktop, sáng/tối: logo/theme/menu không chồng; mở/reload/chuyển chủ đề đều chọn Sơ đồ, tab Danh sách vẫn mở được. Thay đổi còn local, chưa commit/push/merge.
+
+### Tự căn vừa sơ đồ lần đầu mở chủ đề — 19/11/2026
+
+Nhóm trưởng yêu cầu bổ sung: Sol 6.2 sửa, Astra 6 rà soát. Lần đầu mở mỗi chủ đề tự căn vừa toàn bộ node đang hiển thị sau khi dựng/đo bố cục; dùng thuật toán bounding box của nút Căn vừa. Thay góc nhìn mobile cũ chỉ hé gốc và tập trung nhánh đầu. Không tự mở mọi nhánh con; giữ pan/zoom khi đổi tab trong cùng chủ đề và giữ hành vi mở nhánh. Các thao tác Căn vừa, resize/toàn màn hình vẫn được căn lại theo hành vi hiện có. Giữ lịch sử, dữ liệu và thay đổi đang có; chưa commit/push/merge.
+
+**Thực hiện:** `finishMapInteraction()` dùng `fitToScreen()` sau đo/bố trí; bỏ `setInitialMapView()` cắt gốc trên mobile. `showMap()` chỉ yêu cầu fit nếu chưa có bounds của chủ đề; `buildMindMapTree()` xóa bounds cũ. Nếu đổi sang Danh sách trước khi đo xong, bỏ lượt đo khung ẩn và giữ yêu cầu fit cho lần quay lại.
+
+**Kiểm tra:** Astra 6 rà soát source đạt; Sol 6.2 chạy 185 tình huống VM (37 chủ đề thật × 5 độ rộng khung 284/339/731/986/1160px) bằng hàm cây/bố trí/căn vừa thực, kích thước và DOM giả lập. Đạt: bounds nằm trong vùng đệm 40px sau fit; đổi tab sớm vẫn fit lần đầu; quay lại sau pan/zoom giữ transform; mở nhánh giữ scale; thu nhánh giữ pan/scale; nút Căn vừa căn lại; chủ đề mới xóa bounds cũ. 7 module JS qua kiểm tra cú pháp và bộ regression URL/danh sách/email/JSON vẫn đạt; dữ liệu không đổi; diff không lỗi whitespace. Đây là kiểm thử logic với layout giả lập, chưa phải kiểm chứng hiển thị/pointer thật trong trình duyệt. Tự thử Ctrl+F5 ở trang chi tiết mobile/desktop: thấy toàn bộ node ban đầu, zoom/kéo rồi đổi tab để kiểm tra vị trí được giữ.

@@ -1,4 +1,4 @@
-> **Góc nhìn mobile sau phản biện:** Sơ đồ vẫn mặc định; khi khung <768px, bắt đầu tại keyword đầu với tỷ lệ dễ đọc. Nút Căn vừa vẫn xem toàn cây. Giữ API transform/thuật toán bố trí; xem bản ghi sửa chữa TV1 ngày 17/11/2026.
+> **Hiện hành — 19/11/2026:** Mọi chủ đề mở mặc định Sơ đồ và tự căn vừa toàn bộ node đang hiển thị sau khi đo bố cục, kể cả mobile; thay góc nhìn cũ chỉ hé gốc/nhánh đầu. Không tự mở mọi nhánh con. Chuyển qua lại Danh sách giữ pan/zoom đã chọn; nút Căn vừa vẫn chủ động căn lại. Danh sách mặc định đóng toàn bộ nhánh.
 
 > **Nhóm trưởng cập nhật sau Job 2 (17/11/2026):** Hộp chuyển chủ đề chỉ chứa đề tài cùng giảng viên, đóng được bằng nền tối và giữ nút Đóng khi cuộn. Footer năm trang chuyển sang thông tin dự án/trường. Đọc [lịch sử sửa chữa](job2-sua-chua-tv1.md) để biết phần giữ lại, phần nhóm trưởng sửa và cách kiểm tra. Bản local chờ duyệt.
 

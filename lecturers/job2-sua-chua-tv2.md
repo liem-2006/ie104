@@ -128,3 +128,14 @@ Thực hiện hậu tích hợp trên nhánh `review/job-2-combined` (`CODE_SHA`
 ### Vòng động hóa dữ liệu không fix cứng (`00ab17a`) — 18/11/2026
 - Trung tính hóa placeholder (`"Tìm theo tên hoặc email…"`), gán nhãn miền động 6 tone qua `resolveGroupTone` (`data-domain-tone="1".."6"`) trong cả `lecturers.js` và `lecturer-detail.js`, hỗ trợ `?group=<id>` khi mở Danh bạ, và dùng phân trang cửa sổ `getVisiblePages` (`<= 7` ô kèm `"…"`) ở cả Danh bạ lẫn Hồ sơ.
 - Kết quả sau sửa: `29/29` (`lecturers.js`) & `23/23` (`lecturer-detail.js`) hàm đủ JSDoc, `0` lỗi HTML `validator.nu`, `axe_violations: []`, `touch_targets: []`, test tổng hợp `?group=iot` (`12` GV) & 6 tone trên `6` nhóm tùy biến đạt 100%. Minh chứng ảnh `11`, `12`, `13` đã cập nhật.
+## Bổ sung hiện hành — sửa tương tác sau vòng 2, 19/11/2026
+
+Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; nền `3102ed2`, backup `backup/round2-before-interaction-fixes-20261119`. Đây là sửa sau tích hợp; chưa commit/push/merge.
+
+| Trước | Sau | Lý do | File |
+|---|---|---|---|
+| Email là liên kết mailto, có dấu hiệu hover | Email là văn bản đọc/sao chép; hồ sơ vẫn có liên kết riêng | Không có tính năng email | JS/CSS danh bạ và hồ sơ |
+| append trực tiếp quick-facts có thể trả null | Chỉ append khi có khối thống kê | Tránh chữ null với hồ sơ chưa có chủ đề | `assets/js/lecturer-detail.js` |
+| Đồng bộ URL xóa hash/tham số khác, nhận page dạng tiền tố | Giữ phần URL ngoài bộ lọc; chỉ nhận số nguyên dương an toàn | Bảo toàn liên kết | `assets/js/lecturers.js` |
+
+Giữ tra cứu email/alias nội bộ, chủ đề liên quan, thống kê thật và phân trang 9/10. Tự thử email là text, tìm/lọc/reset/reload, URL có tham số riêng và hash; hồ sơ không có chủ đề không hiện null. Kết quả và giới hạn kiểm tra xem [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md), mục sửa tương tác vòng 2. Lịch sử cũ bên dưới giữ nguyên.

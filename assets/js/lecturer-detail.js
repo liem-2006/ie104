@@ -155,7 +155,8 @@ function renderProfile(lecturer, related, groups) {
   card.append(createProfileHeader(lecturer, title, related, groups));
   // Quick-facts (M1/UI-05): 3 số liệu suy từ JSON thật (chủ đề / kiến thức / môn) làm điểm
   // neo thông tin cho cả hồ sơ đầy đủ lẫn hồ sơ tối giản (không thêm dữ liệu mới).
-  card.append(createQuickFacts(related));
+  const quickFacts = createQuickFacts(related);
+  if (quickFacts) card.append(quickFacts);
 
   const links = createResearchLinks(lecturer.researchProfiles || []);
   const metrics = renderMetrics(lecturer.metrics || []);
@@ -209,8 +210,7 @@ function createProfileHeader(lecturer, title, related, groups) {
     info.append(element("p", "profile-header__affiliation", lecturer.profile.affiliation));
   }
 
-  const mail = element("a", "profile-header__email", lecturer.email);
-  mail.href = "mailto:" + normalizeEmail(lecturer.email);
+  const mail = element("span", "profile-header__email", lecturer.email);
   info.append(mail);
 
   const tags = createProfileTags(related, groups);
@@ -226,7 +226,7 @@ function createProfileHeader(lecturer, title, related, groups) {
  * Tạo khối quick-facts gồm 3 ô số liệu suy từ dữ liệu thật: số chủ đề hướng dẫn, tổng mục
  * kiến thức nền và số môn học gợi ý duy nhất (khử trùng lặp giữa các chủ đề bằng Set chung).
  * @param {object[]} related - Danh sách chủ đề giảng viên hướng dẫn (kèm nhóm nguồn).
- * @returns {HTMLElement} Khối section quick-facts; trả về null khi không có chủ đề để không rỗng.
+ * @returns {HTMLElement|null} Khối section quick-facts; null khi không có chủ đề.
  */
 function createQuickFacts(related) {
   if (!related.length) return null;

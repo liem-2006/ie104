@@ -714,15 +714,6 @@ select:focus {
 }
 
 /* Trang chủ (#page-home): khôi phục Hero 2 cột + khung minh họa + hành trình 3 bước, chuẩn hóa lưới cân đối mọi màn hình. */
-#page-home .site-header__inner {
-  flex-wrap: nowrap;
-  min-height: 72px;
-}
-
-#page-home .theme-toggle {
-  margin-left: auto;
-}
-
 #page-home .home {
   max-width: var(--container-max);
   padding-block: 28px 40px;
@@ -990,7 +981,7 @@ select:focus {
 
 @media (max-width: 767px) {
   /* Trang chủ mobile: ẩn vòng orbit trang trí (decorative, aria-hidden) và thu padding khối
-     khái niệm + khoảng cách section để hero + thống kê + 3 bước lọt viewport đầu (mockup M3). */
+     khái niệm + khoảng cách section để CTA dễ thấy và phần tiếp theo rõ ràng (mockup M3). */
   #page-home .home__orbit {
     display: none;
   }
@@ -1013,11 +1004,14 @@ select:focus {
   #page-home .home__visual {
     grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 14px;
-    padding: 24px;
   }
 }
 
 @media (min-width: 768px) {
+  #page-home .home__visual {
+    padding: 24px;
+  }
+
   #page-home .home {
     padding-block: 36px 48px;
   }

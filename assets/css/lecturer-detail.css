@@ -90,7 +90,7 @@
   min-height: 44px;
   max-width: 100%;
   margin-top: 2px;
-  color: var(--color-link);
+  color: var(--color-muted);
   font-size: 15px;
   font-weight: 500;
   overflow-wrap: anywhere;

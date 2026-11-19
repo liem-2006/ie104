@@ -141,3 +141,18 @@ Axe mobile không vi phạm trong nhóm WCAG2A/AA,21AA; HTML Validate trang chi 
 - Gắn sắc độ miền động `resolveGroupTone(group.id, groupIndex)` qua `data-domain-tone="1".."6"` trên `#topic-group-badge` và `#mindmap-viewport` trong `topic-detail.js` / `topic-detail.css` (bỏ ràng buộc `data-group="sec|data|nlp"`).
 - Xử lý an toàn chủ đề `keywords: []`: `buildMindMapTree` + `setInitialMapView` căn giữa node gốc gọn trên mobile/desktop (`0` lỗi/tràn), `renderCardsView` hiển thị thông báo rõ trong `#roadmap-pillars-grid`.
 - Kết quả sau sửa: `37/37` cây (`271` nodes `0` overlap) + test tổng hợp nhóm `"cv"` `keywords: []` (`data-domain-tone="4"`, `rootNodes: 1`), `90/90` hàm JS đủ JSDoc, `0` lỗi HTML `validator.nu` (`1` info-warning `<dialog>`). Minh chứng ảnh `07`, `08`, `09`, `10`, `14` đã cập nhật.
+## Bổ sung hiện hành — sửa tương tác sau vòng 2, 19/11/2026
+
+**Bổ sung tự căn vừa:** Sol 6.2 sửa, Astra 6 rà soát theo yêu cầu nhóm trưởng: góc nhìn ban đầu dùng bounding box toàn bộ node đang hiển thị, kể cả mobile, sau bước đo bố cục. Thay góc nhìn cũ chỉ nhánh đầu. Chuyển tab trong cùng chủ đề giữ vị trí/zoom người dùng; nút Căn vừa vẫn dùng được. Không mở tất cả nhánh tự động. Kết quả kiểm tra cập nhật tại mục cùng tên trong kế hoạch tổng.
+
+**Phản hồi mới cùng ngày:** nhóm trưởng yêu cầu mặc định **Sơ đồ ở mọi kích thước**, thay mobile mặc định Danh sách của vòng 2. Sol 6.2 sửa bước khởi tạo, Astra 6 rà soát; Danh sách vẫn đóng tất cả nhánh mặc định. Khi tự thử, mở mới/reload/chuyển chủ đề phải thấy Sơ đồ, rồi chọn Danh sách để mở từng nhánh. Header trang chủ sửa riêng bởi nhóm trưởng, dùng lại responsive chung; không đổi header trang chi tiết.
+
+Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; đây là thay đổi sau tích hợp, không ghi thành đóng góp mới của TV1. Nền `3102ed2`, backup `backup/round2-before-interaction-fixes-20261119`; sửa local chưa commit.
+
+| Trước | Sau | Lý do | File |
+|---|---|---|---|
+| Stage nhận hit cả vùng trống, cursor nút có thể ghi đè đang kéo | Hit vùng trống về viewport, node nhận click như cũ; dragging luôn dùng grabbing | Giữ phản hồi kéo rõ ràng | `assets/css/topic-detail.css` |
+| Mục đầu tab Danh sách mở sẵn | Tất cả mục đóng khi dựng danh sách | Theo yêu cầu mới, thay quy tắc mở mục đầu | `assets/js/topic-detail.js` |
+| Email là mailto | Email văn bản thường; liên kết tên/hồ sơ giữ nguyên | Không có chức năng email | `topics/detail/index.html`, `assets/js/topic-detail.js` |
+
+Giữ cây dữ liệu, mở/thu sơ đồ, panel, tooltip, pan/zoom/fullscreen và mặc định view theo vòng 2. Tự kiểm tra qua HTTP: kéo vùng trống và qua node, thả chuột/ra ngoài; chuyển Danh sách, thử từng summary bằng chuột và Enter/Space; kiểm tra email không nhận Tab/click nhưng hồ sơ mở đúng. Kết quả kiểm thử và giới hạn mới xem mục “Sửa tương tác sau đánh giá vòng 2” trong [kế hoạch tổng](../../idea/ke-hoach-tich-hop-sua-loi.md). Lịch sử bên dưới giữ nguyên.

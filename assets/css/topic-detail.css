@@ -247,6 +247,8 @@
   position: absolute;
   inset: 0;
   transform-origin: 0 0;
+  /* Vùng trống xuyên qua lớp biến đổi để viewport trực tiếp nhận thao tác kéo. */
+  pointer-events: none;
 }
 
 #page-topic-detail .mindmap-svg {
@@ -274,6 +276,7 @@
 
 /* Thẻ node kiến thức (flex ngang giữa card button và nút mở/thu nhánh) */
 #page-topic-detail .mindmap-node {
+  pointer-events: auto;
   position: absolute;
   display: flex;
   align-items: center;
@@ -392,6 +395,12 @@
 #page-topic-detail .mindmap-node__toggle:hover {
   background: var(--color-accent-soft);
   border-color: var(--color-link);
+}
+
+/* Giữ phản hồi đang kéo kể cả khi con trỏ đi qua nút node. */
+#page-topic-detail .mindmap-viewport--dragging,
+#page-topic-detail .mindmap-viewport--dragging * {
+  cursor: grabbing;
 }
 
 #page-topic-detail .mindmap-hint {

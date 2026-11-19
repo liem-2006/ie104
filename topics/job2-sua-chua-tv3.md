@@ -133,3 +133,13 @@ Thực hiện hậu tích hợp trên nhánh `review/job-2-combined` (`CODE_SHA`
 ### Vòng động hóa dữ liệu không fix cứng (`00ab17a`) — 18/11/2026
 - Đổi placeholder sang `"Tìm đề tài hoặc giảng viên…"` (không gắn tên/từ khóa mẫu, vừa `320px` với `198 <= 238px`), hỗ trợ nhận `?group=<id>` từ Trang chủ (tự xóa query khi reset về mặc định), co gọn nút nhóm khi `> 6` nhóm (`MAX_COLLAPSED_GROUPS = 6`) kèm giữ nút đang chọn trong tầm nhìn, và dùng phân trang cửa sổ `getVisiblePages` (`<= 7` ô kèm `"…"`).
 - Kết quả sau sửa: `28/28` hàm `topics.js` đủ JSDoc, `0` lỗi HTML `validator.nu`, test thật giữ nguyên `first_topic_mobile_375`: `{top: 544, bottom: 582}` (`"hoc sau" -> 5`, `"mã độc" -> 2`, `"nguyen tan cam" -> 3`), test giả lập `8` nhóm / `96` đề tài giữ `firstTitleBottom: 682 <= 812` trên `375×812`, `0` tràn ngang/console error. Minh chứng ảnh `05`, `06` đã cập nhật.
+## Bổ sung hiện hành — sửa tương tác sau vòng 2, 19/11/2026
+
+Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; nền `3102ed2`, backup `backup/round2-before-interaction-fixes-20261119`. Thay đổi local chưa commit/push/merge; không ghi thành đóng góp mới của TV3.
+
+| Trước | Sau | Lý do | File |
+|---|---|---|---|
+| Filter dựng lại toàn query, bỏ hash | Chỉ cập nhật group/q/page, giữ query khác/hash/history.state | Giữ liên kết khi tìm/lọc/phân trang | `assets/js/topics.js` |
+| Page chấp nhận chuỗi như 2junk hoặc 2.5 | Chỉ nhận số nguyên dương an toàn | Đầu vào URL nhất quán | `assets/js/topics.js` |
+
+Giữ tìm không dấu, lọc OR, A–Z và 12 mục/trang. Tự thử reset/filter/reload và URL có tham số riêng, hash; các tham số riêng phải còn, bộ lọc vẫn phản ánh giao diện. Sửa padding mobile trang chủ thuộc phần chung của nhóm trưởng, không đổi logic khám phá. Kết quả/giới hạn xem [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md), mục sửa tương tác vòng 2. Lịch sử cũ bên dưới giữ nguyên.

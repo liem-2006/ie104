@@ -147,17 +147,9 @@
   max-width: 100%;
   margin-block: -2px -6px;
   font-size: 14px;
-  color: var(--color-link);
+  color: var(--color-muted);
   text-decoration: none;
   overflow-wrap: anywhere;
-}
-
-#page-lecturers .lecturer-card__email:hover {
-  text-decoration: underline;
-}
-
-#page-lecturers .lecturer-card__email:focus-visible {
-  outline-offset: -2px;
 }
 
 #page-lecturers .lecturer-card__tags {

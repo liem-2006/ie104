@@ -20,7 +20,7 @@ Clone fork cá nhân, lấy upstream/integration/job-2 làm nền cho nhánh tas
 2. Mở index.html để vào Khám phá hoặc Giảng viên.
 3. Không mở bằng file:// vì ES module và fetch cần HTTP. Không cần npm install để chạy website.
 
-Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Giao diện tra cứu học thuật, sáng/tối. Tìm/lọc/sắp xếp hoạt động trên toàn bộ JSON rồi phân trang 12 chủ đề; đổi bộ lọc về trang 1. Roadmap có sơ đồ tương tác và danh sách đệ quy; mobile mặc định danh sách. Nút sáng/tối nằm trên header của mọi trang; lựa chọn được lưu bằng localStorage và đồng bộ giữa các tab. Khi chưa chọn, website theo hệ điều hành/trình duyệt.
+Có đủ 37 chủ đề thuộc 3 nhóm và 16 hồ sơ giảng viên. Giao diện tra cứu học thuật, sáng/tối. Tìm/lọc/sắp xếp hoạt động trên toàn bộ JSON rồi phân trang 12 chủ đề; đổi bộ lọc về trang 1. Khi mở một chủ đề, Roadmap hiển thị Sơ đồ và tự căn vừa phần cây đang hiển thị vào khung nhìn ở mọi kích thước màn hình. Khi chuyển sang Danh sách lần đầu sau khi tải chủ đề, tất cả nhánh đều thu gọn. Nút sáng/tối nằm trên header của mọi trang; lựa chọn được lưu bằng localStorage và đồng bộ giữa các tab. Khi chưa chọn, JavaScript mặc định giao diện sáng; CSS dự phòng khi tắt JavaScript theo hệ điều hành/trình duyệt. Email hiển thị dạng văn bản để đọc và sao chép; tên giảng viên và nút hồ sơ vẫn dẫn tới hồ sơ.
 
 ## Đọc trước khi nhận việc
 

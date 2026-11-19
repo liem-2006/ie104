@@ -81,8 +81,10 @@ function restoreUrlState() {
     state.query = searchText(queryParam);
   }
 
-  const pageParam = Number.parseInt(params.get("page") || "", 10);
-  if (Number.isInteger(pageParam) && pageParam >= 1) {
+  // Chỉ nhận toàn bộ chuỗi số nguyên dương, không nhận tiền tố hoặc số thập phân.
+  const pageValue = params.get("page") || "";
+  const pageParam = /^[1-9]\d*$/.test(pageValue) ? Number(pageValue) : NaN;
+  if (Number.isSafeInteger(pageParam) && pageParam >= 1) {
     state.page = pageParam; // renderTopics sẽ kẹp lại về khoảng hợp lệ sau khi lọc.
   }
 }
@@ -94,7 +96,11 @@ function restoreUrlState() {
  * @returns {void}
  */
 function syncUrl() {
-  const params = new URLSearchParams();
+  // Chỉ thay khóa thuộc bộ lọc; giữ tham số của tính năng khác.
+  const params = new URLSearchParams(location.search);
+  params.delete("group");
+  params.delete("q");
+  params.delete("page");
 
   // Nhóm: viết theo thứ tự dữ liệu nguồn để URL ổn định; bỏ qua khi không chọn nhóm nào.
   const selectedIds = state.groups
@@ -108,10 +114,10 @@ function syncUrl() {
   if (state.page > 1) params.set("page", String(state.page));
 
   const search = params.toString() ? "?" + params.toString() : "";
-  const target = location.pathname + search;
+  const target = location.pathname + search + location.hash;
   // Chỉ thay đổi khi URL thật sự khác hiện tại để tránh ghi thừa.
-  if (target !== location.pathname + location.search) {
-    history.replaceState(null, "", target);
+  if (target !== location.pathname + location.search + location.hash) {
+    history.replaceState(history.state, "", target);
   }
 }
 
