@@ -143,3 +143,9 @@ Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; nền `3102ed2`, ba
 | Page chấp nhận chuỗi như 2junk hoặc 2.5 | Chỉ nhận số nguyên dương an toàn | Đầu vào URL nhất quán | `assets/js/topics.js` |
 
 Giữ tìm không dấu, lọc OR, A–Z và 12 mục/trang. Tự thử reset/filter/reload và URL có tham số riêng, hash; các tham số riêng phải còn, bộ lọc vẫn phản ánh giao diện. Sửa padding mobile trang chủ thuộc phần chung của nhóm trưởng, không đổi logic khám phá. Kết quả/giới hạn xem [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md), mục sửa tương tác vòng 2. Lịch sử cũ bên dưới giữ nguyên.
+
+## Đối chiếu Lab IE104 sau tích hợp — 19/11/2026
+
+Nhóm trưởng điều phối Astra 6/Sol 6.1. Giữ nguyên code khám phá và đóng góp TV3; chỉ module dữ liệu chung được viết rõ hơn bằng vòng for/push theo nguyên tắc Lab 6. flattenTopics giữ tham chiếu/thứ tự; registerGroupTones giữ index/màu; getVisiblePages giữ quy tắc dấu lược. Tìm/lọc/A–Z/12 mục/URL không thay đổi. Kiểm thử tương đương dữ liệu, màu, dãy trang và regression URL PASS trong Node VM; chưa kiểm thử UI mới. Bảng trước/sau, backup và commit theo checkpoint kế hoạch tổng. Tự kiểm: 12/12/12/1, tìm không dấu, reset và link hồ sơ. Không gán chỉnh sửa module chung thành đóng góp mới của TV3.
+
+Mốc code đợt Lab: 88e91e8; nhánh local review/ie104-lab-alignment-20261119. Chưa push/merge; mốc nền và giới hạn kiểm thử ở kế hoạch tổng.

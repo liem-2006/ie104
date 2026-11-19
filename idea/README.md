@@ -36,3 +36,7 @@ Nhóm trưởng quản lý token, component, trang vào và module chung; các d
 - [Mẫu từng nhóm](data-work/group-template.json): mẫu một nhóm; file chạy web bọc các nhóm trong mảng `groups`.
 
 Các liên kết Excel/tài liệu môn học trong bản lưu có thể trỏ ra workspace gốc và không có trong repo công khai. Không cần các tài liệu đó để chạy web; khi task thực sự cần, nhóm trưởng cung cấp riêng. Không xem chúng là dữ liệu tải ở runtime.
+
+### Đối chiếu kiến thức thực hành — 19/11/2026
+
+Đợt Astra 6/Sol 6.1 áp dụng chọn lọc Lab 1 (time, dl/dt/dd) và Lab 5–6 (DOM/vòng lặp) đã sửa code local. Giao diện, JSON và hợp đồng URL giữ nguyên; xem mục “Áp dụng chọn lọc kiến thức thực hành IE104” trong `ke-hoach-tich-hop-sua-loi.md` để biết thay đổi, backup, kiểm thử và phần chưa nghiệm thu. Không dùng hết kiến thức và không biến website thành bài minh họa game/gallery.

@@ -139,3 +139,17 @@ Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; nền `3102ed2`, ba
 | Đồng bộ URL xóa hash/tham số khác, nhận page dạng tiền tố | Giữ phần URL ngoài bộ lọc; chỉ nhận số nguyên dương an toàn | Bảo toàn liên kết | `assets/js/lecturers.js` |
 
 Giữ tra cứu email/alias nội bộ, chủ đề liên quan, thống kê thật và phân trang 9/10. Tự thử email là text, tìm/lọc/reset/reload, URL có tham số riêng và hash; hồ sơ không có chủ đề không hiện null. Kết quả và giới hạn kiểm tra xem [kế hoạch tổng](../idea/ke-hoach-tich-hop-sua-loi.md), mục sửa tương tác vòng 2. Lịch sử cũ bên dưới giữ nguyên.
+
+## Áp dụng Lab IE104 sau tích hợp — 19/11/2026
+
+Nhóm trưởng điều phối Astra 6 rà soát/Sol 6.1 triển khai; đây không phải phần TV2 tự làm. Giữ tìm/lọc, URL/email alias, phân trang 9 và 10, ảnh fallback, nguồn nghiên cứu và thông tin thiếu.
+
+| Trước | Sau | Lý do | File | Kiểm thử / commit |
+|---|---|---|---|---|
+| Ngày text | time cho ngày lịch hợp lệ, text nếu sai | Lab 1 row-html-43 | assets/js/lecturer-detail.js | VM ngày đúng/sai/thiếu/năm nhuận PASS; commit xem checkpoint kế hoạch tổng |
+| div/p quick facts/metrics | dl/dt/dd, CSS giữ thứ tự thị giác | Lab 1 row-html-46 | JS và CSS lecturer-detail | cấu trúc HTML, 0 thật và rỗng PASS; chưa ảnh browser mới |
+| map/spread dựng danh sách | for + fragment + cập nhật DOM một lần | Lab 5 createElement/appendChild; fragment là bổ trợ | lecturers.js, lecturer-detail.js | 9/7 danh bạ; 0/1/10/11/37 chủ đề hồ sơ PASS bằng DOM giả lập |
+
+Quy tắc mới: nhãn dt đi trước dd trong DOM; không thêm role list lên dl; ngày sai không tạo datetime sai. Không đổi dữ liệu gốc. Tự thử hồ sơ camnt@uit.edu.vn và hồ sơ tối giản, cả sáng/tối và cửa sổ nhỏ. Giới hạn: chưa axe/Lighthouse/W3C hoặc ảnh mới; local chờ kiểm tra. Nguồn/backup/lệnh test ở mục “Áp dụng chọn lọc kiến thức thực hành IE104” của kế hoạch tổng. Giữ nguyên lịch sử trước đây.
+
+Mốc code đợt Lab: 88e91e8; nhánh local review/ie104-lab-alignment-20261119. Chưa push/merge; mốc nền và giới hạn kiểm thử ở kế hoạch tổng.

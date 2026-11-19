@@ -156,3 +156,9 @@ Nhóm trưởng yêu cầu Sol 6.1 sửa, Astra 6 rà soát; đây là thay đ�
 | Email là mailto | Email văn bản thường; liên kết tên/hồ sơ giữ nguyên | Không có chức năng email | `topics/detail/index.html`, `assets/js/topic-detail.js` |
 
 Giữ cây dữ liệu, mở/thu sơ đồ, panel, tooltip, pan/zoom/fullscreen và mặc định view theo vòng 2. Tự kiểm tra qua HTTP: kéo vùng trống và qua node, thả chuột/ra ngoài; chuyển Danh sách, thử từng summary bằng chuột và Enter/Space; kiểm tra email không nhận Tab/click nhưng hồ sơ mở đúng. Kết quả kiểm thử và giới hạn mới xem mục “Sửa tương tác sau đánh giá vòng 2” trong [kế hoạch tổng](../../idea/ke-hoach-tich-hop-sua-loi.md). Lịch sử bên dưới giữ nguyên.
+
+## Đối chiếu Lab IE104 sau tích hợp — 19/11/2026
+
+Nhóm trưởng điều phối Astra 6/Sol 6.1; giữ nguyên code roadmap và đóng góp TV1. Không chuyển SVG sang Canvas hoặc áp game Lab 6. Module dữ liệu chung dùng vòng for/push dễ hiểu hơn, giữ thứ tự và tham chiếu chủ đề; nguồn/backup/commit xem checkpoint kế hoạch tổng. Regression danh sách mặc định đóng và syntax PASS; dữ liệu vẫn 37 cây/234 keyword. Chưa có kiểm thử pan/zoom/fit thực trên browser mới trong đợt này. Quy tắc hiện hành vẫn Sơ đồ mặc định, tự fit lần đầu, giữ pan/zoom khi đổi tab. Không ghi kết quả cũ thành nghiệm thu mới.
+
+Mốc code đợt Lab: 88e91e8; nhánh local review/ie104-lab-alignment-20261119. Chưa push/merge; mốc nền và giới hạn kiểm thử ở kế hoạch tổng.

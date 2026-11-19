@@ -888,3 +888,60 @@ Nhóm trưởng yêu cầu bổ sung: Sol 6.2 sửa, Astra 6 rà soát. Lần đ
 **Thực hiện:** `finishMapInteraction()` dùng `fitToScreen()` sau đo/bố trí; bỏ `setInitialMapView()` cắt gốc trên mobile. `showMap()` chỉ yêu cầu fit nếu chưa có bounds của chủ đề; `buildMindMapTree()` xóa bounds cũ. Nếu đổi sang Danh sách trước khi đo xong, bỏ lượt đo khung ẩn và giữ yêu cầu fit cho lần quay lại.
 
 **Kiểm tra:** Astra 6 rà soát source đạt; Sol 6.2 chạy 185 tình huống VM (37 chủ đề thật × 5 độ rộng khung 284/339/731/986/1160px) bằng hàm cây/bố trí/căn vừa thực, kích thước và DOM giả lập. Đạt: bounds nằm trong vùng đệm 40px sau fit; đổi tab sớm vẫn fit lần đầu; quay lại sau pan/zoom giữ transform; mở nhánh giữ scale; thu nhánh giữ pan/scale; nút Căn vừa căn lại; chủ đề mới xóa bounds cũ. 7 module JS qua kiểm tra cú pháp và bộ regression URL/danh sách/email/JSON vẫn đạt; dữ liệu không đổi; diff không lỗi whitespace. Đây là kiểm thử logic với layout giả lập, chưa phải kiểm chứng hiển thị/pointer thật trong trình duyệt. Tự thử Ctrl+F5 ở trang chi tiết mobile/desktop: thấy toàn bộ node ban đầu, zoom/kéo rồi đổi tab để kiểm tra vị trí được giữ.
+
+## Áp dụng chọn lọc kiến thức thực hành IE104 — 19/11/2026
+
+### Checkpoint tiếp tục phiên
+
+- Điều phối/rà soát: Astra 6; triển khai: Sol 6.1. Chỉ local, chưa push/merge/deploy.
+- Nhánh nền: `task/ui-round2-20261118`; HEAD trước sửa: `3102ed2171c8304648686a70a6a2ef3056fd1e3d`.
+- Backup cả thay đổi chưa commit và file mới: `job-history/backups/curriculum-20261119-191755/` ngoài repo; `manifest.json` liệt kê file, `files/` chứa bản trước sửa, `working-tree.patch` chứa diff nền. Khôi phục bằng worktree riêng tại SHA nền, áp patch rồi sao chép file trong `files/`; không reset working tree đang làm.
+- Nguyên tắc: ưu tiên Lab, code đơn giản/dễ hiểu; không ép đủ kiến thức. Giữ JSON/schema/URL/giao diện và tương tác roadmap. Không chép lỗi mẫu Lab, float layout, inline event hay bỏ focus.
+
+| Chặng | Trạng thái | Công việc tiếp tục |
+|---|---|---|
+| Backup | Đã làm | Bản sao các file thay đổi và bảng kiến thức đã lưu |
+| HTML/CSS Lab 1 | Đã sửa, đã kiểm thử logic/cấu trúc | Chờ đối chiếu trực quan trình duyệt |
+| JS Lab 5–6 | Đã sửa, đã kiểm thử logic | Commit code 88e91e8 |
+| Kiểm thử | Đạt logic/cấu trúc; chưa đủ UI | Xem kết quả và giới hạn bên dưới |
+| Tài liệu/bàn giao | Đã cập nhật | Bản local chờ nghiệm thu trực quan |
+
+Không coi checklist này là nghiệm thu. Nếu phiên bị ngắt, đọc mục này, đối chiếu git diff với backup rồi tiếp tục phần chưa kiểm thử; không chạy lại sửa hàng loạt.
+
+**Checkpoint ngắt phiên — 19/11/2026:** Backup hoàn tất; Sol 6.1 mới đọc source, chưa sửa code (lệnh chuẩn bị sửa không chạy vì python không có trên PATH). Chưa chạy kiểm thử mới. Computer Use dừng phiên vì không xác định chắc URL trình duyệt Windows để thực thi chính sách. Đã yêu cầu Sol dừng, xác nhận không thay đổi file. Server local 8876 trả HTTP 200 qua Invoke-WebRequest; không coi đây là nghiệm thu UI. Tiếp tục: triển khai chặng HTML/CSS + JS theo plan bằng apply_patch hoặc công cụ có sẵn, sau đó chạy regression; không cần tạo lại backup nếu diff vẫn chỉ gồm checkpoint. Không commit/push/merge. Các checklist Chưa làm phía trên vẫn đúng.
+
+### Kết quả triển khai và đối chiếu nguồn — 19/11/2026
+
+Sol 6.1 triển khai, Astra 6 rà diff so với backup và kiểm thử. Đây là chỉnh sửa do nhóm trưởng điều phối, không gán thành đóng góp mới của TV.
+
+| Kiến thức / nguồn trong bảng thống kê | Trước → sau | File / lý do |
+|---|---|---|
+| Lab 1 tr. 1–2, 4; `row-html-43` | Ngày là chuỗi → `time datetime` khi đúng ngày lịch; sai giữ text, thiếu giữ hành vi bỏ qua | `assets/js/lecturer-detail.js`: `createDateNode`, biography/metrics; ngữ nghĩa rõ hơn |
+| Lab 1 tr. 2–4; `row-html-46` | div/p và role list → dl/div/dt/dd, nhãn trước giá trị trong DOM | JS/CSS hồ sơ: giữ giá trị trước nhãn về thị giác bằng Flexbox order; reset margin dl/dd |
+| Lab 6, `code-js-61`; vòng lặp/mảng/push | flatMap/map/hàm lồng → hai vòng for; Array.from → vòng for ở nhánh <=7 trang; forEach → for theo index gốc | `assets/js/data.js`: dễ giải thích, giữ refs/order/index/màu và quy tắc phân trang |
+| Lab 5, `code-js-40`; createElement/appendChild | map/spread render → vòng lặp dựng fragment và cập nhật DOM một lần | `assets/js/lecturers.js`, `assets/js/lecturer-detail.js`; helper fragment tránh lặp. DocumentFragment là bổ trợ, không gán cho Lab |
+| Lab 5–6: biến, mảng, vòng lặp | reduce cộng số lượng → biến tổng và for | `assets/js/home.js`: giữ số liệu và fallback danh bạ |
+| Lab 3/4: box model, typography, Flexbox/Grid | Giữ cách làm đang đáp ứng; chỉ bổ sung quy tắc cho dl/dt/dd | CSS hồ sơ vẫn scope theo ID, không thêm thiết kế mới |
+
+**Chủ động không dùng:** picture/srcset khi chưa có bộ ảnh biến thể phục vụ nhu cầu thật; game/Canvas, random story, kế thừa OOP, thư viện/framework. Giữ SVG roadmap, requestAnimationFrame, Pointer Events, module, URLSearchParams, cache Promise/retry, ARIA và theme: các kỹ thuật bổ trợ này đang phục vụ chức năng. Không thay toàn bộ filter/map/Set/Map chỉ vì hình thức.
+
+**Kiểm thử thực tế:**
+- `job-history/backups/curriculum-20261119-191755/verify.cjs` ngoài repo: PASS số lượng 3/37/234/16; thứ tự và object reference của flattenTopics; đối chiếu getVisiblePages với bản backup qua tổng 0–40 trang và vị trí -1..total+2; màu với ID rỗng/trùng và index gốc.
+- PASS ngày hợp lệ/năm nhuận/ngày sai/ngày thiếu; time/dl/dt/dd; số 0 thật; quick-facts rỗng; render hồ sơ với 0/1/10/11/37 chủ đề đúng thứ tự; danh bạ 9/7 và reset khi rỗng; thống kê trang chủ 3/37/16. Đây là Node VM + DOM giả lập; các callback điều hướng/render ngoài phạm vi được stub, không phải browser E2E.
+- PASS html-validate cục bộ cho 5 HTML tĩnh và markup dl/time sinh mới: các rule cấu trúc element-permitted-content, element-permitted-parent, element-required-attributes, close-order, no-dup-id. Không gọi đây là W3C chính thức hoặc audit accessibility hoàn chỉnh.
+- Bộ regression cũ được chạy lại trên code mới: 7 JS module syntax, URL restore/sync hai trang (giữ query ngoài phạm vi/hash), danh sách roadmap mặc định đóng, JSON parse, email text đều PASS. git diff --check không lỗi whitespace.
+- JSON và roadmap không được sửa trong đợt này. Không lấy kết quả browser/Lighthouse cũ làm kết quả mới.
+
+**Giới hạn còn lại:** chưa có ảnh trước/sau mới, chưa kiểm tra đủ năm kích thước/hai theme bằng trình duyệt; chưa chạy mới axe, Lighthouse, W3C CSS/HTML chính thức. Lượt Computer Use trước bị dừng vì không xác định chắc URL Windows. Cần tự kiểm tra giao diện hồ sơ ở 320/375/768/1024/1440px, sáng/tối; sau đó luồng khám phá → sơ đồ → hồ sơ → danh bạ, tải lại/Back/Forward, URL sai, storage/JSON lỗi. Phần CSS mới đã rà source, chưa có CSS validator mới.
+
+**Checkpoint hiện hành (thay trạng thái bảng đầu mục):** Backup hoàn tất; HTML/CSS và JS đã sửa, đã qua kiểm thử logic/cấu trúc nêu trên; tài liệu đã cập nhật; nghiệm thu trực quan và hiệu năng còn chờ. Không sửa lại code đã đạt chỉ để chạy lại từ đầu. Lệnh tái kiểm: chạy Node với `../job-history/backups/curriculum-20261119-191755/verify.cjs` từ repo. Mở local `http://127.0.0.1:8876/`, Ctrl+F5; trang có dữ liệu đầy đủ để thử: `lecturers/detail/?email=camnt%40uit.edu.vn`. Chưa push/merge/deploy.
+
+### Mốc Git để tiếp tục an toàn
+
+- Backup snapshot (gồm toàn bộ thay đổi tồn tại trước đợt này): `7e1e164203fe3f4e2b7365c7ef36ca83fe8cd440`, nhánh `backup/ie104-lab-alignment-base-20261119`.
+- Commit code chỉ gồm 5 file của đợt Lab: `88e91e85364c25682fa57182d60739b1afef5b60`.
+- Nhánh ứng viên local: `review/ie104-lab-alignment-20261119`; commit tài liệu tiếp theo nằm trên nhánh này. Tra bằng `git log -3 review/ie104-lab-alignment-20261119`.
+- Các commit được tạo bằng index riêng; nhánh đang mở và working tree của nhóm trưởng vẫn nguyên trạng dirty, không bị checkout/reset/stash. Không commit nhầm các sửa chữa cũ thành sửa chữa Lab: chúng nằm riêng trong snapshot nền.
+- Để kiểm tra bản commit ở thư mục riêng: `git worktree add ../ie104-lab-review review/ie104-lab-alignment-20261119`. Không checkout nhánh này trực tiếp lên working tree đang có thay đổi.
+- Test lưu bền ngoài repo: `job-history/backups/curriculum-20261119-191755/verify.cjs` và `interaction-regression.cjs`; chạy từ root repo bằng Node. Hai script chỉ đọc code/data; VM mô phỏng DOM không thay thế nghiệm thu browser.
+- Bước tiếp theo nếu bị ngắt: nghiệm thu trực quan/axe/Lighthouse; không cần viết lại code đã hoàn tất. Mọi thay đổi mới sau kiểm tra phải ghi checkpoint và kiểm thử phần bị ảnh hưởng.
