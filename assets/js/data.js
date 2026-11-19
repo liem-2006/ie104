@@ -51,13 +51,14 @@ export async function loadJson(file) {
  */
 function registerGroupTones(groups) {
   groupToneMap.clear();
-  groups.forEach((entry, index) => {
+  for (let index = 0; index < groups.length; index++) {
+    const entry = groups[index];
     const id = String(entry?.group?.id || "").trim();
-    if (!id || groupToneMap.has(id)) return;
+    if (!id || groupToneMap.has(id)) continue;
     // Giữ màu quen thuộc cho sec/data/nlp; mọi mã nhóm khác gán tuần hoàn từ "1" đến "6".
     const tone = defaultGroupTones[id] || String((index % 6) + 1);
     groupToneMap.set(id, tone);
-  });
+  }
 }
 
 /**
@@ -111,17 +112,15 @@ export async function loadLecturers() {
 }
 /** Trải danh sách, giữ nguyên thứ tự nguồn. @param {object} data Dữ liệu nghiên cứu. @returns {object[]} Các cặp group/topic. */
 export function flattenTopics(data) {
-  return data.groups.flatMap(expandGroup);
-  /** Ghép group cho từng topic. @param {object} entry Nhóm. @returns {object[]} Bản ghi có context. */
-
-  function expandGroup(entry) {
-    return entry.topics.map(
-      pairTopic,
-    ); /** Gắn group. @param {object} topic Chủ đề. @returns {object} Context chủ đề. */
-    function pairTopic(topic) {
-      return { group: entry.group, topic };
+  const topics = [];
+  // Giữ thứ tự nhóm/chủ đề và tham chiếu dữ liệu nguồn khi trải danh sách.
+  for (let groupIndex = 0; groupIndex < data.groups.length; groupIndex++) {
+    const entry = data.groups[groupIndex];
+    for (let topicIndex = 0; topicIndex < entry.topics.length; topicIndex++) {
+      topics.push({ group: entry.group, topic: entry.topics[topicIndex] });
     }
   }
+  return topics;
 }
 
 /**
@@ -149,7 +148,11 @@ export function getVisiblePages(currentPage, pageCount) {
 
   // Khi tổng số trang từ 7 trở xuống thì hiển thị đầy đủ tất cả số trang.
   if (total <= 7) {
-    return Array.from({ length: total }, (_, index) => index + 1);
+    const pages = [];
+    for (let page = 1; page <= total; page++) {
+      pages.push(page);
+    }
+    return pages;
   }
 
   const page = Math.max(1, Math.min(Math.floor(Number(currentPage)) || 1, total));

@@ -245,15 +245,10 @@ function createQuickFacts(related) {
   ];
 
   const block = section("Tóm tắt hồ sơ");
-  const grid = element("div", "metrics-grid profile-quick-facts");
-  grid.setAttribute("role", "list");
+  const grid = element("dl", "metrics-grid profile-quick-facts");
   grid.setAttribute("aria-label", "Tóm tắt hồ sơ giảng viên");
   for (const fact of facts) {
-    const item = element("div", "metric-card", "");
-    item.setAttribute("role", "listitem");
-    item.append(element("p", "metric-card__value", String(fact.value)));
-    item.append(element("p", "metric-card__label", fact.label));
-    grid.append(item);
+    grid.append(createMetricCard(fact.label, fact.value));
   }
   block.append(grid);
   return block;
@@ -285,12 +280,36 @@ function createBiography(lecturer) {
     const note = element("p", "profile-source-note");
     note.append(source);
     if (lecturer.profile.checkedAt) {
-      note.append(" · Ngày ghi nhận: " + lecturer.profile.checkedAt);
+      note.append(" · Ngày ghi nhận: ", createDateNode(lecturer.profile.checkedAt));
     }
     block.append(note);
   }
 
   return block;
+}
+
+/**
+ * Tạo ngày ngữ nghĩa khi chuỗi đúng ngày lịch YYYY-MM-DD, giữ văn bản cho dữ liệu khác.
+ * @param {string} value - Ngày ghi nhận từ dữ liệu nguồn.
+ * @returns {HTMLTimeElement|Text} Phần tử time hợp lệ hoặc nút văn bản dự phòng.
+ */
+function createDateNode(value) {
+  const text = String(value);
+  const match = /^(\d{4})-(\d{2})-(\d{2})$/.exec(text);
+  if (match) {
+    const year = Number(match[1]);
+    const month = Number(match[2]);
+    const day = Number(match[3]);
+    // Kiểm tra số ngày của tháng và năm nhuận, tránh tự chuẩn hóa ngày sai.
+    const isLeapYear = year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0);
+    const daysInMonth = [31, isLeapYear ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+    if (year > 0 && month >= 1 && month <= 12 && day >= 1 && day <= daysInMonth[month - 1]) {
+      const time = element("time", "", text);
+      time.dateTime = text;
+      return time;
+    }
+  }
+  return document.createTextNode(text);
 }
 
 /**
@@ -369,16 +388,31 @@ function renderTopicPage(listEl, summaryEl, navEl, related, pageCount) {
     const start = (topicCurrentPage - 1) * TOPIC_PAGE_SIZE;
     const end = Math.min(start + TOPIC_PAGE_SIZE, total);
     summaryEl.textContent = `Hiển thị ${start + 1}–${end} trong tổng số ${total} chủ đề (Trang ${topicCurrentPage}/${pageCount})`;
-    listEl.replaceChildren(...related.slice(start, end).map(createRelatedTopicItem));
+    listEl.replaceChildren(createTopicFragment(related, start, end));
     createPaginationNav(navEl, topicCurrentPage, pageCount, "profile-pagination__button");
     return;
   }
 
   // Luôn hiển thị dòng tổng số chủ đề cho mọi hồ sơ có từ 1 chủ đề trở lên.
   summaryEl.textContent = `${total} chủ đề hướng dẫn`;
-  listEl.replaceChildren(...related.map(createRelatedTopicItem));
+  listEl.replaceChildren(createTopicFragment(related));
   navEl.hidden = true;
   navEl.replaceChildren();
+}
+
+/**
+ * Gom các chủ đề trong khoảng chỉ định vào fragment trước khi cập nhật DOM.
+ * @param {object[]} related - Danh sách chủ đề theo thứ tự nguồn.
+ * @param {number} [start=0] - Chỉ số bắt đầu, có lấy phần tử này.
+ * @param {number} [end=related.length] - Chỉ số kết thúc, không lấy phần tử này.
+ * @returns {DocumentFragment} Fragment chứa các hàng chủ đề.
+ */
+function createTopicFragment(related, start = 0, end = related.length) {
+  const fragment = document.createDocumentFragment();
+  for (let index = start; index < end; index++) {
+    fragment.appendChild(createRelatedTopicItem(related[index]));
+  }
+  return fragment;
 }
 
 /**
@@ -437,8 +471,8 @@ function createProfileTopicRow(entry) {
 function createMetricCard(label, value) {
   const metric = element("div", "metric-card");
   metric.append(
-    element("p", "metric-card__value", value),
-    element("p", "metric-card__label", label),
+    element("dt", "metric-card__label", label),
+    element("dd", "metric-card__value", String(value)),
   );
   return metric;
 }
@@ -456,7 +490,7 @@ function renderMetrics(records) {
     const source = externalLink(record.sourceName || "Nguồn chỉ số", record.sourceUrl);
     if (!source || !record.asOf) continue;
 
-    const grid = element("div", "metrics-grid");
+    const grid = element("dl", "metrics-grid");
     for (const [key, label] of [
       ["citations", "Trích dẫn"],
       ["hIndex", "h-index"],
@@ -470,14 +504,8 @@ function renderMetrics(records) {
     if (!grid.children.length) continue;
 
     const note = element("p", "profile-source-note");
-    note.append(
-      source,
-      document.createTextNode(
-        " · Ngày thống kê: " +
-          record.asOf +
-          (record.scope === "all-time" ? " · Toàn bộ thời gian" : ""),
-      ),
-    );
+    note.append(source, " · Ngày thống kê: ", createDateNode(record.asOf));
+    if (record.scope === "all-time") note.append(" · Toàn bộ thời gian");
 
     block.append(grid, note);
     count++;

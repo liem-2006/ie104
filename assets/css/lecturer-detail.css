@@ -194,12 +194,15 @@
 }
 
 #page-lecturer-detail .metrics-grid {
+  margin: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 16px 24px;
 }
 
 #page-lecturer-detail .metric-card {
+  display: flex;
+  flex-direction: column;
   padding: 14px 18px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
@@ -208,6 +211,7 @@
 }
 
 #page-lecturer-detail .metric-card__value {
+  order: 0;
   font-size: 26px;
   font-weight: 700;
   color: var(--color-primary);
@@ -216,6 +220,7 @@
 }
 
 #page-lecturer-detail .metric-card__label {
+  order: 1;
   font-size: 13.5px;
   color: var(--color-muted);
   margin: 4px 0 0 0;

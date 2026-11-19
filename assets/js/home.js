@@ -65,10 +65,10 @@ function renderHomeStats(researchGroups, directoryLecturers) {
   }
 
   const groupCount = researchGroups.length;
-  const topicCount = researchGroups.reduce(
-    (sum, entry) => sum + (Array.isArray(entry.topics) ? entry.topics.length : 0),
-    0,
-  );
+  let topicCount = 0;
+  for (const entry of researchGroups) {
+    topicCount += Array.isArray(entry.topics) ? entry.topics.length : 0;
+  }
   const lecturerCount = countUniqueLecturers(researchGroups, directoryLecturers);
 
   statsEl.textContent = `${groupCount} nhóm chủ đề · ${topicCount} đề tài · ${lecturerCount} giảng viên`;

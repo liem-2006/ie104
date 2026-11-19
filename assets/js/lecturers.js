@@ -389,7 +389,11 @@ function renderLecturers(resetPage = false) {
   const start = (currentPage - 1) * PAGE_SIZE;
   const pagedItems = matches.slice(start, start + PAGE_SIZE);
 
-  document.getElementById("lecturers-list").replaceChildren(...pagedItems.map(createLecturerCard));
+  const fragment = document.createDocumentFragment();
+  for (const lecturer of pagedItems) {
+    fragment.appendChild(createLecturerCard(lecturer));
+  }
+  document.getElementById("lecturers-list").replaceChildren(fragment);
   document.getElementById("lecturers-status").textContent = buildLecturersStatus(
     total,
     start,
